@@ -16,11 +16,12 @@ const createCpu = (data) => (headers) => {
 }
 
 const axiosCreateCpu = (data) => {
-    Axios.post(`${process.env.REACT_APP_BASE_API}/cpu`, {
-        ...data
-    }).then(() => {
-        alert("successful insert")
-    });
+    return Axios.post(`${process.env.REACT_APP_BASE_API}/cpu`, {
+        // headers: createHeaders(headers),
+        ...data,
+    })
+    .then((res) => res.json())
+    .then((data) => data);
 }
 
 export {

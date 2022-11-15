@@ -4,6 +4,8 @@ const cors = require('cors')
 require('dotenv').config();
 // const { registerRoutes } = require('./routes');
 const mysql = require('mysql');
+const ValidationError = require('./errors/ValidationError');
+
 
 // connect with database
 const db = mysql.createPool({
@@ -23,24 +25,33 @@ const port = process.env.PORT || 80
 
 // registerRoutes(app);
 
-app.post('/cpu', (req, res) => {
-    const {modelName, clockSpeed, cores} = req.body
-    const sqlInsert = "INSERT INTO cpus (model_name, clockspeed, cores) VALUES (?,?,?)";
-    db.query(sqlInsert, [
-        modelName, 
-        clockSpeed, 
-        cores
-    ], (err, result) => {
-        console.log(result);
-    })
+app.post('/cpu', async (req, res, next) => {
+    const e = {
+        name: 'ValidationError',
+        message: 'testError',
+    }
+    try {
+        const {modelName, clockSpeed, cores} = req.body;
+        const sqlInsert = "INSERT INTO cpus (model_name, clockspeed, cores) VALUES (?,?,?)";
+        db.query(sqlInsert, [
+            modelName, 
+            clockSpeed, 
+            cores
+        ],
+        res.send(json(req.body)))
+    } catch (e) {
+        next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+    }
 })
-// app.post('/cpu', (req, res) => {
-//     const modelName = req.body.modelName
-//     const clockSpeed = req.body.clockSpeed
-//     const cores = req.body.cores
 
+// app.post('/cpu', (req, res, next) => {
+//     const {modelName, clockSpeed, cores} = req.body
 //     const sqlInsert = "INSERT INTO cpus (model_name, clockspeed, cores) VALUES (?,?,?)";
-//     db.query(sqlInsert, [modelName, clockSpeed, cores], (err, result) => {
+//     db.query(sqlInsert, [
+//         modelName, 
+//         clockSpeed, 
+//         cores
+//     ], (err, res) => {
 //         console.log(result);
 //     })
 // })
