@@ -1,4 +1,5 @@
 import { createHeaders } from "../../utils/api";
+import Axios from 'axios'
 
 const fetchCpu = () => (headers) => {
     return fetch(`${process.env.REACT_APP_BASE_API}/cpu`, {
@@ -14,6 +15,15 @@ const createCpu = (data) => (headers) => {
     });
 }
 
+const axiosCreateCpu = (data) => {
+    Axios.post(`${process.env.REACT_APP_BASE_API}/cpu`, {
+        ...data
+    }).then(() => {
+        alert("successful insert")
+    });
+}
+
 export {
-    createCpu
+    createCpu,
+    axiosCreateCpu,
 }

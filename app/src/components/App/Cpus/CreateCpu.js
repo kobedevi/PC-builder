@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { createCpu } from '../../../core/modules/CPU/api';
+import { axiosCreateCpu, createCpu } from '../../../core/modules/CPU/api';
 import ErrorAlert from '../../shared/ErrorAlert';
 import CpuForm from './create/CpuForm';
 
@@ -10,8 +10,7 @@ const CreateCpu = () => {
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    console.log('start request')
-    createCpu(data)
+    axiosCreateCpu(data)
     .catch((err) => {
       setError(err);
       setIsLoading(false);
