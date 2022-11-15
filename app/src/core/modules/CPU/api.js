@@ -20,8 +20,7 @@ const axiosCreateCpu = (data) => {
         // headers: createHeaders(headers),
         ...data,
     })
-    .then((res) => res.json())
-    .then((data) => data);
+    .then((res) => res)
 }
 
 export {

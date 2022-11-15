@@ -26,10 +26,6 @@ const port = process.env.PORT || 80
 // registerRoutes(app);
 
 app.post('/cpu', async (req, res, next) => {
-    const e = {
-        name: 'ValidationError',
-        message: 'testError',
-    }
     try {
         const {modelName, clockSpeed, cores} = req.body;
         const sqlInsert = "INSERT INTO cpus (model_name, clockspeed, cores) VALUES (?,?,?)";
@@ -37,8 +33,13 @@ app.post('/cpu', async (req, res, next) => {
             modelName, 
             clockSpeed, 
             cores
-        ],
-        res.send(json(req.body)))
+        ], (err, result) => {
+            if(err) {
+                next(e);
+            } else {
+                res.send(result)
+            }
+        })
     } catch (e) {
         next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
     }
