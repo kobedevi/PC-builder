@@ -1,14 +1,15 @@
 const express = require('express');
+const { registerRoutes } = require('./routes');
 const bodyParser = require('body-parser')
 const cors = require('cors')
 require('dotenv').config();
 // const { registerRoutes } = require('./routes');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const ValidationError = require('./errors/ValidationError');
 
 
 // connect with database
-const db = mysql.createPool({
+const db = mysql.createConnection({
     host: process.env.HOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
@@ -25,38 +26,16 @@ const port = process.env.PORT || 80
 
 // registerRoutes(app);
 
-app.post('/cpu', async (req, res, next) => {
-    try {
-        const {modelName, clockSpeed, cores} = req.body;
-        const sqlInsert = "INSERT INTO cpus (model_name, clockspeed, cores) VALUES (?,?,?)";
-        db.query(sqlInsert, [
-            modelName, 
-            clockSpeed, 
-            cores
-        ], (err, result) => {
-            if(err) {
-                next(e);
-            } else {
-                res.send(result)
-            }
-        })
-    } catch (e) {
-        next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
-    }
-})
-
-// app.post('/cpu', (req, res, next) => {
-//     const {modelName, clockSpeed, cores} = req.body
-//     const sqlInsert = "INSERT INTO cpus (model_name, clockspeed, cores) VALUES (?,?,?)";
-//     db.query(sqlInsert, [
-//         modelName, 
-//         clockSpeed, 
-//         cores
-//     ], (err, res) => {
-//         console.log(result);
-//     })
-// })
+registerRoutes(app, db);
 
 app.listen(port, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
+
+const closeServer = () => {
+    db.disconnect();
+    process.exit();
+}
+
+process.on('SIGINT', () => closeServer());
+process.on('SIGTERM', () => closeServer());
