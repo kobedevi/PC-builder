@@ -1,7 +1,7 @@
 import { createHeaders } from "../../utils/api";
 import Axios from 'axios'
 
-const fetchCpu = () => (headers) => {
+const fetchCpus = () => (headers) => {
     return fetch(`${process.env.REACT_APP_BASE_API}/cpu`, {
         headers: createHeaders(headers),
     });
@@ -24,6 +24,7 @@ const axiosCreateCpu = (data) => {
 }
 
 export {
+    fetchCpus,
     createCpu,
     axiosCreateCpu,
 }
