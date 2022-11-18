@@ -1,5 +1,6 @@
 const db = require('../utils/db');
 const {validationResult} = require('express-validator');
+const { v4: uuidv4 } = require('uuid');
 
 class CpuController {
     
@@ -12,7 +13,7 @@ class CpuController {
         }
     }
 
-    createCpu = (req, res, next) => {
+    createCpu = async (req, res, next) => {
 
         const errors = validationResult(req);
         if(!errors.isEmpty()) {
@@ -22,8 +23,14 @@ class CpuController {
         const {idManufacturer, idCpuSocket, modelName, clockSpeed, cores} = req.body;
         if(modelName && clockSpeed && cores) {
             try {
-                const sqlInsert = "INSERT INTO cpus (idManufacturer, idCpuSocket, modelName, clockSpeed, cores) VALUES (?,?,?,?,?)";
+                const manufacturer = await db.promise().query(`select * from manufacturers where idManufacturer = ${idManufacturer}`);
+                if(manufacturer[0].length === 0) {
+                    return res.status(400).json({message: "Given idManufacturer does not exist"});
+                }
+                const idProcessor =uuidv4()
+                const sqlInsert = "INSERT INTO cpus (idProcessor, idManufacturer, idCpuSocket, modelName, clockSpeed, cores) VALUES (?,?,?,?,?,?)";
                 db.promise().query(sqlInsert, [
+                    idProcessor,
                     idManufacturer, 
                     idCpuSocket,
                     modelName, 

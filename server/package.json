@@ -22,6 +22,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "sequelize": "^6.25.6"
+    "sequelize": "^6.25.6",
+    "uuid": "^9.0.0"
   }
 }
