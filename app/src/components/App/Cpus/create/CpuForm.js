@@ -4,14 +4,17 @@ import * as yup from 'yup';
 import Input from '../../../Design/Input';
 import Button from '../../../Design/Button';
 import NumberInput from '../../../Design/NumberInput';
+import ManufacturerSelect from '../../../util/ManufacturerSelect';
 
 const schema = yup.object().shape({
+    manufacturerId: yup.string().required(),
     modelName: yup.string().required(),
     clockSpeed: yup.number().required().positive(),
     cores: yup.number().required().positive().integer(),
 });
 
 const defaultData = {
+    manufacturerId: '',
     modelName: '',
     clockSpeed: 3.5,
     cores: 4
@@ -59,6 +62,16 @@ const CpuForm = ({onSubmit, initialData={}, disabled}) => {
 
   return (
     <form noValidate={true} onSubmit={handleSubmit}>
+      
+      <ManufacturerSelect
+        label="Manufacturer"
+        name="manufacturerId"
+        value={data.manufacturerId}
+        disabled={disabled}
+        onChange={handleChange}
+        error={errors.manufacturerId}
+      />
+
       <Input
         label="Model name"
         type="text"
