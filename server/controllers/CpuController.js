@@ -19,11 +19,13 @@ class CpuController {
             return res.status(400).json({errors: errors.array()});
         }
 
-        const {modelName, clockSpeed, cores} = req.body;
+        const {idManufacturer, idCpuSocket, modelName, clockSpeed, cores} = req.body;
         if(modelName && clockSpeed && cores) {
             try {
-                const sqlInsert = "INSERT INTO cpus (model_name, clockspeed, cores) VALUES (?,?,?)";
+                const sqlInsert = "INSERT INTO cpus (idManufacturer, idCpuSocket, modelName, clockSpeed, cores) VALUES (?,?,?,?,?)";
                 db.promise().query(sqlInsert, [
+                    idManufacturer, 
+                    idCpuSocket,
                     modelName, 
                     clockSpeed, 
                     cores
