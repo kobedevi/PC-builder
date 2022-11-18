@@ -4,17 +4,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 require('dotenv').config();
 // const { registerRoutes } = require('./routes');
-const mysql = require('mysql2');
-const ValidationError = require('./errors/ValidationError');
-
-
-// connect with database
-const db = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE
-});
+const db = require('./utils/db');
 
 const app = express();
 app.use(cors());
