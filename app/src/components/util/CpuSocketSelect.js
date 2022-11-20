@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Select from "../Design/Select";
 import {
-  createManufacturer,
-  fetchManufacturers,
-} from "../../core/modules/Manufacturer/api";
+  createCpuSocket,
+  fetchCpuSockets,
+} from "../../core/modules/CpuSocket/api";
 import useFetch from "../../core/hooks/useFetch";
 import Alert from "../Design/Alert";
 import * as yup from "yup";
@@ -13,24 +13,24 @@ import Input from "../Design/Input";
 import Button from "../Design/Button";
 
 const schema = yup.object().shape({
-  newManufacturer: yup.string().required(),
+  socketType: yup.string().required(),
 });
 
-const ManufacturerSelect = (props) => {
+const CpuSocketSelect = (props) => {
   const inputRef = useRef(null);
 
-  const [newManuName, setNewManuName] = useState("");
+  const [newSocket, setNewSocket] = useState("");
   const [isHidden, setIsHidden] = useState(true);
   const [isTouched, setIsTouched] = useState(false);
   const [errors, setErrors] = useState({});
   const [info, setInfo] = useState();
 
   const apiCall = useCallback(() => {
-    return fetchManufacturers();
+    return fetchCpuSockets();
   }, []);
 
   const {
-    data: manufacturers,
+    data: socketTypes,
     error,
     setError,
     isLoading,
@@ -38,21 +38,21 @@ const ManufacturerSelect = (props) => {
     refresh,
   } = useFetch(apiCall);
 
-  const options = manufacturers
-    ? manufacturers.map((m) => ({
-        value: m.idManufacturer,
-        label: m.manufacturerName,
+  const options = socketTypes
+    ? socketTypes.map((s) => ({
+        value: s.idCpuSocket,
+        label: s.socketType,
       }))
     : null;
 
   const toggleHide = () => {
     setIsHidden(!isHidden);
-    setNewManuName({});
+    setNewSocket({});
   };
 
-  const validate = useCallback(async (newManuName, onSuccess) => {
+  const validate = useCallback(async (newSocket, onSuccess) => {
     await schema
-      .validate(newManuName, { abortEarly: false })
+      .validate(newSocket, { abortEarly: false })
       .then(() => {
         if (onSuccess) {
           onSuccess();
@@ -65,23 +65,23 @@ const ManufacturerSelect = (props) => {
 
   useEffect(() => {
     if (isTouched) {
-      validate(newManuName);
+      validate(newSocket);
     }
-  }, [validate, isTouched, newManuName]);
+  }, [validate, isTouched, newSocket]);
 
   const handleChange = (e) => {
-    setNewManuName({
+    setNewSocket({
       [e.target.name]: e.target.value,
     });
   };
 
   const onSubmit = () => {
-    createManufacturer({
-      manufacturerName: newManuName.newManufacturer,
+    createCpuSocket({
+      socketType: newSocket.socketType,
     })
       .then((e) => {
         setInfo(e);
-        setNewManuName();
+        setNewSocket();
         inputRef.current.value = "";
         toggleHide();
         refresh();
@@ -95,7 +95,7 @@ const ManufacturerSelect = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsTouched(true);
-    validate(newManuName, () => onSubmit(newManuName));
+    validate(newSocket, () => onSubmit(newSocket));
   };
 
   return (
@@ -104,24 +104,24 @@ const ManufacturerSelect = (props) => {
       {info && <Alert color="info">{info.message}</Alert>}
       <Select options={options} {...props} />
       <Link style={{ display: "inline-block" }} onClick={toggleHide}>
-        {isHidden ? "Add new manufacturer" : "Cancel"}
+        {isHidden ? "Add new socket type" : "Cancel"}
       </Link>
       <div className={isHidden ? "hide" : "show"}>
         <Input
-          label="Manufacturer name"
+          label="socket name"
           type="text"
           onChange={handleChange}
-          name="newManufacturer"
-          id="newManufacturer"
-          error={errors.newManufacturer}
+          name="socketType"
+          id="socketType"
+          error={errors.socketType}
           ref={inputRef}
         />
         <Button className="mt-4" type="submit" onClick={handleSubmit}>
-          Add manufacturer
+          Add CPU socket
         </Button>
       </div>
     </div>
   );
 };
 
-export default ManufacturerSelect;
+export default CpuSocketSelect;

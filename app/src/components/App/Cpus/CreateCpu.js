@@ -13,15 +13,14 @@ const CreateCpu = () => {
   const handleSubmit = (data) => {
     setIsLoading(true);
     console.log(data);
-    // TODO:  add cpusocket to creation and reactivate the cpu creation
-    // axiosCreateCpu(data)
-    // .then(() => {
-    //   navigate(PossibleRoutes.Cpus, { replace: true })
-    // })
-    // .catch((err) => {
-    //   setError(err);
-    //   setIsLoading(false);
-    // })
+    axiosCreateCpu(data)
+      .then(() => {
+        navigate(PossibleRoutes.Cpus, { replace: true });
+      })
+      .catch((err) => {
+        setError(err);
+        setIsLoading(false);
+      });
   };
 
   return (
