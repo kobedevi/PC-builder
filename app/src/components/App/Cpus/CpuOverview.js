@@ -44,7 +44,7 @@ const CpuOverview = () => {
             {
               cpus.map((cpu) => (
                 <li key={cpu.id_cpu}>
-                  {cpu.id_cpu}
+                  {`${cpu.idProcessor} ${cpu.clockSpeed}GHz`} 
                 </li>
               ))
             }
