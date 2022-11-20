@@ -5,13 +5,16 @@ const ValidationError = require("../errors/ValidationError");
 const { cpuModel } = require("../models/Cpu");
 const { manufacturerModel } = require("../models/Manufacturer");
 const { cpuSocketModel } = require("../models/CpuSocket");
+const { formfactorModel } = require("../models/Formfactor");
 const CpuController = require("../controllers/CpuController");
 const CpuSocketController = require("../controllers/CpuSocketController");
 const ManufacturerController = require("../controllers/ManufacturerController");
+const FormfactorController = require("../controllers/FormfactorController");
 
 const cpuController = new CpuController();
 const manufacturerController = new ManufacturerController();
 const cpuSocketController = new CpuSocketController();
+const formfactorController = new FormfactorController();
 
 const registerRoutes = (app, db) => {
 	// CPUS
@@ -29,6 +32,14 @@ const registerRoutes = (app, db) => {
 	// CPU sockets
 	app.get("/cpusocket", cpuSocketController.fetchCpuSockets);
 	app.post("/cpusocket", cpuSocketModel, cpuSocketController.createCpuSocket);
+
+	// Formfactors
+	app.get("/formfactor", formfactorController.fetchFormfactors);
+	app.post(
+		"/formfactor",
+		formfactorModel,
+		formfactorController.createFormfactor
+	);
 
 	// default 404
 	app.use(function (req, res, next) {
