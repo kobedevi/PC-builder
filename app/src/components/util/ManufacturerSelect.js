@@ -8,6 +8,9 @@ import useFetch from "../../core/hooks/useFetch";
 import Alert from "../Design/Alert";
 import * as yup from "yup";
 import { getValidationErrors } from "../../core/utils/validation";
+import { Link } from "react-router-dom";
+import Input from "../Design/Input";
+import Button from "../Design/Button";
 
 const schema = yup.object().shape({
   newManufacturer: yup.string().required(),
@@ -17,7 +20,7 @@ const ManufacturerSelect = (props) => {
   const inputRef = useRef(null);
 
   const [newManuName, setNewManuName] = useState("");
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
   const [isTouched, setIsTouched] = useState(false);
   const [errors, setErrors] = useState({});
   const [info, setInfo] = useState();
@@ -77,14 +80,14 @@ const ManufacturerSelect = (props) => {
       manufacturerName: newManuName.newManufacturer,
     })
       .then((e) => {
-        setInfo(e.message);
+        setInfo(e);
         setNewManuName();
         inputRef.current.value = "";
         toggleHide();
         refresh();
       })
       .catch((err) => {
-        setError(err);
+        setErrors(err);
         setIsLoading(false);
       });
   };
@@ -96,29 +99,28 @@ const ManufacturerSelect = (props) => {
   };
 
   return (
-    <>
+    <div>
       {error && <Alert color="danger">{error.message}</Alert>}
-      {info && <Alert color="info">{info}</Alert>}
+      {info && <Alert color="info">{info.message}</Alert>}
       <Select options={options} {...props} />
-      <p onClick={toggleHide}>
-        Link that disables above field and lets you add a manufacturer
-      </p>
-      <div className={!isHidden ? "hide" : "show"}>
-        <label name="newManufacturer" htmlFor="newManufacturer">
-          Add Manufacturer to list:
-        </label>
-        <input
+      <Link style={{ display: "block" }} onClick={toggleHide}>
+        {isHidden ? "Add new manufacturer" : "Cancel"}
+      </Link>
+      <div className={isHidden ? "hide" : "show"}>
+        <Input
+          label="Manufacturer name"
+          type="text"
           onChange={handleChange}
-          ref={inputRef}
           name="newManufacturer"
           id="newManufacturer"
-          type="text"
+          error={errors.newManufacturer}
+          ref={inputRef}
         />
-        <button type="submit" onClick={handleSubmit}>
-          new name
-        </button>
+        <Button className="mt-4" type="submit" onClick={handleSubmit}>
+          Add manufacturer
+        </Button>
       </div>
-    </>
+    </div>
   );
 };
 

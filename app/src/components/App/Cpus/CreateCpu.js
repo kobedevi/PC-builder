@@ -27,7 +27,7 @@ const CreateCpu = () => {
   return (
     <div>
       <h2>Create Cpu</h2>
-      <ErrorAlert error={error} />
+      {error && <ErrorAlert error={error} />}
       <CpuForm onSubmit={handleSubmit} disabled={isLoading} />
     </div>
   );

@@ -8,7 +8,6 @@ const fetchManufacturers = () => (headers) => {
 };
 
 const createManufacturer = async (data) => {
-  console.log(data);
   return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
     method: "POST",
     headers: {
