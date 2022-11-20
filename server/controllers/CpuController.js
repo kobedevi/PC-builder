@@ -6,7 +6,7 @@ class CpuController {
 	fetchCpus = async (req, res, next) => {
 		try {
 			const results = await db.promise().query(`SELECT * FROM cpus`);
-			res.status(201).send(results[0]);
+			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}

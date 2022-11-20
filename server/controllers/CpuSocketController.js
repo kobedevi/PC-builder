@@ -9,7 +9,7 @@ class CpuSocketController {
 			const results = await db
 				.promise()
 				.query(`SELECT * FROM cpusockets ORDER BY socketType`);
-			res.status(201).send(results[0]);
+			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}

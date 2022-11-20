@@ -9,7 +9,7 @@ class ManufacturerController {
 			const results = await db
 				.promise()
 				.query(`SELECT * FROM manufacturers ORDER BY manufacturerName`);
-			res.status(201).send(results[0]);
+			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
