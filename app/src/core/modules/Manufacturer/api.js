@@ -1,21 +1,21 @@
 import { createHeaders } from "../../utils/api";
-import Axios from 'axios'
+import Axios from "axios";
 
 const fetchManufacturers = () => (headers) => {
-    return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
-        headers: createHeaders(headers),
-    });
-}
+  return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
+    headers: createHeaders(headers),
+  });
+};
 
-const createManufacturer = (data) => (headers) => {
-    return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
-        method:'POST',
-        headers: createHeaders(headers),
-        body: JSON.stringify(data),
-    });
-}
+const createManufacturer = async (data) => {
+  console.log(data);
+  return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then((res) => res.json());
+};
 
-export {
-    fetchManufacturers,
-    createManufacturer,
-}
+export { fetchManufacturers, createManufacturer };
