@@ -25,15 +25,24 @@ class CpuController {
 				const manufacturer = await db
 					.promise()
 					.query(
-						`select * from manufacturers where idManufacturer = "${idManufacturer}"`
+						`select idManufacturer from manufacturers where idManufacturer = "${idManufacturer}"`
 					);
 				if (manufacturer[0].length === 0) {
 					return res
 						.status(400)
 						.json({ message: "Given idManufacturer does not exist" });
 				}
+				const cpuSocket = await db
+					.promise()
+					.query(
+						`select idCpuSocket from cpusockets where idCpuSocket = "${idCpuSocket}"`
+					);
+				if (cpuSocket[0].length === 0) {
+					return res
+						.status(400)
+						.json({ message: "Given idCpuSocket does not exist" });
+				}
 				const idProcessor = uuidv4();
-				console.log(idProcessor);
 				const sqlInsert =
 					"INSERT INTO cpus (idProcessor, idManufacturer, idCpuSocket, modelName, clockSpeed, cores) VALUES (?,?,?,?,?,?)";
 				db.promise().query(sqlInsert, [

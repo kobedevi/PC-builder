@@ -6,20 +6,31 @@ const { cpuModel } = require("../models/Cpu");
 const { manufacturerModel } = require("../models/Manufacturer");
 const { cpuSocketModel } = require("../models/CpuSocket");
 const { formfactorModel } = require("../models/Formfactor");
+const { motherboardModel } = require("../models/motherboard");
 const CpuController = require("../controllers/CpuController");
 const CpuSocketController = require("../controllers/CpuSocketController");
 const ManufacturerController = require("../controllers/ManufacturerController");
 const FormfactorController = require("../controllers/FormfactorController");
+const MotherboardController = require("../controllers/MotherboardController");
 
 const cpuController = new CpuController();
 const manufacturerController = new ManufacturerController();
 const cpuSocketController = new CpuSocketController();
 const formfactorController = new FormfactorController();
+const motherboardController = new MotherboardController();
 
 const registerRoutes = (app, db) => {
 	// CPUS
 	app.get("/cpu", cpuController.fetchCpus);
 	app.post("/cpu", cpuModel, cpuController.createCpu);
+
+	// Motherboards
+	app.get("/motherboard", motherboardController.fetchMotherboards);
+	app.post(
+		"/motherboard",
+		motherboardModel,
+		motherboardController.createMotherboard
+	);
 
 	// Manufacturers
 	app.get("/manufacturer", manufacturerController.fetchManufacturers);
