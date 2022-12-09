@@ -2,6 +2,7 @@ const NotFoundError = require("../errors/NotFoundError");
 const ValidationError = require("../errors/ValidationError");
 // const authRoutes = require('./authRoutes');
 // const { authLocal, authJwt } = require('../services/auth/auth.services');
+
 const { cpuModel } = require("../models/Cpu");
 const { manufacturerModel } = require("../models/Manufacturer");
 const { cpuSocketModel } = require("../models/CpuSocket");
@@ -9,6 +10,8 @@ const { formfactorModel } = require("../models/Formfactor");
 const { motherboardModel } = require("../models/motherboard");
 const { caseModel } = require("../models/Case");
 const { ramModel } = require("../models/Ram");
+const { storageTypeModel } = require("../models/StorageType");
+
 const CpuController = require("../controllers/CpuController");
 const CpuSocketController = require("../controllers/CpuSocketController");
 const ManufacturerController = require("../controllers/ManufacturerController");
@@ -16,6 +19,7 @@ const FormfactorController = require("../controllers/FormfactorController");
 const MotherboardController = require("../controllers/MotherboardController");
 const CaseController = require("../controllers/CaseController");
 const RamController = require("../controllers/RamController");
+const StorageTypeController = require("../controllers/StorageTypeController");
 
 const cpuController = new CpuController();
 const manufacturerController = new ManufacturerController();
@@ -24,6 +28,7 @@ const formfactorController = new FormfactorController();
 const motherboardController = new MotherboardController();
 const caseController = new CaseController();
 const ramController = new RamController();
+const storageTypeController = new StorageTypeController();
 
 const registerRoutes = (app, db) => {
 	// CPUS
@@ -52,6 +57,14 @@ const registerRoutes = (app, db) => {
 		"/manufacturer",
 		manufacturerModel,
 		manufacturerController.createManufacturer
+	);
+
+	// Storage Types
+	app.get("/storagetypes", storageTypeController.fetchStorageTypes);
+	app.post(
+		"/storagetypes",
+		storageTypeModel,
+		storageTypeController.createStorageTypes
 	);
 
 	// CPU sockets
