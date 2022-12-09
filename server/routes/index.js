@@ -7,17 +7,20 @@ const { manufacturerModel } = require("../models/Manufacturer");
 const { cpuSocketModel } = require("../models/CpuSocket");
 const { formfactorModel } = require("../models/Formfactor");
 const { motherboardModel } = require("../models/motherboard");
+const { caseModel } = require("../models/Case");
 const CpuController = require("../controllers/CpuController");
 const CpuSocketController = require("../controllers/CpuSocketController");
 const ManufacturerController = require("../controllers/ManufacturerController");
 const FormfactorController = require("../controllers/FormfactorController");
 const MotherboardController = require("../controllers/MotherboardController");
+const CaseController = require("../controllers/CaseController");
 
 const cpuController = new CpuController();
 const manufacturerController = new ManufacturerController();
 const cpuSocketController = new CpuSocketController();
 const formfactorController = new FormfactorController();
 const motherboardController = new MotherboardController();
+const caseController = new CaseController();
 
 const registerRoutes = (app, db) => {
 	// CPUS
@@ -31,6 +34,10 @@ const registerRoutes = (app, db) => {
 		motherboardModel,
 		motherboardController.createMotherboard
 	);
+
+	// Cases
+	app.get("/case", caseController.fetchCases);
+	app.post("/case", caseModel, caseController.createCase);
 
 	// Manufacturers
 	app.get("/manufacturer", manufacturerController.fetchManufacturers);
