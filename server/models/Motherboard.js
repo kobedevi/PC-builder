@@ -12,6 +12,7 @@ const motherboardModel = [
 		.withMessage("memorySlots has to have a value between 0 and 16"),
 	check("sataPorts")
 		.isInt({ min: 0, max: 32 })
+		.optional({ nullable: true })
 		.withMessage("sataPorts has to be an int with a max value of 32"),
 ];
 
