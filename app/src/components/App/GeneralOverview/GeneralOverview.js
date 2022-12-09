@@ -10,7 +10,7 @@ const items = [
   },
   {
     label: "Motherboard",
-    route: PossibleRoutes.Motherboard,
+    route: PossibleRoutes.Motherboards,
     icon: null,
   },
 ];
