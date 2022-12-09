@@ -17,6 +17,11 @@ const items = [
     route: PossibleRoutes.Cases,
     icon: null,
   },
+  {
+    label: "Ram",
+    route: PossibleRoutes.Ram,
+    icon: null,
+  },
 ];
 
 const Sidebar = () => {

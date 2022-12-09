@@ -17,10 +17,7 @@ class RamController {
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-
-		res.status(201).send({
-			message: "Ram added",
-		});
+		console.log(req.body);
 
 		const {
 			idManufacturer,

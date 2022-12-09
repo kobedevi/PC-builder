@@ -1,12 +1,14 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { PossibleRoutes } from "../../core/routing";
 import GeneralOverview from "./GeneralOverview/GeneralOverview";
-import CaseOverview from "./Cases/CaseOverview";
-import CreateCase from "./Cases/CreateCase";
 import CpuOverview from "./Cpus/CpuOverview";
 import CreateCpu from "./Cpus/CreateCpu";
-import CreateMotherboard from "./Motherboards/CreateMotherboard";
 import MotherboardOverview from "./Motherboards/MotherboardOverview";
+import CreateMotherboard from "./Motherboards/CreateMotherboard";
+import CaseOverview from "./Cases/CaseOverview";
+import CreateCase from "./Cases/CreateCase";
+import RamOverview from "./Ram/RamOverview";
+import CreateRam from "./Ram/CreateRam";
 
 const MainRouting = () => {
   return (
@@ -30,6 +32,9 @@ const MainRouting = () => {
 
       <Route path={PossibleRoutes.Cases} element={<CaseOverview />} />
       <Route path={PossibleRoutes.CaseCreate} element={<CreateCase />} />
+
+      <Route path={PossibleRoutes.Ram} element={<RamOverview />} />
+      <Route path={PossibleRoutes.RamCreate} element={<CreateRam />} />
 
       <Route
         path="*"

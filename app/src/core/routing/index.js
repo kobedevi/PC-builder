@@ -23,6 +23,10 @@ const PossibleRoutes = Object.freeze({
   Cases: "/case",
   CaseCreate: "/case/create",
   CaseDetail: "/case/:id",
+
+  Ram: "/ram",
+  RamCreate: "/ram/create",
+  RamDetail: "/ram/:id",
   // DirectorsEdit: '/directors/:id/edit',
 });
 

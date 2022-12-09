@@ -18,7 +18,7 @@ const ramModel = [
 		.withMessage("stickAmount can not be empty, and has to be between 1 and 8"),
 	check("speed")
 		.notEmpty()
-		.isInt({ min: 1, max: 8000 })
+		.isInt({ min: 1, max: 12000 })
 		.withMessage(
 			"speed can not be empty, and has to be between 1 and 8000, unit is MHz"
 		),
