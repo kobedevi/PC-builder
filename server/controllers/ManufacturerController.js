@@ -27,11 +27,14 @@ class ManufacturerController {
 			try {
 				const sqlInsert =
 					"INSERT INTO manufacturers (idManufacturer,manufacturerName) VALUES (?,?)";
-				db.promise().query(sqlInsert, [id, manufacturerName]);
-				res.status(201).send({
-					message: "Manufacturer added",
-					id,
-				});
+				db.promise()
+					.query(sqlInsert, [id, manufacturerName])
+					.then(() => {
+						res.status(201).send({
+							message: "Manufacturer added",
+							id,
+						});
+					});
 			} catch (e) {
 				next(
 					e.name && e.name === "ValidationError" ? new ValidationError(e) : e

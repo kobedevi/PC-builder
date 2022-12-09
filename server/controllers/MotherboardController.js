@@ -62,21 +62,24 @@ class MotherboardController {
 			const id = uuidv4();
 			const sqlInsert =
 				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots) VALUES (?,?,?,?,?,?,?,?,?)";
-			db.promise().query(sqlInsert, [
-				id,
-				idManufacturer,
-				idCpuSocket,
-				idFormfactor,
-				modelName,
-				wifi,
-				sataPorts,
-				pcieSlots,
-				memorySlots,
-			]);
-			res.status(201).send({
-				message: "Motherboard added",
-				id,
-			});
+			db.promise()
+				.query(sqlInsert, [
+					id,
+					idManufacturer,
+					idCpuSocket,
+					idFormfactor,
+					modelName,
+					wifi,
+					sataPorts,
+					pcieSlots,
+					memorySlots,
+				])
+				.then(() => {
+					res.status(201).send({
+						message: "Motherboard added",
+						id,
+					});
+				});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}

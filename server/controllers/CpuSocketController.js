@@ -26,11 +26,14 @@ class CpuSocketController {
 			try {
 				const sqlInsert =
 					"INSERT INTO cpusockets (idCpuSocket, socketType) VALUES (?,?)";
-				db.promise().query(sqlInsert, [id, req.body.socketType]);
-				res.status(201).send({
-					message: "CPU socket added",
-					id,
-				});
+				db.promise()
+					.query(sqlInsert, [id, req.body.socketType])
+					.then(() => {
+						res.status(201).send({
+							message: "CPU socket added",
+							id,
+						});
+					});
 			} catch (e) {
 				next(
 					e.name && e.name === "ValidationError" ? new ValidationError(e) : e

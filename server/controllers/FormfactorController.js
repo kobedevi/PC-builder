@@ -26,11 +26,14 @@ class FormfactorController {
 			try {
 				const sqlInsert =
 					"INSERT INTO formfactors (idFormfactor, formfactor) VALUES (?,?)";
-				db.promise().query(sqlInsert, [id, req.body.formfactor]);
-				res.status(201).send({
-					message: "Formfactor added",
-					id,
-				});
+				db.promise()
+					.query(sqlInsert, [id, req.body.formfactor])
+					.then(() => {
+						res.status(201).send({
+							message: "Formfactor added",
+							id,
+						});
+					});
 			} catch (e) {
 				next(
 					e.name && e.name === "ValidationError" ? new ValidationError(e) : e

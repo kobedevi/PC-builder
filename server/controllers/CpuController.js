@@ -45,18 +45,21 @@ class CpuController {
 				const idProcessor = uuidv4();
 				const sqlInsert =
 					"INSERT INTO cpus (idProcessor, idManufacturer, idCpuSocket, modelName, clockSpeed, cores) VALUES (?,?,?,?,?,?)";
-				db.promise().query(sqlInsert, [
-					idProcessor,
-					idManufacturer,
-					idCpuSocket,
-					modelName,
-					clockSpeed,
-					cores,
-				]);
-				res.status(201).send({
-					message: "CPU added",
-					id: idProcessor,
-				});
+				db.promise()
+					.query(sqlInsert, [
+						idProcessor,
+						idManufacturer,
+						idCpuSocket,
+						modelName,
+						clockSpeed,
+						cores,
+					])
+					.then(() => {
+						res.status(201).send({
+							message: "CPU added",
+							id: idProcessor,
+						});
+					});
 			} catch (e) {
 				next(
 					e.name && e.name === "ValidationError" ? new ValidationError(e) : e
