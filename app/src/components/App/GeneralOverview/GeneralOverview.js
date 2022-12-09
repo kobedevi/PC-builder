@@ -13,6 +13,11 @@ const items = [
     route: PossibleRoutes.Motherboards,
     icon: null,
   },
+  {
+    label: "Case",
+    route: PossibleRoutes.Cases,
+    icon: null,
+  },
 ];
 
 const GeneralOverview = () => {

@@ -19,6 +19,10 @@ const PossibleRoutes = Object.freeze({
   Motherboards: "/motherboard",
   MotherboardCreate: "/motherboard/create",
   MotherboardDetail: "/motherboard/:id",
+
+  Cases: "/case",
+  CaseCreate: "/case/create",
+  CaseDetail: "/case/:id",
   // DirectorsEdit: '/directors/:id/edit',
 });
 
