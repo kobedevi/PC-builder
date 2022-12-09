@@ -19,3 +19,34 @@ code {
 .show {
   display: unset;
 }
+
+.app {
+  display: flex;
+}
+
+.sidenav {
+  display: flex;
+  height: 100vh;
+}
+
+.sidenav ul{
+  list-style: none;
+  margin-right: 1rem;
+  padding: 0;
+}
+
+.sidenav li {
+  padding: 8px 12px;
+  transition: .1s ease-in-out;
+  background-color: #292737;
+  border-bottom: 2px solid black;
+}
+
+.sidenav li:hover {
+  background-color:rgba(31,29,36, 1) ;
+}
+
+.sidenav a {
+  color: white;
+  text-decoration: none;
+}
