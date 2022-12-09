@@ -4,7 +4,7 @@ const caseModel = [
 	check("modelName")
 		.notEmpty()
 		.isLength({ max: 100 })
-		.withMessage("odelName can not be empty"),
+		.withMessage("modelName can not be empty"),
 	check(["height", "width", "depth"])
 		.isInt({ min: 1, max: 1000 })
 		.optional({ nullable: true })
