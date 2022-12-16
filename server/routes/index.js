@@ -4,6 +4,7 @@ const ValidationError = require("../errors/ValidationError");
 // const { authLocal, authJwt } = require('../services/auth/auth.services');
 
 const { cpuModel } = require("../models/Cpu");
+const { cpuCoolerModel } = require("../models/CpuCooler");
 const { manufacturerModel } = require("../models/Manufacturer");
 const { cpuSocketModel } = require("../models/CpuSocket");
 const { formfactorModel } = require("../models/Formfactor");
@@ -13,6 +14,7 @@ const { ramModel } = require("../models/Ram");
 const { storageTypeModel } = require("../models/StorageType");
 
 const CpuController = require("../controllers/CpuController");
+const CpuCoolerController = require("../controllers/CpuCoolerController");
 const CpuSocketController = require("../controllers/CpuSocketController");
 const ManufacturerController = require("../controllers/ManufacturerController");
 const FormfactorController = require("../controllers/FormfactorController");
@@ -22,8 +24,9 @@ const RamController = require("../controllers/RamController");
 const StorageTypeController = require("../controllers/StorageTypeController");
 
 const cpuController = new CpuController();
-const manufacturerController = new ManufacturerController();
+const cpuCoolerController = new CpuCoolerController();
 const cpuSocketController = new CpuSocketController();
+const manufacturerController = new ManufacturerController();
 const formfactorController = new FormfactorController();
 const motherboardController = new MotherboardController();
 const caseController = new CaseController();
@@ -34,6 +37,10 @@ const registerRoutes = (app, db) => {
 	// CPUS
 	app.get("/cpu", cpuController.fetchCpus);
 	app.post("/cpu", cpuModel, cpuController.createCpu);
+
+	// CPUCoolers
+	app.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
+	app.post("/cpucooler", cpuCoolerModel, cpuCoolerController.createCpuCooler);
 
 	// Motherboards
 	app.get("/motherboard", motherboardController.fetchMotherboards);
