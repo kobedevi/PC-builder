@@ -3,8 +3,13 @@ import { PossibleRoutes } from "../../core/routing";
 
 const items = [
   {
-    label: "Cpu",
+    label: "CPU",
     route: PossibleRoutes.Cpus,
+    icon: null,
+  },
+  {
+    label: "CPU cooler",
+    route: PossibleRoutes.CpuCoolers,
     icon: null,
   },
   {

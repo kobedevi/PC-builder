@@ -9,6 +9,8 @@ import CaseOverview from "./Cases/CaseOverview";
 import CreateCase from "./Cases/CreateCase";
 import RamOverview from "./Ram/RamOverview";
 import CreateRam from "./Ram/CreateRam";
+import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
+import CreateCpuCooler from "./CpuCoolers/CreateCpuCooler";
 
 const MainRouting = () => {
   return (
@@ -20,6 +22,12 @@ const MainRouting = () => {
 
       <Route path={PossibleRoutes.Cpus} element={<CpuOverview />} />
       <Route path={PossibleRoutes.CpuCreate} element={<CreateCpu />} />
+
+      <Route path={PossibleRoutes.CpuCoolers} element={<CpuCoolerOverview />} />
+      <Route
+        path={PossibleRoutes.CpuCoolerCreate}
+        element={<CreateCpuCooler />}
+      />
 
       <Route
         path={PossibleRoutes.Motherboards}
