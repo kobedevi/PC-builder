@@ -30,7 +30,9 @@ const MotherboardOverview = () => {
       {data && (
         <ul>
           {data.map((mb) => (
-            <li key={mb.id_cpu}>{`${mb.idMotherboard} ${mb.modelName}`}</li>
+            <li
+              key={mb.idMotherboard}
+            >{`${mb.idMotherboard} ${mb.modelName}`}</li>
           ))}
         </ul>
       )}
