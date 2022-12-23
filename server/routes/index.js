@@ -12,7 +12,7 @@ const { motherboardModel } = require("../models/motherboard");
 const { caseModel } = require("../models/Case");
 const { ramModel } = require("../models/Ram");
 const { storageTypeModel } = require("../models/StorageType");
-const { gpuModel } = require("../models/Gpu");
+const { gpuModel, gpuPartnerModel } = require("../models/Gpu");
 
 const CpuController = require("../controllers/CpuController");
 const CpuCoolerController = require("../controllers/CpuCoolerController");
@@ -81,9 +81,13 @@ const registerRoutes = (app, db) => {
 	app.get("/cpusocket", cpuSocketController.fetchCpuSockets);
 	app.post("/cpusocket", cpuSocketModel, cpuSocketController.createCpuSocket);
 
-	// GPUS
+	// GPUS general
 	app.get("/gpu", gpuController.fetchGpus);
 	app.post("/gpu", gpuModel, gpuController.createGpu);
+
+	// GPUS partners
+	app.get("/gpu/partner", gpuController.fetchGpuPartners);
+	app.post("/gpu/partner", gpuPartnerModel, gpuController.createGpuPartner);
 
 	// Formfactors
 	app.get("/formfactor", formfactorController.fetchFormfactors);

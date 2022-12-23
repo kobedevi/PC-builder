@@ -17,6 +17,28 @@ const gpuModel = [
 		.withMessage("Vram must be of type int between 0 and 1024; unit is GB"),
 ];
 
+const gpuPartnerModel = [
+	check("modelName")
+		.notEmpty()
+		.isLength({ max: 100 })
+		.withMessage("modelName can not be empty"),
+	check("clockspeed").notEmpty().withMessage("clockSpeed can not be empty"),
+	check("clockspeed")
+		.isFloat({ min: 1, max: 99999 })
+		.withMessage(
+			"clockspeed must be of type int, with a max size of 99999; unit is MHz"
+		),
+	check("watercooled")
+		.notEmpty()
+		.isBoolean()
+		.withMessage("watercooled can not be empty"),
+	check(["height", "width", "depth"])
+		.isInt({ min: 1, max: 1000 })
+		.optional({ nullable: true })
+		.withMessage("Dimensions must be of type int, with a max size of 1000mm"),
+];
+
 module.exports = {
 	gpuModel,
+	gpuPartnerModel,
 };
