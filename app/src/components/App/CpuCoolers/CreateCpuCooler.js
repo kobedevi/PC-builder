@@ -11,17 +11,15 @@ const CreateCpuCooler = () => {
   const [error, setError] = useState();
 
   const handleSubmit = (data) => {
-    console.log(data);
     setIsLoading(true);
-    // TODO: CPUSOCKETS is always 1 change behind
-    // axiosCreateCpuCooler(data)
-    //   .then(() => {
-    //     navigate(PossibleRoutes.CpuCoolers, { replace: true });
-    //   })
-    //   .catch((err) => {
-    //     setError(err);
-    //     setIsLoading(false);
-    //   });
+    axiosCreateCpuCooler(data)
+      .then(() => {
+        navigate(PossibleRoutes.CpuCoolers, { replace: true });
+      })
+      .catch((err) => {
+        setError(err);
+        setIsLoading(false);
+      });
   };
 
   return (

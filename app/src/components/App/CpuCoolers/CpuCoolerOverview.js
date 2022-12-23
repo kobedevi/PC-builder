@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
-import { fetchCpus } from "../../../core/modules/CPU/api";
+import { fetchCpuCoolers } from "../../../core/modules/CPUCooler/api";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
@@ -10,7 +10,7 @@ const CpuCoolerOverview = () => {
   const [info, setInfo] = useState();
 
   const apiCall = useCallback(() => {
-    return fetchCpus();
+    return fetchCpuCoolers();
   }, []);
 
   const {
@@ -36,7 +36,7 @@ const CpuCoolerOverview = () => {
       {cpuCoolers && (
         <ul>
           {cpuCoolers.map((cc) => (
-            <li key={cc.id_cpu}>{`${cc.idProcessor} ${cc.clockSpeed}GHz`}</li>
+            <li key={cc.idCpuCooler}>{`${cc.idCpuCooler}`}</li>
           ))}
         </ul>
       )}

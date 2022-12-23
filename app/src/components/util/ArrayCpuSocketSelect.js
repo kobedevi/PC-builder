@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import Input from "../Design/Input";
 import Button from "../Design/Button";
 import { produce } from "immer";
+import { v4 as uuidv4 } from "uuid";
 
 const schema = yup.object().shape({
   socketType: yup.string().required(),
@@ -21,6 +22,7 @@ const ArrayCpuSocketSelect = ({
   setCpuSockets,
   label,
   name,
+  disabled,
   handleChange: handleSocketChange,
   setData,
   data: formData,
@@ -37,6 +39,13 @@ const ArrayCpuSocketSelect = ({
   const apiCall = useCallback(() => {
     return fetchCpuSockets();
   }, []);
+
+  useEffect(() => {
+    setData({
+      ...formData,
+      cpuSockets: [...cpuSockets],
+    });
+  }, [cpuSockets]);
 
   const {
     data: socketTypes,
@@ -116,11 +125,11 @@ const ArrayCpuSocketSelect = ({
 
       {/* Code from Ben Awad
       https://www.youtube.com/watch?v=3GtAE9RZHVc */}
-
       {cpuSockets.map((c, index) => {
         return (
-          <div key={c.id}>
+          <div key={c.tempId}>
             <select
+              disabled={disabled}
               name={name}
               onChange={(e) => {
                 const socketType = e.target.value;
@@ -129,11 +138,6 @@ const ArrayCpuSocketSelect = ({
                     v[index].idCpuSocket = socketType;
                   })
                 );
-
-                setData({
-                  ...formData,
-                  cpuSockets: [...cpuSockets, { idCpuSocket: socketType }],
-                });
               }}
             >
               <option>--</option>
@@ -156,9 +160,12 @@ const ArrayCpuSocketSelect = ({
             /> */}
 
             <button
+              disabled={disabled}
               onClick={() => {
                 setCpuSockets((currentCpuSockets) =>
-                  currentCpuSockets.filter((x) => x.id !== c.id)
+                  currentCpuSockets.filter(
+                    (x) => x.idCpuSocket !== c.idCpuSocket
+                  )
                 );
               }}
             >
@@ -167,6 +174,7 @@ const ArrayCpuSocketSelect = ({
           </div>
         );
       })}
+
       <Link style={{ display: "inline-block" }} onClick={toggleHide}>
         {isHidden ? "Add new socket type" : "Cancel"}
       </Link>
@@ -174,6 +182,7 @@ const ArrayCpuSocketSelect = ({
         <Input
           label="socket name"
           type="text"
+          disabled={disabled}
           onChange={handleChange}
           name="socketType"
           id="socketType"
@@ -188,10 +197,13 @@ const ArrayCpuSocketSelect = ({
       <br />
 
       <button
-        onClick={() => {
+        disabled={disabled}
+        onClick={(e) => {
+          e.preventDefault();
           setCpuSockets((currentCpuSockets) => [
             ...currentCpuSockets,
             {
+              tempId: uuidv4(),
               idCpuSocket: "",
             },
           ]);

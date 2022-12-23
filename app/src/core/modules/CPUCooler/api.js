@@ -16,6 +16,12 @@ const createCpuCooler = (data) => (headers) => {
 };
 
 const axiosCreateCpuCooler = (data) => {
+  data = {
+    ...data,
+    // remove tempId
+    cpuSockets: data.cpuSockets.map(({ tempId, ...rest }) => rest),
+  };
+  console.log(data);
   return Axios.post(`${process.env.REACT_APP_BASE_API}/cpucooler`, {
     // headers: createHeaders(headers),
     ...data,

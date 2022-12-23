@@ -18,9 +18,14 @@ class CpuCoolerController {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { idManufacturer, modelName, height, width, depth, socketTypes } =
-			req.body;
-
+		const {
+			idManufacturer,
+			modelName,
+			height,
+			width,
+			depth,
+			cpuSockets: socketTypes,
+		} = req.body;
 		try {
 			const manufacturer = await db
 				.promise()
@@ -46,7 +51,7 @@ class CpuCoolerController {
 			]);
 
 			const promises = [];
-			socketTypes.forEach((socket) => {
+			cpuSockets.forEach((socket) => {
 				const id = uuidv4();
 				const sqlInsert =
 					"INSERT INTO cpucooler_has_cpusockets (id, idCpuCooler, idCpuSocket) VALUES (?,?,?)";

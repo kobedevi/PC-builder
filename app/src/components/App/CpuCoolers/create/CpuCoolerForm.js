@@ -6,6 +6,7 @@ import Button from "../../../Design/Button";
 import NumberInput from "../../../Design/NumberInput";
 import ManufacturerSelect from "../../../util/ManufacturerSelect";
 import ArrayCpuSocketSelect from "../../../util/ArrayCpuSocketSelect";
+import { v4 as uuidv4 } from "uuid";
 
 const schema = yup.object().shape({
   idManufacturer: yup.string().required(),
@@ -26,7 +27,9 @@ const defaultData = {
 };
 
 const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
-  const [cpuSockets, setCpuSockets] = useState([{ idCpuSocket: "" }]);
+  const [cpuSockets, setCpuSockets] = useState([
+    { idCpuSocket: "", tempId: uuidv4() },
+  ]);
 
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
@@ -36,7 +39,6 @@ const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
-    console.log(data);
     setData({
       ...data,
       cpuSockets: cpuSockets,
@@ -45,7 +47,6 @@ const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
   };
 
   const validate = useCallback((data, onSuccess) => {
-    console.log(data);
     schema
       .validate(data, { abortEarly: false })
       .then(() => {
@@ -80,7 +81,6 @@ const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         error={errors.idManufacturer}
       />
-
       <Input
         label="Model name"
         type="text"
@@ -90,49 +90,46 @@ const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         error={errors.modelName}
       />
-
       <NumberInput
         label="Height in cm"
         type="number"
         name="height"
         value={data.height}
         disabled={disabled}
-        min={"1"}
-        max={"1000"}
+        min={1}
+        max={1000}
         step={1}
         onChange={handleChange}
         error={errors.height}
       />
-
       <NumberInput
         label="Width in cm"
         type="number"
         name="width"
         value={data.width}
         disabled={disabled}
-        min={"1"}
-        max={"1000"}
+        min={1}
+        max={1000}
         step={1}
         onChange={handleChange}
         error={errors.width}
       />
-
       <NumberInput
         label="Depth in cm"
         type="number"
         name="depth"
         value={data.depth}
         disabled={disabled}
-        min={"1"}
-        max={"1000"}
+        min={1}
+        max={1000}
         step={1}
         onChange={handleChange}
         error={errors.depth}
       />
-
       <ArrayCpuSocketSelect
         label="Compatible CPU socket"
         name="cpuSockets"
+        disabled={disabled}
         value={data.cpuSockets}
         cpuSockets={cpuSockets}
         setCpuSockets={setCpuSockets}

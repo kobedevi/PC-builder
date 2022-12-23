@@ -34,8 +34,8 @@ const Sidebar = () => {
     <nav id="sidenav" className="sidenav">
       <div>
         <ul>
-          {items.map((item) => (
-            <Link className="nav-link" to={item.route}>
+          {items.map((item, key) => (
+            <Link key={key} className="nav-link" to={item.route}>
               <li key={item.route} className="nav-item">
                 {item.label}
               </li>
