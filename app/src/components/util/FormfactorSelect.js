@@ -110,13 +110,19 @@ const FormfactorSelect = (props) => {
         <Input
           label="formfactor name"
           type="text"
+          disabled={props.disabled}
           onChange={handleChange}
           name="formfactor"
           id="formfactor"
           error={errors.formfactor}
           ref={inputRef}
         />
-        <Button className="mt-4" type="submit" onClick={handleSubmit}>
+        <Button
+          disabled={props.disabled}
+          className="mt-4"
+          type="submit"
+          onClick={handleSubmit}
+        >
           Add formfactor
         </Button>
       </div>

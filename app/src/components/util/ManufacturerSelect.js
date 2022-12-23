@@ -111,12 +111,18 @@ const ManufacturerSelect = (props) => {
           label="Manufacturer name"
           type="text"
           onChange={handleChange}
+          disabled={props.disabled}
           name="newManufacturer"
           id="newManufacturer"
           error={errors.newManufacturer}
           ref={inputRef}
         />
-        <Button className="mt-4" type="submit" onClick={handleSubmit}>
+        <Button
+          disabled={props.disabled}
+          className="mt-4"
+          type="submit"
+          onClick={handleSubmit}
+        >
           Add manufacturer
         </Button>
       </div>

@@ -110,13 +110,19 @@ const CpuSocketSelect = (props) => {
         <Input
           label="socket name"
           type="text"
+          disabled={props.disabled}
           onChange={handleChange}
           name="socketType"
           id="socketType"
           error={errors.socketType}
           ref={inputRef}
         />
-        <Button className="mt-4" type="submit" onClick={handleSubmit}>
+        <Button
+          disabled={props.disabled}
+          className="mt-4"
+          type="submit"
+          onClick={handleSubmit}
+        >
           Add CPU socket
         </Button>
       </div>
