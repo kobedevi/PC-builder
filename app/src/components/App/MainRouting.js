@@ -11,6 +11,8 @@ import RamOverview from "./Ram/RamOverview";
 import CreateRam from "./Ram/CreateRam";
 import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
 import CreateCpuCooler from "./CpuCoolers/CreateCpuCooler";
+import GpuOverview from "./Gpu/GpuOverview";
+import CreateGpu from "./Gpu/CreateGpu";
 
 const MainRouting = () => {
   return (
@@ -43,6 +45,10 @@ const MainRouting = () => {
 
       <Route path={PossibleRoutes.Ram} element={<RamOverview />} />
       <Route path={PossibleRoutes.RamCreate} element={<CreateRam />} />
+
+      {/* TODO: Create Components */}
+      <Route path={PossibleRoutes.Gpus} element={<GpuOverview />} />
+      <Route path={PossibleRoutes.GpuCreate} element={<CreateGpu />} />
 
       <Route
         path="*"

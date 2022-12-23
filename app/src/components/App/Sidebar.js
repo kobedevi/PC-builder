@@ -27,6 +27,11 @@ const items = [
     route: PossibleRoutes.Ram,
     icon: null,
   },
+  {
+    label: "GPU",
+    route: PossibleRoutes.Gpus,
+    icon: null,
+  },
 ];
 
 const Sidebar = () => {
