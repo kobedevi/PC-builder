@@ -1,0 +1,21 @@
+$primary: #008AAB;
+$secondary: #01A5D9;
+$white: #FBFBFB;
+
+$text: #463E40;
+$header: #ffbf00;
+
+$bg: #292737;
+$darker: rgba(31,29,36, .76);
+$darkest: rgba(31,29,36, 1);
+
+$breaker: #939598;
+$breaker-opacity: .2;
+$transition-time: .2s ease-in-out;
+
+$font-family-base: 'Lato', sans-serif;
+$title-font: 'NeoSansBold';
+$text-font: 'Source Sans Pro';
+
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';

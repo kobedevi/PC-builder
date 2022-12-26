@@ -1,5 +1,6 @@
 import MainRouting from "./MainRouting";
 import Sidebar from "./Sidebar";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (

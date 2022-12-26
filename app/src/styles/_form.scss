@@ -1,0 +1,18 @@
+form {
+    width:50rem;
+    max-width: 100%;
+}
+
+.hide {
+    display: none;
+}
+  
+.show {
+    border-radius: 5px;
+    border: 2px solid red;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: .8rem 1rem;
+    margin: 0, .2rem;
+}

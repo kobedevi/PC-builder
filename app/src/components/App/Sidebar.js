@@ -40,11 +40,11 @@ const Sidebar = () => {
       <div>
         <ul>
           {items.map((item, key) => (
-            <Link key={key} className="nav-link" to={item.route}>
-              <li key={item.route} className="nav-item">
+            <li key={item.route} className="nav-item">
+              <Link key={key} className="nav-link" to={item.route}>
                 {item.label}
-              </li>
-            </Link>
+              </Link>
+            </li>
           ))}
         </ul>
       </div>

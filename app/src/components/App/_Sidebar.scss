@@ -1,0 +1,63 @@
+@import '../../styles/bootstrap';
+
+// .sidebar {
+//     font-size: 1.5rem;
+//     position: fixed;
+//     top: 0;
+//     bottom: 0;
+//     left: 0;
+//     z-index: 100;
+//     padding: 48px 0 0;
+//     background: $darker;
+//     box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+// }
+.content{
+    padding: 0;
+    flex: 1;
+    align-self: stretch;
+    justify-self: stretch;
+    display: flex;
+    flex-direction:column;
+}
+
+.app{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.sidenav {
+    transition: .1s;
+    display: flex;
+    flex-direction: column;
+    background: $dark;
+    width: 250px;
+    box-shadow: 0 0.3125rem 0.625rem 0 rgba(0, 0, 0, .55);
+    ul {
+        padding: 0;
+        list-style: none;
+        li{
+            border-bottom: 2px solid $dark;
+            font-weight: bolder;
+            a{
+                transition: .1s;
+                color: white ;
+                padding: 10px;
+            }
+            &:hover{
+                background: $bg;
+                color: $primary;
+            }
+        }
+    }
+}
+
+.nav-link {
+    color: red;
+}
+
+@media screen and (max-width: 640px) {
+    
+}

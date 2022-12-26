@@ -127,8 +127,9 @@ const ArrayCpuSocketSelect = ({
       https://www.youtube.com/watch?v=3GtAE9RZHVc */}
       {cpuSockets.map((c, index) => {
         return (
-          <div key={c.tempId}>
+          <div key={c.tempId} className="form-group selectArray">
             <select
+              className="form-control"
               disabled={disabled}
               name={name}
               onChange={(e) => {
@@ -160,6 +161,7 @@ const ArrayCpuSocketSelect = ({
             /> */}
 
             <button
+              className="btn btn-danger"
               disabled={disabled}
               onClick={() => {
                 setCpuSockets((currentCpuSockets) =>
@@ -197,6 +199,7 @@ const ArrayCpuSocketSelect = ({
       <br />
 
       <button
+        className="btn btn-primary mt-4"
         disabled={disabled}
         onClick={(e) => {
           e.preventDefault();

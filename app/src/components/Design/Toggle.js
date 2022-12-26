@@ -10,7 +10,7 @@ const Toggle = React.forwardRef(
       <div className="form-group">
         <label>Has {name}:</label>
         {possibleValues.map((v) => (
-          <div>
+          <div className="toggle">
             <input
               type="radio"
               id={v.toString()}
@@ -21,7 +21,6 @@ const Toggle = React.forwardRef(
               {...rest}
             />
             <label htmlFor={v.toString()}>{v.toString()}</label>
-            <br />
           </div>
         ))}
 

@@ -1,0 +1,516 @@
+@import 'styles/_bootstrap';
+@import 'styles/_typography';
+@import 'styles/_generic';
+@import 'components/App/Sidebar';
+@import 'styles/_login';
+@import 'styles/pagination';
+@import 'styles/header';
+@import 'styles/form';
+
+
+// hide text for loading animation
+.spinner-border .sr-only {
+    display: inline-block;
+    text-indent: 100% !important;
+    overflow: hidden;
+}
+
+#map{
+    display: flex;
+    position: absolute;
+    z-index: 10;
+    height: calc(100vh - 56px);
+    width: calc(100vw - 250px);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: calc(100vh - 56px);
+    width: calc(100vw - 250px);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+// NEW CSS
+// -----------------
+
+p{
+    color: $text;
+    font-family: $text-font;
+}
+
+.mapboxgl-popup-close-button{
+    color: black;
+}
+
+.formContainer {
+    padding: 32px 24px;
+    margin: auto;
+    width: 100%;
+    max-width: 650px;
+    background: $white;
+    border-radius: 4px;
+    div h1{
+        font-family: $title-font;
+        font-weight: bolder;
+        margin-bottom: 24px;
+    }
+    p{
+        text-align: center;
+    }
+    .btnContainer{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex-grow: 1;
+        .bigBtn {
+            width: 100%;
+            padding: 16px 0;
+            margin: 32px 0;
+            color: $white;
+            font-family: $title-font;
+            text-transform: uppercase;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+    }
+
+    hr {
+        color: $breaker;
+        opacity: $breaker-opacity;
+        height: 4px !important;
+    }
+
+    .formSmall{
+        color: $text;
+        margin-top: 32px;
+        text-decoration: none;
+        &:hover{
+            text-decoration: underline;
+        }
+    }
+
+    input, label, h2, h3, h4, h5{
+        color: $text;
+    }
+}
+
+.toggler {
+    &.fullscreen {
+        height: 100vh;
+    }
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 20;
+    right: 600px;
+    width: 16px;
+    height: calc(100vh - 56px);
+    background-color: #f5842d;
+    transition: all $transition-time;
+    &.hide{
+        right: 0;
+        span {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.mapboxgl-ctrl-geocoder--input {
+    color: black;
+}
+
+.suggestions-wrapper {
+    .suggestions li, .mapboxgl-ctrl-geocoder--suggestion-title {
+        color: black !important;
+    }
+    .mapboxgl-ctrl-geocoder--suggestion-address {
+        color: black !important;
+        padding-bottom: .5rem;
+    }
+}
+
+.infoSidebar {
+    display: flex;
+    align-self: flex-end;
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 20;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+    width: 600px;
+    height: 100%;
+    max-height: calc(100vh - 56px);
+    box-sizing:border-box;
+    padding: 16px;
+    color: $text ;
+    padding-right: -1.5rem;
+    background-color: $white;
+    transition-property: width, flex-grow, padding-left, padding-right;
+    transition: $transition-time;
+    &.fullscreen {
+        max-height: 100vh;
+    }
+    h3, h4, h5 {
+        color: $text ;
+    }
+    .infoheader {
+        position: sticky;
+        .edit {
+            position: absolute !important;
+            z-index: 50;
+            bottom: 6rem;
+        }
+    }
+    article{
+        overflow-y: scroll;
+    }
+    .scrollList{
+        // overflow-y: scroll;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+        .locationCard {
+            box-shadow: 0 0.3125rem 0.625rem 0 rgba(0, 0, 0, 0.55);
+            border-radius:5px;
+            overflow: hidden;
+            max-width: 270px;
+            margin-bottom: 25px;
+            flex-shrink: none;
+            overflow-y: auto;
+            article {
+                box-sizing: border-box;
+                padding: 16px;
+            }
+            img {
+                object-fit: cover;
+                aspect-ratio: 1;
+                width: 100%;
+            }
+        }
+    }
+
+    &.hide{
+        width: 0;
+        flex-grow: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+select *{
+    all: unset;
+}
+::selection, ::-moz-selection{
+    color: black;
+}
+
+#map.fullscreen {
+    height: 100vh;
+    width: 100vw;
+}
+
+table td{
+    cursor: pointer;
+    a {
+        text-decoration: none;
+        color: white;
+    }
+    a:hover {
+        all: unset;
+    }
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+// END NEW CSS
+// ----------------
+
+
+.delete {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 2rem;
+}
+
+table{
+    width: 100%;
+    max-width: 1000px;
+    tr {
+        td,th {
+            padding:.75rem 1rem;
+            vertical-align: middle;
+            position: relative;
+            .edit {
+                position: relative;
+                bottom: unset;
+                left: unset;
+                top: unset;
+                right: unset;
+                font-size:1rem;
+                width: 3rem;
+                height: 3rem;
+                transform-origin: center center;
+            }
+    
+        }
+        &:nth-child(even) {
+            background-color: $darker;
+        }
+    }
+}
+    
+
+.add, .edit {
+    font-size:1.5rem;
+    color: white;
+    text-decoration: none;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 1rem;
+    right: 1rem;
+    width: 4rem;
+    height: 4rem;
+    overflow: hidden;
+    border-radius: 100%;
+    background: $primary;
+    transition: .2s;
+    transform-origin: bottom right;
+    z-index: 500;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.add, .edit {
+    svg{
+        transform: scale(1.7);
+    }
+}
+
+.edit {
+    bottom: 6rem;
+}
+
+.movieList {
+    padding: unset;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    li{
+        list-style: none;
+        margin: 0 10px;
+        width: 220px;
+    }
+    .movieCard{
+        width: 206px;
+        position: relative;
+        margin: 0;
+        img{
+            border-radius: 5px;
+            overflow: hidden;
+            object-fit: cover;
+            height: 300px;
+            width: 206px;
+            box-shadow: 0px 0px 23px -4px #000000;
+        }
+        button, >svg {
+            position: absolute;
+            top: .8rem;
+        }
+        button {
+            right: .8rem;
+        }
+        >svg {
+            transform: scale(1.5);
+            transform-origin: top left;
+            filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.5));
+            left: .8rem;
+        }
+        a {
+            text-decoration: none;
+            section{
+                padding-left: .5rem;
+                .coverTitle{
+                    font-weight: bolder;
+                    letter-spacing: .025rem;
+                    font-size: 1.4rem;
+                }
+                .coverYear{
+                    opacity: .7;
+                    font-size: .8rem;
+                }
+            }
+        }
+    }
+}
+
+.middle {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .specialButton{
+        .btnContainer{
+            all: unset;
+            display: inline-block;
+            background: $bg;
+            border-radius: 5000px;
+            box-shadow: 0px 0px 23px -4px #000000;
+        }   
+        button.btn.btn-primary{
+            margin: 10px;
+            padding: 5px 20px ;
+            border-radius: 5000px;
+        }
+    }
+}
+
+#sidebarMenu {
+    background: $darker;
+}
+
+.detailTitle{
+    font-size: 4rem;
+}
+
+.movieContainer{
+    position: relative;
+    margin-left: -1.5rem;
+    width: calc(100% + 3rem);
+    overflow: hidden;
+    min-height: 300px;
+    div{
+        position: relative;
+        img {
+            width:100%;
+            height: 300px;
+            overflow: hidden;
+            object-fit:cover;
+            object-position: top;
+            filter: blur(10px);
+        }
+        &::before{
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            content: ' ';
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+    }
+    .movieDetails {
+        z-index: 3;
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+    }
+}
+
+form {
+    .form-control{
+        color: $text !important;
+        // background: $darker;
+        &:not(:first-of-type) {
+           margin-top: 1rem !important; 
+        }
+        &:focus{
+            color: $text !important;
+            // background: $darker;
+        }
+        &::placeholder{
+            color: $text !important;
+        }
+    }
+    .form-group {
+        &:not(:first-of-type) {
+            margin-top: .5rem; 
+         }
+    }
+}
+
+.modal-content {
+    background: $bg;
+    .modal-header, .modal-body {
+        padding: 1.5rem;
+    }
+    .modal-body{
+        display: flex;
+        flex-wrap:wrap;
+        flex-direction: column;
+        .btnContainer{
+            button{
+                margin-top: 1rem;
+                margin-right: 1rem;
+            }
+        }
+    }
+}
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.selectArray {
+    display: flex;
+    align-items: flex-start;
+    select {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        width: 90%;
+    }
+    button{
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        width: 10%;
+    }
+}
+
+@media screen and (max-width: 780px) {
+    .app{
+        flex-direction: column;
+    }
+    .sidenav{
+        width: 100%;
+        ul{
+            margin: 0;
+            min-width: 100%;
+            height: 50px;
+            overflow-x: auto;
+            display: flex;
+            flex-direction: row;
+            li{
+                width: unset;
+            }
+        }
+    }
+    main{
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        min-height: calc(100% - 106px);
+    }
+    .pagination{
+        bottom: 50px;
+        position: relative;
+    }
+}

@@ -1,0 +1,9 @@
+@import '_bootstrap';
+
+body {
+    #root{
+        height: 100vh;
+        overflow-y: hidden;
+        background-color: $bg;
+    }
+}
