@@ -46,7 +46,7 @@ const schema = yup.object().shape({
 const defaultData = {
   idManufacturer: "",
   modelName: "",
-  vram: undefined,
+  vram: 0,
   displayport: 0,
   hdmi: 0,
   vga: 0,
@@ -71,8 +71,6 @@ const GpuOriginalForm = ({
     ...initialData,
   });
 
-  // const inputRef = useRef(null);
-
   const handleChange = (e) => {
     setData({
       ...data,
@@ -80,21 +78,18 @@ const GpuOriginalForm = ({
     });
   };
 
-  const validate = useCallback(
-    (data, onSuccess) => {
-      schema
-        .validate(data, { abortEarly: false })
-        .then(() => {
-          if (onSuccess) {
-            onSuccess();
-          }
-        })
-        .catch((err) => {
-          setErrors(getValidationErrors(err));
-        });
-    },
-    [setErrors]
-  );
+  const validate = useCallback(async (data, onSuccess) => {
+    await schema
+      .validate(data, { abortEarly: false })
+      .then(() => {
+        if (onSuccess) {
+          onSuccess();
+        }
+      })
+      .catch((err) => {
+        setErrors(getValidationErrors(err));
+      });
+  }, []);
 
   useEffect(() => {
     if (isTouched) {
@@ -109,10 +104,6 @@ const GpuOriginalForm = ({
       .then((e) => {
         setInfo(e.data);
         setNewGpu();
-        setData({
-          ...initialData,
-        });
-        this.forceUpdate();
         toggleHide();
         refresh();
       })
@@ -125,7 +116,12 @@ const GpuOriginalForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsTouched(true);
-    validate(data, () => onSubmit(data));
+    validate(data, () => onSubmit(data)).then(() => {
+      setIsTouched(false);
+      setData({
+        ...initialData,
+      });
+    });
   };
 
   return (
@@ -160,7 +156,6 @@ const GpuOriginalForm = ({
         step={1}
         onChange={handleChange}
         error={errors.vram}
-        // ref={inputRef}
       />
 
       <div>
