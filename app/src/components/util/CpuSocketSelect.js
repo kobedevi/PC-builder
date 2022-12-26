@@ -11,6 +11,7 @@ import { getValidationErrors } from "../../core/utils/validation";
 import { Link } from "react-router-dom";
 import Input from "../Design/Input";
 import Button from "../Design/Button";
+import Spinner from "../Design/Spinner";
 
 const schema = yup.object().shape({
   socketType: yup.string().required(),
@@ -102,30 +103,35 @@ const CpuSocketSelect = (props) => {
     <div>
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info.message}</Alert>}
-      <Select options={options} {...props} />
-      <Link style={{ display: "inline-block" }} onClick={toggleHide}>
-        {isHidden ? "Add new socket type" : "Cancel"}
-      </Link>
-      <div className={isHidden ? "hide" : "show"}>
-        <Input
-          label="socket name"
-          type="text"
-          disabled={props.disabled}
-          onChange={handleChange}
-          name="socketType"
-          id="socketType"
-          error={errors.socketType}
-          ref={inputRef}
-        />
-        <Button
-          disabled={props.disabled}
-          className="mt-4"
-          type="submit"
-          onClick={handleSubmit}
-        >
-          Add CPU socket
-        </Button>
-      </div>
+      {isLoading && <Spinner />}
+      {options && (
+        <>
+          <Select options={options} {...props} />
+          <Link style={{ display: "inline-block" }} onClick={toggleHide}>
+            {isHidden ? "Add new socket type" : "Cancel"}
+          </Link>
+          <div className={isHidden ? "hide" : "show"}>
+            <Input
+              label="socket name"
+              type="text"
+              disabled={props.disabled}
+              onChange={handleChange}
+              name="socketType"
+              id="socketType"
+              error={errors.socketType}
+              ref={inputRef}
+            />
+            <Button
+              disabled={props.disabled}
+              className="mt-4"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              Add CPU socket
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

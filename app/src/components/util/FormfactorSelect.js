@@ -11,6 +11,7 @@ import {
   fetchFormfactors,
   createFormfactor,
 } from "../../core/modules/Formfactor/api";
+import Spinner from "../Design/Spinner";
 
 const schema = yup.object().shape({
   formfactor: yup.string().required(),
@@ -102,30 +103,35 @@ const FormfactorSelect = (props) => {
     <div>
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info.message}</Alert>}
-      <Select options={options} {...props} />
-      <Link style={{ display: "inline-block" }} onClick={toggleHide}>
-        {isHidden ? "Add new formfactor" : "Cancel"}
-      </Link>
-      <div className={isHidden ? "hide" : "show"}>
-        <Input
-          label="formfactor name"
-          type="text"
-          disabled={props.disabled}
-          onChange={handleChange}
-          name="formfactor"
-          id="formfactor"
-          error={errors.formfactor}
-          ref={inputRef}
-        />
-        <Button
-          disabled={props.disabled}
-          className="mt-4"
-          type="submit"
-          onClick={handleSubmit}
-        >
-          Add formfactor
-        </Button>
-      </div>
+      {isLoading && <Spinner />}
+      {options && (
+        <>
+          <Select options={options} {...props} />
+          <Link style={{ display: "inline-block" }} onClick={toggleHide}>
+            {isHidden ? "Add new formfactor" : "Cancel"}
+          </Link>
+          <div className={isHidden ? "hide" : "show"}>
+            <Input
+              label="formfactor name"
+              type="text"
+              disabled={props.disabled}
+              onChange={handleChange}
+              name="formfactor"
+              id="formfactor"
+              error={errors.formfactor}
+              ref={inputRef}
+            />
+            <Button
+              disabled={props.disabled}
+              className="mt-4"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              Add formfactor
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
