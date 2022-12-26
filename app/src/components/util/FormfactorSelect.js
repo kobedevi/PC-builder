@@ -96,7 +96,9 @@ const FormfactorSelect = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsTouched(true);
-    validate(newFormfactor, () => onSubmit(newFormfactor));
+    validate(newFormfactor, () => onSubmit(newFormfactor)).then(() => {
+      setIsTouched(false);
+    });
   };
 
   return (

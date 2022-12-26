@@ -86,6 +86,7 @@ const ManufacturerSelect = (props) => {
         inputRef.current.value = "";
         toggleHide();
         refresh();
+        setIsLoading(true);
       })
       .catch((err) => {
         setErrors(err);
@@ -96,7 +97,9 @@ const ManufacturerSelect = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsTouched(true);
-    validate(newManuName, () => onSubmit(newManuName));
+    validate(newManuName, () => onSubmit(newManuName)).then(() => {
+      setIsTouched(false);
+    });
   };
 
   return (

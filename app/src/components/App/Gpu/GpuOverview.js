@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
-import { fetchGpus } from "../../../core/modules/Gpu/api";
+import { fetchPartnerGpus } from "../../../core/modules/Gpu/api";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
@@ -10,7 +10,7 @@ const GpuOverview = () => {
   const [info, setInfo] = useState();
 
   const apiCall = useCallback(() => {
-    return fetchGpus();
+    return fetchPartnerGpus();
   }, []);
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);

@@ -5,56 +5,87 @@ import Input from "../../../Design/Input";
 import Button from "../../../Design/Button";
 import NumberInput from "../../../Design/NumberInput";
 import ManufacturerSelect from "../../../util/ManufacturerSelect";
-import FormfactorSelect from "../../../util/FormfactorSelect";
+import GpuOriginalSelect from "../../../util/GpuOriginalSelect";
+import Toggle from "../../../Design/Toggle2";
 
 const schema = yup.object().shape({
+  idGpu: yup.string().required(),
   idManufacturer: yup.string().required(),
   modelName: yup.string().required(),
-  vram: yup
+  clockspeed: yup
     .number()
-    .min(0, "Min. value 0, unit is GB.")
-    .max(1024, "Max. value 1024, unit is GB.")
-    .notRequired()
-    .positive()
-    .integer(),
-  displayport: yup
+    .min(1, "Min. speed amount is 1, unit is MHz.")
+    .max(99999, "Max. speed amount is 99999, unit is MHz.")
+    .required()
+    .positive(),
+  watercooled: yup.boolean().required(),
+  height: yup.number().notRequired().positive().integer(),
+  width: yup.number().notRequired().positive().integer(),
+  depth: yup.number().notRequired().positive().integer(),
+  wattage: yup
     .number()
-    .min(0, "Min. value 0, unit is GB.")
-    .max(1024, "Max. value 1024, unit is GB.")
-    .notRequired()
-    .positive()
-    .integer(),
-  hdmi: yup
-    .number()
-    .min(0, "Min. value 0, unit is GB.")
-    .max(1024, "Max. value 1024, unit is GB.")
-    .notRequired()
-    .positive()
-    .integer(),
-  vga: yup
-    .number()
-    .min(0, "Min. value 0, unit is GB.")
-    .max(1024, "Max. value 1024, unit is GB.")
-    .notRequired()
-    .positive()
-    .integer(),
-  dvi: yup
-    .number()
-    .min(0, "Min. value 0, unit is GB.")
-    .max(1024, "Max. value 1024, unit is GB.")
-    .notRequired()
-    .positive()
-    .integer(),
+    .min(1, "Min. wattage amount is 1, unit is W.")
+    .max(10000, "Max. wattage amount is 10000, unit is W.")
+    .required()
+    .positive(),
+
+  // idManufacturer: yup.string().required(),
+  // modelName: yup.string().required(),
+  // vram: yup
+  //   .number()
+  //   .min(0, "Min. value 0, unit is GB.")
+  //   .max(1024, "Max. value 1024, unit is GB.")
+  //   .notRequired()
+  //   .positive()
+  //   .integer(),
+  // displayport: yup
+  //   .number()
+  //   .min(0, "Min. value 0, unit is GB.")
+  //   .max(1024, "Max. value 1024, unit is GB.")
+  //   .notRequired()
+  //   .positive()
+  //   .integer(),
+  // hdmi: yup
+  //   .number()
+  //   .min(0, "Min. value 0, unit is GB.")
+  //   .max(1024, "Max. value 1024, unit is GB.")
+  //   .notRequired()
+  //   .positive()
+  //   .integer(),
+  // vga: yup
+  //   .number()
+  //   .min(0, "Min. value 0, unit is GB.")
+  //   .max(1024, "Max. value 1024, unit is GB.")
+  //   .notRequired()
+  //   .positive()
+  //   .integer(),
+  // dvi: yup
+  //   .number()
+  //   .min(0, "Min. value 0, unit is GB.")
+  //   .max(1024, "Max. value 1024, unit is GB.")
+  //   .notRequired()
+  //   .positive()
+  //   .integer(),
 });
 
 const defaultData = {
+  idGpu: "",
   idManufacturer: "",
   modelName: "",
-  vram: undefined,
-  displayport: undefined,
-  hdmi: undefined,
-  vga: undefined,
-  dvi: undefined,
+  clockspeed: 1440,
+  watercooled: false,
+  height: undefined,
+  width: undefined,
+  depth: undefined,
+  wattage: undefined,
+
+  // idManufacturer: "",
+  // modelName: "",
+  // vram: undefined,
+  // displayport: undefined,
+  // hdmi: undefined,
+  // vga: undefined,
+  // dvi: undefined,
 };
 
 const GpuForm = ({ onSubmit, initialData = {}, disabled }) => {
@@ -99,97 +130,114 @@ const GpuForm = ({ onSubmit, initialData = {}, disabled }) => {
 
   return (
     <form noValidate={true} onSubmit={handleSubmit}>
-      <ManufacturerSelect
-        label="Manufacturer"
-        name="idManufacturer"
-        value={data.idManufacturer}
-        disabled={disabled}
-        onChange={handleChange}
-        error={errors.idManufacturer}
-      />
+      <div className="form-parent">
+        <GpuOriginalSelect
+          label="Original GPU"
+          name="idGpu"
+          value={data.idGpu}
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.idGpu}
+        />
 
-      <Input
-        label="Model name"
-        type="text"
-        name="modelName"
-        value={data.modelName}
-        disabled={disabled}
-        onChange={handleChange}
-        error={errors.modelName}
-      />
+        <ManufacturerSelect
+          label="Manufacturer"
+          name="idManufacturer"
+          value={data.idManufacturer}
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.idManufacturer}
+        />
 
-      <NumberInput
-        label="VRAM in GB"
-        type="number"
-        name="vram"
-        value={data.vram}
-        disabled={disabled}
-        min={0}
-        max={1024}
-        step={1}
-        onChange={handleChange}
-        error={errors.vram}
-      />
-
-      <div>
-        <h3>Video outputs:</h3>
+        <Input
+          label="Model name"
+          type="text"
+          name="modelName"
+          value={data.modelName}
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.modelName}
+        />
 
         <NumberInput
-          label="Displayport outputs"
+          label="Clock speed in MHz"
           type="number"
-          name="displayport"
-          value={data.displayport}
+          name="clockspeed"
+          value={data.clockspeed}
+          disabled={disabled}
+          min={0.1}
+          max={99999}
+          step={1}
+          onChange={handleChange}
+          error={errors.clockspeed}
+        />
+
+        <Toggle
+          label="Is watercooled"
+          name="watercooled"
+          value={data.watercooled}
+          possibleValues={[false, true]}
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.watercooled}
+        />
+
+        <NumberInput
+          label="Height in cm"
+          type="number"
+          name="height"
+          value={data.height}
           disabled={disabled}
           min={1}
-          max={10}
+          max={1000}
           step={1}
           onChange={handleChange}
-          error={errors.displayport}
+          error={errors.height}
         />
 
         <NumberInput
-          label="HDMI outputs"
+          label="Width in cm"
           type="number"
-          name="hdmi"
-          value={data.hdmi}
+          name="width"
+          value={data.width}
           disabled={disabled}
           min={1}
-          max={10}
+          max={1000}
           step={1}
           onChange={handleChange}
-          error={errors.hdmi}
+          error={errors.width}
         />
 
         <NumberInput
-          label="VGA outputs"
+          label="Depth in cm"
           type="number"
-          name="vga"
-          value={data.vga}
+          name="depth"
+          value={data.depth}
           disabled={disabled}
-          min={"1"}
-          max={"1000"}
+          min={1}
+          max={1000}
           step={1}
           onChange={handleChange}
-          error={errors.vga}
+          error={errors.depth}
         />
 
         <NumberInput
-          label="DVI outputs"
+          label="Wattage"
           type="number"
-          name="dvi"
-          value={data.dvi}
+          name="wattage"
+          value={data.wattage}
           disabled={disabled}
-          min={"1"}
-          max={"1000"}
-          step={1}
+          min={100}
+          max={10000}
+          step={50}
           onChange={handleChange}
-          error={errors.dvi}
+          error={errors.wattage}
         />
+
+        <Button className="mt-4" type="submit" disabled={disabled}>
+          {data._id ? "Update" : "Create"}
+        </Button>
       </div>
-
-      <Button className="mt-4" type="submit" disabled={disabled}>
-        {data._id ? "Update" : "Create"}
-      </Button>
     </form>
   );
 };

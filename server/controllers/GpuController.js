@@ -83,6 +83,7 @@ class GpuController {
 			height,
 			width,
 			depth,
+			wattage,
 		} = req.body;
 
 		try {
@@ -106,7 +107,7 @@ class GpuController {
 
 			const id = uuidv4();
 			const sqlInsert =
-				"INSERT INTO gpu_has_partners (idGpuPartner, idGpu, idManufacturer, modelName, clockspeed, watercooled, height, width, depth) VALUES (?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO gpu_has_partners (idGpuPartner, idGpu, idManufacturer, modelName, clockspeed, watercooled, height, width, depth, wattage) VALUES (?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					id,
@@ -118,6 +119,7 @@ class GpuController {
 					height,
 					width,
 					depth,
+					wattage,
 				])
 				.then(() => {
 					res.status(201).send({

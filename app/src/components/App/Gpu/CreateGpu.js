@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosCreateGpu } from "../../../core/modules/Gpu/api";
+import { axiosCreatePartnerGpu } from "../../../core/modules/Gpu/api";
 import { PossibleRoutes } from "../../../core/routing";
 import ErrorAlert from "../../shared/ErrorAlert";
 import GpuForm from "./create/GpuForm";
@@ -12,7 +12,7 @@ const CreateGpu = () => {
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    axiosCreateGpu(data)
+    axiosCreatePartnerGpu(data)
       .then(() => {
         navigate(PossibleRoutes.Gpus, { replace: true });
       })

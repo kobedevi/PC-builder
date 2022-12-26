@@ -96,7 +96,9 @@ const CpuSocketSelect = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsTouched(true);
-    validate(newSocket, () => onSubmit(newSocket));
+    validate(newSocket, () => onSubmit(newSocket)).then(() => {
+      setIsTouched(false);
+    });
   };
 
   return (
