@@ -78,18 +78,21 @@ const GpuOriginalForm = ({
     });
   };
 
-  const validate = useCallback(async (data, onSuccess) => {
-    await schema
-      .validate(data, { abortEarly: false })
-      .then(() => {
-        if (onSuccess) {
-          onSuccess();
-        }
-      })
-      .catch((err) => {
-        setErrors(getValidationErrors(err));
-      });
-  }, []);
+  const validate = useCallback(
+    async (data, onSuccess) => {
+      await schema
+        .validate(data, { abortEarly: false })
+        .then(() => {
+          if (onSuccess) {
+            onSuccess();
+          }
+        })
+        .catch((err) => {
+          setErrors(getValidationErrors(err));
+        });
+    },
+    [setErrors]
+  );
 
   useEffect(() => {
     if (isTouched) {
@@ -109,7 +112,9 @@ const GpuOriginalForm = ({
       })
       .catch((err) => {
         setErrors(err);
-        setIsLoading(false);
+        setData({
+          ...initialData,
+        });
       });
   };
 

@@ -1,31 +1,24 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import Select from "../Design/Select";
-import {
-  axiosCreateOriginalGpu,
-  fetchOriginalGpus,
-} from "../../core/modules/Gpu/api";
+import { fetchOriginalGpus } from "../../core/modules/Gpu/api";
 import useFetch from "../../core/hooks/useFetch";
 import Alert from "../Design/Alert";
-import * as yup from "yup";
-import { getValidationErrors } from "../../core/utils/validation";
 import { Link } from "react-router-dom";
-import Input from "../Design/Input";
-import Button from "../Design/Button";
 import GpuOriginalForm from "../App/Gpu/create/GpuOriginalForm";
 import Spinner from "../Design/Spinner";
+import ErrorAlert from "../shared/ErrorAlert";
 
 const GpuOriginalSelect = (props) => {
   const [newGpu, setNewGpu] = useState("");
   const [isHidden, setIsHidden] = useState(true);
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState({});
   const [info, setInfo] = useState();
 
   const apiCall = useCallback(() => {
     return fetchOriginalGpus();
   }, []);
 
-  const { data, error, setError, isLoading, setIsLoading, refresh } =
-    useFetch(apiCall);
+  const { data, isLoading, setIsLoading, refresh } = useFetch(apiCall);
 
   const options = data
     ? data.map((x) => ({
@@ -41,9 +34,8 @@ const GpuOriginalSelect = (props) => {
 
   return (
     <div>
-      {error && <Alert color="danger">{error.message}</Alert>}
-      {errors.message && <Alert color="danger">{errors.message}</Alert>}
       {isLoading && <Spinner />}
+      {error.message && <ErrorAlert error={error} />}
       {options && (
         <>
           <Select options={options} {...props} />
@@ -55,8 +47,8 @@ const GpuOriginalSelect = (props) => {
             <h4>Create original GPU:</h4>
             <GpuOriginalForm
               setInfo={setInfo}
-              errors={errors}
-              setErrors={setErrors}
+              errors={error}
+              setErrors={setError}
               toggleHide={toggleHide}
               setNewGpu={setNewGpu}
               refresh={refresh}

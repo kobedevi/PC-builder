@@ -28,44 +28,6 @@ const schema = yup.object().shape({
     .max(10000, "Max. wattage amount is 10000, unit is W.")
     .required()
     .positive(),
-
-  // idManufacturer: yup.string().required(),
-  // modelName: yup.string().required(),
-  // vram: yup
-  //   .number()
-  //   .min(0, "Min. value 0, unit is GB.")
-  //   .max(1024, "Max. value 1024, unit is GB.")
-  //   .notRequired()
-  //   .positive()
-  //   .integer(),
-  // displayport: yup
-  //   .number()
-  //   .min(0, "Min. value 0, unit is GB.")
-  //   .max(1024, "Max. value 1024, unit is GB.")
-  //   .notRequired()
-  //   .positive()
-  //   .integer(),
-  // hdmi: yup
-  //   .number()
-  //   .min(0, "Min. value 0, unit is GB.")
-  //   .max(1024, "Max. value 1024, unit is GB.")
-  //   .notRequired()
-  //   .positive()
-  //   .integer(),
-  // vga: yup
-  //   .number()
-  //   .min(0, "Min. value 0, unit is GB.")
-  //   .max(1024, "Max. value 1024, unit is GB.")
-  //   .notRequired()
-  //   .positive()
-  //   .integer(),
-  // dvi: yup
-  //   .number()
-  //   .min(0, "Min. value 0, unit is GB.")
-  //   .max(1024, "Max. value 1024, unit is GB.")
-  //   .notRequired()
-  //   .positive()
-  //   .integer(),
 });
 
 const defaultData = {
@@ -78,17 +40,9 @@ const defaultData = {
   width: undefined,
   depth: undefined,
   wattage: undefined,
-
-  // idManufacturer: "",
-  // modelName: "",
-  // vram: undefined,
-  // displayport: undefined,
-  // hdmi: undefined,
-  // vga: undefined,
-  // dvi: undefined,
 };
 
-const GpuForm = ({ onSubmit, initialData = {}, disabled }) => {
+const GpuForm = ({ onSubmit, initialData = {}, disabled, setError }) => {
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
     ...defaultData,

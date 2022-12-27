@@ -26,7 +26,11 @@ const CreateGpu = () => {
     <div>
       <h2>Create Gpu</h2>
       {error && <ErrorAlert error={error} />}
-      <GpuForm onSubmit={handleSubmit} disabled={isLoading} />
+      <GpuForm
+        onSubmit={handleSubmit}
+        setError={setError}
+        disabled={isLoading}
+      />
     </div>
   );
 };
