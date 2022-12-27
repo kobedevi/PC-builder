@@ -18,7 +18,13 @@ const GpuOriginalSelect = (props) => {
     return fetchOriginalGpus();
   }, []);
 
-  const { data, isLoading, setIsLoading, refresh } = useFetch(apiCall);
+  const {
+    data,
+    error: fetchError,
+    isLoading,
+    setIsLoading,
+    refresh,
+  } = useFetch(apiCall);
 
   const options = data
     ? data.map((x) => ({
@@ -35,7 +41,11 @@ const GpuOriginalSelect = (props) => {
   return (
     <div>
       {isLoading && <Spinner />}
+
+      {/* errors*/}
       {error.message && <ErrorAlert error={error} />}
+      {fetchError && <Alert color="danger">{fetchError}</Alert>}
+
       {options && (
         <>
           <Select options={options} {...props} />
