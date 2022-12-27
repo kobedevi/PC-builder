@@ -12,7 +12,6 @@ const PartnerGpuOverview = () => {
   }, []);
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
-  console.log(data);
   return (
     <>
       <h4>Partner GPU:</h4>

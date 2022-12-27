@@ -12,7 +12,6 @@ const OriginalGpuOverview = () => {
   }, []);
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
-  console.log(data);
   return (
     <>
       <h4>Original GPU:</h4>
