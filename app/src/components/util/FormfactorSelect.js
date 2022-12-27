@@ -113,8 +113,9 @@ const FormfactorSelect = (props) => {
             {isHidden ? "Add new formfactor" : "Cancel"}
           </Link>
           <div className={isHidden ? "hide" : "show"}>
+            <h4>Create a formfactor:</h4>
             <Input
-              label="formfactor name"
+              label="Formfactor name"
               type="text"
               disabled={props.disabled}
               onChange={handleChange}

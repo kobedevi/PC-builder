@@ -1,7 +1,7 @@
 @import 'styles/_bootstrap';
 @import 'styles/_typography';
 @import 'styles/_generic';
-@import 'components/App/Sidebar';
+@import 'components/App/Sidebar/Sidebar';
 @import 'styles/_login';
 @import 'styles/pagination';
 @import 'styles/header';
@@ -29,6 +29,7 @@ main {
     position: relative;
     height: calc(100vh - 56px);
     width: calc(100vw - 250px);
+    padding: 1rem;
     box-sizing: border-box;
     overflow-y: auto;
 }
@@ -118,10 +119,6 @@ p{
             transform: rotate(180deg);
         }
     }
-}
-
-.mapboxgl-ctrl-geocoder--input {
-    color: black;
 }
 
 .suggestions-wrapper {

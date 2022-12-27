@@ -1,3 +1,5 @@
+@import '_bootstrap';
+
 form {
     width:50rem;
     max-width: 100%;
@@ -6,13 +8,24 @@ form {
 .hide {
     display: none;
 }
+
+.toggle {
+    display: flex;
+}
+
+input[type=radio] {
+    margin-right: 4px;
+}
   
 .show {
+    position: relative;
     border-radius: 5px;
-    border: 2px solid red;
+    background: $darker;
+    border: $border;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding: .8rem 1rem;
-    margin: 0, .2rem;
+    padding: 1.5rem 1.5rem;
+    margin: .25rem 0.3125rem 0.625rem 0;
+    box-shadow: 0 0.3125rem 0.625rem 0 rgba(0, 0, 0, 0.55);
 }

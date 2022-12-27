@@ -181,6 +181,7 @@ const ArrayCpuSocketSelect = ({
         {isHidden ? "Add new socket type" : "Cancel"}
       </Link>
       <div className={isHidden ? "hide" : "show"}>
+        <h4>Create new CPU socket:</h4>
         <Input
           label="socket name"
           type="text"

@@ -14,16 +14,9 @@ import Button from "../Design/Button";
 import GpuOriginalForm from "../App/Gpu/create/GpuOriginalForm";
 import Spinner from "../Design/Spinner";
 
-const schema = yup.object().shape({
-  // socketType: yup.string().required(),
-});
-
 const GpuOriginalSelect = (props) => {
-  // const inputRef = useRef(null);
-
   const [newGpu, setNewGpu] = useState("");
   const [isHidden, setIsHidden] = useState(true);
-  // const [isTouched, setIsTouched] = useState(false);
   const [errors, setErrors] = useState({});
   const [info, setInfo] = useState();
 
@@ -46,54 +39,6 @@ const GpuOriginalSelect = (props) => {
     setNewGpu({});
   };
 
-  // const validate = useCallback(async (newSocket, onSuccess) => {
-  //   await schema
-  //     .validate(newSocket, { abortEarly: false })
-  //     .then(() => {
-  //       if (onSuccess) {
-  //         onSuccess();
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setErrors(getValidationErrors(err));
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   if (isTouched) {
-  //     validate(newSocket);
-  //   }
-  // }, [validate, isTouched, newSocket]);
-
-  // const handleChange = (e) => {
-  //   setNewSocket({
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
-
-  // const onSubmit = () => {
-  //   axiosCreateOriginalGpu({
-  //     socketType: newSocket.socketType,
-  //   })
-  //     .then((e) => {
-  //       setInfo(e);
-  //       setNewSocket();
-  //       inputRef.current.value = "";
-  //       toggleHide();
-  //       refresh();
-  //     })
-  //     .catch((err) => {
-  //       setErrors(err);
-  //       setIsLoading(false);
-  //     });
-  // };
-
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   setIsTouched(true);
-  //   validate(newSocket, () => onSubmit(newSocket));
-  // };
-
   return (
     <div>
       {error && <Alert color="danger">{error.message}</Alert>}
@@ -107,6 +52,7 @@ const GpuOriginalSelect = (props) => {
             {isHidden ? "Add new original GPU" : "Cancel"}
           </Link>
           <div className={isHidden ? "hide" : "show"}>
+            <h4>Create original GPU:</h4>
             <GpuOriginalForm
               setInfo={setInfo}
               errors={errors}

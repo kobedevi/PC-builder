@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { PossibleRoutes } from "../../core/routing";
+import { PossibleRoutes } from "../../../core/routing";
 
 const items = [
   {

@@ -114,6 +114,7 @@ const ManufacturerSelect = (props) => {
             {isHidden ? "Add new manufacturer" : "Cancel"}
           </Link>
           <div className={isHidden ? "hide" : "show"}>
+            <h4>Create new manufacturer:</h4>
             <Input
               label="Manufacturer name"
               type="text"

@@ -159,7 +159,7 @@ const GpuOriginalForm = ({
       />
 
       <div>
-        <h3>Video outputs:</h3>
+        <h5 className="mt-4">Video outputs:</h5>
 
         <NumberInput
           label="Displayport outputs"
