@@ -17,7 +17,7 @@ const MotherboardOverview = () => {
 
   return (
     <>
-      <h2>MotherboardOverview</h2>
+      <h2>Motherboard Overview</h2>
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 

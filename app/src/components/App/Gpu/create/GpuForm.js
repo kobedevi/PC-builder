@@ -42,7 +42,7 @@ const defaultData = {
   wattage: undefined,
 };
 
-const GpuForm = ({ onSubmit, initialData = {}, disabled, setError }) => {
+const GpuForm = ({ onSubmit, initialData = {}, disabled }) => {
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
     ...defaultData,
