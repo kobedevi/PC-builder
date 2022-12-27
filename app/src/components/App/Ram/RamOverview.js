@@ -19,13 +19,13 @@ const RamOverview = () => {
     <>
       <h2>Ram Overview</h2>
       {error && <Alert color="danger">{error.message}</Alert>}
+      {info && <Alert color="info">{info}</Alert>}
 
       <Link className="nav-link" to={PossibleRoutes.RamCreate}>
         Add Ram
       </Link>
 
       {isLoading && <Spinner />}
-      {info && <Alert color="info">{info}</Alert>}
 
       {ram && (
         <ul>

@@ -25,13 +25,13 @@ const CaseOverview = () => {
     <>
       <h2>CaseOverview</h2>
       {error && <Alert color="danger">{error.message}</Alert>}
+      {info && <Alert color="info">{info}</Alert>}
 
       <Link className="nav-link" to={PossibleRoutes.CaseCreate}>
         Add Case
       </Link>
 
       {isLoading && <Spinner />}
-      {info && <Alert color="info">{info}</Alert>}
 
       {cases && (
         <ul>

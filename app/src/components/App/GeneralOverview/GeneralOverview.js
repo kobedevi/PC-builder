@@ -21,23 +21,7 @@ const items = [
 ];
 
 const GeneralOverview = () => {
-  return (
-    <div id="app">
-      {/* <nav id="sidenav" className="sidenav">
-        <div>
-          <ul>
-            {items.map((item) => (
-              <li key={item.route} className="nav-item">
-                <Link className="nav-link" to={item.route}>
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav> */}
-    </div>
-  );
+  return <div id="app"></div>;
 };
 
 export default GeneralOverview;

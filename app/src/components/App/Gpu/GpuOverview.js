@@ -19,13 +19,13 @@ const GpuOverview = () => {
     <>
       <h2>GPU Overview</h2>
       {error && <Alert color="danger">{error.message}</Alert>}
+      {info && <Alert color="info">{info}</Alert>}
 
       <Link className="nav-link" to={PossibleRoutes.GpuCreate}>
         Add GPU
       </Link>
 
       {isLoading && <Spinner />}
-      {info && <Alert color="info">{info}</Alert>}
 
       {data && (
         <ul>

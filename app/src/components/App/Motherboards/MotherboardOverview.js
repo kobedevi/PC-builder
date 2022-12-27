@@ -19,13 +19,13 @@ const MotherboardOverview = () => {
     <>
       <h2>MotherboardOverview</h2>
       {error && <Alert color="danger">{error.message}</Alert>}
+      {info && <Alert color="info">{info}</Alert>}
 
       <Link className="nav-link" to={PossibleRoutes.MotherboardCreate}>
         Add Motherboard
       </Link>
 
       {isLoading && <Spinner />}
-      {info && <Alert color="info">{info}</Alert>}
 
       {data && (
         <ul>
