@@ -24,6 +24,8 @@ const CaseController = require("../controllers/CaseController");
 const RamController = require("../controllers/RamController");
 const StorageTypeController = require("../controllers/StorageTypeController");
 const GpuController = require("../controllers/GpuController");
+const PsuController = require("../controllers/PsuController");
+const { psuModel } = require("../models/Psu");
 
 const cpuController = new CpuController();
 const cpuCoolerController = new CpuCoolerController();
@@ -32,6 +34,7 @@ const gpuController = new GpuController();
 const manufacturerController = new ManufacturerController();
 const formfactorController = new FormfactorController();
 const motherboardController = new MotherboardController();
+const psuController = new PsuController();
 const caseController = new CaseController();
 const ramController = new RamController();
 const storageTypeController = new StorageTypeController();
@@ -88,6 +91,10 @@ const registerRoutes = (app, db) => {
 	// GPUS partners
 	app.get("/gpu/partner", gpuController.fetchGpuPartners);
 	app.post("/gpu/partner", gpuPartnerModel, gpuController.createGpuPartner);
+
+	// PSU
+	app.get("/psu", psuController.fetchPsu);
+	app.post("/psu", psuModel, psuController.createPsu);
 
 	// Formfactors
 	app.get("/formfactor", formfactorController.fetchFormfactors);

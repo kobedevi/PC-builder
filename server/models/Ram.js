@@ -6,6 +6,11 @@ const ramModel = [
 		.notEmpty()
 		.isLength({ max: 100 })
 		.withMessage("modelName can not be empty"),
+	check("idManufacturer")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given manufacturer does not exist"),
 	check("sizePerStick")
 		.notEmpty()
 		.isInt({ min: 1, max: 512 })

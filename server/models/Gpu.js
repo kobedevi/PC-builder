@@ -5,6 +5,11 @@ const gpuModel = [
 		.notEmpty()
 		.isLength({ max: 100 })
 		.withMessage("modelName can not be empty"),
+	check("idManufacturer")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given manufacturer does not exist"),
 	check(["displayport", "hdmi", "vga", "dvi"])
 		.isInt({ min: 0, max: 10 })
 		.optional({ nullable: true })
@@ -22,6 +27,16 @@ const gpuPartnerModel = [
 		.notEmpty()
 		.isLength({ max: 100 })
 		.withMessage("modelName can not be empty"),
+	check("idGpu")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given GPU does not exist"),
+	check("idManufacturer")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given manufacturer does not exist"),
 	check("clockspeed").notEmpty().withMessage("clockSpeed can not be empty"),
 	check("clockspeed")
 		.isFloat({ min: 1, max: 99999 })

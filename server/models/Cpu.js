@@ -5,6 +5,16 @@ const cpuModel = [
 		.notEmpty()
 		.isLength({ max: 100 })
 		.withMessage("modelName can not be empty"),
+	check("idManufacturer")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given manufacturer does not exist"),
+	check("idCpuSocket")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given CPU socket does not exist"),
 	check("clockSpeed")
 		.isFloat({ min: 0.1, max: 100 })
 		.withMessage("clockspeed must be of type float, with a max size of 100"),

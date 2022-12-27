@@ -35,6 +35,10 @@ const PossibleRoutes = Object.freeze({
   Gpus: "/gpu",
   GpuCreate: "/gpu/create",
   GpuDetail: "/gpu/:id",
+
+  Psus: "/psu",
+  PsuCreate: "/psu/create",
+  PsuDetail: "/psu/:id",
 });
 
 // replaces : values with values from object

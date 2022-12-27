@@ -1,6 +1,11 @@
 const { check } = require("express-validator");
 
 const cpuCoolerModel = [
+	check("idManufacturer")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given manufacturer does not exist"),
 	check("modelName")
 		.notEmpty()
 		.isLength({ max: 45 })

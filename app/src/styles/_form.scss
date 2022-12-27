@@ -16,6 +16,16 @@ form {
 input[type=radio] {
     margin-right: 4px;
 }
+
+.alert {
+    ul{
+        margin: 0;
+        color: var(--bs-alert-color);
+        li {
+            color: unset;
+        }
+    }
+}
   
 .show {
     position: relative;

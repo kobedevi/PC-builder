@@ -1,11 +1,25 @@
 import Alert from "../Design/Alert";
 
-const ErrorAlert = ({error}) => {
-    if(!error){
-        return null
-    }
+const ErrorAlert = ({ error }) => {
+  if (!error) {
+    return null;
+  }
 
-    return <Alert color='danger'> {error.message || 'Something went wrong'} </Alert>
-}
+  if (error.response.data.errors) {
+    return (
+      <Alert color="danger">
+        <ul>
+          {error.response.data.errors.map((x) => {
+            return <li>{x.msg.toString() || "Something went wrong"}</li>;
+          })}
+        </ul>
+      </Alert>
+    );
+  }
+
+  return (
+    <Alert color="danger"> {error.message || "Something went wrong"} </Alert>
+  );
+};
 
 export default ErrorAlert;

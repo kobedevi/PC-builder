@@ -5,6 +5,21 @@ const motherboardModel = [
 		.notEmpty()
 		.isLength({ max: 100 })
 		.withMessage("modelName can not be empty"),
+	check("idManufacturer")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given manufacturer does not exist"),
+	check("idFormfactor")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given formfactor does not exist"),
+	check("idCpuSocket")
+		.notEmpty()
+		.isString()
+		.isLength({ min: 36, max: 36 })
+		.withMessage("Given CPU socket does not exist"),
 	check("wifi").notEmpty().isBoolean().withMessage("wifi can not be empty"),
 	check("memorySlots").notEmpty().withMessage("memorySlots can not be empty"),
 	check("memorySlots")
