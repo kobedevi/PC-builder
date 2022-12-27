@@ -5,6 +5,8 @@ import { fetchPartnerGpus } from "../../../core/modules/Gpu/api";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
+import OriginalGpuOverview from "./Overview/OriginalGpu";
+import PartnerGpuOverview from "./Overview/PartnerGpu";
 
 const GpuOverview = () => {
   const [info, setInfo] = useState();
@@ -21,19 +23,12 @@ const GpuOverview = () => {
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link className="nav-link" to={PossibleRoutes.GpuCreate}>
-        Add GPU
-      </Link>
+      <Link to={PossibleRoutes.GpuCreate}>Add GPU</Link>
 
-      {isLoading && <Spinner />}
-
-      {data && (
-        <ul>
-          {data.map((gpu) => (
-            <li key={gpu.idGpu}>{`${gpu.modelName}`}</li>
-          ))}
-        </ul>
-      )}
+      <div>
+        <OriginalGpuOverview />
+        <PartnerGpuOverview />
+      </div>
     </>
   );
 };
