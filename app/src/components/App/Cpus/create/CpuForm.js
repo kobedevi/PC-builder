@@ -118,7 +118,7 @@ const CpuForm = ({ onSubmit, initialData = {}, disabled }) => {
       />
 
       <Button className="mt-4" type="submit" disabled={disabled}>
-        {data._id ? "Update" : "Create"}
+        {data.idProcessor ? "Update" : "Create"}
       </Button>
     </form>
   );

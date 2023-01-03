@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchCpus } from "../../../core/modules/CPU/api";
-import { PossibleRoutes } from "../../../core/routing";
+import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 
@@ -30,9 +30,11 @@ const CpuOverview = () => {
       {cpus && (
         <ul>
           {cpus.map((cpu) => (
-            <li
-              key={cpu.idProcessor}
-            >{`${cpu.idProcessor} ${cpu.clockSpeed}GHz`}</li>
+            <li key={cpu.idProcessor}>
+              <Link
+                to={route(PossibleRoutes.CpuDetail, { id: cpu.idProcessor })}
+              >{`${cpu.idProcessor} ${cpu.clockSpeed}GHz`}</Link>
+            </li>
           ))}
         </ul>
       )}

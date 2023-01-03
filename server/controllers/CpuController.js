@@ -12,6 +12,18 @@ class CpuController {
 		}
 	};
 
+	fetchCpuById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const results = await db
+				.promise()
+				.query(`SELECT * FROM cpus WHERE idProcessor = "${id}" LIMIT 1`);
+			res.status(200).send(results[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
 	createCpu = async (req, res, next) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {

@@ -7,6 +7,21 @@ const fetchCpus = () => (headers) => {
   });
 };
 
+const fetchCpu = (id) => (headers) => {
+  return fetch(`${process.env.REACT_APP_BASE_API}/cpu/${id}`, {
+    headers: createHeaders(headers),
+  });
+};
+
+const updateCpu = (data) => (headers) => {
+  const { id } = data;
+  return fetch(`${process.env.REACT_APP_BASE_API}/directors/${id}`, {
+    method: "PATCH",
+    headers: createHeaders(headers),
+    body: JSON.stringify(data),
+  });
+};
+
 const createCpu = (data) => (headers) => {
   return fetch(`${process.env.REACT_APP_BASE_API}/cpu`, {
     method: "POST",
@@ -22,4 +37,4 @@ const axiosCreateCpu = (data) => {
   }).then((res) => res);
 };
 
-export { fetchCpus, createCpu, axiosCreateCpu };
+export { fetchCpus, fetchCpu, updateCpu, createCpu, axiosCreateCpu };

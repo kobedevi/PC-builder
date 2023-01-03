@@ -12,6 +12,7 @@ const PossibleRoutes = Object.freeze({
   Cpus: "/cpu",
   CpuCreate: "/cpu/create",
   CpuDetail: "/cpu/:id",
+  CpuEdit: "/cpu/:id/edit",
 
   CpuCoolers: "/cpucooler",
   CpuCoolerCreate: "/cpucooler/create",

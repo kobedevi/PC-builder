@@ -43,6 +43,7 @@ const registerRoutes = (app, db) => {
 	// CPUS
 	app.get("/cpu", cpuController.fetchCpus);
 	app.post("/cpu", cpuModel, cpuController.createCpu);
+	app.get("/cpu/:id", cpuController.fetchCpuById);
 
 	// CPUCoolers
 	app.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
