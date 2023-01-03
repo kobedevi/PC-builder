@@ -26,7 +26,7 @@ const psuModel = [
 	check(["height", "width", "depth"])
 		.isInt({ min: 1, max: 1000 })
 		.optional({ nullable: true })
-		.withMessage("Dimensions must be of type int, with a max size of 1000cm"),
+		.withMessage("Dimensions must be of type int, with a max size of 1000mm"),
 ];
 
 module.exports = {

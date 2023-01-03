@@ -32,6 +32,11 @@ const items = [
     route: PossibleRoutes.Gpus,
     icon: null,
   },
+  {
+    label: "PSU",
+    route: PossibleRoutes.Psus,
+    icon: null,
+  },
 ];
 
 const Sidebar = () => {

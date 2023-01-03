@@ -13,6 +13,8 @@ import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
 import CreateCpuCooler from "./CpuCoolers/CreateCpuCooler";
 import GpuOverview from "./Gpu/GpuOverview";
 import CreateGpu from "./Gpu/CreateGpu";
+import PsuOverview from "./Psu/PsuOverview";
+import CreatePsu from "./Psu/CreatePsu";
 
 const MainRouting = () => {
   return (
@@ -48,6 +50,9 @@ const MainRouting = () => {
 
       <Route path={PossibleRoutes.Gpus} element={<GpuOverview />} />
       <Route path={PossibleRoutes.GpuCreate} element={<CreateGpu />} />
+
+      <Route path={PossibleRoutes.Psus} element={<PsuOverview />} />
+      <Route path={PossibleRoutes.PsuCreate} element={<CreatePsu />} />
 
       <Route
         path="*"
