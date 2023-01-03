@@ -39,3 +39,9 @@ input[type=radio] {
     margin: .25rem 0.3125rem 0.625rem 0;
     box-shadow: 0 0.3125rem 0.625rem 0 rgba(0, 0, 0, 0.55);
 }
+
+form {
+    .btn-warning{
+        background-color: $add;
+    }
+}

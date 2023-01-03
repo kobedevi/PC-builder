@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 const Button = ({
   children,
   onClick,
-  color = "primary",
+  color = "success",
   type = "button",
   className = "",
   disabled = false,
@@ -26,6 +26,7 @@ Button.propTypes = {
   color: PropTypes.oneOf([
     "primary",
     "secondary",
+    "warning",
     "light",
     "outline-light",
     "danger",

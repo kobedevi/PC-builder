@@ -21,7 +21,7 @@ const RamOverview = () => {
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link className="nav-link" to={PossibleRoutes.RamCreate}>
+      <Link to={PossibleRoutes.RamCreate} className="btn btn-primary">
         Add Ram
       </Link>
 

@@ -177,44 +177,50 @@ const ArrayCpuSocketSelect = ({
         );
       })}
 
-      <Link style={{ display: "inline-block" }} onClick={toggleHide}>
-        {isHidden ? "Add new socket type" : "Cancel"}
-      </Link>
-      <div className={isHidden ? "hide" : "show"}>
-        <h4>Create new CPU socket:</h4>
-        <Input
-          label="socket name"
-          type="text"
+      <div className="mt-4">
+        <button
+          className="btn btn-primary"
           disabled={disabled}
-          onChange={handleChange}
-          name="socketType"
-          id="socketType"
-          error={errors.socketType}
-          ref={inputRef}
-        />
-        <Button className="mt-4" type="submit" onClick={handleSubmit}>
-          Add CPU socket
-        </Button>
-      </div>
-      <br />
-      <br />
+          onClick={(e) => {
+            e.preventDefault();
+            setCpuSockets((currentCpuSockets) => [
+              ...currentCpuSockets,
+              {
+                tempId: uuidv4(),
+                idCpuSocket: "",
+              },
+            ]);
+          }}
+        >
+          Add compatible CPU socket
+        </button>
 
-      <button
-        className="btn btn-primary mt-4"
-        disabled={disabled}
-        onClick={(e) => {
-          e.preventDefault();
-          setCpuSockets((currentCpuSockets) => [
-            ...currentCpuSockets,
-            {
-              tempId: uuidv4(),
-              idCpuSocket: "",
-            },
-          ]);
-        }}
-      >
-        add compatible CPU socket
-      </button>
+        <Button
+          style={{ display: "inline-block" }}
+          color="warning"
+          className="ml-1"
+          onClick={toggleHide}
+        >
+          {isHidden ? "Add new socket type" : "Cancel"}
+        </Button>
+
+        <div className={isHidden ? "hide" : "show mt-4"}>
+          <h4>Create new CPU socket:</h4>
+          <Input
+            label="socket name"
+            type="text"
+            disabled={disabled}
+            onChange={handleChange}
+            name="socketType"
+            id="socketType"
+            error={errors.socketType}
+            ref={inputRef}
+          />
+          <Button className="mt-4" type="submit" onClick={handleSubmit}>
+            Add CPU socket
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

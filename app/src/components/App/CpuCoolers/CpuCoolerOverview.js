@@ -27,7 +27,7 @@ const CpuCoolerOverview = () => {
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link className="nav-link" to={PossibleRoutes.CpuCoolerCreate}>
+      <Link to={PossibleRoutes.CpuCoolerCreate} className="btn btn-primary">
         Add CPU cooler
       </Link>
 

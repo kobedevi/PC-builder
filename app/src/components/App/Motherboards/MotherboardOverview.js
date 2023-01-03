@@ -21,7 +21,7 @@ const MotherboardOverview = () => {
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link className="nav-link" to={PossibleRoutes.MotherboardCreate}>
+      <Link to={PossibleRoutes.MotherboardCreate} className="btn btn-primary">
         Add Motherboard
       </Link>
 

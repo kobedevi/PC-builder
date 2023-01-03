@@ -21,7 +21,7 @@ const CpuOverview = () => {
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link className="nav-link" to={PossibleRoutes.CpuCreate}>
+      <Link to={PossibleRoutes.CpuCreate} className="btn btn-primary">
         Add CPU
       </Link>
 

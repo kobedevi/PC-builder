@@ -23,7 +23,9 @@ const GpuOverview = () => {
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link to={PossibleRoutes.GpuCreate}>Add GPU</Link>
+      <Link to={PossibleRoutes.GpuCreate} className="btn btn-primary">
+        Add GPU
+      </Link>
 
       <div>
         <OriginalGpuOverview />

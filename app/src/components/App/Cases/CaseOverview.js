@@ -27,7 +27,7 @@ const CaseOverview = () => {
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link className="nav-link" to={PossibleRoutes.CaseCreate}>
+      <Link to={PossibleRoutes.CaseCreate} className="btn btn-primary">
         Add Case
       </Link>
 

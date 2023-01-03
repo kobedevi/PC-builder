@@ -21,7 +21,9 @@ const PsuOverview = () => {
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link to={PossibleRoutes.PsuCreate}>Add Power supply</Link>
+      <Link to={PossibleRoutes.PsuCreate} className="btn btn-primary">
+        Add Power supply
+      </Link>
 
       {isLoading && <Spinner />}
 

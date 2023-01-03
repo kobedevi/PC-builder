@@ -28,10 +28,12 @@ main {
     flex-direction: column;
     position: relative;
     height: calc(100vh - 56px);
-    width: calc(100vw - 250px);
+    max-width: calc(100vw - 250px);
+    width: auto;
     padding: 1rem;
     box-sizing: border-box;
     overflow-y: auto;
+    align-items: flex-start;
 }
 
 // NEW CSS
