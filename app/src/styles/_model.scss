@@ -1,0 +1,14 @@
+.fullSize {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    
+    .detail{
+        width: 30%;
+    }
+    .model {
+        width: 70%;
+        height: 100vh;
+        cursor: move;
+    }
+}

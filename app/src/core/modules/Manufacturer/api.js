@@ -7,6 +7,12 @@ const fetchManufacturers = () => (headers) => {
   });
 };
 
+const fetchManufacturerById = (id) => (headers) => {
+  return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer/${id}`, {
+    headers: createHeaders(headers),
+  });
+};
+
 const createManufacturer = async (data) => {
   return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
     method: "POST",
@@ -17,4 +23,4 @@ const createManufacturer = async (data) => {
   }).then((res) => res.json());
 };
 
-export { fetchManufacturers, createManufacturer };
+export { fetchManufacturers, fetchManufacturerById, createManufacturer };

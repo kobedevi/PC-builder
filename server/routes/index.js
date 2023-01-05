@@ -67,6 +67,8 @@ const registerRoutes = (app, db) => {
 
 	// Manufacturers
 	app.get("/manufacturer", manufacturerController.fetchManufacturers);
+	app.get("/manufacturer/:id", manufacturerController.fetchManufacturerById);
+
 	app.post(
 		"/manufacturer",
 		manufacturerModel,

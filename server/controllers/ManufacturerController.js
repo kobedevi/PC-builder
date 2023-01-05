@@ -15,6 +15,20 @@ class ManufacturerController {
 		}
 	};
 
+	fetchManufacturerById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const results = await db
+				.promise()
+				.query(
+					`SELECT * FROM manufacturers WHERE idManufacturer = "${id}" LIMIT 1`
+				);
+			res.status(200).send(results[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
 	createManufacturer = (req, res, next) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {

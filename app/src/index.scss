@@ -1,6 +1,7 @@
 @import 'styles/_bootstrap';
 @import 'styles/_typography';
 @import 'styles/_generic';
+@import 'styles/_model';
 @import 'components/App/Sidebar/Sidebar';
 @import 'styles/_login';
 @import 'styles/pagination';
@@ -28,8 +29,8 @@ main {
     flex-direction: column;
     position: relative;
     height: calc(100vh - 56px);
+    width: 100%;
     max-width: calc(100vw - 250px);
-    width: auto;
     padding: 1rem;
     box-sizing: border-box;
     overflow-y: auto;
