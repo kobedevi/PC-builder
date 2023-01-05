@@ -2,7 +2,7 @@ import React from "react";
 import { Text } from "@react-three/drei";
 import { DoubleSide, FrontSide } from "three";
 
-const Model = ({ cpu, brandName }) => {
+const Model = ({ cpu }) => {
   return (
     <>
       <group name="Cpu">
@@ -35,7 +35,7 @@ const Model = ({ cpu, brandName }) => {
                   color={0x333333}
                   fontSize={0.14}
                 >
-                  {brandName}
+                  {cpu.manufacturerName ? cpu.manufacturerName : "Unknown"}
                 </Text>
                 <Text position={[0, 0, 0.17]} color={0x333333} fontSize={0.08}>
                   {cpu.modelName}

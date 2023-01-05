@@ -3,7 +3,7 @@ import { OrbitControls } from "@react-three/drei";
 import BasicLighting from "../../../../Design/Lighting/Studio";
 import Model from "./Model";
 
-const ModelContainer = ({ cpu, brandName }) => {
+const ModelContainer = ({ cpu }) => {
   return (
     <>
       <group name="Helpers">
@@ -13,7 +13,7 @@ const ModelContainer = ({ cpu, brandName }) => {
         <BasicLighting />
       </group>
       <group name="Components">
-        <Model cpu={cpu} brandName={brandName} />
+        <Model cpu={cpu} />
       </group>
     </>
   );

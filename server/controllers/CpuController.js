@@ -15,9 +15,10 @@ class CpuController {
 	fetchCpuById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const results = await db
-				.promise()
-				.query(`SELECT * FROM cpus WHERE idProcessor = "${id}" LIMIT 1`);
+			const results = await db.promise()
+				.query(`SELECT cpus.*, manufacturers.manufacturerName FROM cpus
+				LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
+				WHERE cpus.idProcessor="${id}" LIMIT 1;`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
