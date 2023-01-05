@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 
 const Select = React.forwardRef(
   ({ label, name, options = [], onChange, value, error, disabled }, ref) => {
-    // console.log(options);
     return (
       <div className="form-group">
         {label && <label htmlFor={name}>{label}:</label>}

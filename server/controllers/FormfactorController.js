@@ -24,10 +24,11 @@ class FormfactorController {
 		if (req.body.formfactor) {
 			const id = uuidv4();
 			try {
+				const { formfactor, height, width } = req.body;
 				const sqlInsert =
-					"INSERT INTO formfactors (idFormfactor, formfactor) VALUES (?,?)";
+					"INSERT INTO formfactors (idFormfactor, formfactor, height, width) VALUES (?, ?, ?, ?)";
 				db.promise()
-					.query(sqlInsert, [id, req.body.formfactor])
+					.query(sqlInsert, [id, formfactor, height, width])
 					.then(() => {
 						res.status(201).send({
 							message: "Formfactor added",

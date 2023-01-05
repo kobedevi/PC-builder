@@ -124,7 +124,7 @@ const GpuOriginalForm = ({
     validate(data, () => onSubmit(data)).then(() => {
       setIsTouched(false);
       setData({
-        ...initialData,
+        ...defaultData,
       });
     });
   };
