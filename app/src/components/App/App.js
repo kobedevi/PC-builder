@@ -1,20 +1,23 @@
 import MainRouting from "./MainRouting";
 import Sidebar from "./Sidebar/Sidebar";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Header from "../Design/Header";
 
 function App() {
   return (
-    <div className="App">
-      <h1>CRUD Pc-Parts</h1>
-      <div className="content">
-        <div className="app">
-          <Sidebar />
-          <main>
-            <MainRouting />
-          </main>
+    <>
+      <Header />
+      <div className="App">
+        <div className="content">
+          <div className="app">
+            <Sidebar />
+            <main>
+              <MainRouting />
+            </main>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
