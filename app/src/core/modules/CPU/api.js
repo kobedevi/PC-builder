@@ -13,20 +13,21 @@ const fetchCpuById = (id) => (headers) => {
   }).catch((e) => e);
 };
 
-const updateCpu = async (data) => {
+const updateCpu = (data) => async (headers) => {
   return Axios.patch(
     `${process.env.REACT_APP_BASE_API}/cpu/${data.idProcessor}`,
     {
+      headers: createHeaders(headers),
       ...data,
     }
-  ).then((res) => res);
+  );
 };
 
-const createCpu = async (data) => {
-  return Axios.post(`${process.env.REACT_APP_BASE_API}/cpu`, {
-    // headers: createHeaders(headers),
+const createCpu = (data) => async (headers) => {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpu`, {
+    headers: createHeaders(headers),
     ...data,
-  }).then((res) => res);
+  });
 };
 
 export { fetchCpus, fetchCpuById, updateCpu, createCpu };

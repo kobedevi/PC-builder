@@ -29,7 +29,6 @@ class UserController {
 					throw err;
 				}
 				(user.id = uuidv4()), (user.password = hash);
-				console.log(user);
 				const sqlInsert =
 					"INSERT INTO users (idUsers, role, userName, password, email) VALUES (?,?,?,?,?)";
 				const u = await db

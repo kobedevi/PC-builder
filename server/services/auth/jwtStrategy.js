@@ -10,7 +10,6 @@ const jwtOptions = {
 
 const jwtStrategy = new Strategy(jwtOptions, async (payload, done) => {
 	try {
-		console.log(payload);
 		const userController = new UserController();
 		const user = userController.fetchUserById();
 		// const user = await .findById(payload._id);

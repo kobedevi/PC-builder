@@ -1,18 +1,13 @@
 import ApiError from "../error/ApiError";
 
 const handleApiResult = async (res) => {
-  // if (!res.ok) {
-  //   const json = await res.json();
-  //   throw new ApiError(json);
-  // }
-  // if (res.statusText === "OK") {
-  //   console.log(res.data);
-  //   return res.data[0];
-  // }
-  if (res.statusText !== "OK") {
+  if (res.status >= 400) {
     throw new ApiError(res);
   }
-  return res.data;
+  if (res.data) {
+    return res.data;
+  }
+  return res;
 };
 
 const createHeaders = (extra = {}) => {

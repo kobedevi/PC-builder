@@ -4,7 +4,7 @@ import useNoAuthApi from "../../../../core/hooks/useNoAuthApi";
 import { updateCpu } from "../../../../core/modules/CPU/api";
 import { PossibleRoutes } from "../../../../core/routing";
 import ErrorAlert from "../../../shared/ErrorAlert";
-import CpuForm from "../create/CpuForm";
+import CpuForm from "../forms/CpuForm";
 
 const CpuEdit = ({ cpu, onUpdate }) => {
   const withAuth = useNoAuthApi();

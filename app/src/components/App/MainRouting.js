@@ -2,7 +2,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { PossibleRoutes } from "../../core/routing";
 import GeneralOverview from "./GeneralOverview/GeneralOverview";
 import CpuOverview from "./Cpus/CpuOverview";
-import CreateCpu from "./Cpus/CreateCpu";
+import CreateCpu from "./Cpus/create/CreateCpu";
 import MotherboardOverview from "./Motherboards/MotherboardOverview";
 import CreateMotherboard from "./Motherboards/CreateMotherboard";
 import CaseOverview from "./Cases/CaseOverview";
