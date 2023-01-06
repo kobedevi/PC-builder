@@ -2,7 +2,7 @@ import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
 const fetchCpuSockets = () => (headers) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/cpusocket`, {
+  return Axios.request(`${process.env.REACT_APP_BASE_API}/cpusocket`, {
     headers: createHeaders(headers),
   });
 };

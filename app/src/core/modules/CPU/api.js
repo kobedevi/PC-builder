@@ -2,39 +2,31 @@ import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
 const fetchCpus = () => (headers) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/cpu`, {
+  return Axios.request(`${process.env.REACT_APP_BASE_API}/cpu`, {
     headers: createHeaders(headers),
-  });
+  }).catch((e) => e);
 };
 
-const fetchCpu = (id) => (headers) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/cpu/${id}`, {
+const fetchCpuById = (id) => (headers) => {
+  return Axios.get(`${process.env.REACT_APP_BASE_API}/cpu/${id}`, {
     headers: createHeaders(headers),
-  });
+  }).catch((e) => e);
 };
 
-const updateCpu = (data) => (headers) => {
-  const { id } = data;
-  return fetch(`${process.env.REACT_APP_BASE_API}/directors/${id}`, {
-    method: "PATCH",
-    headers: createHeaders(headers),
-    body: JSON.stringify(data),
-  });
+const updateCpu = async (data) => {
+  return Axios.patch(
+    `${process.env.REACT_APP_BASE_API}/cpu/${data.idProcessor}`,
+    {
+      ...data,
+    }
+  ).then((res) => res);
 };
 
-const createCpu = (data) => (headers) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/cpu`, {
-    method: "POST",
-    headers: createHeaders(headers),
-    body: JSON.stringify(data),
-  });
-};
-
-const axiosCreateCpu = (data) => {
+const createCpu = async (data) => {
   return Axios.post(`${process.env.REACT_APP_BASE_API}/cpu`, {
     // headers: createHeaders(headers),
     ...data,
   }).then((res) => res);
 };
 
-export { fetchCpus, fetchCpu, updateCpu, createCpu, axiosCreateCpu };
+export { fetchCpus, fetchCpuById, updateCpu, createCpu };

@@ -1,15 +1,17 @@
 import Alert from "../Design/Alert";
 
-const ErrorAlert = ({ error, children }) => {
-  console.log("we should start here");
-  console.log(error);
-  console.log(children);
+const ErrorAlert = ({ error }) => {
   if (!error) {
     return null;
   }
 
+  if (error.message) {
+    return (
+      <Alert color="danger">{error.message || "Something went wrong"}</Alert>
+    );
+  }
+
   if (error.response.data.errors) {
-    console.log("we should be here");
     return (
       <Alert color="danger">
         <ul>
@@ -23,9 +25,15 @@ const ErrorAlert = ({ error, children }) => {
     );
   }
 
-  return (
-    <Alert color="danger"> {error.message || "Something went wrong"} </Alert>
-  );
+  if (error.response.data.message) {
+    return (
+      <Alert color="danger">
+        {error.response.data.message || "Something went wrong"}
+      </Alert>
+    );
+  }
+
+  return <Alert color="danger">{"Something went wrong"}</Alert>;
 };
 
 export default ErrorAlert;

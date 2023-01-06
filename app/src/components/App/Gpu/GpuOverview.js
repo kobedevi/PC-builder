@@ -11,16 +11,9 @@ import PartnerGpuOverview from "./Overview/PartnerGpu";
 const GpuOverview = () => {
   const [info, setInfo] = useState();
 
-  const apiCall = useCallback(() => {
-    return fetchPartnerGpus();
-  }, []);
-
-  const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
-
   return (
     <>
       <h2>GPU Overview</h2>
-      {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
       <Link to={PossibleRoutes.GpuCreate} className="btn btn-primary">

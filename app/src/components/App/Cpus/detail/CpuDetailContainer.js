@@ -1,15 +1,16 @@
 import React, { useCallback } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../../../core/hooks/useFetch";
-import { fetchCpu } from "../../../../core/modules/CPU/api";
+import { fetchCpuById } from "../../../../core/modules/CPU/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
+import ErrorAlert from "../../../shared/ErrorAlert";
 import CpuDetail from "./CpuDetail";
 
 const CpuDetailContainer = () => {
   const { id } = useParams();
   const apiCall = useCallback(() => {
-    return fetchCpu(id);
+    return fetchCpuById(id);
   }, [id]);
 
   const { data: cpu, setData, error, isLoading } = useFetch(apiCall);
@@ -19,9 +20,8 @@ const CpuDetailContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />;
   }
-
   return <CpuDetail cpu={cpu[0]} />;
 };
 

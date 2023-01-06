@@ -2,13 +2,13 @@ import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
 const fetchManufacturers = () => (headers) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
+  return Axios.request(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
     headers: createHeaders(headers),
   });
 };
 
 const fetchManufacturerById = (id) => (headers) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer/${id}`, {
+  return Axios.get(`${process.env.REACT_APP_BASE_API}/manufacturer/${id}`, {
     headers: createHeaders(headers),
   });
 };

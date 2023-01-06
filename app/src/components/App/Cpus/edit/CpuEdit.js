@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import useNoAuthApi from "../../../../core/hooks/useNoAuthApi";
 import { updateCpu } from "../../../../core/modules/CPU/api";
-import { PossibleRoutes, route } from "../../../../core/routing";
+import { PossibleRoutes } from "../../../../core/routing";
+import ErrorAlert from "../../../shared/ErrorAlert";
 import CpuForm from "../create/CpuForm";
 
 const CpuEdit = ({ cpu, onUpdate }) => {
@@ -15,14 +16,8 @@ const CpuEdit = ({ cpu, onUpdate }) => {
     setIsLoading(true);
     withAuth(updateCpu(data))
       .then((data) => {
-        // let parent know data is updated
         onUpdate(data);
-        //   <Navigate to={PossibleRoutes.PartsOverview} replace />
-        navigate(
-          route(PossibleRoutes.CpuDetail, {
-            id: data.idProcessor,
-          })
-        );
+        navigate(PossibleRoutes.Cpus, { replace: true });
       })
       .catch((err) => {
         setError(err);
@@ -33,8 +28,7 @@ const CpuEdit = ({ cpu, onUpdate }) => {
   return (
     <>
       <h1>Edit CPU</h1>
-      {console.log(cpu)}
-      {/* {error && <ErrorAlert error={error.message} />} */}
+      {error && <ErrorAlert error={error} />}
 
       <CpuForm initialData={cpu} onSubmit={handleSubmit} disabled={isLoading} />
     </>

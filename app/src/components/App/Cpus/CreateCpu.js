@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosCreateCpu, createCpu } from "../../../core/modules/CPU/api";
+import { createCpu } from "../../../core/modules/CPU/api";
 import { PossibleRoutes } from "../../../core/routing";
 import ErrorAlert from "../../shared/ErrorAlert";
 import CpuForm from "./create/CpuForm";
@@ -12,7 +12,7 @@ const CreateCpu = () => {
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    axiosCreateCpu(data)
+    createCpu(data)
       .then(() => {
         navigate(PossibleRoutes.Cpus, { replace: true });
       })
