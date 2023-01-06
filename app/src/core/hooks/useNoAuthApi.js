@@ -5,9 +5,11 @@ import AppError from "../error/AppError";
 import { handleApiResult, withToken } from "../utils/api";
 
 const useNoAuthApi = () => {
+  const { user, logout } = useAuth();
+
   const withAuth = useCallback((promise) => {
     return new Promise((resolve, reject) => {
-      withToken(promise)
+      withToken(promise, user.token)
         .then(handleApiResult)
         .then((data) => resolve(data))
         .catch((err) => {

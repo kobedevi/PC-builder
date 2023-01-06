@@ -1,8 +1,9 @@
 const NotFoundError = require("../errors/NotFoundError");
 const ValidationError = require("../errors/ValidationError");
 // const authRoutes = require('./authRoutes');
-// const { authLocal, authJwt } = require('../services/auth/auth.services');
+const { authLocal, authJwt } = require("../services/auth/auth.services");
 
+const { userModel } = require("../models/User");
 const { cpuModel } = require("../models/Cpu");
 const { cpuCoolerModel } = require("../models/CpuCooler");
 const { manufacturerModel } = require("../models/Manufacturer");
@@ -13,7 +14,9 @@ const { caseModel } = require("../models/Case");
 const { ramModel } = require("../models/Ram");
 const { storageTypeModel } = require("../models/StorageType");
 const { gpuModel, gpuPartnerModel } = require("../models/Gpu");
+const { psuModel } = require("../models/Psu");
 
+const UserController = require("../controllers/UserController");
 const CpuController = require("../controllers/CpuController");
 const CpuCoolerController = require("../controllers/CpuCoolerController");
 const CpuSocketController = require("../controllers/CpuSocketController");
@@ -25,8 +28,8 @@ const RamController = require("../controllers/RamController");
 const StorageTypeController = require("../controllers/StorageTypeController");
 const GpuController = require("../controllers/GpuController");
 const PsuController = require("../controllers/PsuController");
-const { psuModel } = require("../models/Psu");
 
+const userController = new UserController();
 const cpuController = new CpuController();
 const cpuCoolerController = new CpuCoolerController();
 const cpuSocketController = new CpuSocketController();
@@ -40,6 +43,10 @@ const ramController = new RamController();
 const storageTypeController = new StorageTypeController();
 
 const registerRoutes = (app, db) => {
+	app.post("/register", userModel, userController.register);
+	// login wont work yet
+	app.post("/login", authLocal, userController.login);
+
 	// CPUS
 	app.get("/cpu", cpuController.fetchCpus);
 	app.get("/cpu/:id", cpuController.fetchCpuById);

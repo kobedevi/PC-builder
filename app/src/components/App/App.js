@@ -11,7 +11,6 @@ function App() {
           <Sidebar />
           <main>
             <MainRouting />
-            {/* TODO: frontend validation for string length etc... */}
           </main>
         </div>
       </div>
