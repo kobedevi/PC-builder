@@ -7,29 +7,34 @@ import useFetch from "../../core/hooks/useFetch";
 import Alert from "../Design/Alert";
 import * as yup from "yup";
 import { getValidationErrors } from "../../core/utils/validation";
-import { Link } from "react-router-dom";
 import Input from "../Design/Input";
 import Button from "../Design/Button";
 import { produce } from "immer";
 import { v4 as uuidv4 } from "uuid";
+import useAuthApi from "../../core/hooks/useAuthApi";
 
 const schema = yup.object().shape({
   socketType: yup.string().required(),
 });
 
-const ArrayCpuSocketSelect = ({
-  cpuSockets,
-  setCpuSockets,
-  label,
-  name,
-  disabled,
-  handleChange: handleSocketChange,
-  setData,
-  data: formData,
-  error: formError,
-}) => {
+const ArrayCpuSocketSelect = (
+  {
+    cpuSockets,
+    setCpuSockets,
+    label,
+    name,
+    disabled,
+    handleChange: handleSocketChange,
+    setData,
+    data: formData,
+    error: formError,
+  },
+  props
+) => {
   const inputRef = useRef(null);
+  const withAuth = useAuthApi();
 
+  const [localDisabled, setLocalDisabled] = useState(props.disabled);
   const [newSocket, setNewSocket] = useState("");
   const [isHidden, setIsHidden] = useState(true);
   const [isTouched, setIsTouched] = useState(false);
@@ -52,7 +57,6 @@ const ArrayCpuSocketSelect = ({
     error,
     setError,
     isLoading,
-    setIsLoading,
     refresh,
   } = useFetch(apiCall);
 
@@ -94,26 +98,32 @@ const ArrayCpuSocketSelect = ({
   };
 
   const onSubmit = () => {
-    createCpuSocket({
-      socketType: newSocket.socketType,
-    })
+    setLocalDisabled(true);
+    withAuth(
+      createCpuSocket({
+        socketType: newSocket.socketType,
+      })
+    )
       .then((e) => {
+        setLocalDisabled(false);
+        refresh();
         setInfo(e);
+        toggleHide();
         setNewSocket();
         inputRef.current.value = "";
-        toggleHide();
-        refresh();
       })
       .catch((err) => {
         setErrors(err);
-        setIsLoading(false);
+        setLocalDisabled(false);
       });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsTouched(true);
-    validate(newSocket, () => onSubmit(newSocket));
+    validate(newSocket, () => onSubmit(newSocket)).then(() => {
+      setIsTouched(false);
+    });
   };
 
   return (
@@ -130,7 +140,7 @@ const ArrayCpuSocketSelect = ({
           <div key={c.tempId} className="form-group selectArray">
             <select
               className="form-control"
-              disabled={disabled}
+              disabled={localDisabled}
               name={name}
               onChange={(e) => {
                 const socketType = e.target.value;
@@ -162,7 +172,7 @@ const ArrayCpuSocketSelect = ({
 
             <button
               className="btn btn-danger"
-              disabled={disabled}
+              disabled={localDisabled}
               onClick={() => {
                 setCpuSockets((currentCpuSockets) =>
                   currentCpuSockets.filter(

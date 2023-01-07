@@ -7,6 +7,7 @@ const handleApiResult = async (res) => {
   if (res.data) {
     return res.data;
   }
+  // console.log(res);
   return res;
 };
 

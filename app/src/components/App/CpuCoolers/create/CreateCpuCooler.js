@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosCreateCpuCooler } from "../../../core/modules/CPUCooler/api";
-import { PossibleRoutes } from "../../../core/routing";
-import ErrorAlert from "../../shared/ErrorAlert";
-import CpuCoolerForm from "./create/CpuCoolerForm";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
+import { createCpuCooler } from "../../../../core/modules/CPUCooler/api";
+import { PossibleRoutes } from "../../../../core/routing";
+import ErrorAlert from "../../../shared/ErrorAlert";
+import CpuCoolerForm from "../forms/CpuCoolerForm";
 
 const CreateCpuCooler = () => {
+  const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    axiosCreateCpuCooler(data)
+    withAuth(createCpuCooler(data))
       .then(() => {
         navigate(PossibleRoutes.CpuCoolers, { replace: true });
       })

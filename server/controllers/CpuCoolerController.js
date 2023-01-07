@@ -13,19 +13,14 @@ class CpuCoolerController {
 	};
 
 	createCpuCooler = async (req, res, next) => {
+		console.log(req.body.socketTypes);
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const {
-			idManufacturer,
-			modelName,
-			height,
-			width,
-			depth,
-			cpuSockets: socketTypes,
-		} = req.body;
+		const { idManufacturer, modelName, height, width, depth, cpuSockets } =
+			req.body;
 		try {
 			const manufacturer = await db
 				.promise()
@@ -51,12 +46,14 @@ class CpuCoolerController {
 			]);
 
 			const promises = [];
-			cpuSockets.forEach((socket) => {
+			cpuSockets.forEach(async (socket) => {
 				const id = uuidv4();
 				const sqlInsert =
 					"INSERT INTO cpucooler_has_cpusockets (id, idCpuCooler, idCpuSocket) VALUES (?,?,?)";
 				promises.push(
-					db.promise().query(sqlInsert, [id, coolerId, socket.idCpuSocket])
+					await db
+						.promise()
+						.query(sqlInsert, [id, coolerId, socket.idCpuSocket])
 				);
 			});
 			Promise.all(promises).then(() => {
@@ -64,6 +61,7 @@ class CpuCoolerController {
 					message: "CPU cooler added",
 					id: coolerId,
 				});
+				console.log("end promises");
 			});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);

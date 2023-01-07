@@ -7,14 +7,11 @@ const fetchCpuSockets = () => (headers) => {
   });
 };
 
-const createCpuSocket = async (data) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/cpusocket`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  }).then((res) => res.json());
+const createCpuSocket = (data) => async (headers) => {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpusocket`, {
+    headers: createHeaders(headers),
+    ...data,
+  });
 };
 
 export { fetchCpuSockets, createCpuSocket };

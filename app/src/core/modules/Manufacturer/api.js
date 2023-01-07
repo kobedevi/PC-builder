@@ -13,14 +13,11 @@ const fetchManufacturerById = (id) => (headers) => {
   });
 };
 
-const createManufacturer = async (data) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  }).then((res) => res.json());
+const createManufacturer = (data) => async (headers) => {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/manufacturer`, {
+    headers: createHeaders(headers),
+    ...data,
+  });
 };
 
 export { fetchManufacturers, fetchManufacturerById, createManufacturer };

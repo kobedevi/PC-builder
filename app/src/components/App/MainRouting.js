@@ -10,7 +10,7 @@ import CreateCase from "./Cases/CreateCase";
 import RamOverview from "./Ram/RamOverview";
 import CreateRam from "./Ram/CreateRam";
 import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
-import CreateCpuCooler from "./CpuCoolers/CreateCpuCooler";
+import CreateCpuCooler from "./CpuCoolers/create/CreateCpuCooler";
 import GpuOverview from "./Gpu/GpuOverview";
 import CreateGpu from "./Gpu/CreateGpu";
 import PsuOverview from "./Psu/PsuOverview";

@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Input from "../Design/Input";
 import Button from "../Design/Button";
 import Spinner from "../Design/Spinner";
+import useAuthApi from "../../core/hooks/useAuthApi";
 
 const schema = yup.object().shape({
   newManufacturer: yup.string().required(),
@@ -19,7 +20,9 @@ const schema = yup.object().shape({
 
 const ManufacturerSelect = (props) => {
   const inputRef = useRef(null);
+  const withAuth = useAuthApi();
 
+  const [localDisabled, setLocalDisabled] = useState(props.disabled);
   const [newManuName, setNewManuName] = useState("");
   const [isHidden, setIsHidden] = useState(true);
   const [isTouched, setIsTouched] = useState(false);
@@ -35,7 +38,6 @@ const ManufacturerSelect = (props) => {
     error,
     setError,
     isLoading,
-    setIsLoading,
     refresh,
   } = useFetch(apiCall);
 
@@ -77,20 +79,23 @@ const ManufacturerSelect = (props) => {
   };
 
   const onSubmit = () => {
-    createManufacturer({
-      manufacturerName: newManuName.newManufacturer,
-    })
+    setLocalDisabled(true);
+    withAuth(
+      createManufacturer({
+        manufacturerName: newManuName.newManufacturer,
+      })
+    )
       .then((e) => {
+        setLocalDisabled(false);
+        refresh();
         setInfo(e);
+        toggleHide();
         setNewManuName();
         inputRef.current.value = "";
-        toggleHide();
-        refresh();
-        setIsLoading(true);
       })
       .catch((err) => {
         setErrors(err);
-        setIsLoading(false);
+        setLocalDisabled(false);
       });
   };
 
@@ -119,14 +124,14 @@ const ManufacturerSelect = (props) => {
               label="Manufacturer name"
               type="text"
               onChange={handleChange}
-              disabled={props.disabled}
+              disabled={localDisabled}
               name="newManufacturer"
               id="newManufacturer"
               error={errors.newManufacturer}
               ref={inputRef}
             />
             <Button
-              disabled={props.disabled}
+              disabled={localDisabled}
               className="mt-4"
               type="submit"
               onClick={handleSubmit}

@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Input from "../Design/Input";
 import Button from "../Design/Button";
 import Spinner from "../Design/Spinner";
+import useAuthApi from "../../core/hooks/useAuthApi";
 
 const schema = yup.object().shape({
   socketType: yup.string().required(),
@@ -19,7 +20,9 @@ const schema = yup.object().shape({
 
 const CpuSocketSelect = (props) => {
   const inputRef = useRef(null);
+  const withAuth = useAuthApi();
 
+  const [localDisabled, setLocalDisabled] = useState(props.disabled);
   const [newSocket, setNewSocket] = useState("");
   const [isHidden, setIsHidden] = useState(true);
   const [isTouched, setIsTouched] = useState(false);
@@ -35,7 +38,6 @@ const CpuSocketSelect = (props) => {
     error,
     setError,
     isLoading,
-    setIsLoading,
     refresh,
   } = useFetch(apiCall);
 
@@ -77,19 +79,23 @@ const CpuSocketSelect = (props) => {
   };
 
   const onSubmit = () => {
-    createCpuSocket({
-      socketType: newSocket.socketType,
-    })
+    setLocalDisabled(true);
+    withAuth(
+      createCpuSocket({
+        socketType: newSocket.socketType,
+      })
+    )
       .then((e) => {
+        setLocalDisabled(false);
+        refresh();
         setInfo(e);
+        toggleHide();
         setNewSocket();
         inputRef.current.value = "";
-        toggleHide();
-        refresh();
       })
       .catch((err) => {
         setErrors(err);
-        setIsLoading(false);
+        setLocalDisabled(false);
       });
   };
 
@@ -117,7 +123,7 @@ const CpuSocketSelect = (props) => {
             <Input
               label="socket name"
               type="text"
-              disabled={props.disabled}
+              disabled={localDisabled}
               onChange={handleChange}
               name="socketType"
               id="socketType"
@@ -125,7 +131,7 @@ const CpuSocketSelect = (props) => {
               ref={inputRef}
             />
             <Button
-              disabled={props.disabled}
+              disabled={localDisabled}
               className="mt-4"
               type="submit"
               onClick={handleSubmit}
