@@ -1,20 +1,20 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchCpus = () => (headers) => {
-  return Axios.request(`${process.env.REACT_APP_BASE_API}/cpu`, {
+const fetchCpus = () => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/cpu`, {
     headers: createHeaders(headers),
   }).catch((e) => e);
 };
 
-const fetchCpuById = (id) => (headers) => {
-  return Axios.get(`${process.env.REACT_APP_BASE_API}/cpu/${id}`, {
+const fetchCpuById = (id) => async (headers) => {
+  return await Axios.get(`${process.env.REACT_APP_BASE_API}/cpu/${id}`, {
     headers: createHeaders(headers),
   }).catch((e) => e);
 };
 
 const updateCpu = (data) => async (headers) => {
-  return Axios.patch(
+  return await Axios.patch(
     `${process.env.REACT_APP_BASE_API}/cpu/${data.idProcessor}`,
     {
       headers: createHeaders(headers),

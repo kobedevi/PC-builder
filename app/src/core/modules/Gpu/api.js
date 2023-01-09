@@ -2,13 +2,13 @@ import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
 const fetchOriginalGpus = () => async (headers) => {
-  return Axios.request(`${process.env.REACT_APP_BASE_API}/gpu`, {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/gpu`, {
     headers: createHeaders(headers),
   });
 };
 
 const fetchPartnerGpus = () => async (headers) => {
-  return Axios.request(`${process.env.REACT_APP_BASE_API}/gpu/partner`, {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/gpu/partner`, {
     headers: createHeaders(headers),
   });
 };

@@ -8,7 +8,7 @@ const fetchCases = () => async (headers) => {
 };
 
 const createCase = (data) => async (headers) => {
-  return Axios.post(`${process.env.REACT_APP_BASE_API}/case`, {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/case`, {
     headers: createHeaders(headers),
     ...data,
   });
