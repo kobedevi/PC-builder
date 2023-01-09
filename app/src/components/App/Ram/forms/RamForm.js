@@ -138,7 +138,7 @@ const RamForm = ({ onSubmit, initialData = {}, disabled }) => {
         disabled={disabled}
         min={"1"}
         max={"12000"}
-        step={1}
+        step={100}
         onChange={handleChange}
         error={errors.speed}
       />

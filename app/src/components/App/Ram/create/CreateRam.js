@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosCreateRam } from "../../../core/modules/Ram/api";
-import { PossibleRoutes } from "../../../core/routing";
-import ErrorAlert from "../../shared/ErrorAlert";
-import CaseForm from "./create/RamForm";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
+import { createRam } from "../../../../core/modules/Ram/api";
+import { PossibleRoutes } from "../../../../core/routing";
+import Spinner from "../../../Design/Spinner";
+import ErrorAlert from "../../../shared/ErrorAlert";
+import RamForm from "../forms/RamForm";
 
 const CreateRam = () => {
+  const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    axiosCreateRam(data)
+    withAuth(createRam(data))
       .then(() => {
         navigate(PossibleRoutes.Ram, { replace: true });
       })
@@ -22,11 +25,18 @@ const CreateRam = () => {
       });
   };
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return <ErrorAlert error={error} />;
+  }
+
   return (
     <div>
       <h2>Create Ram</h2>
-      {error && <ErrorAlert error={error} />}
-      <CaseForm onSubmit={handleSubmit} disabled={isLoading} />
+      <RamForm onSubmit={handleSubmit} disabled={isLoading} />
     </div>
   );
 };

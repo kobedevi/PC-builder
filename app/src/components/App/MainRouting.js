@@ -8,7 +8,7 @@ import CreateMotherboard from "./Motherboards/create/CreateMotherboard";
 import CaseOverview from "./Cases/CaseOverview";
 import CreateCase from "./Cases/create/CreateCase";
 import RamOverview from "./Ram/RamOverview";
-import CreateRam from "./Ram/CreateRam";
+import CreateRam from "./Ram/create/CreateRam";
 import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
 import CreateCpuCooler from "./CpuCoolers/create/CreateCpuCooler";
 import GpuOverview from "./Gpu/GpuOverview";
