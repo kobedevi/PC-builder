@@ -13,7 +13,6 @@ class CpuCoolerController {
 	};
 
 	createCpuCooler = async (req, res, next) => {
-		console.log(req.body.socketTypes);
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
@@ -61,7 +60,6 @@ class CpuCoolerController {
 					message: "CPU cooler added",
 					id: coolerId,
 				});
-				console.log("end promises");
 			});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);

@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosCreateCase } from "../../../core/modules/Case/api";
-import { PossibleRoutes } from "../../../core/routing";
-import ErrorAlert from "../../shared/ErrorAlert";
-import CaseForm from "./create/CaseForm";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
+import { createCase } from "../../../../core/modules/Case/api";
+import { PossibleRoutes } from "../../../../core/routing";
+import ErrorAlert from "../../../shared/ErrorAlert";
+import CaseForm from "../forms/CaseForm";
 
 const CreateCase = () => {
+  const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    axiosCreateCase(data)
+    withAuth(createCase(data))
       .then(() => {
         navigate(PossibleRoutes.Cases, { replace: true });
       })

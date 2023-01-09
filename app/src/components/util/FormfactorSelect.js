@@ -28,7 +28,7 @@ const defaultData = {
 };
 
 const FormfactorSelect = (
-  { initialData = {}, onChange, name, value },
+  { initialData = {}, onChange, name, value, label },
   props
 ) => {
   const [newFormfactor, setNewFormfactor] = useState("");
@@ -41,6 +41,7 @@ const FormfactorSelect = (
     ...defaultData,
     ...initialData,
   });
+
   const withAuth = useAuthApi();
 
   const toggleHide = () => {
@@ -59,8 +60,6 @@ const FormfactorSelect = (
     isLoading,
     refresh,
   } = useFetch(apiCall);
-
-  console.log(formfactors);
 
   const options = formfactors
     ? formfactors.map((formfactor) => ({
@@ -136,6 +135,7 @@ const FormfactorSelect = (
       {options && (
         <>
           <Select
+            label={label}
             options={options}
             onChange={onChange}
             name={name}

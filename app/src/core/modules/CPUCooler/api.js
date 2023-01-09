@@ -8,7 +8,6 @@ const fetchCpuCoolers = () => (headers) => {
 };
 
 const createCpuCooler = (data) => async (headers) => {
-  console.log(data);
   return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpucooler`, {
     headers: createHeaders(headers),
     ...data,

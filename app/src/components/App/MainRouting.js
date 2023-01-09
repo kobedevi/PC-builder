@@ -6,7 +6,7 @@ import CreateCpu from "./Cpus/create/CreateCpu";
 import MotherboardOverview from "./Motherboards/MotherboardOverview";
 import CreateMotherboard from "./Motherboards/create/CreateMotherboard";
 import CaseOverview from "./Cases/CaseOverview";
-import CreateCase from "./Cases/CreateCase";
+import CreateCase from "./Cases/create/CreateCase";
 import RamOverview from "./Ram/RamOverview";
 import CreateRam from "./Ram/CreateRam";
 import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
