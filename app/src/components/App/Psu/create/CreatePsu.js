@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosCreatePsu } from "../../../core/modules/Psu/api";
-import { PossibleRoutes } from "../../../core/routing";
-import ErrorAlert from "../../shared/ErrorAlert";
-import PsuForm from "./create/PsuForm";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
+import { createPsu } from "../../../../core/modules/Psu/api";
+import { PossibleRoutes } from "../../../../core/routing";
+import ErrorAlert from "../../../shared/ErrorAlert";
+import PsuForm from "../forms/PsuForm";
 
 const CreatePsu = () => {
+  const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    axiosCreatePsu(data)
+    withAuth(createPsu(data))
       .then(() => {
         navigate(PossibleRoutes.Psus, { replace: true });
       })

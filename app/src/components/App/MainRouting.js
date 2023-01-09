@@ -14,7 +14,7 @@ import CreateCpuCooler from "./CpuCoolers/create/CreateCpuCooler";
 import GpuOverview from "./Gpu/GpuOverview";
 import CreateGpu from "./Gpu/create/CreateGpu";
 import PsuOverview from "./Psu/PsuOverview";
-import CreatePsu from "./Psu/CreatePsu";
+import CreatePsu from "./Psu/create/CreatePsu";
 import CpuDetailContainer from "./Cpus/detail/CpuDetailContainer";
 import CpuEdit from "./Cpus/edit/CpuEdit";
 import CpuEditContainer from "./Cpus/edit/CpuEditContainer";
