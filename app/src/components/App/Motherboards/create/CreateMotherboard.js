@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosCreateMotherboard } from "../../../core/modules/Motherboard/api";
-import { PossibleRoutes } from "../../../core/routing";
-import ErrorAlert from "../../shared/ErrorAlert";
-import MotherboardForm from "./create/MotherboardForm";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
+import { createMotherboard } from "../../../../core/modules/Motherboard/api";
+import { PossibleRoutes } from "../../../../core/routing";
+import ErrorAlert from "../../../shared/ErrorAlert";
+import MotherboardForm from "../forms/MotherboardForm";
 
 const CreateMotherboard = () => {
+  const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    axiosCreateMotherboard(data)
+    withAuth(createMotherboard(data))
       .then(() => {
         navigate(PossibleRoutes.Motherboards, { replace: true });
       })

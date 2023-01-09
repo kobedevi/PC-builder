@@ -13,6 +13,7 @@ import {
 } from "../../core/modules/Formfactor/api";
 import Spinner from "../Design/Spinner";
 import NumberInput from "../Design/NumberInput";
+import useAuthApi from "../../core/hooks/useAuthApi";
 
 const schema = yup.object().shape({
   formfactor: yup.string().required(),
@@ -31,6 +32,7 @@ const FormfactorSelect = (
   props
 ) => {
   const [newFormfactor, setNewFormfactor] = useState("");
+  const [localDisabled, setLocalDisabled] = useState(props.disabled);
   const [isHidden, setIsHidden] = useState(true);
   const [isTouched, setIsTouched] = useState(false);
   const [errors, setErrors] = useState({});
@@ -39,6 +41,7 @@ const FormfactorSelect = (
     ...defaultData,
     ...initialData,
   });
+  const withAuth = useAuthApi();
 
   const toggleHide = () => {
     setIsHidden(!isHidden);
@@ -54,9 +57,10 @@ const FormfactorSelect = (
     error,
     setError,
     isLoading,
-    setIsLoading,
     refresh,
   } = useFetch(apiCall);
+
+  console.log(formfactors);
 
   const options = formfactors
     ? formfactors.map((formfactor) => ({
@@ -70,25 +74,6 @@ const FormfactorSelect = (
       ...data,
       [e.target.name]: e.target.value,
     });
-  };
-
-  const onSubmit = () => {
-    createFormfactor({
-      ...data,
-    })
-      .then((e) => {
-        setInfo(e);
-        toggleHide();
-        refresh();
-        setIsLoading(true);
-      })
-      .catch((err) => {
-        setErrors(err);
-        setData({
-          ...initialData,
-        });
-        setIsLoading(false);
-      });
   };
 
   const validate = useCallback((data, onSuccess) => {
@@ -109,6 +94,28 @@ const FormfactorSelect = (
       validate(data);
     }
   }, [validate, isTouched, data]);
+
+  const onSubmit = () => {
+    setLocalDisabled(true);
+    withAuth(
+      createFormfactor({
+        ...data,
+      })
+    )
+      .then((e) => {
+        setLocalDisabled(false);
+        refresh();
+        setInfo(e);
+        toggleHide();
+      })
+      .catch((err) => {
+        setErrors(err);
+        setData({
+          ...initialData,
+        });
+        setLocalDisabled(false);
+      });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -147,7 +154,7 @@ const FormfactorSelect = (
               type="text"
               name="formfactor"
               value={data.formfactor}
-              disabled={props.disabled}
+              disabled={localDisabled}
               onChange={handleChange}
               id="formfactor"
               error={errors.formfactor}
@@ -158,7 +165,7 @@ const FormfactorSelect = (
               type="number"
               name="height"
               value={data.height}
-              disabled={props.disabled}
+              disabled={localDisabled}
               min={1}
               max={1000}
               step={1}
@@ -171,7 +178,7 @@ const FormfactorSelect = (
               type="number"
               name="width"
               value={data.width}
-              disabled={props.disabled}
+              disabled={localDisabled}
               min={1}
               max={1000}
               step={1}
@@ -180,7 +187,7 @@ const FormfactorSelect = (
             />
 
             <Button
-              disabled={props.disabled}
+              disabled={localDisabled}
               className="mt-4"
               type="submit"
               onClick={handleSubmit}

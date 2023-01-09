@@ -4,7 +4,7 @@ import GeneralOverview from "./GeneralOverview/GeneralOverview";
 import CpuOverview from "./Cpus/CpuOverview";
 import CreateCpu from "./Cpus/create/CreateCpu";
 import MotherboardOverview from "./Motherboards/MotherboardOverview";
-import CreateMotherboard from "./Motherboards/CreateMotherboard";
+import CreateMotherboard from "./Motherboards/create/CreateMotherboard";
 import CaseOverview from "./Cases/CaseOverview";
 import CreateCase from "./Cases/CreateCase";
 import RamOverview from "./Ram/RamOverview";

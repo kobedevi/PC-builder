@@ -1,31 +1,36 @@
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
+import useAuthApi from "../../../core/hooks/useAuthApi";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchMotherboards } from "../../../core/modules/Motherboard/api";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
+import ErrorAlert from "../../shared/ErrorAlert";
 
 const MotherboardOverview = () => {
+  const withAuth = useAuthApi();
   const [info, setInfo] = useState();
 
-  const apiCall = useCallback(() => {
-    return fetchMotherboards();
-  }, []);
+  const { data, error, setError, isLoading, refresh } =
+    useFetch(fetchMotherboards);
 
-  const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return <ErrorAlert error={error} />;
+  }
 
   return (
     <>
       <h2>Motherboard Overview</h2>
-      {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info}</Alert>}
 
       <Link to={PossibleRoutes.MotherboardCreate} className="btn btn-primary">
         Add Motherboard
       </Link>
-
-      {isLoading && <Spinner />}
 
       {data && (
         <ul>
