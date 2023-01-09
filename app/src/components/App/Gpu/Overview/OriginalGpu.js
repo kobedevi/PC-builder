@@ -6,7 +6,6 @@ import Spinner from "../../../Design/Spinner";
 
 const OriginalGpuOverview = () => {
   const [info, setInfo] = useState();
-
   const apiCall = useCallback(() => {
     return fetchOriginalGpus();
   }, []);

@@ -5,7 +5,8 @@ import Input from "../../../Design/Input";
 import Button from "../../../Design/Button";
 import NumberInput from "../../../Design/NumberInput";
 import ManufacturerSelect from "../../../util/ManufacturerSelect";
-import { axiosCreateOriginalGpu } from "../../../../core/modules/Gpu/api";
+import { createOriginalGpu } from "../../../../core/modules/Gpu/api";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
 
 const schema = yup.object().shape({
   idManufacturer: yup.string().required(),
@@ -46,9 +47,9 @@ const schema = yup.object().shape({
 const defaultData = {
   idManufacturer: "",
   modelName: "",
-  vram: 0,
-  displayport: 0,
-  hdmi: 0,
+  vram: 12,
+  displayport: 3,
+  hdmi: 1,
   vga: 0,
   dvi: 0,
 };
@@ -70,6 +71,7 @@ const GpuOriginalForm = ({
     ...defaultData,
     ...initialData,
   });
+  const withAuth = useAuthApi();
 
   const handleChange = (e) => {
     setData({
@@ -101,9 +103,11 @@ const GpuOriginalForm = ({
   }, [validate, isTouched, data]);
 
   const onSubmit = () => {
-    axiosCreateOriginalGpu({
-      ...data,
-    })
+    withAuth(
+      createOriginalGpu({
+        ...data,
+      })
+    )
       .then((e) => {
         setInfo(e.data);
         setNewGpu();

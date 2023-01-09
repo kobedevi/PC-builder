@@ -4,7 +4,7 @@ import { fetchOriginalGpus } from "../../core/modules/Gpu/api";
 import useFetch from "../../core/hooks/useFetch";
 import Alert from "../Design/Alert";
 import { Link } from "react-router-dom";
-import GpuOriginalForm from "../App/Gpu/create/GpuOriginalForm";
+import GpuOriginalForm from "../App/Gpu/forms/GpuOriginalForm";
 import Spinner from "../Design/Spinner";
 import ErrorAlert from "../shared/ErrorAlert";
 

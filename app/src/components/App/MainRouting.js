@@ -12,7 +12,7 @@ import CreateRam from "./Ram/create/CreateRam";
 import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
 import CreateCpuCooler from "./CpuCoolers/create/CreateCpuCooler";
 import GpuOverview from "./Gpu/GpuOverview";
-import CreateGpu from "./Gpu/CreateGpu";
+import CreateGpu from "./Gpu/create/CreateGpu";
 import PsuOverview from "./Psu/PsuOverview";
 import CreatePsu from "./Psu/CreatePsu";
 import CpuDetailContainer from "./Cpus/detail/CpuDetailContainer";

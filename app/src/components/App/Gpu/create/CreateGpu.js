@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { axiosCreatePartnerGpu } from "../../../core/modules/Gpu/api";
-import { PossibleRoutes } from "../../../core/routing";
-import ErrorAlert from "../../shared/ErrorAlert";
-import GpuForm from "./create/GpuForm";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
+import { createPartnerGpu } from "../../../../core/modules/Gpu/api";
+import { PossibleRoutes } from "../../../../core/routing";
+import Spinner from "../../../Design/Spinner";
+import ErrorAlert from "../../../shared/ErrorAlert";
+import GpuForm from "../forms/GpuForm";
 
 const CreateGpu = () => {
+  const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    axiosCreatePartnerGpu(data)
+    withAuth(createPartnerGpu(data))
       .then(() => {
         navigate(PossibleRoutes.Gpus, { replace: true });
       })
@@ -21,6 +24,10 @@ const CreateGpu = () => {
         setIsLoading(false);
       });
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div>

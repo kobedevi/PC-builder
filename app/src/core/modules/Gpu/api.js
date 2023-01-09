@@ -1,35 +1,35 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchOriginalGpus = () => (headers) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/gpu`, {
+const fetchOriginalGpus = () => async (headers) => {
+  return Axios.request(`${process.env.REACT_APP_BASE_API}/gpu`, {
     headers: createHeaders(headers),
   });
 };
 
-const fetchPartnerGpus = () => (headers) => {
-  return fetch(`${process.env.REACT_APP_BASE_API}/gpu/partner`, {
+const fetchPartnerGpus = () => async (headers) => {
+  return Axios.request(`${process.env.REACT_APP_BASE_API}/gpu/partner`, {
     headers: createHeaders(headers),
   });
 };
 
-const axiosCreateOriginalGpu = (data) => {
-  return Axios.post(`${process.env.REACT_APP_BASE_API}/gpu`, {
-    // headers: createHeaders(headers),
+const createOriginalGpu = (data) => async (headers) => {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/gpu`, {
+    headers: createHeaders(headers),
     ...data,
-  }).then((res) => res);
+  });
 };
 
-const axiosCreatePartnerGpu = (data) => {
-  return Axios.post(`${process.env.REACT_APP_BASE_API}/gpu/partner`, {
-    // headers: createHeaders(headers),
+const createPartnerGpu = (data) => async (headers) => {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/gpu/partner`, {
+    headers: createHeaders(headers),
     ...data,
-  }).then((res) => res);
+  });
 };
 
 export {
   fetchOriginalGpus,
   fetchPartnerGpus,
-  axiosCreateOriginalGpu,
-  axiosCreatePartnerGpu,
+  createOriginalGpu,
+  createPartnerGpu,
 };

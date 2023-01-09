@@ -12,6 +12,8 @@ const PartnerGpuOverview = () => {
   }, []);
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
+
+  console.log(data);
   return (
     <>
       <h4>Partner GPU:</h4>
@@ -22,7 +24,7 @@ const PartnerGpuOverview = () => {
       {data && (
         <ul>
           {data.map((x) => (
-            <li key={x.idGpu}>{`${x.idGpu}`}</li>
+            <li key={x.idGpuPartner}>{`${x.idGpuPartner}`}</li>
           ))}
         </ul>
       )}
