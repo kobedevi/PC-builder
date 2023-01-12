@@ -91,7 +91,7 @@ const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
         error={errors.modelName}
       />
       <NumberInput
-        label="Height in cm"
+        label="Height in mm"
         type="number"
         name="height"
         value={data.height}
@@ -103,7 +103,7 @@ const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
         error={errors.height}
       />
       <NumberInput
-        label="Width in cm"
+        label="Width in mm"
         type="number"
         name="width"
         value={data.width}
@@ -115,7 +115,7 @@ const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
         error={errors.width}
       />
       <NumberInput
-        label="Depth in cm"
+        label="Depth in mm"
         type="number"
         name="depth"
         value={data.depth}

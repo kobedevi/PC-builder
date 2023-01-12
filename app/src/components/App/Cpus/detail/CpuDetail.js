@@ -4,7 +4,7 @@ import { PossibleRoutes, route } from "../../../../core/routing";
 import { Canvas } from "@react-three/fiber";
 import { Leva } from "leva";
 import ModelContainer from "./Model/ModelContainer";
-import CpuDetailCard from "../../../Design/CpuDetailCard";
+import CpuDetailCard from "../../../Design/DetailCards/CpuDetailCard";
 
 const CpuDetail = ({ cpu }) => {
   return (

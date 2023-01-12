@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchCpuCoolers } from "../../../core/modules/CPUCooler/api";
-import { PossibleRoutes } from "../../../core/routing";
+import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 
@@ -36,7 +36,13 @@ const CpuCoolerOverview = () => {
       {cpuCoolers && (
         <ul>
           {cpuCoolers.map((cc) => (
-            <li key={cc.idCpuCooler}>{`${cc.idCpuCooler}`}</li>
+            <li key={cc.idCpuCooler}>
+              <Link
+                to={route(PossibleRoutes.CpuCoolerDetail, {
+                  id: cc.idCpuCooler,
+                })}
+              >{`${cc.modelName}`}</Link>
+            </li>
           ))}
         </ul>
       )}

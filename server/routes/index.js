@@ -55,6 +55,8 @@ const registerRoutes = (app, db) => {
 
 	// CPUCoolers
 	app.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
+	app.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolerById);
+	app.patch("/cpucooler/:id", cpuCoolerController.patchCpuCoolerById);
 	app.post("/cpucooler", cpuCoolerModel, cpuCoolerController.createCpuCooler);
 
 	// Motherboards
