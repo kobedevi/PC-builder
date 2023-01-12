@@ -1,12 +1,8 @@
 class ApiError extends Error {
   constructor(err) {
     super();
-    // if (err && err.message && err.statusCode) {
-    //   this.message = `${err.statusCode} ${err.message}`;
-    //   this.statusCode = err.statusCode;
-    // }
     if (err && err.response.data.message && err.response.status) {
-      this.message = `${err.response.data.message}`;
+      this.message = `${err.response.status}: ${err.response.data.message}`;
       this.statusCode = err.response.status;
     } else if (err && err.message && err.response.status) {
       this.message = `${err.message}`;

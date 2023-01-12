@@ -41,7 +41,11 @@ const LoginPage = ({ setUser }) => {
           .then((data) => {
             setUser(data);
           })
-          .catch((e) => {
+          .catch((err) => {
+            let e;
+            if (err.response.status >= 401) {
+              e = new ApiError(err);
+            }
             if (e instanceof ApiError) {
               if (e.isUnauthorized()) {
                 setError(new AppError("Wrong combination"));

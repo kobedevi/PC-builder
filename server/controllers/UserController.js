@@ -53,7 +53,7 @@ class UserController {
 			const results = await db.promise().query(`SELECT * FROM users
 				WHERE email="${email}" LIMIT 1;`);
 			if (results[0].length === 0) {
-				return res.status(200).send(null);
+				return null;
 			}
 			return results[0][0];
 		} catch (e) {
