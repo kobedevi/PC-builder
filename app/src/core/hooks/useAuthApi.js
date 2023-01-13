@@ -14,8 +14,12 @@ const useAuthApi = () => {
           .then(handleApiResult)
           .then((data) => resolve(data))
           .catch((err) => {
-            if (err instanceof ApiError) {
-              if (err.isUnauthorized()) {
+            let e;
+            if (err.response.status >= 400) {
+              e = new ApiError(err);
+            }
+            if (e instanceof ApiError) {
+              if (e.isUnauthorized()) {
                 logout();
                 return;
               } else {

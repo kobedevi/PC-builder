@@ -8,7 +8,6 @@ const fetchCpuCoolers = () => async (headers) => {
 };
 
 const fetchCpuCoolerById = (id) => async (headers) => {
-  console.log(id);
   return await Axios.get(`${process.env.REACT_APP_BASE_API}/cpucooler/${id}`, {
     headers: createHeaders(headers),
   }).catch((e) => e);

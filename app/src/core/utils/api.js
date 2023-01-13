@@ -1,7 +1,6 @@
 import ApiError from "../error/ApiError";
 
 const handleApiResult = async (res) => {
-  // console.log(res);
   if (res.status >= 400) {
     throw new ApiError(res);
   }

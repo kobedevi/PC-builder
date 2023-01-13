@@ -21,7 +21,6 @@ const CpuCoolerDetailContainer = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  console.log(cooler);
   return <CpuCoolerDetail cooler={cooler[0]} />;
 };
 
