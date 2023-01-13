@@ -43,7 +43,7 @@ const LoginPage = ({ setUser }) => {
           })
           .catch((err) => {
             let e;
-            if (err.response.status >= 401) {
+            if (typeof err.response !== "undefined") {
               e = new ApiError(err);
             }
             if (e instanceof ApiError) {
@@ -53,7 +53,7 @@ const LoginPage = ({ setUser }) => {
                 setError(e);
               }
             } else {
-              setError(new AppError(e));
+              setError(new AppError(err));
             }
           });
       })
