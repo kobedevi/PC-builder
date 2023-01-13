@@ -1,6 +1,7 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4, validate: uuidValidate } = require("uuid");
+const SQL = require("@nearform/sql");
 
 class CpuCoolerController {
 	fetchCpuCoolers = async (req, res, next) => {
@@ -15,11 +16,10 @@ class CpuCoolerController {
 	fetchCpuCoolerById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			console.log(id);
 			const results = await db.promise()
-				.query(`SELECT cpucoolers.*, manufacturers.manufacturerName FROM cpucoolers
+				.query(SQL`SELECT cpucoolers.*, manufacturers.manufacturerName FROM cpucoolers
 				LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
-				WHERE cpucoolers.idCpuCooler="${id}" LIMIT 1;`);
+				WHERE cpucoolers.idCpuCooler=${id} LIMIT 1;`);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "CPU cooler does not exist" });
 			}
@@ -29,6 +29,7 @@ class CpuCoolerController {
 		}
 	};
 
+	// TODO: Update this method
 	patchCpuCoolerById = async (req, res, next) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
@@ -105,13 +106,19 @@ class CpuCoolerController {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { idManufacturer, modelName, height, width, depth, cpuSockets } =
-			req.body;
+		const {
+			idManufacturer,
+			modelName,
+			height,
+			width,
+			depth,
+			cpuSockets = [{ idCpuSocket: undefined, tempId: undefined }],
+		} = req.body;
 		try {
 			const manufacturer = await db
 				.promise()
 				.query(
-					`select idManufacturer from manufacturers where idManufacturer = "${idManufacturer}"`
+					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
 				);
 			if (manufacturer[0].length === 0) {
 				return res
@@ -122,31 +129,54 @@ class CpuCoolerController {
 			const coolerId = uuidv4();
 			const sqlInsert =
 				"INSERT INTO cpucoolers (idCpuCooler, idManufacturer, modelName, height, width, depth) VALUES (?,?,?,?,?,?)";
-			db.promise().query(sqlInsert, [
-				coolerId,
-				idManufacturer,
-				modelName,
-				height,
-				width,
-				depth,
-			]);
+			await db
+				.promise()
+				.query(sqlInsert, [
+					coolerId,
+					idManufacturer,
+					modelName,
+					height,
+					width,
+					depth,
+				]);
 
-			const promises = [];
-			cpuSockets.forEach(async (socket) => {
-				const id = uuidv4();
-				const sqlInsert =
-					"INSERT INTO cpucooler_has_cpusockets (id, idCpuCooler, idCpuSocket) VALUES (?,?,?)";
-				promises.push(
-					await db
-						.promise()
-						.query(sqlInsert, [id, coolerId, socket.idCpuSocket])
-				);
+			// OLD METHOD WITH MULTIPLE INSERTS
+			// const promises = [];
+			// cpuSockets.forEach(async (socket) => {
+			// 	const id = uuidv4();
+			// 	const sqlInsert =
+			// 		"INSERT INTO cpucooler_has_cpusockets (id, idCpuCooler, idCpuSocket) VALUES (?,?,?)";
+			// 	promises.push(
+			// 		await db
+			// 			.promise()
+			// 			.query(sqlInsert, [id, coolerId, socket.idCpuSocket])
+			// 	);
+			// });
+
+			// Promise.all(promises).then(() => {
+			// 	res.status(201).send({
+			// 		message: "CPU cooler added",
+			// 		id: coolerId,
+			// 	});
+			// });
+			const inserter = [];
+			cpuSockets.forEach((socket) => {
+				// only add valid cpusockets
+				if (uuidValidate(socket.idCpuSocket)) {
+					inserter.push(
+						`('${uuidv4()}', '${coolerId}', '${socket.idCpuSocket}')`
+					);
+				}
 			});
-			Promise.all(promises).then(() => {
-				res.status(201).send({
-					message: "CPU cooler added",
-					id: coolerId,
-				});
+			if (inserter.length > 0) {
+				const socketsSqlInsert = `INSERT INTO cpucooler_has_cpusockets (id, idCpuCooler, idCpuSocket) VALUES ${inserter.join(
+					", "
+				)}`;
+				await db.promise().query(socketsSqlInsert);
+			}
+			res.status(201).send({
+				message: "CPU cooler added",
+				id: coolerId,
 			});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);

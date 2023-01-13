@@ -1,6 +1,7 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
+const SQL = require("@nearform/sql");
 
 class MotherboardController {
 	fetchMotherboards = async (req, res, next) => {
@@ -32,7 +33,7 @@ class MotherboardController {
 			const manufacturer = await db
 				.promise()
 				.query(
-					`select idManufacturer from manufacturers where idManufacturer = "${idManufacturer}"`
+					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
 				);
 			if (manufacturer[0].length === 0) {
 				return res
@@ -42,7 +43,7 @@ class MotherboardController {
 			const cpuSocket = await db
 				.promise()
 				.query(
-					`select idCpuSocket from cpusockets where idCpuSocket = "${idCpuSocket}"`
+					SQL`select idCpuSocket from cpusockets where idCpuSocket = ${idCpuSocket}`
 				);
 			if (cpuSocket[0].length === 0) {
 				return res
@@ -52,7 +53,7 @@ class MotherboardController {
 			const formfactor = await db
 				.promise()
 				.query(
-					`select idFormfactor from formfactors where idFormfactor = "${idFormfactor}"`
+					SQL`select idFormfactor from formfactors where idFormfactor = ${idFormfactor}`
 				);
 			if (formfactor[0].length === 0) {
 				return res

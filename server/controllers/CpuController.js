@@ -1,6 +1,7 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
+const SQL = require("@nearform/sql");
 
 class CpuController {
 	fetchCpus = async (req, res, next) => {
@@ -16,9 +17,9 @@ class CpuController {
 		try {
 			const { id } = req.params;
 			const results = await db.promise()
-				.query(`SELECT cpus.*, manufacturers.manufacturerName FROM cpus
+				.query(SQL`SELECT cpus.*, manufacturers.manufacturerName FROM cpus
 				LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
-				WHERE cpus.idProcessor="${id}" LIMIT 1;`);
+				WHERE cpus.idProcessor=${id} LIMIT 1;`);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "CPU does not exist" });
 			}
@@ -41,7 +42,7 @@ class CpuController {
 				const manufacturer = await db
 					.promise()
 					.query(
-						`select idManufacturer from manufacturers where idManufacturer = "${idManufacturer}"`
+						SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
 					);
 				if (manufacturer[0].length === 0) {
 					return res
@@ -51,7 +52,7 @@ class CpuController {
 				const cpuSocket = await db
 					.promise()
 					.query(
-						`select idCpuSocket from cpusockets where idCpuSocket = "${idCpuSocket}"`
+						SQL`select idCpuSocket from cpusockets where idCpuSocket = ${idCpuSocket}`
 					);
 				if (cpuSocket[0].length === 0) {
 					return res

@@ -1,6 +1,7 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
+const SQL = require("@nearform/sql");
 
 class GpuController {
 	fetchGpus = async (req, res, next) => {
@@ -25,7 +26,7 @@ class GpuController {
 			const manufacturer = await db
 				.promise()
 				.query(
-					`select idManufacturer from manufacturers where idManufacturer = "${idManufacturer}"`
+					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
 				);
 			if (manufacturer[0].length === 0) {
 				return res
@@ -90,7 +91,7 @@ class GpuController {
 			const manufacturer = await db
 				.promise()
 				.query(
-					`select idManufacturer from manufacturers where idManufacturer = "${idManufacturer}"`
+					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
 				);
 			if (manufacturer[0].length === 0) {
 				return res

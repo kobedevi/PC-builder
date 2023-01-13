@@ -2,6 +2,7 @@ const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const ValidationError = require("../errors/ValidationError");
 const { v4: uuidv4 } = require("uuid");
+const SQL = require("@nearform/sql");
 
 class ManufacturerController {
 	fetchManufacturers = async (req, res, next) => {
@@ -21,7 +22,7 @@ class ManufacturerController {
 			const results = await db
 				.promise()
 				.query(
-					`SELECT * FROM manufacturers WHERE idManufacturer = "${id}" LIMIT 1`
+					SQL`SELECT * FROM manufacturers WHERE idManufacturer = ${id} LIMIT 1`
 				);
 			res.status(200).send(results[0]);
 		} catch (e) {
