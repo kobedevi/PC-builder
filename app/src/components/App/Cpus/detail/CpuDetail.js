@@ -1,10 +1,8 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { PossibleRoutes, route } from "../../../../core/routing";
-import { Canvas } from "@react-three/fiber";
-import { Leva } from "leva";
-import ModelContainer from "./Model/ModelContainer";
 import CpuDetailCard from "../../../Design/DetailCards/CpuDetailCard";
+import Layout from "components/Design/Models/Layout";
+import Model from "./Model/Model";
 
 const CpuDetail = ({ cpu }) => {
   return (
@@ -16,10 +14,9 @@ const CpuDetail = ({ cpu }) => {
         </Link>
       </div>
       <div className="model">
-        <Leva flat={true} oneLineLabels={true} />
-        <Canvas linear={false} shadows={true}>
-          <ModelContainer cpu={cpu} />
-        </Canvas>
+        <Layout>
+          <Model cpu={cpu} />
+        </Layout>
       </div>
     </div>
   );
