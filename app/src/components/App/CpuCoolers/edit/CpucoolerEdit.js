@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import useNoAuthApi from "../../../../core/hooks/useNoAuthApi";
 import { PossibleRoutes } from "../../../../core/routing";
-import { updateCpuCooler } from "../../../../core/modules/CPUCooler";
+import { updateCpuCooler } from "../../../../core/modules/CPUCooler/api";
 import ErrorAlert from "../../../shared/ErrorAlert";
-import CpuForm from "../forms/CpuForm";
+import CpuCoolerForm from "../forms/CpuCoolerForm";
 
-const CpucoolerEdit = ({ cpu, onUpdate }) => {
+const CpuCoolerEdit = ({ cooler, sockets, onUpdate }) => {
   const withAuth = useNoAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
@@ -15,9 +15,8 @@ const CpucoolerEdit = ({ cpu, onUpdate }) => {
   const handleSubmit = (data) => {
     setIsLoading(true);
     withAuth(updateCpuCooler(data))
-      .then((data) => {
-        onUpdate(data);
-        navigate(PossibleRoutes.Cpus, { replace: true });
+      .then(() => {
+        navigate(PossibleRoutes.CpuCoolers, { replace: true });
       })
       .catch((err) => {
         setError(err);
@@ -29,10 +28,14 @@ const CpucoolerEdit = ({ cpu, onUpdate }) => {
     <>
       <h1>Edit CPU Cooler</h1>
       {error && <ErrorAlert error={error} />}
-
-      <CpuForm initialData={cpu} onSubmit={handleSubmit} disabled={isLoading} />
+      <CpuCoolerForm
+        initialData={cooler}
+        initialSockets={sockets}
+        onSubmit={handleSubmit}
+        disabled={isLoading}
+      />
     </>
   );
 };
 
-export default CpucoolerEdit;
+export default CpuCoolerEdit;

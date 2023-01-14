@@ -17,6 +17,7 @@ const PossibleRoutes = Object.freeze({
   CpuCoolers: "/cpucooler",
   CpuCoolerCreate: "/cpucooler/create",
   CpuCoolerDetail: "/cpucooler/:id",
+  CpuCoolerEdit: "/cpucooler/:id/edit",
   // MoviesCreate: '/movies/create',
   // MoviesEdit: '/movies/:id/edit',
   // MoviesCreateReview: '/movies/:id/review',

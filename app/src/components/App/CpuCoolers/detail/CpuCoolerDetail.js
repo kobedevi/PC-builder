@@ -13,9 +13,11 @@ const CpuCoolerDetail = ({ cooler }) => {
     <div className="fullSize">
       <div className="detail">
         <CpuCoolerDetailCard cooler={cooler} />
-        {/* <Link to={route(PossibleRoutes.CpuEdit, { id: cooler.idCpuCooler })}>
+        <Link
+          to={route(PossibleRoutes.CpuCoolerEdit, { id: cooler.idCpuCooler })}
+        >
           {cooler.modelName}
-        </Link> */}
+        </Link>
       </div>
       <div className="model">
         <Layout>

@@ -1,18 +1,18 @@
 import React, { useCallback } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../../../core/hooks/useFetch";
-import { fetchCpuById } from "../../../../core/modules/CPU/api";
+import { fetchCpuCoolerById } from "../../../../core/modules/CPUCooler/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
-import CpuEdit from "./CpuEdit";
+import CpuCoolerEdit from "./CpuCoolerEdit";
 
-const CpuEditContainer = () => {
+const CpuCoolerEditContainer = () => {
   const { id } = useParams();
   const apiCall = useCallback(() => {
-    return fetchCpuById(id);
+    return fetchCpuCoolerById(id);
   }, [id]);
 
-  const { data: cpu, setData, error, isLoading } = useFetch(apiCall);
+  const { data: cooler, setData, error, isLoading } = useFetch(apiCall);
 
   if (isLoading) {
     return <Spinner />;
@@ -22,7 +22,13 @@ const CpuEditContainer = () => {
     return <Alert color="danger">{error}</Alert>;
   }
 
-  return <CpuEdit cpu={cpu[0]} onUpdate={(data) => setData(data)} />;
+  return (
+    <CpuCoolerEdit
+      cooler={cooler[0]}
+      sockets={cooler}
+      onUpdate={(data) => setData(data)}
+    />
+  );
 };
 
-export default CpuEditContainer;
+export default CpuCoolerEditContainer;

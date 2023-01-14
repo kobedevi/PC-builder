@@ -18,6 +18,7 @@ import CreatePsu from "./Psu/create/CreatePsu";
 import CpuDetailContainer from "./Cpus/detail/CpuDetailContainer";
 import CpuEditContainer from "./Cpus/edit/CpuEditContainer";
 import CpuCoolerDetailContainer from "./CpuCoolers/detail/CpuCoolerDetailContainer";
+import CpuCoolerEditContainer from "./CpuCoolers/edit/CpuCoolerEditContainer";
 
 const MainRouting = () => {
   return (
@@ -40,6 +41,10 @@ const MainRouting = () => {
       <Route
         path={PossibleRoutes.CpuCoolerDetail}
         element={<CpuCoolerDetailContainer />}
+      />
+      <Route
+        path={PossibleRoutes.CpuCoolerEdit}
+        element={<CpuCoolerEditContainer />}
       />
 
       <Route

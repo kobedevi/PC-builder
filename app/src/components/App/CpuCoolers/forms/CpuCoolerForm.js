@@ -26,16 +26,33 @@ const defaultData = {
   cpuSockets: [],
 };
 
-const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
-  const [cpuSockets, setCpuSockets] = useState([
-    { idCpuSocket: "", tempId: uuidv4() },
-  ]);
+const CpuCoolerForm = ({
+  onSubmit,
+  initialData = {},
+  initialSockets = {},
+  disabled,
+}) => {
+  const temp = [];
+  if (Object.keys(initialSockets).length > 0) {
+    initialSockets.map((socket) => {
+      const socketData = {
+        idCpuSocket: socket.idCpuSocket,
+        tempId: uuidv4(),
+      };
+      temp.push(socketData);
+    });
+  } else {
+    temp.push({ idCpuSocket: "", tempId: uuidv4() });
+  }
 
+  const [cpuSockets, setCpuSockets] = useState(temp);
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
     ...defaultData,
     ...initialData,
+    cpuSockets: temp,
   });
+
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -139,7 +156,7 @@ const CpuCoolerForm = ({ onSubmit, initialData = {}, disabled }) => {
       />
 
       <Button className="mt-4" type="submit" disabled={disabled}>
-        {data._id ? "Update" : "Create"}
+        {data.idCpuCooler ? "Update" : "Create"}
       </Button>
     </form>
   );

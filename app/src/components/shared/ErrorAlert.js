@@ -1,7 +1,6 @@
 import Alert from "../Design/Alert";
 
 const ErrorAlert = ({ error }) => {
-  console.log(error);
   if (!error) {
     return null;
   } else if (error.response.data.errors) {

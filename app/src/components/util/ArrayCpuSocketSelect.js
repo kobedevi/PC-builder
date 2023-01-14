@@ -12,6 +12,7 @@ import Button from "../Design/Button";
 import { produce } from "immer";
 import { v4 as uuidv4 } from "uuid";
 import useAuthApi from "../../core/hooks/useAuthApi";
+import { CompressedPixelFormat } from "three/src/constants";
 
 const schema = yup.object().shape({
   socketType: yup.string().required(),
@@ -142,6 +143,7 @@ const ArrayCpuSocketSelect = (
               className="form-control"
               disabled={localDisabled}
               name={name}
+              value={c.idCpuSocket || ""}
               onChange={(e) => {
                 const socketType = e.target.value;
                 setCpuSockets((currentCpuSockets) =>
@@ -159,16 +161,6 @@ const ArrayCpuSocketSelect = (
                   </option>
                 ))}
             </select>
-
-            {/* TODO: Errors toevoegen en types controleren */}
-            {/* <CpuSocketSelect
-              label="Cpu Socket"
-              name="idCpuSocket"
-              value={data[tester].idCpuSocket}
-              disabled={disabled}
-              onChange={handleChange}
-              error={errors.idCpuSocket}
-            /> */}
 
             <button
               className="btn btn-danger"
