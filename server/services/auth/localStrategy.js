@@ -14,7 +14,7 @@ const localStrategy = new LocalStrategy(
 				},
 			};
 			const userController = new UserController();
-			const user = await userController.fetchUserById(payload);
+			const user = await userController.fetchUserByMail(payload);
 			if (user) {
 				const check = await userController.comparePassword(
 					password,

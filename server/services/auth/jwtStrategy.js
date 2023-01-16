@@ -1,6 +1,5 @@
 const { ExtractJwt, Strategy } = require("passport-jwt");
 const UserController = require("../../controllers/UserController");
-const { User } = require("../../models/User");
 const db = require("../../utils/db");
 
 const jwtOptions = {
@@ -11,8 +10,12 @@ const jwtOptions = {
 const jwtStrategy = new Strategy(jwtOptions, async (payload, done) => {
 	try {
 		const userController = new UserController();
-		const user = userController.fetchUserById();
-		// const user = await .findById(payload._id);
+		const sender = {
+			body: {
+				idUsers: payload.idUsers,
+			},
+		};
+		const user = await userController.fetchUserById(sender);
 		if (!user) {
 			return done(null, false);
 		}

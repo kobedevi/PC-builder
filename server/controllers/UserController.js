@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const { ROLES } = require("../utils/globals");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
+const SQL = require("@nearform/sql");
 
 class UserController {
 	login = async (req, res, next) => {
@@ -47,11 +48,25 @@ class UserController {
 		}
 	};
 
-	fetchUserById = async (req, res, next) => {
+	fetchUserByMail = async (req, res, next) => {
 		const { email } = req.body;
 		try {
-			const results = await db.promise().query(`SELECT * FROM users
-				WHERE email="${email}" LIMIT 1;`);
+			const results = await db.promise().query(SQL`SELECT * FROM users
+				WHERE email=${email} LIMIT 1;`);
+			if (results[0].length === 0) {
+				return null;
+			}
+			return results[0][0];
+		} catch (e) {
+			next(e);
+		}
+	};
+
+	fetchUserById = async (req, res, next) => {
+		const { idUsers } = req.body;
+		try {
+			const results = await db.promise().query(SQL`SELECT * FROM users
+				WHERE idUsers=${idUsers} LIMIT 1;`);
 			if (results[0].length === 0) {
 				return null;
 			}

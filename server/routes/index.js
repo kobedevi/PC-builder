@@ -1,6 +1,6 @@
 const NotFoundError = require("../errors/NotFoundError");
 const ValidationError = require("../errors/ValidationError");
-// const authRoutes = require('./authRoutes');
+const authRoutes = require("./authRoutes");
 const { authLocal, authJwt } = require("../services/auth/auth.services");
 
 const { userModel } = require("../models/User");
@@ -43,15 +43,17 @@ const ramController = new RamController();
 const storageTypeController = new StorageTypeController();
 
 const registerRoutes = (app, db) => {
+	// TODO: Register page
 	app.post("/register", userModel, userController.register);
-	// login wont work yet
 	app.post("/login", authLocal, userController.login);
 
-	// CPUS
-	app.get("/cpu", cpuController.fetchCpus);
-	app.get("/cpu/:id", cpuController.fetchCpuById);
-	app.patch("/cpu/:id", cpuController.patchCpuById);
-	app.post("/cpu", cpuModel, cpuController.createCpu);
+	app.use(authJwt, authRoutes);
+
+	// // CPUS
+	// app.get("/cpu", cpuController.fetchCpus);
+	// app.get("/cpu/:id", cpuController.fetchCpuById);
+	// app.patch("/cpu/:id", cpuController.patchCpuById);
+	// app.post("/cpu", cpuModel, cpuController.createCpu);
 
 	// CPUCoolers
 	app.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);

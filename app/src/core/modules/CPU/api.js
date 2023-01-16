@@ -4,7 +4,7 @@ import Axios from "axios";
 const fetchCpus = () => async (headers) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/cpu`, {
     headers: createHeaders(headers),
-  }).catch((e) => e);
+  });
 };
 
 const fetchCpuById = (id) => async (headers) => {
