@@ -12,7 +12,7 @@ const handleApiResult = async (res) => {
 
 const createHeaders = (extra = {}) => {
   return {
-    "Content-type": "application/json",
+    "Content-Type": "application/json;charset=UTF-8",
     ...extra,
   };
 };

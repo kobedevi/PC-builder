@@ -16,17 +16,16 @@ const fetchCpuById = (id) => async (headers) => {
 const updateCpu = (data) => async (headers) => {
   return await Axios.patch(
     `${process.env.REACT_APP_BASE_API}/cpu/${data.idProcessor}`,
+    data,
     {
       headers: createHeaders(headers),
-      ...data,
     }
   );
 };
 
 const createCpu = (data) => async (headers) => {
-  return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpu`, {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpu`, data, {
     headers: createHeaders(headers),
-    ...data,
   });
 };
 
