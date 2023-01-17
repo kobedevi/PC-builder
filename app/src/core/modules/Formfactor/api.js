@@ -8,10 +8,13 @@ const fetchFormfactors = () => async (headers) => {
 };
 
 const createFormfactor = (data) => async (headers) => {
-  return await Axios.post(`${process.env.REACT_APP_BASE_API}/formfactor`, {
-    headers: createHeaders(headers),
-    ...data,
-  });
+  return await Axios.post(
+    `${process.env.REACT_APP_BASE_API}/formfactor`,
+    data,
+    {
+      headers: createHeaders(headers),
+    }
+  );
 };
 
 export { fetchFormfactors, createFormfactor };

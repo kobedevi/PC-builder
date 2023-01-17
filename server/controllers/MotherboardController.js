@@ -13,6 +13,22 @@ class MotherboardController {
 		}
 	};
 
+	fetchMotherboardById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const results = await db.promise()
+				.query(SQL`SELECT motherboards.*, manufacturers.manufacturerName FROM motherboards
+				LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
+				WHERE motherboards.idMotherboard=${id} LIMIT 1;`);
+			if (results[0].length === 0) {
+				return res.status(400).json({ message: "Motherboard does not exist" });
+			}
+			res.status(200).send(results[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
 	createMotherboard = async (req, res, next) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
@@ -78,6 +94,80 @@ class MotherboardController {
 				.then(() => {
 					res.status(201).send({
 						message: "Motherboard added",
+						id,
+					});
+				});
+		} catch (e) {
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
+	patchMotherboardById = async (req, res, next) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ errors: errors.array() });
+		}
+
+		const {
+			idManufacturer,
+			idCpuSocket,
+			idFormfactor,
+			modelName,
+			wifi,
+			sataPorts,
+			pcieSlots,
+			memorySlots,
+		} = req.body;
+		try {
+			const { id } = req.params;
+			const manufacturer = await db
+				.promise()
+				.query(
+					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
+				);
+			if (manufacturer[0].length === 0) {
+				return res
+					.status(400)
+					.json({ message: "Given idManufacturer does not exist" });
+			}
+			const cpuSocket = await db
+				.promise()
+				.query(
+					SQL`select idCpuSocket from cpusockets where idCpuSocket = ${idCpuSocket}`
+				);
+			if (cpuSocket[0].length === 0) {
+				return res
+					.status(400)
+					.json({ message: "Given idCpuSocket does not exist" });
+			}
+			const formfactor = await db
+				.promise()
+				.query(
+					SQL`select idFormfactor from formfactors where idFormfactor = ${idFormfactor}`
+				);
+			if (formfactor[0].length === 0) {
+				return res
+					.status(400)
+					.json({ message: "Given idFormfactor does not exist" });
+			}
+			const sql = `UPDATE motherboards SET idManufacturer = ?, idCpuSocket = ?, idFormfactor = ?, modelName = ?, wifi = ?, sataPorts = ?, pcieSlots = ?, memorySlots = ? WHERE idMotherboard=?`;
+			let data = [
+				idManufacturer,
+				idCpuSocket,
+				idFormfactor,
+				modelName,
+				wifi,
+				sataPorts,
+				pcieSlots,
+				memorySlots,
+				id,
+			];
+
+			db.promise()
+				.query(sql, data)
+				.then(() => {
+					res.status(201).send({
+						message: "Motherboard updated",
 						id,
 					});
 				});

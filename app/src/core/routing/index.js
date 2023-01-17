@@ -2,8 +2,6 @@ const PossibleRoutes = Object.freeze({
   splash: "/splash",
   Login: "/login",
 
-  // LikedMovies: '/likedMovies',
-
   Users: "/users",
   UsersEdit: "/users/edit",
 
@@ -18,13 +16,11 @@ const PossibleRoutes = Object.freeze({
   CpuCoolerCreate: "/cpucooler/create",
   CpuCoolerDetail: "/cpucooler/:id",
   CpuCoolerEdit: "/cpucooler/:id/edit",
-  // MoviesCreate: '/movies/create',
-  // MoviesEdit: '/movies/:id/edit',
-  // MoviesCreateReview: '/movies/:id/review',
 
   Motherboards: "/motherboard",
   MotherboardCreate: "/motherboard/create",
   MotherboardDetail: "/motherboard/:id",
+  MotherboardEdit: "/motherboard/:id/edit",
 
   Cases: "/case",
   CaseCreate: "/case/create",

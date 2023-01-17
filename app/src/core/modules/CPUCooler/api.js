@@ -16,17 +16,16 @@ const fetchCpuCoolerById = (id) => async (headers) => {
 const updateCpuCooler = (data) => async (headers) => {
   return await Axios.patch(
     `${process.env.REACT_APP_BASE_API}/cpucooler/${data.idCpuCooler}`,
+    data,
     {
       headers: createHeaders(headers),
-      ...data,
     }
   );
 };
 
 const createCpuCooler = (data) => async (headers) => {
-  return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpucooler`, {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpucooler`, data, {
     headers: createHeaders(headers),
-    ...data,
   });
 };
 

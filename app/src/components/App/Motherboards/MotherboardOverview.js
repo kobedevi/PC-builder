@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useAuthApi from "../../../core/hooks/useAuthApi";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchMotherboards } from "../../../core/modules/Motherboard/api";
-import { PossibleRoutes } from "../../../core/routing";
+import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
@@ -35,9 +35,13 @@ const MotherboardOverview = () => {
       {data && (
         <ul>
           {data.map((mb) => (
-            <li
-              key={mb.idMotherboard}
-            >{`${mb.idMotherboard} ${mb.modelName}`}</li>
+            <li key={mb.idMotherboard}>
+              <Link
+                to={route(PossibleRoutes.MotherboardDetail, {
+                  id: mb.idMotherboard,
+                })}
+              >{`${mb.modelName}`}</Link>
+            </li>
           ))}
         </ul>
       )}

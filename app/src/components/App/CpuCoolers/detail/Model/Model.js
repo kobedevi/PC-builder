@@ -37,7 +37,11 @@ const Model = ({ cooler }) => {
           .map((value, index) => {
             const clone = fins.clone();
             return (
-              <primitive object={clone} position={[0, index * 0.136, 0]} />
+              <primitive
+                key={index}
+                object={clone}
+                position={[0, index * 0.136, 0]}
+              />
             );
           })}
       </group>

@@ -7,11 +7,38 @@ const fetchMotherboards = () => async (headers) => {
   });
 };
 
-const createMotherboard = (data) => async (headers) => {
-  return await Axios.post(`${process.env.REACT_APP_BASE_API}/motherboard`, {
-    headers: createHeaders(headers),
-    ...data,
-  });
+const fetchMotherboardById = (id) => async (headers) => {
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/motherboard/${id}`,
+    {
+      headers: createHeaders(headers),
+    }
+  );
 };
 
-export { fetchMotherboards, createMotherboard };
+const updateMotherboard = (data) => async (headers) => {
+  return await Axios.patch(
+    `${process.env.REACT_APP_BASE_API}/motherboard/${data.idMotherboard}`,
+    data,
+    {
+      headers: createHeaders(headers),
+    }
+  );
+};
+
+const createMotherboard = (data) => async (headers) => {
+  return await Axios.post(
+    `${process.env.REACT_APP_BASE_API}/motherboard`,
+    data,
+    {
+      headers: createHeaders(headers),
+    }
+  );
+};
+
+export {
+  fetchMotherboards,
+  fetchMotherboardById,
+  updateMotherboard,
+  createMotherboard,
+};

@@ -1,6 +1,8 @@
 import humps from "humps";
 
 const DetailCard = ({ data }) => {
+  console.log(data);
+
   return (
     <table className="mt-4">
       <tbody>
@@ -8,13 +10,13 @@ const DetailCard = ({ data }) => {
           // hide show id fields
           if (!key.includes("id")) {
             return (
-              <tr>
+              <tr key={key}>
                 <td>
                   {key.charAt(0).toUpperCase() +
                     humps.decamelize(key, { separator: " " }).substring(1)}
                   :
                 </td>
-                <td>{value ? value : "unknown"}</td>
+                <td>{value !== null ? `${value}` : "unknown"}</td>
               </tr>
             );
           }

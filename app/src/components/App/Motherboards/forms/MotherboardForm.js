@@ -25,7 +25,7 @@ const defaultData = {
   idCpuSocket: "",
   idFormfactor: "",
   modelName: "",
-  wifi: false,
+  wifi: 0,
   memorySlots: 4,
   sataPorts: 4,
   pcieSlots: 3,
@@ -133,8 +133,8 @@ const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
         name="memorySlots"
         value={data.memorySlots}
         disabled={disabled}
-        min={"1"}
-        max={"32"}
+        min={1}
+        max={32}
         step={1}
         onChange={handleChange}
         error={errors.memorySlots}
@@ -146,7 +146,7 @@ const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
         name="sataPorts"
         value={data.sataPorts}
         disabled={disabled}
-        min={"0"}
+        min={0}
         step={1}
         onChange={handleChange}
         error={errors.sataPorts}
@@ -158,14 +158,14 @@ const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
         name="pcieSlots"
         value={data.pcieSlots}
         disabled={disabled}
-        min={"0"}
+        min={0}
         step={1}
         onChange={handleChange}
         error={errors.pcieSlots}
       />
 
       <Button className="mt-4" type="submit" disabled={disabled}>
-        {data._id ? "Update" : "Create"}
+        {data.idMotherboard ? "Update" : "Create"}
       </Button>
     </form>
   );

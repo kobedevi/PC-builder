@@ -4,6 +4,8 @@ import GeneralOverview from "./GeneralOverview/GeneralOverview";
 import CpuOverview from "./Cpus/CpuOverview";
 import CreateCpu from "./Cpus/create/CreateCpu";
 import MotherboardOverview from "./Motherboards/MotherboardOverview";
+import MotherboardDetailContainer from "./Motherboards/detail/MotherboardDetailContainer";
+import MotherboardEditContainer from "./Motherboards/edit/MotherboardEditContainer";
 import CreateMotherboard from "./Motherboards/create/CreateMotherboard";
 import CaseOverview from "./Cases/CaseOverview";
 import CreateCase from "./Cases/create/CreateCase";
@@ -54,6 +56,14 @@ const MainRouting = () => {
       <Route
         path={PossibleRoutes.MotherboardCreate}
         element={<CreateMotherboard />}
+      />
+      <Route
+        path={PossibleRoutes.MotherboardDetail}
+        element={<MotherboardDetailContainer />}
+      />
+      <Route
+        path={PossibleRoutes.MotherboardEdit}
+        element={<MotherboardEditContainer />}
       />
 
       <Route path={PossibleRoutes.Cases} element={<CaseOverview />} />

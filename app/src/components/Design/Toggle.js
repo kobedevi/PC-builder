@@ -9,15 +9,15 @@ const Toggle = React.forwardRef(
     return (
       <div className="form-group">
         <label>Has {name}:</label>
-        {possibleValues.map((v) => (
-          <div className="toggle">
+        {possibleValues.map((v, index) => (
+          <div className="toggle" key={v}>
             <input
               type="radio"
               id={v.toString()}
               name={name}
               value={v}
               onChange={onChange}
-              defaultChecked={v ? false : true}
+              defaultChecked={index === value}
               {...rest}
             />
             <label htmlFor={v.toString()}>{v.toString()}</label>

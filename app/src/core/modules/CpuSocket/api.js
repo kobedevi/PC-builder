@@ -8,9 +8,8 @@ const fetchCpuSockets = () => async (headers) => {
 };
 
 const createCpuSocket = (data) => async (headers) => {
-  return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpusocket`, {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/cpusocket`, data, {
     headers: createHeaders(headers),
-    ...data,
   });
 };
 
