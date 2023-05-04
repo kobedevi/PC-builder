@@ -8,9 +8,12 @@ const fetchCpus = () => async (headers) => {
 };
 
 const fetchCpuById = (id) => async (headers) => {
-  return await Axios.get(`${process.env.REACT_APP_BASE_API}/cpu/${id}`, {
-    headers: createHeaders(headers),
-  }).catch((e) => e);
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/cpu/${id}`, 
+    {
+      headers: createHeaders(headers),
+    }
+  );
 };
 
 const updateCpu = (data) => async (headers) => {

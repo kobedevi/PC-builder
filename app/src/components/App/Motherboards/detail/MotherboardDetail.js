@@ -8,6 +8,7 @@ const MotherboardDetail = ({ motherboard }) => {
   return (
     <div className="fullSize">
       <div className="detail">
+        {/* TODO: cpusockets mapping */}
         <DetailCard data={motherboard} />
         <Link
           to={route(PossibleRoutes.MotherboardEdit, {
