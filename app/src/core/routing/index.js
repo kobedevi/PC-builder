@@ -25,6 +25,7 @@ const PossibleRoutes = Object.freeze({
   Cases: "/case",
   CaseCreate: "/case/create",
   CaseDetail: "/case/:id",
+  CaseEdit: "/case/:id/edit",
 
   Ram: "/ram",
   RamCreate: "/ram/create",

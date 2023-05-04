@@ -51,6 +51,16 @@ authRouter.get("/cpu/:id", cpuController.fetchCpuById);
 authRouter.patch("/cpu/:id", cpuModel, cpuController.patchCpuById);
 authRouter.post("/cpu", cpuModel, cpuController.createCpu);
 
+// Cases
+authRouter.get("/case", caseController.fetchCases);
+authRouter.get("/case/:id", caseController.fetchCaseById);
+authRouter.patch(
+	"/case/:id",
+	caseModel,
+	caseController.patchCaseById
+);
+authRouter.post("/case", caseModel, caseController.createCase);
+
 // CPUCoolers
 authRouter.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
 authRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolerById);
@@ -78,10 +88,6 @@ authRouter.post(
 	motherboardModel,
 	motherboardController.createMotherboard
 );
-
-// Cases
-authRouter.get("/case", caseController.fetchCases);
-authRouter.post("/case", caseModel, caseController.createCase);
 
 // RAM
 authRouter.get("/ram", ramController.fetchRam);

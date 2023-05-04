@@ -1,7 +1,6 @@
 import humps from "humps";
 
 const DetailCard = ({ data }) => {
-  console.log(data);
 
   return (
     <table className="mt-4">

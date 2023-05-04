@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import useAuthApi from "../../../../core/hooks/useAuthApi";
-import { updateCpu } from "../../../../core/modules/CPU/api";
+import { updateCase } from "../../../../core/modules/Case/api";
 import { PossibleRoutes } from "../../../../core/routing";
 import ErrorAlert from "../../../shared/ErrorAlert";
-import CpuForm from "../forms/CpuForm";
+import CaseForm from "../forms/CaseForm";
 
-const CpuEdit = ({ cpu, onUpdate }) => {
+const CaseEdit = ({ pccase, onUpdate }) => {
   const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
@@ -14,25 +14,28 @@ const CpuEdit = ({ cpu, onUpdate }) => {
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    withAuth(updateCpu(data))
+    withAuth(updateCase(data))
       .then((data) => {
         onUpdate(data);
-        navigate(PossibleRoutes.Cpus, { replace: true });
+        navigate(PossibleRoutes.Cases, { replace: true });
       })
       .catch((err) => {
         setError(err);
         setIsLoading(false);
       });
   };
-
   return (
     <>
-      <h1>Edit CPU</h1>
+      <h1>Edit Case</h1>
       {error && <ErrorAlert error={error} />}
-
-      <CpuForm initialData={cpu} onSubmit={handleSubmit} disabled={isLoading} />
+      
+      <CaseForm
+        initialData={pccase}
+        onSubmit={handleSubmit}
+        disabled={isLoading}
+      />
     </>
   );
 };
 
-export default CpuEdit;
+export default CaseEdit;

@@ -9,6 +9,8 @@ import MotherboardEditContainer from "./Motherboards/edit/MotherboardEditContain
 import CreateMotherboard from "./Motherboards/create/CreateMotherboard";
 import CaseOverview from "./Cases/CaseOverview";
 import CreateCase from "./Cases/create/CreateCase";
+import CaseDetailContainer from "./Cases/detail/CaseDetailContainer";
+import CaseEditContainer from "./Cases/edit/CaseEditContainer";
 import RamOverview from "./Ram/RamOverview";
 import CreateRam from "./Ram/create/CreateRam";
 import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
@@ -68,6 +70,8 @@ const MainRouting = () => {
 
       <Route path={PossibleRoutes.Cases} element={<CaseOverview />} />
       <Route path={PossibleRoutes.CaseCreate} element={<CreateCase />} />
+      <Route path={PossibleRoutes.CaseDetail} element={<CaseDetailContainer />} />
+      <Route path={PossibleRoutes.CaseEdit} element={<CaseEditContainer />} />
 
       <Route path={PossibleRoutes.Ram} element={<RamOverview />} />
       <Route path={PossibleRoutes.RamCreate} element={<CreateRam />} />

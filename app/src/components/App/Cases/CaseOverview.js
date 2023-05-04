@@ -2,46 +2,62 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchCases } from "../../../core/modules/Case/api";
-import { PossibleRoutes } from "../../../core/routing";
+import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
+import useAuthApi from "core/hooks/useAuthApi";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const CaseOverview = () => {
+  const withAuth = useAuthApi();
   const [info, setInfo] = useState();
 
-  const apiCall = useCallback(() => {
-    return fetchCases();
-  }, []);
+  const { data, error, setError, isLoading, refresh } =
+    useFetch(fetchCases);
 
-  const {
-    data: cases,
-    error,
-    setError,
-    isLoading,
-    refresh,
-  } = useFetch(apiCall);
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (error) {
+    return <ErrorAlert error={error} />;
+  }
 
   return (
     <>
-      <h2>CaseOverview</h2>
-      {error && <Alert color="danger">{error.message}</Alert>}
+      <h2>Case Overview</h2>
       {info && <Alert color="info">{info}</Alert>}
 
       <Link to={PossibleRoutes.CaseCreate} className="btn btn-primary">
         Add Case
       </Link>
 
-      {isLoading && <Spinner />}
-
-      {cases && (
+      {data && (
         <ul>
-          {cases.map((casing) => (
-            <li key={casing.idCase}>{`${casing.modelName}`}</li>
+          {data.map((c) => (
+            <li key={c.idCase}>
+              <Link
+                to={route(PossibleRoutes.CaseDetail, {
+                  id: c.idCase,
+                })}
+              >{`${c.modelName}`}</Link>
+            </li>
           ))}
         </ul>
       )}
     </>
   );
 };
+
+
+
+
+
+
+
+
+
+
+
 
 export default CaseOverview;
