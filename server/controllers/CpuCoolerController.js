@@ -25,7 +25,19 @@ class CpuCoolerController {
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "CPU cooler does not exist" });
 			}
-			res.status(200).send(results[0]);
+
+			const finalResult = {
+				...results[0][0],
+				socketType: [],
+				idCpuSocket: []
+			}
+
+			results[0].map(item => {
+				finalResult.socketType.push(item.socketType)
+				finalResult.idCpuSocket.push(item.idCpuSocket)
+			});
+
+			res.status(200).send(finalResult);
 		} catch (e) {
 			next(e);
 		}
