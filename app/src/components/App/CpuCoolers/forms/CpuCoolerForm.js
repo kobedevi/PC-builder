@@ -28,23 +28,30 @@ const defaultData = {
 
 const CpuCoolerForm = ({
   onSubmit,
-  initialData = {},
-  initialSockets = {},
+  initialData = {
+    idCpuSocket: {}
+  },
   disabled,
 }) => {
-  const temp = [];
-  if (Object.keys(initialSockets).length > 0) {
-    initialSockets.map((socket) => {
-      const socketData = {
-        idCpuSocket: socket.idCpuSocket,
-        tempId: uuidv4(),
-      };
-      temp.push(socketData);
-    });
-  } else {
-    temp.push({ idCpuSocket: "", tempId: uuidv4() });
-  }
 
+
+  const temp = [];
+  useEffect(() => {
+    // Update the document title using the browser API
+    if (Object.keys(initialData.idCpuSocket).length > 0) {
+      initialData.idCpuSocket.map((socket) => {
+        const socketData = {
+          idCpuSocket: socket,
+          tempId: uuidv4(),
+        };
+        temp.push(socketData);
+      });
+      console.log(temp);
+    } else {
+      temp.push({ idCpuSocket: "", tempId: uuidv4() });
+    }
+  });
+  
   const [cpuSockets, setCpuSockets] = useState(temp);
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({

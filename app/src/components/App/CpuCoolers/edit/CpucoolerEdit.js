@@ -6,7 +6,7 @@ import { updateCpuCooler } from "../../../../core/modules/CPUCooler/api";
 import ErrorAlert from "../../../shared/ErrorAlert";
 import CpuCoolerForm from "../forms/CpuCoolerForm";
 
-const CpuCoolerEdit = ({ cooler, sockets, onUpdate }) => {
+const CpuCoolerEdit = ({ cooler, onUpdate }) => {
   const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
@@ -24,13 +24,13 @@ const CpuCoolerEdit = ({ cooler, sockets, onUpdate }) => {
       });
   };
 
+
   return (
     <>
       <h1>Edit CPU Cooler</h1>
       {error && <ErrorAlert error={error} />}
       <CpuCoolerForm
         initialData={cooler}
-        initialSockets={sockets}
         onSubmit={handleSubmit}
         disabled={isLoading}
       />

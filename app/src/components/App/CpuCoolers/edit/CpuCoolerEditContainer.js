@@ -24,8 +24,7 @@ const CpuCoolerEditContainer = () => {
 
   return (
     <CpuCoolerEdit
-      cooler={cooler[0]}
-      sockets={cooler}
+      cooler={cooler}
       onUpdate={(data) => setData(data)}
     />
   );
