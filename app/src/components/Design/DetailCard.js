@@ -5,6 +5,7 @@ const DetailCard = ({ data }) => {
   return (
     <table className="mt-4">
       <tbody>
+        {console.log(data)}
         {Object.entries(data).map(([key, value]) => {
           // hide show id fields
           if (!key.includes("id")) {
@@ -15,7 +16,7 @@ const DetailCard = ({ data }) => {
                     humps.decamelize(key, { separator: " " }).substring(1)}
                   :
                 </td>
-                <td>{value !== null ? `${value}` : "unknown"}</td>
+                <td>{value !== null ? (!Array.isArray(value) ? value : value.join(', ')) : "unknown"}</td>
               </tr>
             );
           }
