@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchRam } from "../../../core/modules/Ram/api";
-import { PossibleRoutes } from "../../../core/routing";
+import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 
@@ -30,7 +30,13 @@ const RamOverview = () => {
       {ram && (
         <ul>
           {ram.map((r) => (
-            <li key={r.idRam}>{`${r.modelName}`}</li>
+            <li key={r.idRam}>
+              <Link
+                to={route(PossibleRoutes.RamDetail, {
+                  id: r.idRam,
+                })}
+              >{`${r.modelName}`}</Link>
+            </li>
           ))}
         </ul>
       )}

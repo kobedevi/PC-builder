@@ -13,6 +13,8 @@ import CaseDetailContainer from "./Cases/detail/CaseDetailContainer";
 import CaseEditContainer from "./Cases/edit/CaseEditContainer";
 import RamOverview from "./Ram/RamOverview";
 import CreateRam from "./Ram/create/CreateRam";
+import RamDetailContainer from "./Ram/detail/RamDetailContainer";
+import RamEditContainer from "./Ram/edit/RamEditContainer";
 import CpuCoolerOverview from "./CpuCoolers/CpuCoolerOverview";
 import CreateCpuCooler from "./CpuCoolers/create/CreateCpuCooler";
 import GpuOverview from "./Gpu/GpuOverview";
@@ -75,6 +77,8 @@ const MainRouting = () => {
 
       <Route path={PossibleRoutes.Ram} element={<RamOverview />} />
       <Route path={PossibleRoutes.RamCreate} element={<CreateRam />} />
+      <Route path={PossibleRoutes.RamDetail} element={<RamDetailContainer />} />
+      <Route path={PossibleRoutes.RamEdit} element={<RamEditContainer />} />
 
       <Route path={PossibleRoutes.Gpus} element={<GpuOverview />} />
       <Route path={PossibleRoutes.GpuCreate} element={<CreateGpu />} />

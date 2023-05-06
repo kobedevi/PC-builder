@@ -30,6 +30,7 @@ const PossibleRoutes = Object.freeze({
   Ram: "/ram",
   RamCreate: "/ram/create",
   RamDetail: "/ram/:id",
+  RamEdit: "/ram/:id/edit",
 
   Gpus: "/gpu",
   GpuCreate: "/gpu/create",

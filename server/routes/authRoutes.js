@@ -91,6 +91,8 @@ authRouter.post(
 
 // RAM
 authRouter.get("/ram", ramController.fetchRam);
+authRouter.get("/ram/:id", ramController.fetchRamById);
+authRouter.patch("/ram/:id", ramModel, ramController.patchRamById);
 authRouter.post("/ram", ramModel, ramController.createRam);
 
 // Storage Types

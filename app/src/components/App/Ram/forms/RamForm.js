@@ -154,7 +154,7 @@ const RamForm = ({ onSubmit, initialData = {}, disabled }) => {
       />
 
       <Button className="mt-4" type="submit" disabled={disabled}>
-        {data._id ? "Update" : "Create"}
+        {data.idRam ? "Update" : "Create"}
       </Button>
     </form>
   );
