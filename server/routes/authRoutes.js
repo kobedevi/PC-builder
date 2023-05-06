@@ -66,7 +66,7 @@ authRouter.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
 authRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolerById);
 authRouter.patch(
 	"/cpucooler/:id",
-	cpuModel,
+	cpuCoolerModel,
 	cpuCoolerController.patchCpuCoolerById
 );
 authRouter.post(

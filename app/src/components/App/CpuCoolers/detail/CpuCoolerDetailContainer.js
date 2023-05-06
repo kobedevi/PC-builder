@@ -21,7 +21,7 @@ const CpuCoolerDetailContainer = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  return <CpuCoolerDetail cooler={cooler[0]} />;
+  return <CpuCoolerDetail cooler={cooler} />;
 };
 
 export default CpuCoolerDetailContainer;
