@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import useNoAuthApi from "../../../../core/hooks/useNoAuthApi";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
 import { PossibleRoutes } from "../../../../core/routing";
 import { updateCpuCooler } from "../../../../core/modules/CPUCooler/api";
 import ErrorAlert from "../../../shared/ErrorAlert";
 import CpuCoolerForm from "../forms/CpuCoolerForm";
 
 const CpuCoolerEdit = ({ cooler, sockets, onUpdate }) => {
-  const withAuth = useNoAuthApi();
+  const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();
