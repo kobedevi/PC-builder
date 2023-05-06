@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import useNoAuthApi from "../../../../core/hooks/useNoAuthApi";
+import useAuthApi from "../../../../core/hooks/useAuthApi";
 import { updateMotherboard } from "../../../../core/modules/Motherboard/api";
 import { PossibleRoutes } from "../../../../core/routing";
 import ErrorAlert from "../../../shared/ErrorAlert";
 import MotherboardForm from "../forms/MotherboardForm";
 
 const MotherboardEdit = ({ motherboard, onUpdate }) => {
-  const withAuth = useNoAuthApi();
+  const withAuth = useAuthApi();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState();
   const [error, setError] = useState();

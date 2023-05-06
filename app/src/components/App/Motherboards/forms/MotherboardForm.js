@@ -89,6 +89,16 @@ const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
         error={errors.idManufacturer}
       />
 
+      <Input
+        label="Model name"
+        type="text"
+        name="modelName"
+        value={data.modelName}
+        disabled={disabled}
+        onChange={handleChange}
+        error={errors.modelName}
+      />
+
       <CpuSocketSelect
         label="Cpu Socket"
         name="idCpuSocket"
@@ -105,16 +115,6 @@ const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
         disabled={disabled}
         onChange={handleChange}
         error={errors.idFormfactor}
-      />
-
-      <Input
-        label="Model name"
-        type="text"
-        name="modelName"
-        value={data.modelName}
-        disabled={disabled}
-        onChange={handleChange}
-        error={errors.modelName}
       />
 
       <Toggle
