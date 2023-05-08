@@ -113,15 +113,16 @@ authRouter.post(
 
 // GPUS general and GPU partners
 authRouter.get("/gpu", gpuController.fetchGpus);
-authRouter.get("/gpu/partner", gpuController.fetchGpuPartners);
-authRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
-authRouter.get("/gpu/:id", gpuController.fetchGpuById);
+authRouter.patch("/gpu/:id", gpuModel, gpuController.patchGpuById);
 authRouter.post("/gpu", gpuModel, gpuController.createGpu);
 authRouter.post(
 	"/gpu/partner",
 	gpuPartnerModel,
 	gpuController.createGpuPartner
 );
+authRouter.get("/gpu/partner", gpuController.fetchGpuPartners);
+authRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
+authRouter.get("/gpu/:id", gpuController.fetchGpuById);
 
 // PSU
 authRouter.get("/psu", psuController.fetchPsu);

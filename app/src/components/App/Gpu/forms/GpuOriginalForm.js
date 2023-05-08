@@ -55,8 +55,9 @@ const defaultData = {
 };
 
 const GpuOriginalForm = ({
+  onUpdate = undefined,
   setInfo,
-  errors,
+  errors = {},
   setErrors,
   toggleHide,
   initialData = {},
@@ -103,23 +104,29 @@ const GpuOriginalForm = ({
   }, [validate, isTouched, data]);
 
   const onSubmit = () => {
-    withAuth(
-      createOriginalGpu({
-        ...data,
-      })
-    )
-      .then((e) => {
-        setInfo(e.data);
-        setNewGpu();
-        toggleHide();
-        refresh();
-      })
-      .catch((err) => {
-        setErrors(err);
-        setData({
-          ...initialData,
+    if(onUpdate === undefined) {
+      withAuth(
+        createOriginalGpu({
+          ...data,
+        })
+      )
+        .then((e) => {
+          setInfo(e.data);
+          setNewGpu();
+          toggleHide();
+          refresh();
+        })
+        .catch((err) => {
+          console.log(err)
+          setErrors(err);
+          setData({
+            ...initialData,
+          });
         });
-      });
+    } else {
+      
+      onUpdate(data);
+    }
   };
 
   const handleSubmit = (e) => {
@@ -127,9 +134,6 @@ const GpuOriginalForm = ({
     setIsTouched(true);
     validate(data, () => onSubmit(data)).then(() => {
       setIsTouched(false);
-      setData({
-        ...defaultData,
-      });
     });
   };
 
@@ -143,6 +147,7 @@ const GpuOriginalForm = ({
         onChange={handleChange}
         error={errors.idManufacturer}
       />
+
 
       <Input
         label="Model name"
@@ -229,7 +234,7 @@ const GpuOriginalForm = ({
         disabled={disabled}
         onClick={handleSubmit}
       >
-        {data._id ? "Update" : "Add original GPU"}
+        {data.idGpu ? "Update" : "Add original GPU"}
       </Button>
     </>
   );

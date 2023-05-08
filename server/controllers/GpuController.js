@@ -12,6 +12,17 @@ class GpuController {
 			next(e);
 		}
 	};
+	
+	fetchGpuPartners = async (req, res, next) => {
+		try {
+			const results = await db
+				.promise()
+				.query(`SELECT * FROM gpu_has_partners`);
+			res.status(200).send(results[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
 
 	createGpu = async (req, res, next) => {
 		const errors = validationResult(req);
@@ -55,51 +66,6 @@ class GpuController {
 				});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
-		}
-	};
-
-	fetchGpuById = async (req, res, next) => {
-		try {
-			const { id } = req.params;
-			const results = await db.promise()
-				.query(SQL`SELECT gpus.*, manufacturers.manufacturerName FROM gpus
-				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
-				WHERE gpus.idGpu=${id} LIMIT 1;`);
-			if (results[0].length === 0) {
-				return res.status(400).json({ message: "GPU does not exist" });
-			}
-			res.status(200).send(results[0]);
-		} catch (e) {
-			next(e);
-		}
-	};
-
-	fetchGpuPartnerById = async (req, res, next) => {
-		try {
-			const { id } = req.params;
-			const results = await db.promise()
-				.query(SQL`SELECT gpu_has_partners.*, gpus.modelName AS originalCard, gpus.vram, gpus.displayport, gpus.hdmi, gpus.vga, gpus.dvi, manufacturers.manufacturerName, partner.manufacturerName AS partnerName FROM gpu_has_partners
-				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
-				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
-				LEFT JOIN manufacturers AS partner ON gpu_has_partners.idManufacturer = partner.idManufacturer
-				WHERE gpu_has_partners.idGpuPartner=${id} LIMIT 1;`);
-			if (results[0].length === 0) {
-				return res.status(400).json({ message: "GPU does not exist" });
-			}
-			res.status(200).send(results[0]);
-		} catch (e) {
-			next(e);
-		}
-	};
-
-	fetchGpuPartners = async (req, res, next) => {
-		try {
-			const results = await db
-				.promise()
-				.query(`SELECT * FROM gpu_has_partners`);
-			res.status(200).send(results[0]);
-		} catch (e) {
-			next(e);
 		}
 	};
 
@@ -166,6 +132,96 @@ class GpuController {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
+
+	patchGpuById = async (req, res, next) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ 
+				errors: errors.array(),
+			});
+		}
+
+		const {
+			idManufacturer, 
+			modelName, 
+			vram, 
+			displayport, 
+			hdmi, 
+			vga, 
+			dvi
+		} = req.body;
+		try {
+			const { id } = req.params;
+			const manufacturer = await db
+				.promise()
+				.query(
+					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
+				);
+			if (manufacturer[0].length === 0) {
+				return res
+					.status(400)
+					.json({ message: "Given idManufacturer does not exist" });
+			}
+			const sql = "UPDATE gpus SET idManufacturer = ?, modelName = ?, vram = ?, displayport = ?, hdmi = ?, vga = ?, dvi = ? WHERE idGpu = ?";
+			let data = [
+				idManufacturer, 
+				modelName, 
+				vram, 
+				displayport, 
+				hdmi, 
+				vga, 
+				dvi,
+				id,
+			];
+		
+			db.promise()
+			.query(sql, data)
+			.then(() => {
+				res.status(201).send({
+					message: "Gpu updated",
+					id,
+				});
+			});
+
+		} catch (e) {
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
+	fetchGpuById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const results = await db.promise()
+				.query(SQL`SELECT gpus.*, manufacturers.manufacturerName FROM gpus
+				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
+				WHERE gpus.idGpu=${id} LIMIT 1;`);
+			if (results[0].length === 0) {
+				return res.status(400).json({ message: "GPU does not exist" });
+			}
+			res.status(200).send(results[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
+	fetchGpuPartnerById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const results = await db.promise()
+				.query(SQL`SELECT gpu_has_partners.*, gpus.modelName AS originalCard, gpus.vram, gpus.displayport, gpus.hdmi, gpus.vga, gpus.dvi, manufacturers.manufacturerName, partner.manufacturerName AS partnerName FROM gpu_has_partners
+				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
+				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
+				LEFT JOIN manufacturers AS partner ON gpu_has_partners.idManufacturer = partner.idManufacturer
+				WHERE gpu_has_partners.idGpuPartner=${id} LIMIT 1;`);
+			if (results[0].length === 0) {
+				return res.status(400).json({ message: "GPU does not exist" });
+			}
+			res.status(200).send(results[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
 }
 
 module.exports = GpuController;
