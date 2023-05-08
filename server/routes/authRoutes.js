@@ -111,12 +111,12 @@ authRouter.post(
 	cpuSocketController.createCpuSocket
 );
 
-// GPUS general
+// GPUS general and GPU partners
 authRouter.get("/gpu", gpuController.fetchGpus);
-authRouter.post("/gpu", gpuModel, gpuController.createGpu);
-
-// GPUS partners
 authRouter.get("/gpu/partner", gpuController.fetchGpuPartners);
+authRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
+authRouter.get("/gpu/:id", gpuController.fetchGpuById);
+authRouter.post("/gpu", gpuModel, gpuController.createGpu);
 authRouter.post(
 	"/gpu/partner",
 	gpuPartnerModel,

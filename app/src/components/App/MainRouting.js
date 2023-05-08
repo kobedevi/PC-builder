@@ -25,6 +25,8 @@ import CpuDetailContainer from "./Cpus/detail/CpuDetailContainer";
 import CpuEditContainer from "./Cpus/edit/CpuEditContainer";
 import CpuCoolerDetailContainer from "./CpuCoolers/detail/CpuCoolerDetailContainer";
 import CpuCoolerEditContainer from "./CpuCoolers/edit/CpuCoolerEditContainer";
+import GpuDetailContainer from "./Gpu/detail/GpuDetailContainer";
+import GpuPartnerDetailContainer from "./Gpu/detail/GpuPartnerDetailContainer copy";
 
 const MainRouting = () => {
   return (
@@ -82,6 +84,10 @@ const MainRouting = () => {
 
       <Route path={PossibleRoutes.Gpus} element={<GpuOverview />} />
       <Route path={PossibleRoutes.GpuCreate} element={<CreateGpu />} />
+      <Route path={PossibleRoutes.GpuDetail} element={<GpuDetailContainer/>} />
+      <Route path={PossibleRoutes.GpuPartnerDetail} element={<GpuPartnerDetailContainer/>} />
+      {/* FILL THIS IN */}
+      {/* <Route path={PossibleRoutes.GpuEdit} element={<EditContainer />} /> */}
 
       <Route path={PossibleRoutes.Psus} element={<PsuOverview />} />
       <Route path={PossibleRoutes.PsuCreate} element={<CreatePsu />} />

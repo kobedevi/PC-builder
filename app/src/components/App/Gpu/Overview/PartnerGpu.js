@@ -3,6 +3,8 @@ import useFetch from "../../../../core/hooks/useFetch";
 import { fetchPartnerGpus } from "../../../../core/modules/Gpu/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
+import { Link } from "react-router-dom";
+import { PossibleRoutes, route } from "core/routing";
 
 const PartnerGpuOverview = () => {
   const [info, setInfo] = useState();
@@ -23,7 +25,11 @@ const PartnerGpuOverview = () => {
       {data && (
         <ul>
           {data.map((x) => (
-            <li key={x.idGpuPartner}>{`${x.idGpuPartner}`}</li>
+            <li key={x.idGpuPartner}>
+              <Link to={route(PossibleRoutes.GpuPartnerDetail, { id: x.idGpuPartner })}>
+                {`${x.modelName}`}
+              </Link>
+            </li>
           ))}
         </ul>
       )}

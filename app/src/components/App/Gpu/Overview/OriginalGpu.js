@@ -3,6 +3,8 @@ import useFetch from "../../../../core/hooks/useFetch";
 import { fetchOriginalGpus } from "../../../../core/modules/Gpu/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
+import { Link } from "react-router-dom";
+import { PossibleRoutes, route } from "core/routing";
 
 const OriginalGpuOverview = () => {
   const [info, setInfo] = useState();
@@ -21,7 +23,11 @@ const OriginalGpuOverview = () => {
       {data && (
         <ul>
           {data.map((x) => (
-            <li key={x.idGpu}>{`${x.idGpu}`}</li>
+            <li key={x.idGpu}>
+              <Link
+              to={route(PossibleRoutes.GpuDetail, { id: x.idGpu })}
+            >{`${x.modelName}`}</Link>
+            </li>
           ))}
         </ul>
       )}

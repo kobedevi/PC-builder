@@ -5,7 +5,6 @@ const DetailCard = ({ data }) => {
   return (
     <table className="mt-4">
       <tbody>
-        {console.log(data)}
         {Object.entries(data).map(([key, value]) => {
           // hide show id fields
           if (!key.includes("id")) {
