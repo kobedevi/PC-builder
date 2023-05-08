@@ -46,7 +46,6 @@ const CpuCoolerForm = ({
         };
         temp.push(socketData);
       });
-      console.log(temp);
     } else {
       temp.push({ idCpuSocket: "", tempId: uuidv4() });
     }
