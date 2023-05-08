@@ -36,6 +36,7 @@ const PossibleRoutes = Object.freeze({
   GpuCreate: "/gpu/create",
   GpuPartnerDetail: "/gpu/partner/:id",
   GpuDetail: "/gpu/:id",
+  GpuPartnerEdit: "/gpu/partner/:id/edit",
   GpuEdit: "/gpu/:id/edit",
 
   Psus: "/psu",

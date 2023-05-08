@@ -188,6 +188,65 @@ class GpuController {
 		}
 	};
 
+	patchGpuPartnerById = async (req, res, next) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ 
+				errors: errors.array(),
+			});
+		}
+
+		const {
+			idGpu,
+			idManufacturer, 
+			modelName, 
+			clockspeed,
+			watercooled,
+			height,
+			width,
+			depth,
+			wattage
+		} = req.body;
+		try {
+			const { id } = req.params;
+			const manufacturer = await db
+				.promise()
+				.query(
+					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
+				);
+			if (manufacturer[0].length === 0) {
+				return res
+					.status(400)
+					.json({ message: "Given idManufacturer does not exist" });
+			}
+			const sql = "UPDATE gpu_has_partners SET idGpu = ?, idManufacturer = ?, modelName = ?, clockspeed = ?, watercooled = ?, height = ?, width = ?, depth = ?, wattage = ? WHERE idGpuPartner = ?";
+			let data = [
+				idGpu,
+				idManufacturer, 
+				modelName, 
+				clockspeed,
+				watercooled,
+				height,
+				width,
+				depth,
+				wattage,
+				id,
+			];
+		
+			db.promise()
+			.query(sql, data)
+			.then(() => {
+				res.status(201).send({
+					message: "Gpu updated",
+					id,
+				});
+			});
+
+		} catch (e) {
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
 	fetchGpuById = async (req, res, next) => {
 		try {
 			const { id } = req.params;

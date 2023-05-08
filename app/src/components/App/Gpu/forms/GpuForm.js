@@ -189,7 +189,7 @@ const GpuForm = ({ onSubmit, initialData = {}, disabled }) => {
         />
 
         <Button className="mt-4" type="submit" disabled={disabled}>
-          {data._id ? "Update" : "Create"}
+          {data.idGpuPartner ? "Update" : "Create"}
         </Button>
       </div>
     </form>

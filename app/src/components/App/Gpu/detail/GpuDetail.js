@@ -9,10 +9,22 @@ const GpuDetail = ({ gpu }) => {
     <div className="fullSize">
       <div className="detail">
         <DetailCard data={gpu} />
-        <Link to={route(PossibleRoutes.GpuEdit, { id: gpu.idGpu })}>
-          {gpu.modelName}
-        </Link>
+        {
+          gpu.idGpuPartner && (
+            <Link to={route(PossibleRoutes.GpuPartnerEdit, { id: gpu.idGpuPartner })}>
+              Partner: {gpu.modelName}
+            </Link>
+          )
+        }
+        {
+          !gpu.idGpuPartner && (
+            <Link to={route(PossibleRoutes.GpuEdit, { id: gpu.idGpu })}>
+              Original: {gpu.modelName}
+            </Link>
+          )
+        }
       </div>
+
       {
         gpu.idPartnerGpu && (
           <div className="model">
