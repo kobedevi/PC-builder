@@ -7,10 +7,12 @@ import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import useAdmin from "../../../core/hooks/useAdmin";
+import DeleteButton from "components/Design/DeleteButton";
+import DeleteCpu from "./Delete/DeleteCpu";
 
 const CpuOverview = () => {
   const [info, setInfo] = useState();
-  const [cpu, setCpu] = useState();
+  const [deleteCpu, setDeleteCpu] = useState();
 
   const {
     data: cpus,
@@ -23,7 +25,7 @@ const CpuOverview = () => {
   const admin = useAdmin();
 
   const onUpdate = () => {
-    setCpu(null);
+    setDeleteCpu(null);
     refresh();
   };
 
@@ -31,26 +33,54 @@ const CpuOverview = () => {
     return <Spinner />;
   }
 
-  if (error) {
-    return <ErrorAlert error={error} />;
-  }
-
   return (
     <>
-      {info && <Alert color="info">{info}</Alert>}
       <h2>CPU Overview</h2>
-      <Link to={PossibleRoutes.CpuCreate} className="btn btn-primary">
-        Add CPU
-      </Link>
-      <ul>
-        {cpus.map((cpu) => (
-          <li key={cpu.idProcessor}>
-            <Link
-              to={route(PossibleRoutes.CpuDetail, { id: cpu.idProcessor })}
-            >{`${cpu.modelName} ${cpu.clockSpeed}GHz`}</Link>
-          </li>
-        ))}
-      </ul>
+
+      {
+        error && (
+          <ErrorAlert error={error} />
+        )
+      }
+
+      {
+        cpus && (
+          <>
+
+            {
+              info && <Alert color="info">{info}</Alert>
+            }
+
+            <Link to={PossibleRoutes.CpuCreate} className="btn btn-primary">
+              Add CPU
+            </Link>
+
+            <ul>
+              {cpus.map((cpu) => (
+                <li key={cpu.idProcessor}>
+                  <Link
+                    to={route(PossibleRoutes.CpuDetail, { id: cpu.idProcessor })}
+                  >{`${cpu.modelName} ${cpu.clockSpeed}GHz`}</Link> 
+                  <DeleteButton deleter={() => setDeleteCpu(cpu)}/>
+                </li>
+              ))}
+            </ul>
+
+            {
+              deleteCpu && (
+                <DeleteCpu
+                  cpu={deleteCpu}
+                  onUpdate={onUpdate}
+                  onDismiss={() => setDeleteCpu(null)}
+                  setError={setError}
+                  setInfo={setInfo}
+                />
+              )
+            }
+
+          </>
+        )
+      }
     </>
   );
 };

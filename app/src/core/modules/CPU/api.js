@@ -32,4 +32,10 @@ const createCpu = (data) => async (headers) => {
   });
 };
 
-export { fetchCpus, fetchCpuById, updateCpu, createCpu };
+const deleteCpu = (id) => async (headers) => {
+  return await Axios.delete(`${process.env.REACT_APP_BASE_API}/cpu/${id}`, {
+    headers: createHeaders(headers),
+  });
+};
+
+export { fetchCpus, fetchCpuById, updateCpu, createCpu, deleteCpu };

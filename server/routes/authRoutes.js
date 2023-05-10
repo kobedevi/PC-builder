@@ -49,6 +49,7 @@ authRouter.use(bodyParser.urlencoded({ extended: true }));
 authRouter.get("/cpu", cpuController.fetchCpus);
 authRouter.get("/cpu/:id", cpuController.fetchCpuById);
 authRouter.patch("/cpu/:id", cpuModel, cpuController.patchCpuById);
+authRouter.delete("/cpu/:id", cpuModel, cpuController.deleteCpuById);
 authRouter.post("/cpu", cpuModel, cpuController.createCpu);
 
 // Cases
