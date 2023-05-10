@@ -118,7 +118,7 @@ const CpuSocketSelect = (props) => {
           <Link style={{ display: "inline-block" }} onClick={toggleHide}>
             {isHidden ? "Add new socket type" : "Cancel"}
           </Link>
-          <div className={isHidden ? "hide" : "show"}>
+          <div className={isHidden ? "hide" : "formShow"}>
             <h4>Create new CPU socket:</h4>
             <Input
               label="socket name"

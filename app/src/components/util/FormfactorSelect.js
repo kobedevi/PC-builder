@@ -146,7 +146,7 @@ const FormfactorSelect = (
             {isHidden ? "Add new formfactor" : "Cancel"}
           </Link>
 
-          <div className={isHidden ? "hide" : "show"}>
+          <div className={isHidden ? "hide" : "formShow"}>
             <h4>Create a formfactor:</h4>
 
             <Input

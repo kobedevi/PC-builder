@@ -118,7 +118,7 @@ const ManufacturerSelect = (props) => {
           <Link style={{ display: "inline-block" }} onClick={toggleHide}>
             {isHidden ? "Add new manufacturer" : "Cancel"}
           </Link>
-          <div className={isHidden ? "hide" : "show"}>
+          <div className={isHidden ? "hide" : "formShow"}>
             <h4>Create new manufacturer:</h4>
             <Input
               label="Manufacturer name"
