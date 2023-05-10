@@ -42,6 +42,7 @@ const PossibleRoutes = Object.freeze({
   Psus: "/psu",
   PsuCreate: "/psu/create",
   PsuDetail: "/psu/:id",
+  PsuEdit: "/psu/:id/edit",
 });
 
 // replaces : values with values from object

@@ -7,11 +7,28 @@ const fetchPsus = () => async (headers) => {
   });
 };
 
-const createPsu = (data) => async (headers) => {
-  return await Axios.post(`${process.env.REACT_APP_BASE_API}/psu`, {
+const fetchPsuById = (id) => async (headers) => {
+  return await Axios.get(`${process.env.REACT_APP_BASE_API}/psu/${id}`, {
     headers: createHeaders(headers),
-    ...data,
   });
 };
 
-export { fetchPsus, createPsu };
+
+const updatePsu = (data) => async (headers) => {
+  return await Axios.patch(
+    `${process.env.REACT_APP_BASE_API}/psu/${data.idPsu}`,
+    data,
+    {
+      headers: createHeaders(headers),
+    }
+  );
+};
+
+const createPsu = (data) => async (headers) => {
+  return await Axios.post(`${process.env.REACT_APP_BASE_API}/psu`, data, {
+    headers: createHeaders(headers),
+  });
+};
+
+
+export { fetchPsus, fetchPsuById, updatePsu, createPsu };

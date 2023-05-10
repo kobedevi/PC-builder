@@ -164,7 +164,7 @@ const PsuForm = ({ onSubmit, initialData = {}, disabled }) => {
       />
 
       <Button className="mt-4" type="submit" disabled={disabled}>
-        {data._id ? "Update" : "Create"}
+        {data.idPsu ? "Update" : "Create"}
       </Button>
     </form>
   );

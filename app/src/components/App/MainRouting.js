@@ -29,6 +29,8 @@ import GpuDetailContainer from "./Gpu/detail/GpuDetailContainer";
 import GpuPartnerDetailContainer from "./Gpu/detail/GpuPartnerDetailContainer copy";
 import GpuEditContainer from "./Gpu/edit/GpuEditContainer";
 import GpuPartnerEditContainer from "./Gpu/edit/GpuPartnerEditContainer";
+import PsuDetailContainer from "./Psu/detail/PsuDetailContainer";
+import PsuEditContainer from "./Psu/edit/PsuEditContainer";
 
 const MainRouting = () => {
   return (
@@ -93,6 +95,8 @@ const MainRouting = () => {
 
       <Route path={PossibleRoutes.Psus} element={<PsuOverview />} />
       <Route path={PossibleRoutes.PsuCreate} element={<CreatePsu />} />
+      <Route path={PossibleRoutes.PsuDetail} element={<PsuDetailContainer />} />
+      <Route path={PossibleRoutes.PsuEdit} element={<PsuEditContainer/>} />
 
       <Route
         path="*"

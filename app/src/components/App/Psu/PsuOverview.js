@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchPsus } from "../../../core/modules/Psu/api";
-import { PossibleRoutes } from "../../../core/routing";
+import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 
@@ -30,9 +30,13 @@ const PsuOverview = () => {
       {data && (
         <ul>
           {data.map((psu) => (
-            <li key={psu.idPsu}>{`${psu.idPsu} ${psu.modelName}`}</li>
+            <li key={psu.idPsu}>
+              <Link to={route(PossibleRoutes.PsuDetail, { id: psu.idPsu })}>
+                {`${psu.modelName}`}
+              </Link>
+            </li>            
           ))}
-        </ul>
+        </ul>        
       )}
     </>
   );

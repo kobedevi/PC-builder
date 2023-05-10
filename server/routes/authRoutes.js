@@ -127,6 +127,8 @@ authRouter.get("/gpu/:id", gpuController.fetchGpuById);
 
 // PSU
 authRouter.get("/psu", psuController.fetchPsu);
+authRouter.get("/psu/:id", psuController.fetchPsuById);
+authRouter.patch("/psu/:id", psuModel, psuController.patchPsuById);
 authRouter.post("/psu", psuModel, psuController.createPsu);
 
 // Manufacturers
