@@ -52,7 +52,7 @@ class CpuController {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { idManufacturer, idCpuSocket, modelName, clockSpeed, cores } =
+		const { idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image } =
 			req.body;
 		if (modelName && clockSpeed && cores) {
 			try {
@@ -78,7 +78,7 @@ class CpuController {
 				}
 				const idProcessor = uuidv4();
 				const sqlInsert =
-					"INSERT INTO cpus (idProcessor, idManufacturer, idCpuSocket, modelName, clockSpeed, cores) VALUES (?,?,?,?,?,?)";
+					"INSERT INTO cpus (idProcessor, idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image) VALUES (?,?,?,?,?,?,?)";
 				await db
 					.promise()
 					.query(sqlInsert, [
@@ -88,6 +88,7 @@ class CpuController {
 						modelName,
 						clockSpeed,
 						cores,
+						image,
 					]);
 				res.status(201).send({
 					message: "CPU added",

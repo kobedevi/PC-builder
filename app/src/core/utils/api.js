@@ -17,6 +17,13 @@ const createHeaders = (extra = {}) => {
   };
 };
 
+const uploadHeaders = (extra = {}) => {
+  return {
+    'Content-Type': 'multipart/form-data',
+    ...extra,
+  };
+};
+
 const createAuthHeader = (token) => ({
   Authorization: `Bearer ${token}`,
 });
@@ -25,4 +32,4 @@ const withToken = (promise, token) => {
   return promise(createAuthHeader(token));
 };
 
-export { handleApiResult, createHeaders, withToken };
+export { handleApiResult, createHeaders, uploadHeaders, withToken };

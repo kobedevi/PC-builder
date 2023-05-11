@@ -23,7 +23,7 @@ const defaultData = {
   cores: 4,
 };
 
-const CpuForm = ({ onSubmit, initialData = {}, disabled }) => {
+const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
     ...defaultData,
@@ -36,6 +36,9 @@ const CpuForm = ({ onSubmit, initialData = {}, disabled }) => {
       ...data,
       [e.target.name]: e.target.value,
     });
+    if(e.target.name === 'image') {
+      setFile(e.target.files[0]);
+    }
   };
 
   const validate = useCallback((data, onSuccess) => {
@@ -116,6 +119,19 @@ const CpuForm = ({ onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         error={errors.cores}
       />
+
+      <Input
+        label="Product image"
+        type="file"
+        name="image"
+        accept='image/png, image/jpeg, image/jpg'
+        disabled={disabled}
+        onChange={handleChange}
+        error={errors.coverLink}
+      />
+      {
+          file && <p>File uploaded</p>
+      }
 
       <Button className="mt-4" type="submit" disabled={disabled}>
         {data.idProcessor ? "Update" : "Create"}

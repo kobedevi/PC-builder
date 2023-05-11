@@ -27,6 +27,7 @@ const RamController = require("../controllers/RamController");
 const StorageTypeController = require("../controllers/StorageTypeController");
 const GpuController = require("../controllers/GpuController");
 const PsuController = require("../controllers/PsuController");
+const UploadController = require("../controllers/UploadController");
 
 const cpuController = new CpuController();
 const cpuCoolerController = new CpuCoolerController();
@@ -39,6 +40,7 @@ const psuController = new PsuController();
 const caseController = new CaseController();
 const ramController = new RamController();
 const storageTypeController = new StorageTypeController();
+const uploadController = new UploadController();
 
 const authRouter = express.Router();
 const adminRouter = express.Router();
@@ -151,6 +153,9 @@ authRouter.post(
 	formfactorModel,
 	formfactorController.createFormfactor
 );
+
+// uploads
+authRouter.post('/uploads', upload.single('file') ,uploadController.uploadImage);
 
 authRouter.use(withRole(ROLES.admin), adminRouter);
 
