@@ -13,7 +13,7 @@ const schema = yup.object().shape({
   modelName: yup.string().required(),
   clockSpeed: yup.number().required().positive(),
   cores: yup.number().required().positive().integer(),
-  image: yup.string().nullable,
+  image: yup.string().nullable(),
 });
 
 const defaultData = {
