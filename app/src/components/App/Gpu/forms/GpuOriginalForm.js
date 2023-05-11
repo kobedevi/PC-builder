@@ -117,7 +117,6 @@ const GpuOriginalForm = ({
           refresh();
         })
         .catch((err) => {
-          console.log(err)
           setErrors(err);
           setData({
             ...initialData,

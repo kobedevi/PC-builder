@@ -16,7 +16,6 @@ class CpuController {
 	deleteCpuById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			console.log(id);
 			const results = await db.promise()
 				.query(SQL`SELECT * FROM cpus WHERE cpus.idProcessor=${id} LIMIT 1;`);
 			if (results[0].length === 0) {
@@ -108,7 +107,7 @@ class CpuController {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { idManufacturer, idCpuSocket, modelName, clockSpeed, cores } =
+		const { idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image } =
 			req.body;
 		if (modelName && clockSpeed && cores) {
 			try {
@@ -133,13 +132,14 @@ class CpuController {
 						.status(400)
 						.json({ message: "Given idCpuSocket does not exist" });
 				}
-				const sql = `UPDATE cpus SET idManufacturer = ?, idCpuSocket = ?, modelName = ?, clockSpeed = ?, cores = ? WHERE idProcessor=?`;
+				const sql = `UPDATE cpus SET idManufacturer = ?, idCpuSocket = ?, modelName = ?, clockSpeed = ?, cores = ?, image = ? WHERE idProcessor=?`;
 				let data = [
 					idManufacturer,
 					idCpuSocket,
 					modelName,
 					clockSpeed,
 					cores,
+					image,
 					id,
 				];
 
