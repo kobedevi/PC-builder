@@ -45,6 +45,27 @@ class CpuController {
 		}
 	};
 
+	fetchCpusByFilter = async (req, res, next) => {
+		try {
+			const { query } = req.params;
+			const encodedStr = query.replace(/[\u00A0-\u9999<>\&]/g, i => '&#'+i.charCodeAt(0)+';')
+			const results = await db.promise()
+				.query(
+					`SELECT cpus.*, manufacturers.manufacturerName FROM cpus
+					LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
+					WHERE CONCAT_WS('', modelName, manufacturerName) LIKE '%${encodedStr}%'`
+				);
+			if (results[0].length === 0) {
+				return res.status(200).json({ 
+					message: "No results"
+				});
+			}
+			res.status(200).send(results[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
 	createCpu = async (req, res, next) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {

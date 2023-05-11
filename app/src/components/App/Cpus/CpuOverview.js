@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchCpus } from "../../../core/modules/CPU/api";
@@ -6,13 +6,15 @@ import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
-import useAdmin from "../../../core/hooks/useAdmin";
-import DeleteButton from "components/Design/DeleteButton";
 import DeleteCpu from "./Delete/DeleteCpu";
+import ProductCard from "components/Design/ProductCard";
+import SearchForm from "components/Design/SearchForm";
+import Result from "./forms/Result";
 
 const CpuOverview = () => {
   const [info, setInfo] = useState();
   const [deleteCpu, setDeleteCpu] = useState();
+  const [query, setQuery] = useState('');
 
   const {
     data: cpus,
@@ -22,16 +24,14 @@ const CpuOverview = () => {
     refresh,
   } = useFetch(fetchCpus);
 
-  const admin = useAdmin();
-
   const onUpdate = () => {
     setDeleteCpu(null);
     refresh();
   };
 
-  if (isLoading) {
-    return <Spinner />;
-  }
+  const onSubmit = (query) => {
+    setQuery(query.search)
+}
 
   return (
     <>
@@ -44,6 +44,12 @@ const CpuOverview = () => {
       }
 
       {
+        isLoading && (
+          <Spinner />
+        )
+      }
+
+      {
         cpus && (
           <>
 
@@ -51,20 +57,34 @@ const CpuOverview = () => {
               info && <Alert color="info">{info}</Alert>
             }
 
+            <SearchForm
+              onSubmit={onSubmit}
+              setQuery={setQuery}
+            />
+
             <Link to={PossibleRoutes.CpuCreate} className="btn btn-primary">
               Add CPU
             </Link>
 
-            <ul>
-              {cpus.map((cpu) => (
-                <li key={cpu.idProcessor}>
-                  <Link
-                    to={route(PossibleRoutes.CpuDetail, { id: cpu.idProcessor })}
-                  >{`${cpu.modelName} ${cpu.clockSpeed}GHz`}</Link> 
-                  <DeleteButton deleter={() => setDeleteCpu(cpu)}/>
-                </li>
-              ))}
-            </ul>
+            {
+              query && <Result updateChecker={deleteCpu} deleter={setDeleteCpu} result={query}/>
+            }
+
+            {
+              !query && (
+                <ul className="movieList">
+                  {cpus.map((cpu) => (
+                    <li key={cpu.idProcessor}>
+                      <ProductCard
+                        deleter={setDeleteCpu}
+                        product={cpu}
+                        id={cpu.idProcessor}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
 
             {
               deleteCpu && (
