@@ -13,6 +13,7 @@ const schema = yup.object().shape({
   modelName: yup.string().required(),
   clockSpeed: yup.number().required().positive(),
   cores: yup.number().required().positive().integer(),
+  image: yup.string().nullable,
 });
 
 const defaultData = {
@@ -21,6 +22,7 @@ const defaultData = {
   modelName: "",
   clockSpeed: 3.5,
   cores: 4,
+  image: "",
 };
 
 const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -65,6 +67,15 @@ const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
     setIsTouched(true);
     validate(data, () => onSubmit(data));
   };
+
+  const removeImage = (e) => {
+    e.preventDefault();
+    setFile(null);
+    setData({
+      ...data,
+      image: null,
+    });
+  }
 
   return (
     <form noValidate={true} onSubmit={handleSubmit}>
@@ -120,18 +131,27 @@ const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         error={errors.cores}
       />
 
-      <Input
-        label="Product image"
-        type="file"
-        name="image"
-        accept='image/png, image/jpeg, image/jpg'
-        disabled={disabled}
-        onChange={handleChange}
-        error={errors.coverLink}
-      />
-      {
-          file && <p>File uploaded</p>
-      }
+      <div>
+        <Input
+          label="Product image"
+          type="file"
+          name="image"
+          accept='image/png, image/jpeg, image/jpg, image/gif'
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.coverLink}
+        />
+        {
+          data.image && (
+            <>
+              <img alt="product preview" src={ file ? URL.createObjectURL(file) : (data.image)}/>
+              <Button onClick={removeImage} color="danger">
+                Remove image
+              </Button>
+            </>
+          )
+        }
+      </div>
 
       <Button className="mt-4" type="submit" disabled={disabled}>
         {data.idProcessor ? "Update" : "Create"}

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const Modal = ({ children, title, onDismiss }) => {
+const Modal = ({ children, center=false, title, onDismiss }) => {
     useEffect(() => {
         document.body.classList.add('modal-open');
         return () => {
@@ -36,9 +36,16 @@ const Modal = ({ children, title, onDismiss }) => {
                             />
                         </div>
                         <div className="modal-body">
-                            <div className='btnContainer'>
-                                {children}
-                            </div>
+                            {center && (
+                                <div className={"btnContainer d-flex justify-content-center"}>
+                                    {children}
+                                </div>
+                            )}
+                            {!center && (
+                                <div className='btnContainer'>
+                                    {children}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -16,40 +16,54 @@ const CreateCpu = () => {
   const [error, setError] = useState();
   const [file, setFile] = useState();
 
-  const {user} = useAuth();
-
   const handleSubmit = (data) => {
     setIsLoading(true);
 
-    const formData = new FormData();
-    formData.append('file', file);
+    if(file) {
+      const formData = new FormData();
+      formData.append('file', file);
 
-    // File upload
-    const fileUpload = new Promise(async (resolve, reject) => {
-      // await uploadImage(formData, data, user)
-      withAuth(uploadImage(formData))
-      .then((data) => {
-          resolve(data.link);
-      })
-      .catch((err) =>{
-          reject(err);
-      })
-    });
-
-    fileUpload
-    .then((link) => {
-      data.image = link
-      withAuth(createCpu(data))
-      .then(() => {
-        navigate(PossibleRoutes.Cpus, { replace: true });
-      })
-      .catch((err) => {
-        setError(err);
-        setIsLoading(false);
+      // File upload
+      const fileUpload = new Promise(async (resolve, reject) => {
+        // await uploadImage(formData, data, user)
+        withAuth(uploadImage(formData))
+        .then((data) => {
+            resolve(data.link);
+        })
+        .catch((err) =>{
+            reject(err);
+        })
       });
-    })
+
+      fileUpload
+      .then((link) => {
+        data.image = link
+        withAuth(createCpu(data))
+        .then(() => {
+          navigate(PossibleRoutes.Cpus, { replace: true });
+        })
+        .catch((err) => {
+          setError(err);
+          setIsLoading(false);
+        });
+      })
+    }
+    else {
+      creater(data)
+    }
 
   };
+
+  const creater = (data) => {
+    withAuth(createCpu(data))
+    .then(() => {
+      navigate(PossibleRoutes.Cpus, { replace: true });
+    })
+    .catch((err) => {
+      setError(err);
+      setIsLoading(false);
+    });
+  }
 
   return (
     <div>

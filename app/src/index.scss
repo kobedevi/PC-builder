@@ -425,6 +425,14 @@ table{
     }
 }
 
+.productImage {
+    width:290px;
+}
+
+.modal img, .productImage {
+    border-radius: 5px;
+}
+
 form {
     .form-control{
         color: $text !important;

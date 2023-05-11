@@ -1,6 +1,10 @@
 import humps from "humps";
+import { useState } from "react";
+import ProductView from "./ProductView";
 
 const DetailCard = ({ data }) => {
+
+  const [productView, setProductView] = useState();
 
   return (
     <>
@@ -24,12 +28,24 @@ const DetailCard = ({ data }) => {
           {data.image && (
             <tr key="image">
               <td>Product image:</td>
-              <td><img className="productImage" src={data.image} alt="Product"/></td>
+              <td onClick={() => setProductView(true)}><img className="productImage" src={data.image} alt="Product"/></td>
             </tr>
           )}
         </tbody>
       </table>
+
+      {
+        productView && (
+          <ProductView
+            image={data.image}
+            center={true}
+            onDismiss={() => setProductView(null)}
+          />
+        )
+      }
+
     </>
+
   );
 };
 
