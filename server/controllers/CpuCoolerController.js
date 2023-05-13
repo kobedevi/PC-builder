@@ -6,12 +6,79 @@ const SQL = require("@nearform/sql");
 class CpuCoolerController {
 	fetchCpuCoolers = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT * FROM cpucoolers`);
-			res.status(200).send(results[0]);
+			const [rows] = await db.promise().query(`SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
+			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
+			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket;`);
+			const data = rows;
+
+			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
+			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
+			.map(id => {
+				return {
+					idCpuCooler: id,
+					idManufacturer: data.filter(s => s.idCpuCooler === id).map(a => a.idManufacturer)[0],
+					manufacturerName: data.filter(s => s.idCpuCooler === id).map(a => a.manufacturerName)[0],
+					modelName: data.filter(s => s.idCpuCooler === id).map(a => a.modelName)[0],
+					height: data.filter(s => s.idCpuCooler === id).map(a => a.height)[0],
+					width: data.filter(s => s.idCpuCooler === id).map(a => a.width)[0],
+					depth: data.filter(s => s.idCpuCooler === id).map(a => a.depth)[0],
+					socketType: data.filter(s => s.idCpuCooler === id).map(socket => socket.socketType),
+					idCpuSocket: data.filter(s => s.idCpuCooler === id).map(socket => socket.idCpuSocket)
+				}
+			})
+
+			res.status(200).send(result);
 		} catch (e) {
 			next(e);
 		}
 	};
+
+	fetchCpuCoolersByFilter = async (req, res, next) => {
+		try {
+			let { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
+			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
+			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
+			WHERE CONCAT_WS('', modelName, manufacturerName, socketType) LIKE ?;`;
+			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			const data = rows;
+
+			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
+			.map(id => {
+				return {
+					idCpuCooler: id,
+					idManufacturer: data.filter(s => s.idCpuCooler === id).map(a => a.idManufacturer)[0],
+					manufacturerName: data.filter(s => s.idCpuCooler === id).map(a => a.manufacturerName)[0],
+					modelName: data.filter(s => s.idCpuCooler === id).map(a => a.modelName)[0],
+					height: data.filter(s => s.idCpuCooler === id).map(a => a.height)[0],
+					width: data.filter(s => s.idCpuCooler === id).map(a => a.width)[0],
+					depth: data.filter(s => s.idCpuCooler === id).map(a => a.depth)[0],
+					socketType: data.filter(s => s.idCpuCooler === id).map(socket => socket.socketType),
+					idCpuSocket: data.filter(s => s.idCpuCooler === id).map(socket => socket.idCpuSocket)
+				}
+			})
+
+			if (result.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+
+			res.status(200).send(result);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 
 	deleteCpuCoolerById = async (req, res, next) => {
 		try {

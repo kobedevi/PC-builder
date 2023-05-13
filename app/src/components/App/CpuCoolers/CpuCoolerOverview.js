@@ -9,6 +9,7 @@ import ErrorAlert from "components/shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import DeleteCpuCooler from "./Delete/DeleteCpuCooler";
 import SearchForm from "components/Design/SearchForm";
+import Result from "./forms/Result";
 
 const CpuCoolerOverview = () => {
   const [info, setInfo] = useState();
@@ -70,6 +71,10 @@ const CpuCoolerOverview = () => {
             </Link>
 
             {
+              query && <Result updateChecker={deleteCooler} deleter={setDeleteCooler} result={query}/>
+            }
+
+            {
               !query && (
                 <ul className="movieList">
                   {cpuCoolers.map((cc) => (
@@ -80,6 +85,8 @@ const CpuCoolerOverview = () => {
                         link={PossibleRoutes.CpuCoolerDetail}
                         id={cc.idCpuCooler}
                       >
+                        Manufacturer: {cc.manufacturerName}<br/>
+                        compatible sockets: {cc.socketType.join(', ')}<br/>
                       </ProductCard>
                     </li>
                   ))}

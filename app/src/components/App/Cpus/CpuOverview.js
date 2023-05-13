@@ -81,6 +81,7 @@ const CpuOverview = () => {
                         link={PossibleRoutes.CpuDetail}
                         id={cpu.idProcessor}
                       >
+                        Manufacturer: {cpu.manufacturerName}<br/>
                         Base Clock: {cpu.clockSpeed}Ghz<br/>
                         Cores: {cpu.cores}<br/>
                         Socket: {cpu.socketType}

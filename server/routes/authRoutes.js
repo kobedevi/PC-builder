@@ -68,6 +68,7 @@ authRouter.post("/case", caseModel, caseController.createCase);
 // CPUCoolers
 authRouter.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
 authRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolerById);
+authRouter.get("/cpucooler/filter/:query", cpuCoolerController.fetchCpuCoolersByFilter);
 authRouter.patch(
 	"/cpucooler/:id",
 	cpuCoolerModel,

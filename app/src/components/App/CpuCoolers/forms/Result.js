@@ -3,14 +3,14 @@ import ErrorAlert from "components/shared/ErrorAlert";
 import useFetch from "core/hooks/useFetch";
 import Spinner from "components/Design/Spinner";
 import ProductCard from "components/Design/ProductCard";
-import {fetchFilteredCpus} from "../../../../core/modules/CPU/api"
+import {fetchFilteredCpuCoolers} from "../../../../core/modules/CPUCooler/api"
 import Alert from "components/Design/Alert";
 import { PossibleRoutes } from "core/routing";
 
 const Result = ({result, deleter}) => {
 
     const apiCall = useCallback(() => {
-        return fetchFilteredCpus(result);
+        return fetchFilteredCpuCoolers(result);
     }, [result, ])
 
     const {
@@ -50,9 +50,7 @@ const Result = ({result, deleter}) => {
                                 link={PossibleRoutes.CpuDetail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
-                                Base Clock: {product.clockSpeed}Ghz<br/>
-                                Cores: {product.cores}<br/>
-                                Socket: {product.socketType}
+                                compatible sockets: {product.socketType.join(', ')}<br/>
                             </ProductCard>
                         </li>
                     ))}
