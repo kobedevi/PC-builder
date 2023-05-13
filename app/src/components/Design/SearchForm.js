@@ -76,11 +76,10 @@ const SearchForm = ({onSubmit, setQuery, initialData={}, disabled}) => {
                     placeholder='Search...'
                 />
 
-                {/* <input value={data.search} onChange={handleChange} className="form-control" type="search" placeholder="Search..." id="search" name="search"/> */}
             </div>
             <div className="col-md-4">
                 <button type="submit" className='me-2 btn btn-primary'>Search</button>
-                <button onClick={handleReset} className='btn btn-danger'>Reset</button>
+                <button onClick={handleReset} className='me-2 btn btn-danger'>Reset</button>
             </div>
         </form>
     )

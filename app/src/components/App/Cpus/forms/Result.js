@@ -5,13 +5,13 @@ import Spinner from "components/Design/Spinner";
 import ProductCard from "components/Design/ProductCard";
 import {fetchFilteredCpus} from "../../../../core/modules/CPU/api"
 import Alert from "components/Design/Alert";
+import { PossibleRoutes } from "core/routing";
 
-const Result = ({result, deleter, updateChecker}) => {
+const Result = ({result, deleter}) => {
 
     const apiCall = useCallback(() => {
         return fetchFilteredCpus(result);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [result, updateChecker])
+    }, [result, ])
 
     const {
         data: products,
@@ -29,9 +29,10 @@ const Result = ({result, deleter, updateChecker}) => {
 
     if (products.message) {
         return (
-            <>
-                <Alert color={"info"}>{products.message}</Alert>
-            </>
+            <div className="blobContainer">
+                <p>{products.message}</p>
+                <img src="./blob.svg" alt="blobby blobby blobby!"/>
+            </div>
         )
     }
 
@@ -42,7 +43,16 @@ const Result = ({result, deleter, updateChecker}) => {
                 <ul className='movieList'>
                     { products.map((product) => (
                         <li key={product.idProcessor}>
-                            <ProductCard deleter={deleter} product={product}/>
+                            <ProductCard
+                                deleter={deleter}
+                                product={product}
+                                id={product.idProcessor}
+                                link={PossibleRoutes.CpuDetail}
+                            >
+                                Base Clock: {product.clockSpeed}Ghz<br/>
+                                Cores: {product.cores}<br/>
+                                Socket: {product.socketType}
+                            </ProductCard>
                         </li>
                     ))}
                 </ul>

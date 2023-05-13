@@ -78,8 +78,13 @@ const CpuOverview = () => {
                       <ProductCard
                         deleter={setDeleteCpu}
                         product={cpu}
+                        link={PossibleRoutes.CpuDetail}
                         id={cpu.idProcessor}
-                      />
+                      >
+                        Base Clock: {cpu.clockSpeed}Ghz<br/>
+                        Cores: {cpu.cores}<br/>
+                        Socket: {cpu.socketType}
+                      </ProductCard>
                     </li>
                   ))}
                 </ul>
