@@ -17,7 +17,6 @@ const fetchCpuById = (id) => async (headers) => {
 };
 
 const fetchFilteredCpus = (query) => async (headers) => {
-  const encodedStr = query.replace(/[/^#\%]/g," ")
   return await Axios.get(
     `${process.env.REACT_APP_BASE_API}/cpu/filter/${query.replace(/[/^#\%]/g,"")}`, 
     {
