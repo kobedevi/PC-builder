@@ -13,6 +13,33 @@ class CpuCoolerController {
 		}
 	};
 
+	deleteCpuCoolerById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+
+			let query = `SELECT * FROM cpucoolers WHERE idCpuCooler = ? LIMIT 1;`;
+			let [rows] = await db.promise().query(query, [id]);
+			const result = rows;
+			console.log(result)
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "CPU cooler does not exist" });
+			}
+			
+			query = `SELECT * FROM cpucooler_has_cpusockets WHERE idCpuCooler = ?;`;
+			[rows] = await db.promise().query(query, [id]);
+			if (rows.length > 0) {
+				query = `DELETE FROM cpucooler_has_cpusockets WHERE idCpuCooler = ?;`;
+				await db.promise().query(query, [id]);
+			}
+			query = `DELETE FROM cpucoolers WHERE idCpuCooler = ?;`;
+			await db.promise().query(query, [id]);
+			
+			res.status(200).send(result[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
 	fetchCpuCoolerById = async (req, res, next) => {
 		try {
 			const { id } = req.params;

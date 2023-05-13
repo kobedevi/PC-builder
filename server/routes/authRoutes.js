@@ -73,6 +73,7 @@ authRouter.patch(
 	cpuCoolerModel,
 	cpuCoolerController.patchCpuCoolerById
 );
+authRouter.delete("/cpucooler/:id", cpuCoolerModel, cpuCoolerController.deleteCpuCoolerById);
 authRouter.post(
 	"/cpucooler",
 	cpuCoolerModel,

@@ -5,9 +5,15 @@ import { fetchCpuCoolers } from "../../../core/modules/CPUCooler/api";
 import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
+import ErrorAlert from "components/shared/ErrorAlert";
+import ProductCard from "components/Design/ProductCard";
+import DeleteCpuCooler from "./Delete/DeleteCpuCooler";
+import SearchForm from "components/Design/SearchForm";
 
 const CpuCoolerOverview = () => {
   const [info, setInfo] = useState();
+  const [deleteCooler, setDeleteCooler] = useState();
+  const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
     return fetchCpuCoolers();
@@ -21,31 +27,81 @@ const CpuCoolerOverview = () => {
     refresh,
   } = useFetch(apiCall);
 
+  const onUpdate = () => {
+    setDeleteCooler(null);
+    refresh();
+  };
+
+  
+  const onSubmit = (query) => {
+    setQuery(query.search)
+  }
+
   return (
     <>
       <h2>CPU cooler Overview</h2>
-      {error && <Alert color="danger">{error.message}</Alert>}
-      {info && <Alert color="info">{info}</Alert>}
+      {
+        error && (
+          <ErrorAlert error={error} />
+        )
+      }
 
-      <Link to={PossibleRoutes.CpuCoolerCreate} className="btn btn-primary">
-        Add CPU cooler
-      </Link>
+      {
+        isLoading && (
+          <Spinner />
+        )
+      }
 
-      {isLoading && <Spinner />}
+      {
+        cpuCoolers && (
+          <>
 
-      {cpuCoolers && (
-        <ul>
-          {cpuCoolers.map((cc) => (
-            <li key={cc.idCpuCooler}>
-              <Link
-                to={route(PossibleRoutes.CpuCoolerDetail, {
-                  id: cc.idCpuCooler,
-                })}
-              >{`${cc.modelName}`}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
+            {
+              info && <Alert color="info">{info}</Alert>
+            }
+
+            <SearchForm
+              onSubmit={onSubmit}
+              setQuery={setQuery}
+            />
+
+            <Link to={PossibleRoutes.CpuCoolerCreate} className="btn btn-primary">
+              Add CPU cooler
+            </Link>
+
+            {
+              !query && (
+                <ul className="movieList">
+                  {cpuCoolers.map((cc) => (
+                    <li key={cc.idCpuCooler}>
+                      <ProductCard
+                        deleter={setDeleteCooler}
+                        product={cc}
+                        link={PossibleRoutes.CpuCoolerDetail}
+                        id={cc.idCpuCooler}
+                      >
+                      </ProductCard>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+
+            {
+              deleteCooler && (
+                <DeleteCpuCooler
+                  cooler={deleteCooler}
+                  onUpdate={onUpdate}
+                  onDismiss={() => setDeleteCooler(null)}
+                  setError={setError}
+                  setInfo={setInfo}
+                />
+              )
+            }
+
+          </>
+        )
+      }
     </>
   );
 };

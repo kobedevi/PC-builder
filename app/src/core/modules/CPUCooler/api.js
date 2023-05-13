@@ -29,9 +29,16 @@ const createCpuCooler = (data) => async (headers) => {
   });
 };
 
+const deleteCpuCooler = (id) => async (headers) => {
+  return await Axios.delete(`${process.env.REACT_APP_BASE_API}/cpucooler/${id}`, {
+    headers: createHeaders(headers),
+  });
+};
+
 export {
   fetchCpuCoolers,
   createCpuCooler,
   fetchCpuCoolerById,
   updateCpuCooler,
+  deleteCpuCooler
 };
