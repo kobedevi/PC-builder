@@ -6,7 +6,8 @@ const SQL = require("@nearform/sql");
 class CpuController {
 	fetchCpus = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT * FROM cpus`);
+			const results = await db.promise().query(`SELECT *, cpusockets.socketType FROM cpus
+			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
@@ -16,30 +17,33 @@ class CpuController {
 	deleteCpuById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const results = await db.promise()
-				.query(SQL`SELECT * FROM cpus WHERE cpus.idProcessor=${id} LIMIT 1;`);
-			if (results[0].length === 0) {
+
+			let query = `SELECT * FROM cpus WHERE cpus.idProcessor= ? LIMIT 1;`;
+			let [rows] = await db.promise().query(query, [id]);
+			if (rows.length === 0) {
 				return res.status(400).json({ message: "CPU does not exist" });
 			}
-			await db.promise().query(SQL`DELETE FROM cpus WHERE idProcessor = ${id};`)
-			.then(() => res.status(200).send(results[0][0]));
+			query = `DELETE FROM cpus WHERE idProcessor = ?;`
+			await db.promise().query(query, [id]);
+			res.status(200).send(rows);
 		} catch (e) {
 			next(e);
 		}
 	};
 
-
 	fetchCpuById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const results = await db.promise()
-				.query(SQL`SELECT cpus.*, manufacturers.manufacturerName FROM cpus
-				LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
-				WHERE cpus.idProcessor=${id} LIMIT 1;`);
-			if (results[0].length === 0) {
+
+			let userQuery = `SELECT cpus.*, manufacturers.manufacturerName, cpusockets.socketType FROM cpus
+			LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket
+			WHERE cpus.idProcessor= ? LIMIT 1;`;
+			let [rows] = await db.promise().query(userQuery, [id]);
+			if (rows.length === 0) {
 				return res.status(400).json({ message: "CPU does not exist" });
 			}
-			res.status(200).send(results[0]);
+			res.status(200).send(rows);
 		} catch (e) {
 			next(e);
 		}
@@ -47,22 +51,27 @@ class CpuController {
 
 	fetchCpusByFilter = async (req, res, next) => {
 		try {
-			const { query } = req.params;
-			const encodedStr = query.replace(/[\u00A0-\u9999<>\&]/g, i => '&#'+i.charCodeAt(0)+';')
-			const results = await db.promise()
-				.query(
-					`SELECT cpus.*, manufacturers.manufacturerName FROM cpus
-					LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
-					WHERE CONCAT_WS('', modelName, manufacturerName) LIKE '%${encodedStr}%'`
-				);
-			if (results[0].length === 0) {
+			let { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT cpus.*, manufacturers.manufacturerName, cpusockets.socketType FROM cpus
+			LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket
+			WHERE CONCAT_WS('', modelName, manufacturerName, socketType) LIKE ?;`;
+			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			if (rows.length === 0) {
 				return res.status(200).json({ 
-					message: "No results"
+					message: "No results",
+					encodedStr,
 				});
 			}
-			res.status(200).send(results[0]);
+			res.status(200).send(rows);
 		} catch (e) {
-			next(e);
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
 		}
 	};
 
@@ -76,26 +85,19 @@ class CpuController {
 			req.body;
 		if (modelName && clockSpeed && cores) {
 			try {
-				const manufacturer = await db
-					.promise()
-					.query(
-						SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-					);
-				if (manufacturer[0].length === 0) {
-					return res
-						.status(400)
-						.json({ message: "Given idManufacturer does not exist" });
+
+				let userQuery = `select idManufacturer from manufacturers where idManufacturer = ?;`;
+				let [rows] = await db.promise().query(userQuery, [idManufacturer]);
+				if (rows.length === 0) {
+					return res.status(400).json({ message: "Given idManufacturer does not exist" });
 				}
-				const cpuSocket = await db
-					.promise()
-					.query(
-						SQL`select idCpuSocket from cpusockets where idCpuSocket = ${idCpuSocket}`
-					);
-				if (cpuSocket[0].length === 0) {
-					return res
-						.status(400)
-						.json({ message: "Given idCpuSocket does not exist" });
+
+				userQuery = `select idCpuSocket from cpusockets where idCpuSocket = ?;`;
+				[rows] = await db.promise().query(userQuery, [idCpuSocket]);
+				if (rows.length === 0) {
+					return res.status(400).json({ message: "Given idCpuSocket does not exist" });
 				}
+
 				const idProcessor = uuidv4();
 				const sqlInsert =
 					"INSERT INTO cpus (idProcessor, idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image) VALUES (?,?,?,?,?,?,?)";
@@ -133,25 +135,19 @@ class CpuController {
 		if (modelName && clockSpeed && cores) {
 			try {
 				const { id } = req.params;
-				const manufacturer = await db
-					.promise()
-					.query(
-						`select idManufacturer from manufacturers where idManufacturer = "${idManufacturer}"`
-					);
-				if (manufacturer[0].length === 0) {
+
+				let userQuery = `select idManufacturer from manufacturers where idManufacturer = ?;`
+				let [rows] = await db.promise().query(userQuery, [idManufacturer]);
+				if (rows.length === 0) {
 					return res
 						.status(400)
 						.json({ message: "Given idManufacturer does not exist" });
 				}
-				const cpuSocket = await db
-					.promise()
-					.query(
-						`select idCpuSocket from cpusockets where idCpuSocket = "${idCpuSocket}"`
-					);
-				if (cpuSocket[0].length === 0) {
-					return res
-						.status(400)
-						.json({ message: "Given idCpuSocket does not exist" });
+
+				userQuery = `select idCpuSocket from cpusockets where idCpuSocket = ?;`;
+				[rows] = await db.promise().query(userQuery, [idCpuSocket]);
+				if (rows.length === 0) {
+					return res.status(400).json({ message: "Given idCpuSocket does not exist" });
 				}
 				const sql = `UPDATE cpus SET idManufacturer = ?, idCpuSocket = ?, modelName = ?, clockSpeed = ?, cores = ?, image = ? WHERE idProcessor=?`;
 				let data = [
