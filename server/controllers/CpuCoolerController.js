@@ -20,7 +20,6 @@ class CpuCoolerController {
 			let query = `SELECT * FROM cpucoolers WHERE idCpuCooler = ? LIMIT 1;`;
 			let [rows] = await db.promise().query(query, [id]);
 			const result = rows;
-			console.log(result)
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "CPU cooler does not exist" });
 			}
@@ -43,12 +42,13 @@ class CpuCoolerController {
 	fetchCpuCoolerById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
+			let query = `SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
+			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
+			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
+			WHERE cpucoolers.idCpuCooler= ? `;
 			const results = await db.promise()
-				.query(SQL`SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
-				LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
-				LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
-				LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
-				WHERE cpucoolers.idCpuCooler=${id}`);
+				.query(query, [id]);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "CPU cooler does not exist" });
 			}
@@ -80,15 +80,10 @@ class CpuCoolerController {
 			req.body;
 		try {
 			const { id } = req.params;
-			const manufacturer = await db
-				.promise()
-				.query(
-					SQL`SELECT idManufacturer FROM manufacturers WHERE idManufacturer = ${idManufacturer}`
-				);
-			if (manufacturer[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idManufacturer does not exist" });
+			let query = `SELECT idManufacturer FROM manufacturers WHERE idManufacturer = ?;`;
+			const [rows] = await db.promise().query(query, [idManufacturer]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idManufacturer does not exist" });
 			}
 
 			const sql = `UPDATE cpucoolers SET idManufacturer = ?, modelName = ?, height = ?, width = ? , depth = ? WHERE idCpuCooler = ?`;
@@ -97,10 +92,11 @@ class CpuCoolerController {
 
 			// execute the UPDATE statement
 
+			query = `SELECT idCpuSocket FROM cpucooler_has_cpusockets WHERE idCpuCooler= ? ;`;
 			const results = await db
 				.promise()
 				.query(
-					SQL`SELECT idCpuSocket FROM cpucooler_has_cpusockets WHERE idCpuCooler=${id};`
+					query, [id]
 				);
 
 			let UA = [], //user
@@ -136,11 +132,10 @@ class CpuCoolerController {
 				}
 			});
 			if (remover.length > 0) {
-				const socketsSqlRemover = `DELETE FROM cpucooler_has_cpusockets WHERE idCpuCooler = '${id}' AND idCpuSocket IN (${remover.join(
+				const socketsSqlRemover = `DELETE FROM cpucooler_has_cpusockets WHERE idCpuCooler = ? AND idCpuSocket IN (${remover.join(
 					", "
 				)})`;
-				data = [id];
-				await db.promise().query(socketsSqlRemover, data);
+				await db.promise().query(socketsSqlRemover, [id]);
 			}
 
 			res.status(200).send({
@@ -167,15 +162,10 @@ class CpuCoolerController {
 			cpuSockets = [{ idCpuSocket: undefined, tempId: undefined }],
 		} = req.body;
 		try {
-			const manufacturer = await db
-				.promise()
-				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
-			if (manufacturer[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idManufacturer does not exist" });
+			const query = `select idManufacturer from manufacturers where idManufacturer = ?`;
+			const [rows] = await db.promise().query(query, [idManufacturer]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idManufacturer does not exist" });
 			}
 
 			const coolerId = uuidv4();

@@ -16,7 +16,6 @@ const CpuEdit = ({ cpu, onUpdate }) => {
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    console.log(file)
     if(file) {
       const formData = new FormData();
       formData.append('file', file);
