@@ -15,6 +15,7 @@ const schema = yup.object().shape({
   width: yup.number().notRequired().positive().integer(),
   depth: yup.number().notRequired().positive().integer(),
   cpuSockets: yup.array().notRequired(),
+  image: yup.string().nullable(),
 });
 
 const defaultData = {
@@ -24,15 +25,10 @@ const defaultData = {
   width: undefined,
   depth: undefined,
   cpuSockets: [],
+  image: "",
 };
 
-const CpuCoolerForm = ({
-  onSubmit,
-  initialData = {
-    idCpuSocket: {}
-  },
-  disabled,
-}) => {
+const CpuCoolerForm = ({ file, setFile, onSubmit, initialData = { idCpuSocket: {} }, disabled }) => {
 
 
   const temp = [];
@@ -67,6 +63,9 @@ const CpuCoolerForm = ({
       cpuSockets: cpuSockets,
       [e.target.name]: e.target.value,
     });
+    if(e.target.name === 'image') {
+      setFile(e.target.files[0]);
+    }
   };
 
   const validate = useCallback((data, onSuccess) => {
@@ -93,6 +92,15 @@ const CpuCoolerForm = ({
     setIsTouched(true);
     validate(data, () => onSubmit(data));
   };
+
+  const removeImage = (e) => {
+    e.preventDefault();
+    setFile(null);
+    setData({
+      ...data,
+      image: null,
+    });
+  }
 
   return (
     <form noValidate={true} onSubmit={handleSubmit}>
@@ -160,6 +168,28 @@ const CpuCoolerForm = ({
         data={data}
         error={errors.cpuSockets}
       />
+
+      <div>
+        <Input
+          label="Product image"
+          type="file"
+          name="image"
+          accept='image/png, image/jpeg, image/jpg, image/gif'
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.coverLink}
+        />
+        {
+          data.image && (
+            <>
+              <img alt="product preview" src={ file ? URL.createObjectURL(file) : (data.image)}/>
+              <Button onClick={removeImage} color="danger">
+                Remove image
+              </Button>
+            </>
+          )
+        }
+      </div>
 
       <Button className="mt-4" type="submit" disabled={disabled}>
         {data.idCpuCooler ? "Update" : "Create"}

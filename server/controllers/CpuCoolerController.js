@@ -16,13 +16,7 @@ class CpuCoolerController {
 			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
 			.map(id => {
 				return {
-					idCpuCooler: id,
-					idManufacturer: data.filter(s => s.idCpuCooler === id).map(a => a.idManufacturer)[0],
-					manufacturerName: data.filter(s => s.idCpuCooler === id).map(a => a.manufacturerName)[0],
-					modelName: data.filter(s => s.idCpuCooler === id).map(a => a.modelName)[0],
-					height: data.filter(s => s.idCpuCooler === id).map(a => a.height)[0],
-					width: data.filter(s => s.idCpuCooler === id).map(a => a.width)[0],
-					depth: data.filter(s => s.idCpuCooler === id).map(a => a.depth)[0],
+					...data.filter(s => s.idCpuCooler === id).map(rest => rest)[0],
 					socketType: data.filter(s => s.idCpuCooler === id).map(socket => socket.socketType),
 					idCpuSocket: data.filter(s => s.idCpuCooler === id).map(socket => socket.idCpuSocket)
 				}
@@ -49,16 +43,11 @@ class CpuCoolerController {
 			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
 			const data = rows;
 
+			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
 			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
 			.map(id => {
 				return {
-					idCpuCooler: id,
-					idManufacturer: data.filter(s => s.idCpuCooler === id).map(a => a.idManufacturer)[0],
-					manufacturerName: data.filter(s => s.idCpuCooler === id).map(a => a.manufacturerName)[0],
-					modelName: data.filter(s => s.idCpuCooler === id).map(a => a.modelName)[0],
-					height: data.filter(s => s.idCpuCooler === id).map(a => a.height)[0],
-					width: data.filter(s => s.idCpuCooler === id).map(a => a.width)[0],
-					depth: data.filter(s => s.idCpuCooler === id).map(a => a.depth)[0],
+					...data.filter(s => s.idCpuCooler === id).map(rest => rest)[0],
 					socketType: data.filter(s => s.idCpuCooler === id).map(socket => socket.socketType),
 					idCpuSocket: data.filter(s => s.idCpuCooler === id).map(socket => socket.idCpuSocket)
 				}
@@ -143,7 +132,7 @@ class CpuCoolerController {
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-		const { idManufacturer, modelName, height, width, depth, cpuSockets } =
+		const { idManufacturer, modelName, height, width, depth, cpuSockets, image } =
 			req.body;
 		try {
 			const { id } = req.params;
@@ -153,8 +142,8 @@ class CpuCoolerController {
 				return res.status(400).json({ message: "Given idManufacturer does not exist" });
 			}
 
-			const sql = `UPDATE cpucoolers SET idManufacturer = ?, modelName = ?, height = ?, width = ? , depth = ? WHERE idCpuCooler = ?`;
-			let data = [idManufacturer, modelName, height, width, depth, id];
+			const sql = `UPDATE cpucoolers SET idManufacturer = ?, modelName = ?, height = ?, width = ? , depth = ?, image = ? WHERE idCpuCooler = ?`;
+			let data = [idManufacturer, modelName, height, width, depth, image, id];
 			await db.promise().query(sql, data);
 
 			// execute the UPDATE statement
@@ -227,6 +216,7 @@ class CpuCoolerController {
 			width,
 			depth,
 			cpuSockets = [{ idCpuSocket: undefined, tempId: undefined }],
+			image
 		} = req.body;
 		try {
 			const query = `select idManufacturer from manufacturers where idManufacturer = ?`;
@@ -237,7 +227,7 @@ class CpuCoolerController {
 
 			const coolerId = uuidv4();
 			const sqlInsert =
-				"INSERT INTO cpucoolers (idCpuCooler, idManufacturer, modelName, height, width, depth) VALUES (?,?,?,?,?,?)";
+				"INSERT INTO cpucoolers (idCpuCooler, idManufacturer, modelName, height, width, depth, image) VALUES (?,?,?,?,?,?,?)";
 			await db
 				.promise()
 				.query(sqlInsert, [
@@ -247,6 +237,7 @@ class CpuCoolerController {
 					height,
 					width,
 					depth,
+					image
 				]);
 
 			const inserter = [];
