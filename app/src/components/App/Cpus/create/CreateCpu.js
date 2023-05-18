@@ -6,8 +6,6 @@ import { uploadImage } from "../../../../core/modules/Upload/api";
 import { PossibleRoutes } from "../../../../core/routing";
 import ErrorAlert from "../../../shared/ErrorAlert";
 import CpuForm from "../forms/CpuForm";
-import { useAuth } from "../../../Auth/AuthContainer";
-
 
 const CreateCpu = () => {
   const withAuth = useAuthApi();
@@ -38,14 +36,7 @@ const CreateCpu = () => {
       fileUpload
       .then((link) => {
         data.image = link
-        withAuth(createCpu(data))
-        .then(() => {
-          navigate(PossibleRoutes.Cpus, { replace: true });
-        })
-        .catch((err) => {
-          setError(err);
-          setIsLoading(false);
-        });
+        creater(data);
       })
     }
     else {
