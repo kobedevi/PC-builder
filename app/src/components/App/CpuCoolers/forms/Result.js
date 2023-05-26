@@ -42,12 +42,12 @@ const Result = ({result, deleter}) => {
             products && (
                 <ul className='movieList'>
                     { products.map((product) => (
-                        <li key={product.idProcessor}>
+                        <li key={product.idCpuCooler}>
                             <ProductCard
                                 deleter={deleter}
                                 product={product}
-                                id={product.idProcessor}
-                                link={PossibleRoutes.CpuDetail}
+                                id={product.idCpuCooler}
+                                link={PossibleRoutes.CpuCoolerDetail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
                                 compatible sockets: {product.socketType.join(', ')}<br/>
