@@ -1,7 +1,6 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4, validate: uuidValidate } = require("uuid");
-const SQL = require("@nearform/sql");
 
 class CpuCoolerController {
 	fetchCpuCoolers = async (req, res, next) => {
@@ -9,7 +8,8 @@ class CpuCoolerController {
 			const [rows] = await db.promise().query(`SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
 			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
-			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket;`);
+			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
+			WHERE deleted = 0;`);
 			const data = rows;
 
 			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
@@ -39,7 +39,8 @@ class CpuCoolerController {
 			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
 			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
-			WHERE CONCAT_WS('', modelName, manufacturerName, socketType) LIKE ?;`;
+			WHERE CONCAT_WS('', modelName, manufacturerName, socketType) LIKE ?
+			AND deleted = 0;`;
 			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
 			const data = rows;
 
@@ -86,7 +87,7 @@ class CpuCoolerController {
 				query = `DELETE FROM cpucooler_has_cpusockets WHERE idCpuCooler = ?;`;
 				await db.promise().query(query, [id]);
 			}
-			query = `DELETE FROM cpucoolers WHERE idCpuCooler = ?;`;
+			query = `UPDATE cpucoolers SET deleted = 1 WHERE idCpuCooler= ?`;
 			await db.promise().query(query, [id]);
 			
 			res.status(200).send(result[0]);
@@ -102,7 +103,8 @@ class CpuCoolerController {
 			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
 			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
-			WHERE cpucoolers.idCpuCooler= ? `;
+			WHERE cpucoolers.idCpuCooler = ? 
+			AND deleted = 0 LIMIT 1;`;
 			const results = await db.promise()
 				.query(query, [id]);
 			if (results[0].length === 0) {

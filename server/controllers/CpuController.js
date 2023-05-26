@@ -7,7 +7,8 @@ class CpuController {
 	fetchCpus = async (req, res, next) => {
 		try {
 			const results = await db.promise().query(`SELECT *, cpusockets.socketType FROM cpus
-			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket`);
+			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket
+			WHERE deleted = 0`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
@@ -23,7 +24,7 @@ class CpuController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "CPU does not exist" });
 			}
-			query = `DELETE FROM cpus WHERE idProcessor = ?;`
+			query = `UPDATE cpus SET deleted = 1 WHERE idProcessor= ?`;
 			await db.promise().query(query, [id]);
 			res.status(200).send(rows);
 		} catch (e) {
@@ -38,7 +39,8 @@ class CpuController {
 			let userQuery = `SELECT cpus.*, manufacturers.manufacturerName, cpusockets.socketType FROM cpus
 			LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket
-			WHERE cpus.idProcessor= ? LIMIT 1;`;
+			WHERE cpus.idProcessor = ? 
+			AND deleted = 0 LIMIT 1;`;
 			let [rows] = await db.promise().query(userQuery, [id]);
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "CPU does not exist" });
@@ -59,7 +61,8 @@ class CpuController {
 			const userQuery = `SELECT cpus.*, manufacturers.manufacturerName, cpusockets.socketType FROM cpus
 			LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket
-			WHERE CONCAT_WS('', modelName, manufacturerName, socketType) LIKE ?;`;
+			WHERE CONCAT_WS('', modelName, manufacturerName, socketType) LIKE ?
+			AND deleted = 0;`;
 			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
 			if (rows.length === 0) {
 				return res.status(200).json({ 
