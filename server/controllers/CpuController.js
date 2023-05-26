@@ -6,7 +6,8 @@ const SQL = require("@nearform/sql");
 class CpuController {
 	fetchCpus = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT *, cpusockets.socketType FROM cpus
+			const results = await db.promise().query(`SELECT *, manufacturers.manufacturerName, cpusockets.socketType FROM cpus
+			LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket
 			WHERE deleted = 0`);
 			res.status(200).send(results[0]);
