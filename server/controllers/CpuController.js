@@ -27,7 +27,7 @@ class CpuController {
 			}
 			query = `UPDATE cpus SET deleted = 1 WHERE idProcessor= ?`;
 			await db.promise().query(query, [id]);
-			res.status(200).send(rows);
+			res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}

@@ -30,6 +30,7 @@ const CpuCoolerOverview = () => {
 
   const onUpdate = () => {
     setDeleteCooler(null);
+    setQuery(null);
     refresh();
   };
 

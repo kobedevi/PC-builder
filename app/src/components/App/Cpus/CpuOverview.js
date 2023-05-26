@@ -26,6 +26,7 @@ const CpuOverview = () => {
 
   const onUpdate = () => {
     setDeleteCpu(null);
+    setQuery(null);
     refresh();
   };
 
