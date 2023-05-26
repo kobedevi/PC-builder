@@ -7,44 +7,111 @@ import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
+import SearchForm from "components/Design/SearchForm";
+import Result from "./forms/Result";
+import ProductCard from "components/Design/ProductCard";
+import DeleteMotherboard from "./Delete/DeleteMotherboard";
 
 const MotherboardOverview = () => {
-  const withAuth = useAuthApi();
   const [info, setInfo] = useState();
+  const [deleteMotherboard, setDeleteMotherboard] = useState();
+  const [query, setQuery] = useState('');
 
-  const { data, error, setError, isLoading, refresh } =
-    useFetch(fetchMotherboards);
+  const apiCall = useCallback(() => {
+    return fetchMotherboards();
+  }, []);
 
-  if (isLoading) {
-    return <Spinner />;
-  }
+  const { 
+    data, 
+    error, 
+    setError, 
+    isLoading, 
+    refresh 
+  } = useFetch(apiCall);
 
-  if (error) {
-    return <ErrorAlert error={error} />;
+  
+  const onUpdate = () => {
+    setDeleteMotherboard(null);
+    setQuery(null);
+    refresh();
+  };
+
+  const onSubmit = (query) => {
+    setQuery(query.search)
   }
 
   return (
     <>
       <h2>Motherboard Overview</h2>
-      {info && <Alert color="info">{info}</Alert>}
+      {
+        error && (
+          <ErrorAlert error={error} />
+        )
+      }
 
-      <Link to={PossibleRoutes.MotherboardCreate} className="btn btn-primary">
-        Add Motherboard
-      </Link>
+      {
+        isLoading && (
+          <Spinner />
+        )
+      }
 
-      {data && (
-        <ul>
-          {data.map((mb) => (
-            <li key={mb.idMotherboard}>
-              <Link
-                to={route(PossibleRoutes.MotherboardDetail, {
-                  id: mb.idMotherboard,
-                })}
-              >{`${mb.modelName}`}</Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      {
+        data && (
+          <>
+            {
+              info && <Alert color="info">{info}</Alert>
+            }
+
+            <SearchForm
+              onSubmit={onSubmit}
+              setQuery={setQuery}
+            />
+
+            <Link to={PossibleRoutes.MotherboardCreate} className="btn btn-primary">
+              Add Motherboard
+            </Link>
+
+            {
+              query && <Result updateChecker={deleteMotherboard} deleter={setDeleteMotherboard} result={query}/>
+            }
+
+            {
+              !query && (
+                <ul className="movieList">
+                  {data.map((mb) => (
+                    <li key={mb.idMotherboard}>
+                      <ProductCard
+                        deleter={setDeleteMotherboard}
+                        product={mb}
+                        link={PossibleRoutes.MotherboardDetail}
+                        id={mb.idMotherboard}
+                      >
+                        Manufacturer: {mb.manufacturerName}<br/>
+                        Formfactor: {mb.formfactor}<br/>
+                        SocketType: {mb.socketType}<br/>
+                      </ProductCard>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+
+            {
+              deleteMotherboard && (
+                <DeleteMotherboard
+                  motherboard={deleteMotherboard}
+                  onUpdate={onUpdate}
+                  onDismiss={() => setDeleteMotherboard(null)}
+                  setError={setError}
+                  setInfo={setInfo}
+                />
+              )
+            }
+
+
+          </>
+        )
+      }
     </>
   );
 };

@@ -6,10 +6,42 @@ const SQL = require("@nearform/sql");
 class MotherboardController {
 	fetchMotherboards = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT * FROM motherboards`);
+			const results = await db.promise().query(`SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor FROM motherboards
+			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
+			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
+			WHERE deleted = 0;`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
+		}
+	};
+
+	fetchMotherboardsByFilter = async (req, res, next) => {
+		try {
+			let { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor FROM motherboards
+			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
+			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
+			WHERE CONCAT_WS('', modelName, manufacturerName, socketType, formfactor) LIKE ?
+			AND deleted = 0;`;
+			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
 		}
 	};
 
@@ -44,6 +76,7 @@ class MotherboardController {
 			sataPorts,
 			pcieSlots,
 			memorySlots,
+			image,
 		} = req.body;
 		try {
 			const manufacturer = await db
@@ -78,7 +111,7 @@ class MotherboardController {
 			}
 			const id = uuidv4();
 			const sqlInsert =
-				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots) VALUES (?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots, image) VALUES (?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					id,
@@ -90,6 +123,7 @@ class MotherboardController {
 					sataPorts,
 					pcieSlots,
 					memorySlots,
+					image,
 				])
 				.then(() => {
 					res.status(201).send({
@@ -117,6 +151,7 @@ class MotherboardController {
 			sataPorts,
 			pcieSlots,
 			memorySlots,
+			image,
 		} = req.body;
 		try {
 			const { id } = req.params;
@@ -150,7 +185,7 @@ class MotherboardController {
 					.status(400)
 					.json({ message: "Given idFormfactor does not exist" });
 			}
-			const sql = `UPDATE motherboards SET idManufacturer = ?, idCpuSocket = ?, idFormfactor = ?, modelName = ?, wifi = ?, sataPorts = ?, pcieSlots = ?, memorySlots = ? WHERE idMotherboard=?`;
+			const sql = `UPDATE motherboards SET idManufacturer = ?, idCpuSocket = ?, idFormfactor = ?, modelName = ?, wifi = ?, sataPorts = ?, pcieSlots = ?, memorySlots = ?, image = ? WHERE idMotherboard=?`;
 			let data = [
 				idManufacturer,
 				idCpuSocket,
@@ -160,6 +195,7 @@ class MotherboardController {
 				sataPorts,
 				pcieSlots,
 				memorySlots,
+				image,
 				id,
 			];
 
@@ -170,9 +206,28 @@ class MotherboardController {
 						message: "Motherboard updated",
 						id,
 					});
+					console.log(data);
 				});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
+	
+	deleteMotherboardById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+
+			let query = `SELECT * FROM motherboards WHERE motherboards.idMotherboard = ? LIMIT 1;`;
+			let [rows] = await db.promise().query(query, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Motherboard does not exist" });
+			}
+			query = `UPDATE motherboards SET deleted = 1 WHERE idMotherboard= ?`;
+			await db.promise().query(query, [id]);
+			res.status(200).send(rows[0]);
+		} catch (e) {
+			next(e);
 		}
 	};
 }

@@ -18,6 +18,7 @@ const schema = yup.object().shape({
   memorySlots: yup.number().max(32).required().positive().integer(),
   sataPorts: yup.number().required().positive().integer(),
   pcieSlots: yup.number().max(8).required().positive().integer(),
+  image: yup.string().nullable(),
 });
 
 const defaultData = {
@@ -29,9 +30,10 @@ const defaultData = {
   memorySlots: 4,
   sataPorts: 4,
   pcieSlots: 3,
+  image: ""
 };
 
-const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
+const MotherboardForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
     ...defaultData,
@@ -40,16 +42,18 @@ const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
     if (e.target.name === "wifi") {
       setData({
         ...data,
         [e.target.name]: e.target.value === "true",
       });
-    } else {
-      setData({
-        ...data,
-        [e.target.name]: e.target.value,
-      });
+    }
+    if(e.target.name === 'image') {
+      setFile(e.target.files[0]);
     }
   };
 
@@ -77,6 +81,15 @@ const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
     setIsTouched(true);
     validate(data, () => onSubmit(data));
   };
+  
+  const removeImage = (e) => {
+    e.preventDefault();
+    setFile(null);
+    setData({
+      ...data,
+      image: null,
+    });
+  }
 
   return (
     <form noValidate={true} onSubmit={handleSubmit}>
@@ -163,6 +176,28 @@ const MotherboardForm = ({ onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         error={errors.pcieSlots}
       />
+
+      <div>
+        <Input
+          label="Product image"
+          type="file"
+          name="image"
+          accept='image/png, image/jpeg, image/jpg, image/gif'
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.coverLink}
+        />
+        {
+          data.image && (
+            <>
+              <img alt="product preview" src={ file ? URL.createObjectURL(file) : (data.image)}/>
+              <Button onClick={removeImage} color="danger">
+                Remove image
+              </Button>
+            </>
+          )
+        }
+      </div>
 
       <Button className="mt-4" type="submit" disabled={disabled}>
         {data.idMotherboard ? "Update" : "Create"}

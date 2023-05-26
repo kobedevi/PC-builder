@@ -84,11 +84,13 @@ authRouter.post(
 // Motherboards
 authRouter.get("/motherboard", motherboardController.fetchMotherboards);
 authRouter.get("/motherboard/:id", motherboardController.fetchMotherboardById);
+authRouter.get("/motherboard/filter/:query", motherboardController.fetchMotherboardsByFilter);
 authRouter.patch(
 	"/motherboard/:id",
 	motherboardModel,
 	motherboardController.patchMotherboardById
 );
+authRouter.delete("/motherboard/:id", motherboardModel, motherboardController.deleteMotherboardById);
 authRouter.post(
 	"/motherboard",
 	motherboardModel,
