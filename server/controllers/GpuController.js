@@ -6,10 +6,38 @@ const SQL = require("@nearform/sql");
 class GpuController {
 	fetchGpus = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT * FROM gpus`);
+			const results = await db.promise().query(`SELECT * FROM gpus
+			LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
+			WHERE deleted = 0;`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
+		}
+	};
+
+	fetchOriginalGpusByFilter = async (req, res, next) => {
+		try {
+			let { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT * FROM gpus
+			LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
+			WHERE CONCAT_WS('', modelName, manufacturerName, vram, displayport, hdmi, vga, dvi) LIKE ?
+			AND deleted = 0;`;
+			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
 		}
 	};
 	
