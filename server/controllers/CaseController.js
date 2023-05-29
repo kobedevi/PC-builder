@@ -201,7 +201,7 @@ class CaseController {
 			let query = `SELECT * FROM cases WHERE idCase = ? LIMIT 1;`;
 			let [rows] = await db.promise().query(query, [id]);
 			if (rows.length === 0) {
-				return res.status(400).json({ message: "CPU does not exist" });
+				return res.status(400).json({ message: "RAM does not exist" });
 			}
 			query = `UPDATE cases SET deleted = 1 WHERE idCase = ?;`;
 			await db.promise().query(query, [id]);
