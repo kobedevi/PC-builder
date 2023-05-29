@@ -30,10 +30,13 @@ const defaultData = {
 };
 
 const CaseForm = ({ onSubmit, initialData = {}, disabled }) => {
+
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
     ...defaultData,
     ...initialData,
+    smallBay: initialData?.['2-5_slots'],
+    largeBay: initialData?.['3-5_slots']
   });
   const [errors, setErrors] = useState({});
 
