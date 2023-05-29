@@ -25,8 +25,8 @@ const defaultData = {
   height: undefined,
   width: undefined,
   depth: undefined,
-  smallBay: undefined,
-  largeBay: undefined,
+  smallBay: 0,
+  largeBay: 0,
 };
 
 const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {

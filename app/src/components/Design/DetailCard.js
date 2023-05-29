@@ -12,7 +12,7 @@ const DetailCard = ({ data }) => {
         <tbody>
           {Object.entries(data).map(([key, value]) => {
             // hide show id fields
-            if (!key.startsWith("id") && !key.startsWith("image")) {
+            if (!key.startsWith("id") && !key.startsWith("image") && !key.startsWith("deleted")) {
               return (
                 <tr key={key}>
                   <td>

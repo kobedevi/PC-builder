@@ -41,11 +41,11 @@ const Result = ({result, deleter}) => {
             products && (
                 <ul className='movieList'>
                     { products.map((product) => (
-                        <li key={product.idProcessor}>
+                        <li key={product.idCase}>
                             <ProductCard
                                 deleter={deleter}
                                 product={product}
-                                id={product.idProcessor}
+                                id={product.idCase}
                                 link={PossibleRoutes.CaseDetail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
