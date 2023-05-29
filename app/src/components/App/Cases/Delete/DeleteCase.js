@@ -20,7 +20,7 @@ const DeleteCase = ({setError, product, onDismiss, onUpdate, setInfo}) => {
 
     return(
         <Modal
-            title={'Delete Processor'}
+            title={'Delete Case'}
             onDismiss={onDismiss}
         >
             <h2>Are you sure?</h2>
