@@ -7,6 +7,15 @@ const fetchRam = () => async (headers) => {
   });
 };
 
+const fetchFilteredRam = (query) => async (headers) => {
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/ram/filter/${query.replace(/[/^#\%]/g,"")}`, 
+    {
+      headers: createHeaders(headers),
+    }
+  );
+};
+
 const fetchRamById = (id) => async (headers) => {
   return await Axios.get(
     `${process.env.REACT_APP_BASE_API}/ram/${id}`,
@@ -36,4 +45,10 @@ const createRam = (data) => async (headers) => {
   );
 };
 
-export { fetchRam, createRam, fetchRamById, updateRam };
+const deleteRam = (id) => async (headers) => {
+  return await Axios.delete(`${process.env.REACT_APP_BASE_API}/ram/${id}`, {
+    headers: createHeaders(headers),
+  });
+};
+
+export { fetchRam, fetchFilteredRam, createRam, fetchRamById, updateRam, deleteRam };

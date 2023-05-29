@@ -102,7 +102,9 @@ authRouter.post(
 // RAM
 authRouter.get("/ram", ramController.fetchRam);
 authRouter.get("/ram/:id", ramController.fetchRamById);
+authRouter.get("/ram/filter/:query", ramController.fetchRamByFilter);
 authRouter.patch("/ram/:id", ramModel, ramController.patchRamById);
+authRouter.delete("/ram/:id", ramModel, ramController.deleteRamById);
 authRouter.post("/ram", ramModel, ramController.createRam);
 
 // Storage Types

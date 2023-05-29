@@ -5,40 +5,107 @@ import { fetchRam } from "../../../core/modules/Ram/api";
 import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
+import ErrorAlert from "components/shared/ErrorAlert";
+import SearchForm from "components/Design/SearchForm";
+import ProductCard from "components/Design/ProductCard";
+import Result from "./forms/Result";
+import DeleteRam from "./Delete/DeleteRam";
 
 const RamOverview = () => {
   const [info, setInfo] = useState();
+  const [deleteRam, setDeleteRam] = useState();
+  const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
     return fetchRam();
   }, []);
-
+  
+  const onSubmit = (query) => {
+    setQuery(query.search)
+  }
+  
   const { data: ram, error, setError, isLoading, refresh } = useFetch(apiCall);
+  
+  const onUpdate = () => {
+    setDeleteRam(null);
+    setQuery(null);
+    refresh();
+  };
 
   return (
     <>
       <h2>Ram Overview</h2>
-      {error && <Alert color="danger">{error.message}</Alert>}
-      {info && <Alert color="info">{info}</Alert>}
 
-      <Link to={PossibleRoutes.RamCreate} className="btn btn-primary">
-        Add Ram
-      </Link>
+      {
+        error && (
+          <ErrorAlert error={error} />
+        )
+      }
 
-      {isLoading && <Spinner />}
+      {
+        isLoading && (
+          <Spinner />
+        )
+      }
 
       {ram && (
-        <ul>
-          {ram.map((r) => (
-            <li key={r.idRam}>
-              <Link
-                to={route(PossibleRoutes.RamDetail, {
-                  id: r.idRam,
-                })}
-              >{`${r.modelName}`}</Link>
-            </li>
-          ))}
-        </ul>
+          <>
+
+          {
+            info && <Alert color="info">{info}</Alert>
+          }
+
+          <SearchForm
+            onSubmit={onSubmit}
+            setQuery={setQuery}
+          />
+
+          <Link to={PossibleRoutes.RamCreate} className="btn btn-primary">
+            Add Ram
+          </Link>
+
+          {
+            query && <Result updateChecker={deleteRam} deleter={setDeleteRam} result={query}/>
+          }
+
+          {
+            !query && (
+              <ul className="movieList">
+                {ram.map((product) => (
+                  <li key={product.idRam}>
+                    <ProductCard
+                      deleter={setDeleteRam}
+                      product={product}
+                      link={PossibleRoutes.RamDetail}
+                      id={product.idRam}
+                    >
+                      Manufacturer: {product.manufacturerName}<br/>
+                      Ram type: {product.type}<br/>
+                      Amount of sticks: {product.stickAmount}<br/>
+                      Size per stick: {product.sizePerStick} GB<br/>
+                      <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
+                      Ram speed: {product.speed}MHz<br/>
+                    </ProductCard>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+
+          {
+            deleteRam && (
+              <DeleteRam
+                ram={deleteRam}
+                onUpdate={onUpdate}
+                onDismiss={() => setDeleteRam(null)}
+                setError={setError}
+                setInfo={setInfo}
+              />
+            )
+          }
+
+          </>
+
       )}
     </>
   );
