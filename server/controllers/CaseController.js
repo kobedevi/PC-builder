@@ -6,10 +6,40 @@ const SQL = require("@nearform/sql");
 class CaseController {
 	fetchCases = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT * FROM cases`);
+			const results = await db.promise().query(`SELECT * FROM cases
+			LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN formfactors ON cases.idFormfactor = formfactors.idFormfactor
+			WHERE deleted = 0;`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
+		}
+	};
+
+	fetchCasesByFilter = async (req, res, next) => {
+		try {
+			let { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT * FROM cases
+			LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN formfactors ON cases.idFormfactor = formfactors.idFormfactor
+			WHERE CONCAT_WS('', modelName, manufacturerName, formfactor) LIKE ?
+			AND deleted = 0;`;
+			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
 		}
 	};
 
@@ -19,7 +49,7 @@ class CaseController {
 			const results = await db.promise()
 				.query(SQL`SELECT cases.*, manufacturers.manufacturerName FROM cases
 				LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
-				WHERE cases.idCase=${id} LIMIT 1;`);
+				WHERE cases.idCase=${id} AND deleted = 0 LIMIT 1;`);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "Case does not exist" });
 			}
@@ -42,8 +72,9 @@ class CaseController {
 			height,
 			width,
 			depth,
-			"2-5_slots": smallSlot,
-			"3-5_slots": largeSlot,
+			smallBay: smallSlot,
+			largeBay: largeSlot,
+			image
 		} = req.body;
 
 		try {
@@ -69,7 +100,7 @@ class CaseController {
 			}
 			const idCase = uuidv4();
 			const sqlInsert =
-				"INSERT INTO cases (idCase, idManufacturer, idFormfactor, modelName, height, width, depth, `2-5_slots`, `3-5_slots`) VALUES (?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO cases (idCase, idManufacturer, idFormfactor, modelName, height, width, depth, `2-5_slots`, `3-5_slots`, image) VALUES (?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					idCase,
@@ -81,6 +112,7 @@ class CaseController {
 					depth,
 					smallSlot,
 					largeSlot,
+					image,
 				])
 				.then(() => {
 					res.status(201).send({
@@ -108,8 +140,9 @@ class CaseController {
 			height,
 			width,
 			depth,
-			"2-5_slots": smallSlot,
-			"3-5_slots": largeSlot,
+			smallBay: smallSlot,
+			largeBay: largeSlot,
+			image,
 		} = req.body;
 		try {
 			const { id } = req.params;
@@ -133,7 +166,7 @@ class CaseController {
 					.status(400)
 					.json({ message: "Given idFormfactor does not exist" });
 			}
-			const sql = "UPDATE cases SET idManufacturer = ?, idFormfactor = ?, modelName = ?, height = ?, width = ?, depth = ?, `2-5_slots` = ?, `3-5_slots` = ? WHERE idCase = ?";
+			const sql = "UPDATE cases SET idManufacturer = ?, idFormfactor = ?, modelName = ?, height = ?, width = ?, depth = ?, `2-5_slots` = ?, `3-5_slots` = ?, image = ? WHERE idCase = ?";
 			let data = [
 				idManufacturer,
 				idFormfactor,
@@ -143,6 +176,7 @@ class CaseController {
 				depth,
 				smallSlot,
 				largeSlot,
+				image,
 				id,
 			];
 		
@@ -157,6 +191,23 @@ class CaseController {
 
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
+	deleteCaseById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+
+			let query = `SELECT * FROM cases WHERE idCase = ? LIMIT 1;`;
+			let [rows] = await db.promise().query(query, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "CPU does not exist" });
+			}
+			query = `UPDATE cases SET deleted = 1 WHERE idCase = ?;`;
+			await db.promise().query(query, [id]);
+			res.status(200).send(rows[0]);
+		} catch (e) {
+			next(e);
 		}
 	};
 }

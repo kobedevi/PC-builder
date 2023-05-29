@@ -14,8 +14,8 @@ const schema = yup.object().shape({
   height: yup.number().notRequired().positive().integer(),
   width: yup.number().notRequired().positive().integer(),
   depth: yup.number().notRequired().positive().integer(),
-  smallBay: yup.number().notRequired().positive().integer(),
-  largeBay: yup.number().notRequired().positive().integer(),
+  smallBay: yup.number().moreThan(-1).notRequired().integer(),
+  largeBay: yup.number().moreThan(-1).notRequired().integer(),
 });
 
 const defaultData = {
@@ -29,7 +29,7 @@ const defaultData = {
   largeBay: undefined,
 };
 
-const CaseForm = ({ onSubmit, initialData = {}, disabled }) => {
+const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
 
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
@@ -45,6 +45,9 @@ const CaseForm = ({ onSubmit, initialData = {}, disabled }) => {
       ...data,
       [e.target.name]: e.target.value,
     });
+    if(e.target.name === 'image') {
+      setFile(e.target.files[0]);
+    }
   };
 
   const validate = useCallback((data, onSuccess) => {
@@ -71,6 +74,15 @@ const CaseForm = ({ onSubmit, initialData = {}, disabled }) => {
     setIsTouched(true);
     validate(data, () => onSubmit(data));
   };
+  
+  const removeImage = (e) => {
+    e.preventDefault();
+    setFile(null);
+    setData({
+      ...data,
+      image: null,
+    });
+  }
 
   return (
     <form noValidate={true} onSubmit={handleSubmit}>
@@ -166,6 +178,29 @@ const CaseForm = ({ onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         error={errors.largeBay}
       />
+
+      
+      <div>
+        <Input
+          label="Product image"
+          type="file"
+          name="image"
+          accept='image/png, image/jpeg, image/jpg, image/gif'
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.coverLink}
+        />
+        {
+          data.image && (
+            <>
+              <img alt="product preview" src={ file ? URL.createObjectURL(file) : (data.image)}/>
+              <Button onClick={removeImage} color="danger">
+                Remove image
+              </Button>
+            </>
+          )
+        }
+      </div>
 
       <Button className="mt-4" type="submit" disabled={disabled}>
         {data.idCase ? "Update" : "Create"}

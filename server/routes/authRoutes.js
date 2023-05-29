@@ -58,11 +58,13 @@ authRouter.post("/cpu", cpuModel, cpuController.createCpu);
 // Cases
 authRouter.get("/case", caseController.fetchCases);
 authRouter.get("/case/:id", caseController.fetchCaseById);
+authRouter.get("/case/filter/:query", caseController.fetchCasesByFilter);
 authRouter.patch(
 	"/case/:id",
 	caseModel,
 	caseController.patchCaseById
 );
+authRouter.delete("/case/:id", caseModel, caseController.deleteCaseById);
 authRouter.post("/case", caseModel, caseController.createCase);
 
 // CPUCoolers
