@@ -5,9 +5,14 @@ import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import { Link } from "react-router-dom";
 import { PossibleRoutes, route } from "core/routing";
+import ErrorAlert from "components/shared/ErrorAlert";
+import ProductCard from "components/Design/ProductCard";
+import ResultOther from "../forms/ResultOther";
+import DeletePartnerGpu from "../Delete/DeletePartnerGpu";
 
-const PartnerGpuOverview = () => {
+const PartnerGpuOverview = ({query, setQuery}) => {
   const [info, setInfo] = useState();
+  const [deleteGpu, setDeleteGpu] = useState();
 
   const apiCall = useCallback(() => {
     return fetchPartnerGpus();
@@ -15,26 +20,83 @@ const PartnerGpuOverview = () => {
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
+  const onUpdate = () => {
+    setDeleteGpu(null);
+    setQuery(null);
+    refresh();
+  };
+
+  console.log(data)
+
   return (
     <>
       <h4>Partner GPU:</h4>
-      {error && <Alert color="danger">{error.message}</Alert>}
-      {info && <Alert color="info">{info}</Alert>}
 
-      {isLoading && <Spinner />}
+      {
+        error && (
+          <ErrorAlert error={error} />
+        )
+      }
+
+      {
+        isLoading && (
+          <Spinner />
+        )
+      }
+
       {data && (
-        <ul>
-          {data.map((x) => (
-            <li key={x.idGpuPartner}>
-              <Link to={route(PossibleRoutes.GpuPartnerDetail, { id: x.idGpuPartner })}>
-                {`${x.modelName}`}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <>
+
+          {
+            info && <Alert color="info">{info}</Alert>
+          }
+
+          {
+            query && <ResultOther updateChecker={deleteGpu} deleter={setDeleteGpu} result={query}/>
+          }
+
+          {
+            !query && (
+              <ul className="movieList">
+                {data.map((product) => (
+                  <li key={product.idGpuPartner}>
+                    <ProductCard
+                      subtitle={`Original GPU: ${product.ogCard}`}
+                      deleter={setDeleteGpu}
+                      product={product}
+                      link={PossibleRoutes.GpuPartnerDetail}
+                      id={product.idGpuPartner}
+                    >
+                      Manufacturer: {product.manufacturerName}<br/>
+                      Vram: {product.vram} GB<br/>
+                      Clockspeed: {product.clockspeed} MHz<br/>
+                      Watercooled: {product.watercooled ? 'Yes': 'No'}
+                    </ProductCard>
+                  </li>
+                ))}
+              </ul>
+            )
+          }
+
+          {
+            deleteGpu && (
+              <DeletePartnerGpu
+                gpu={deleteGpu}
+                onUpdate={onUpdate}
+                onDismiss={() => setDeleteGpu(null)}
+                setError={setError}
+                setInfo={setInfo}
+              />
+            )
+          }
+
+          </>
+
       )}
+
     </>
   );
+
 };
 
 export default PartnerGpuOverview;

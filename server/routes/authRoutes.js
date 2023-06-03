@@ -135,6 +135,7 @@ authRouter.post(
 	gpuController.createGpuPartner
 );
 authRouter.get("/gpu/partner", gpuController.fetchGpuPartners);
+authRouter.get("/gpu/partner/filter/:query", gpuController.fetchPartnerGpusByFilter);
 authRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
 authRouter.get("/gpu/:id", gpuController.fetchGpuById);
 

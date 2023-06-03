@@ -2,7 +2,7 @@ import { Link, Routes } from "react-router-dom"
 import DeleteButton from "./DeleteButton"
 import { route } from "core/routing"
 
-const ProductCard = ({product, link, id, deleter, img=true, children}) => {
+const ProductCard = ({product, subtitle, link, id, deleter, img=true, children}) => {
 
   return (
     <div className='movieCard mt-4 mb-4'>
@@ -16,6 +16,9 @@ const ProductCard = ({product, link, id, deleter, img=true, children}) => {
               <Link to={route(link, {id})}>
                   <section>
                       <p className='coverTitle mt-2 mb-0'>{product.modelName}</p>
+                      {
+                        subtitle && <h6 className='subTitle mt-1 mb-2'>{subtitle}</h6>
+                      }
                       {
                         children && <p className="coverYear mb-0">{children}</p>
                       }

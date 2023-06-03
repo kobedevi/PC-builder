@@ -3,18 +3,15 @@ import useFetch from "../../../../core/hooks/useFetch";
 import { fetchOriginalGpus } from "../../../../core/modules/Gpu/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
-import { Link } from "react-router-dom";
 import { PossibleRoutes, route } from "core/routing";
 import ErrorAlert from "components/shared/ErrorAlert";
-import SearchForm from "components/Design/SearchForm";
 import ProductCard from "components/Design/ProductCard";
 import DeleteOrginalGpu from "../Delete/DeleteOriginalGpu";
 import ResultOriginalGpu from "../forms/ResultOriginalGpu";
 
-const OriginalGpuOverview = () => {
+const OriginalGpuOverview = ({query, setQuery}) => {
   const [info, setInfo] = useState();
   const [deleteGpu, setDeleteGpu] = useState();
-  const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
     return fetchOriginalGpus();
@@ -22,15 +19,12 @@ const OriginalGpuOverview = () => {
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
-  const onSubmit = (query) => {
-    setQuery(query.search)
-  }
-
   const onUpdate = () => {
     setDeleteGpu(null);
     setQuery(null);
     refresh();
   };
+
   return (
     <>
       <h4>Original GPU:</h4>
@@ -53,11 +47,6 @@ const OriginalGpuOverview = () => {
           {
             info && <Alert color="info">{info}</Alert>
           }
-
-          <SearchForm
-            onSubmit={onSubmit}
-            setQuery={setQuery}
-          />
 
           {
             query && <ResultOriginalGpu updateChecker={deleteGpu} deleter={setDeleteGpu} result={query}/>

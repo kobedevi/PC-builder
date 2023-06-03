@@ -1,15 +1,19 @@
-import React, { useCallback, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import useFetch from "../../../core/hooks/useFetch";
-import { fetchPartnerGpus } from "../../../core/modules/Gpu/api";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
-import Spinner from "../../Design/Spinner";
 import OriginalGpuOverview from "./Overview/OriginalGpu";
 import PartnerGpuOverview from "./Overview/PartnerGpu";
+import SearchForm from "components/Design/SearchForm";
 
 const GpuOverview = () => {
   const [info, setInfo] = useState();
+  const [query, setQuery] = useState('');
+
+
+  const onSubmit = (query) => {
+    setQuery(query.search)
+  }
 
   return (
     <>
@@ -21,8 +25,12 @@ const GpuOverview = () => {
       </Link>
 
       <div>
-        <OriginalGpuOverview />
-        <PartnerGpuOverview />
+        <SearchForm
+          onSubmit={onSubmit}
+          setQuery={setQuery}
+        />
+        <OriginalGpuOverview query={query} setQuery={setQuery}/>
+        <PartnerGpuOverview query={query} setQuery={setQuery}/>
       </div>
     </>
   );

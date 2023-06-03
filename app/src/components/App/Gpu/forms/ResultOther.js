@@ -3,13 +3,13 @@ import ErrorAlert from "components/shared/ErrorAlert";
 import useFetch from "core/hooks/useFetch";
 import Spinner from "components/Design/Spinner";
 import ProductCard from "components/Design/ProductCard";
-import {fetchFilteredRam} from "../../../../core/modules/Ram/api"
+import {fetchFilteredPartnerGpu} from "../../../../core/modules/Gpu/api"
 import { PossibleRoutes } from "core/routing";
 
 const Result = ({result, deleter}) => {
 
     const apiCall = useCallback(() => {
-        return fetchFilteredRam(result);
+        return fetchFilteredPartnerGpu(result);
     }, [result, ])
 
     const {
@@ -17,6 +17,8 @@ const Result = ({result, deleter}) => {
         error,
         isLoading
     } = useFetch(apiCall);
+
+    console.log(products);
 
     if (isLoading) {
         return <Spinner />;
@@ -38,6 +40,7 @@ const Result = ({result, deleter}) => {
     return (
         <>
         {
+            
             products && (
                 <ul className='movieList'>
                     { products.map((product) => (

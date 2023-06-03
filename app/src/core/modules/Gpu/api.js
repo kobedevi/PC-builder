@@ -16,6 +16,15 @@ const fetchFilteredOriginalGpu = (query) => async (headers) => {
   );
 };
 
+const fetchFilteredPartnerGpu = (query) => async (headers) => {
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/gpu/partner/filter/${query.replace(/[/^#\%]/g,"")}`, 
+    {
+      headers: createHeaders(headers),
+    }
+  );
+};
+
 const fetchOriginalGpuById = (id) => async (headers) => {
   return await Axios.get(`${process.env.REACT_APP_BASE_API}/gpu/${id}`, {
     headers: createHeaders(headers),
@@ -69,6 +78,7 @@ const createPartnerGpu = (data) => async (headers) => {
 export {
   fetchOriginalGpus,
   fetchFilteredOriginalGpu,
+  fetchFilteredPartnerGpu,
   fetchOriginalGpuById,
   updateOriginalGpu,
   updatePartnerGpu,

@@ -45,6 +45,7 @@ const ResultOriginalGpu = ({result, deleter}) => {
                             <ProductCard
                                 deleter={deleter}
                                 product={product}
+                                img={false}
                                 id={product.idGpu}
                                 link={PossibleRoutes.GpuDetail}
                             >

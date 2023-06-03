@@ -40,12 +40,44 @@ class GpuController {
 			);
 		}
 	};
+
+	fetchPartnerGpusByFilter = async (req, res, next) => {
+		try {
+			let { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT gpu_has_partners.*, gpus.modelName AS og_card, gpus.vram, manufacturers.manufacturerName, gpus.deleted AS ogDeleted FROM gpu_has_partners
+			LEFT JOIN manufacturers ON gpu_has_partners.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
+			WHERE CONCAT_WS('', gpu_has_partners.modelName, gpus.modelName, manufacturerName, clockspeed, vram) LIKE ?
+			AND gpu_has_partners.deleted = 0
+			AND gpus.deleted = 0;`;
+			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
 	
 	fetchGpuPartners = async (req, res, next) => {
 		try {
 			const results = await db
 				.promise()
-				.query(`SELECT * FROM gpu_has_partners`);
+				.query(`SELECT gpu_has_partners.*, manufacturers.manufacturerName, gpus.modelName AS ogCard, gpus.vram FROM gpu_has_partners
+				LEFT JOIN manufacturers ON gpu_has_partners.idManufacturer = manufacturers.idManufacturer
+				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
+				WHERE gpu_has_partners.deleted = 0
+				AND gpus.deleted = 0;`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
