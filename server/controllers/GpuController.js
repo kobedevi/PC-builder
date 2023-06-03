@@ -145,6 +145,7 @@ class GpuController {
 			width,
 			depth,
 			wattage,
+			image
 		} = req.body;
 
 		try {
@@ -168,7 +169,7 @@ class GpuController {
 
 			const id = uuidv4();
 			const sqlInsert =
-				"INSERT INTO gpu_has_partners (idGpuPartner, idGpu, idManufacturer, modelName, clockspeed, watercooled, height, width, depth, wattage) VALUES (?,?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO gpu_has_partners (idGpuPartner, idGpu, idManufacturer, modelName, clockspeed, watercooled, height, width, depth, wattage, image) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					id,
@@ -181,6 +182,7 @@ class GpuController {
 					width,
 					depth,
 					wattage,
+					image
 				])
 				.then(() => {
 					res.status(201).send({
@@ -208,7 +210,7 @@ class GpuController {
 			displayport, 
 			hdmi, 
 			vga, 
-			dvi
+			dvi,
 		} = req.body;
 		try {
 			const { id } = req.params;
@@ -265,7 +267,8 @@ class GpuController {
 			height,
 			width,
 			depth,
-			wattage
+			wattage,
+			image
 		} = req.body;
 		try {
 			const { id } = req.params;
@@ -279,7 +282,7 @@ class GpuController {
 					.status(400)
 					.json({ message: "Given idManufacturer does not exist" });
 			}
-			const sql = "UPDATE gpu_has_partners SET idGpu = ?, idManufacturer = ?, modelName = ?, clockspeed = ?, watercooled = ?, height = ?, width = ?, depth = ?, wattage = ? WHERE idGpuPartner = ?";
+			const sql = "UPDATE gpu_has_partners SET idGpu = ?, idManufacturer = ?, modelName = ?, clockspeed = ?, watercooled = ?, height = ?, width = ?, depth = ?, wattage = ?, image = ? WHERE idGpuPartner = ?";
 			let data = [
 				idGpu,
 				idManufacturer, 
@@ -290,6 +293,7 @@ class GpuController {
 				width,
 				depth,
 				wattage,
+				image,
 				id,
 			];
 		
@@ -313,7 +317,9 @@ class GpuController {
 			const results = await db.promise()
 				.query(SQL`SELECT gpus.*, manufacturers.manufacturerName FROM gpus
 				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
-				WHERE gpus.idGpu=${id} LIMIT 1;`);
+				WHERE gpus.idGpu=${id} 
+				AND deleted = 0 
+				LIMIT 1;`);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "GPU does not exist" });
 			}
@@ -331,7 +337,9 @@ class GpuController {
 				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
 				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
 				LEFT JOIN manufacturers AS partner ON gpu_has_partners.idManufacturer = partner.idManufacturer
-				WHERE gpu_has_partners.idGpuPartner=${id} LIMIT 1;`);
+				WHERE gpu_has_partners.idGpuPartner=${id} 
+				AND gpu_has_partners.deleted = 0
+				LIMIT 1;`);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "GPU does not exist" });
 			}

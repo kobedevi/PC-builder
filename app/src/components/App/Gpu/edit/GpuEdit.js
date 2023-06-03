@@ -7,6 +7,7 @@ import { PossibleRoutes } from "../../../../core/routing";
 import ErrorAlert from "../../../shared/ErrorAlert";
 import GpuOriginalForm from "../forms/GpuOriginalForm";
 import GpuForm from "../forms/GpuForm";
+import { uploadImage } from "core/modules/Upload/api";
 
 const GpuEdit = ({ gpu, onUpdate }) => {
   const withAuth = useAuthApi();
@@ -16,20 +17,53 @@ const GpuEdit = ({ gpu, onUpdate }) => {
 
   const [newGpu, setNewGpu] = useState("");
   const [info, setInfo] = useState();
+  const [file, setFile] = useState();
+
 
 
   const handleSubmit = (data) => {
     setIsLoading(true);
-    withAuth(gpu?.idGpuPartner ? updatePartnerGpu(data) : updateOriginalGpu(data))
-      .then((data) => {
-        onUpdate(data);
-        navigate(PossibleRoutes.Gpus, { replace: true });
-      })
-      .catch((err) => {
-        setError(err);
-        setIsLoading(false);
+    if(file) {
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      // File upload
+      const fileUpload = new Promise(async (resolve, reject) => {
+        // await uploadImage(formData, data, user)
+        withAuth(uploadImage(formData))
+        .then((data) => {
+            resolve(data.link);
+        })
+        .catch((err) =>{
+            reject(err);
+        })
       });
+  
+      fileUpload
+      .then((link) => {
+        data.image = link
+        updater(data)
+      });
+    }
+    else {
+      updater(data)
+    }
   };
+
+  const updater = (data) => {
+    if(file === null){
+      data.image = null;
+    }
+    withAuth(gpu?.idGpuPartner ? updatePartnerGpu(data) : updateOriginalGpu(data))
+    .then((data) => {
+      onUpdate(data);
+      navigate(PossibleRoutes.Gpus, { replace: true });
+    })
+    .catch((err) => {
+      setError(err);
+      setIsLoading(false);
+    });
+  }
 
   const toggleHide = () => {};
   const refresh = () => {};
@@ -42,7 +76,7 @@ const GpuEdit = ({ gpu, onUpdate }) => {
         <>
           <h1>Edit Partner GPU</h1>
           {error && <ErrorAlert error={error} />}
-          <GpuForm initialData={gpu} onSubmit={handleSubmit} disabled={isLoading} />
+          <GpuForm file={file} setFile={setFile} initialData={gpu} onSubmit={handleSubmit} disabled={isLoading} />
         </>
       )
     }
@@ -55,7 +89,6 @@ const GpuEdit = ({ gpu, onUpdate }) => {
           <GpuOriginalForm
             initialData={gpu} 
             onUpdate={handleSubmit} 
-
             setInfo={setInfo}
             errors={error}
             setErrors={setError}
