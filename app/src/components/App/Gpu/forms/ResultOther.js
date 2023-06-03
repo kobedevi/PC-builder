@@ -18,8 +18,6 @@ const Result = ({result, deleter}) => {
         isLoading
     } = useFetch(apiCall);
 
-    console.log(products);
-
     if (isLoading) {
         return <Spinner />;
     }

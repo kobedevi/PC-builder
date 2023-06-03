@@ -26,8 +26,6 @@ const PartnerGpuOverview = ({query, setQuery}) => {
     refresh();
   };
 
-  console.log(data)
-
   return (
     <>
       <h4>Partner GPU:</h4>

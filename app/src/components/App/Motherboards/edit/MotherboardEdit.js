@@ -49,7 +49,6 @@ const MotherboardEdit = ({ motherboard, onUpdate }) => {
     }
     withAuth(updateMotherboard(data))
     .then((data) => {
-      console.log('update successful')
       onUpdate(data);
       navigate(PossibleRoutes.Motherboards, { replace: true });
     })
