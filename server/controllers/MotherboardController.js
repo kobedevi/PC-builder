@@ -206,7 +206,6 @@ class MotherboardController {
 						message: "Motherboard updated",
 						id,
 					});
-					console.log(data);
 				});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);

@@ -5,7 +5,6 @@ import Layout from "../../../Design/Models/Layout";
 import { Model } from "./Model/Model";
 
 const CpuCoolerDetail = ({ cooler }) => {
-  console.log(cooler);
   return (
     <div className="fullSize">
       <div className="detail">
