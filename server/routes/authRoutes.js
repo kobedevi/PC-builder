@@ -127,7 +127,9 @@ authRouter.post(
 authRouter.get("/gpu", gpuController.fetchGpus);
 authRouter.get("/gpu/filter/:query", gpuController.fetchOriginalGpusByFilter);
 authRouter.patch("/gpu/:id", gpuModel, gpuController.patchGpuById);
+authRouter.delete("/gpu/:id", gpuModel, gpuController.deleteGpuById);
 authRouter.patch("/gpu/partner/:id", gpuModel, gpuController.patchGpuPartnerById);
+authRouter.delete("/gpu/partner/:id", gpuModel, gpuController.deletePartnerGpuById);
 authRouter.post("/gpu", gpuModel, gpuController.createGpu);
 authRouter.post(
 	"/gpu/partner",

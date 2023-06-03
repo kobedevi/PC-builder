@@ -53,7 +53,7 @@ const GpuOriginalSelect = (props) => {
           <Link style={{ display: "inline-block" }} onClick={toggleHide}>
             {isHidden ? "Add new original GPU" : "Cancel"}
           </Link>
-          <div className={isHidden ? "hide" : "show"}>
+          <div className={isHidden ? "hide" : "formShow"}>
             <h4>Create original GPU:</h4>
             <GpuOriginalForm
               setInfo={setInfo}

@@ -1,14 +1,14 @@
 import Button from "components/Design/Button";
 import Modal from "components/shared/Modal";
 import useAuthApi from "core/hooks/useAuthApi";
-import { deleteRam } from "../../../../core/modules/Ram/api";
+import { deletePartnerGpu } from "../../../../core/modules/Gpu/api";
 
 const DeletePartnerGpu = ({setError, gpu, onDismiss, onUpdate, setInfo}) => {
     
     const withAuth = useAuthApi();
 
     const handleDelete = async() =>{
-        await withAuth(deleteRam(gpu.idGpu))
+        await withAuth(deletePartnerGpu(gpu.idGpuPartner))
         .then((data) => {
             onUpdate();
             setInfo(`GPU: '${data.modelName}' was deleted.`);

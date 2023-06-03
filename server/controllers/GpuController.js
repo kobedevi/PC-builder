@@ -341,6 +341,40 @@ class GpuController {
 		}
 	};
 
+	deleteGpuById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+
+			let query = `SELECT * FROM gpus WHERE gpus.idGpu= ? LIMIT 1;`;
+			let [rows] = await db.promise().query(query, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "GPU does not exist" });
+			}
+			query = `UPDATE gpus SET deleted = 1 WHERE idGpu= ?`;
+			await db.promise().query(query, [id]);
+			res.status(200).send(rows[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
+	deletePartnerGpuById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+
+			let query = `SELECT * FROM gpu_has_partners WHERE gpu_has_partners.idGpuPartner= ? LIMIT 1;`;
+			let [rows] = await db.promise().query(query, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "GPU does not exist" });
+			}
+			query = `UPDATE gpu_has_partners SET deleted = 1 WHERE idGpuPartner= ?`;
+			await db.promise().query(query, [id]);
+			res.status(200).send(rows[0]);
+		} catch (e) {
+			next(e);
+		}
+	};
+
 }
 
 module.exports = GpuController;

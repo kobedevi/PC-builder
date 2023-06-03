@@ -75,6 +75,18 @@ const createPartnerGpu = (data) => async (headers) => {
   });
 };
 
+const deleteOriginalGpu = (id) => async (headers) => {
+  return await Axios.delete(`${process.env.REACT_APP_BASE_API}/gpu/${id}`, {
+    headers: createHeaders(headers),
+  });
+};
+
+const deletePartnerGpu = (id) => async (headers) => {
+  return await Axios.delete(`${process.env.REACT_APP_BASE_API}/gpu/partner/${id}`, {
+    headers: createHeaders(headers),
+  });
+};
+
 export {
   fetchOriginalGpus,
   fetchFilteredOriginalGpu,
@@ -86,4 +98,6 @@ export {
   fetchPartnerGpus,
   createOriginalGpu,
   createPartnerGpu,
+  deleteOriginalGpu,
+  deletePartnerGpu
 };
