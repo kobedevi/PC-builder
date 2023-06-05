@@ -5,9 +5,16 @@ import { fetchPsus } from "../../../core/modules/Psu/api";
 import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
+import ErrorAlert from "components/shared/ErrorAlert";
+import SearchForm from "components/Design/SearchForm";
+import ProductCard from "components/Design/ProductCard";
+import Result from "./forms/Result";
+import DeletePsu from "./Delete/DeletePsu";
 
 const PsuOverview = () => {
   const [info, setInfo] = useState();
+  const [deletePsu, setDeletePsu] = useState();
+  const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
     return fetchPsus();
@@ -15,31 +22,90 @@ const PsuOverview = () => {
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
+  const onUpdate = () => {
+    setDeletePsu(null);
+    setQuery(null);
+    refresh();
+  };
+
+  const onSubmit = (query) => {
+    setQuery(query.search)
+}
+
+
   return (
     <>
       <h2>Power supply Overview</h2>
-      {error && <Alert color="danger">{error.message}</Alert>}
-      {info && <Alert color="info">{info}</Alert>}
+      {
+        error && (
+          <ErrorAlert error={error} />
+        )
+      }
 
-      <Link to={PossibleRoutes.PsuCreate} className="btn btn-primary">
-        Add Power supply
-      </Link>
+      {
+        isLoading && (
+          <Spinner />
+        )
+      }
 
-      {isLoading && <Spinner />}
+      {
+        data && (
+          <>
+            {
+              info && <Alert color="info">{info}</Alert>
+            }
 
-      {data && (
-        <ul>
-          {data.map((psu) => (
-            <li key={psu.idPsu}>
-              <Link to={route(PossibleRoutes.PsuDetail, { id: psu.idPsu })}>
-                {`${psu.modelName}`}
-              </Link>
-            </li>            
-          ))}
-        </ul>        
-      )}
+            <SearchForm
+              onSubmit={onSubmit}
+              setQuery={setQuery}
+            />
+            
+            <Link to={PossibleRoutes.Create} className="btn btn-primary">
+              Add Power supply
+            </Link>
+
+            {
+              query && <Result updateChecker={deletePsu} deleter={setDeletePsu} result={query}/>
+            }
+
+            {
+              !query && (
+                <ul className="movieList">
+                  {data.map((product) => (
+                    <li key={product.idPsu}>
+                      <ProductCard
+                        deleter={setDeletePsu}
+                        product={product}
+                        id={product.idPsu}
+                        link={PossibleRoutes.Detail}
+                    >
+                        Manufacturer: {product.manufacturerName}<br/>
+                        Modular: {product.modular ? 'Yes': 'No'}<br/>
+                        wattage: {product.socketType}
+                    </ProductCard>
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+
+          {
+            deletePsu && (
+              <DeletePsu
+                product={deletePsu}
+                onUpdate={onUpdate}
+                onDismiss={() => setDeletePsu(null)}
+                setError={setError}
+                setInfo={setInfo}
+              />
+            )
+          }
+        </>
+        )
+      }
     </>
   );
+
 };
 
 export default PsuOverview;

@@ -31,7 +31,7 @@ const defaultData = {
   depth: 140,
 };
 
-const PsuForm = ({ onSubmit, initialData = {}, disabled }) => {
+const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
     ...defaultData,
@@ -44,6 +44,9 @@ const PsuForm = ({ onSubmit, initialData = {}, disabled }) => {
       ...data,
       [e.target.name]: e.target.value,
     });
+    if(e.target.name === 'image') {
+      setFile(e.target.files[0]);
+    }
   };
 
   const validate = useCallback((data, onSuccess) => {
@@ -70,6 +73,15 @@ const PsuForm = ({ onSubmit, initialData = {}, disabled }) => {
     setIsTouched(true);
     validate(data, () => onSubmit(data));
   };
+
+  const removeImage = (e) => {
+    e.preventDefault();
+    setFile(null);
+    setData({
+      ...data,
+      image: null,
+    });
+  }
 
   return (
     <form noValidate={true} onSubmit={handleSubmit}>
@@ -162,6 +174,28 @@ const PsuForm = ({ onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         error={errors.depth}
       />
+      
+      <div>
+        <Input
+          label="Product image"
+          type="file"
+          name="image"
+          accept='image/png, image/jpeg, image/jpg, image/gif'
+          disabled={disabled}
+          onChange={handleChange}
+          error={errors.coverLink}
+        />
+        {
+          data.image && (
+            <>
+              <img alt="product preview" src={ file ? URL.createObjectURL(file) : (data.image)}/>
+              <Button onClick={removeImage} color="danger">
+                Remove image
+              </Button>
+            </>
+          )
+        }
+      </div>
 
       <Button className="mt-4" type="submit" disabled={disabled}>
         {data.idPsu ? "Update" : "Create"}

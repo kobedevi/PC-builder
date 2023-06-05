@@ -13,6 +13,14 @@ const fetchPsuById = (id) => async (headers) => {
   });
 };
 
+const fetchFilteredPsus = (query) => async (headers) => {
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/psu/filter/${query.replace(/[/^#\%]/g,"")}`, 
+    {
+      headers: createHeaders(headers),
+    }
+  );
+};
 
 const updatePsu = (data) => async (headers) => {
   return await Axios.patch(
@@ -30,5 +38,11 @@ const createPsu = (data) => async (headers) => {
   });
 };
 
+const deletePsu = (id) => async (headers) => {
+  return await Axios.delete(`${process.env.REACT_APP_BASE_API}/psu/${id}`, {
+    headers: createHeaders(headers),
+  });
+};
 
-export { fetchPsus, fetchPsuById, updatePsu, createPsu };
+
+export { fetchPsus, fetchPsuById, fetchFilteredPsus, updatePsu, createPsu, deletePsu };

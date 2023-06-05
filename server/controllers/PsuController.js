@@ -6,7 +6,8 @@ const SQL = require("@nearform/sql");
 class PsuController {
 	fetchPsu = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(SQL`SELECT * FROM psu;`);
+			const results = await db.promise().query(SQL`SELECT * FROM psu
+			WHERE deleted = 0;`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
@@ -19,13 +20,41 @@ class PsuController {
 			const results = await db.promise()
 				.query(SQL`SELECT psu.*, manufacturers.manufacturerName FROM psu
 				LEFT JOIN manufacturers ON psu.idManufacturer = manufacturers.idManufacturer
-				WHERE psu.idPsu=${id} LIMIT 1;`);
+				WHERE psu.idPsu=${id} 
+				AND deleted = 0
+				LIMIT 1;`);
 			if (results[0].length === 0) {
-				return res.status(400).json({ message: "RAM does not exist" });
+				return res.status(400).json({ message: "PSU does not exist" });
 			}
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
+		}
+	};
+
+	fetchPsuByFilter = async (req, res, next) => {
+		try {
+			let { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT * FROM psu
+			LEFT JOIN manufacturers ON psu.idManufacturer = manufacturers.idManufacturer
+			WHERE CONCAT_WS('', modelName, manufacturerName, modular, wattage) LIKE ?
+			AND deleted = 0;`;
+			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
 		}
 	};
 
@@ -46,6 +75,7 @@ class PsuController {
 			height,
 			width,
 			depth,
+			image
 		} = req.body;
 		try {
 			const { id } = req.params;
@@ -69,7 +99,7 @@ class PsuController {
 					.status(400)
 					.json({ message: "Given idFormfactor does not exist" });
 			}
-			const sql = "UPDATE Psu SET idManufacturer = ?, modelName = ?, modular = ?, idFormfactor = ?, wattage = ?, height = ?, width = ?, depth = ? WHERE idPsu = ?";
+			const sql = "UPDATE Psu SET idManufacturer = ?, modelName = ?, modular = ?, idFormfactor = ?, wattage = ?, height = ?, width = ?, depth = ?, image = ? WHERE idPsu = ?";
 			let data = [
 				idManufacturer,
 				modelName,
@@ -79,6 +109,7 @@ class PsuController {
 				height,
 				width,
 				depth,
+				image,
 				id,
 			];
 		
@@ -111,6 +142,7 @@ class PsuController {
 			depth,
 			wattage,
 			modular,
+			image
 		} = req.body;
 
 		try {
@@ -136,7 +168,7 @@ class PsuController {
 			}
 			const id = uuidv4();
 			const sqlInsert =
-				"INSERT INTO psu (idPsu, idManufacturer, idFormfactor, modelName, height, width, depth, wattage, modular) VALUES (?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO psu (idPsu, idManufacturer, idFormfactor, modelName, height, width, depth, wattage, modular, image) VALUES (?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					id,
@@ -148,6 +180,7 @@ class PsuController {
 					depth,
 					wattage,
 					modular,
+					image
 				])
 				.then(() => {
 					res.status(201).send({
@@ -157,6 +190,23 @@ class PsuController {
 				});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
+	deletePsuById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+
+			let query = `SELECT * FROM psu WHERE idPsu = ? LIMIT 1;`;
+			let [rows] = await db.promise().query(query, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "PSU does not exist" });
+			}
+			query = `UPDATE psu SET deleted = 1 WHERE idPsu = ?;`;
+			await db.promise().query(query, [id]);
+			res.status(200).send(rows[0]);
+		} catch (e) {
+			next(e);
 		}
 	};
 }
