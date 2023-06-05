@@ -5,6 +5,7 @@ import { fetchOriginalGpuById } from "../../../../core/modules/Gpu/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import GpuEdit from "./GpuEdit";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const GpuEditContainer = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const GpuEditContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />
   }
 
   return <GpuEdit gpu={gpu[0]} onUpdate={(data) => setData(data)} />;

@@ -5,6 +5,7 @@ import { fetchPartnerGpuById } from "../../../../core/modules/Gpu/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import GpuEdit from "./GpuEdit";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const GpuPartnerEditContainer = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const GpuPartnerEditContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />
   }
 
   return (

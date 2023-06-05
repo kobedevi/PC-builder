@@ -5,6 +5,7 @@ import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import { fetchRamById } from "core/modules/Ram/api";
 import RamEdit from "./RamEdit";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const RamEditContainer = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const RamEditContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />
   }
 
   return <RamEdit ram={ram[0]} onUpdate={(data) => setData(data)} />;

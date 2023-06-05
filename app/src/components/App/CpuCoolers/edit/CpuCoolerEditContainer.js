@@ -5,6 +5,7 @@ import { fetchCpuCoolerById } from "../../../../core/modules/CPUCooler/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import CpuCoolerEdit from "./CpuCoolerEdit";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const CpuCoolerEditContainer = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const CpuCoolerEditContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />
   }
 
   return (

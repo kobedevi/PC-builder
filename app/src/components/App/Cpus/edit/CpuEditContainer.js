@@ -5,6 +5,7 @@ import { fetchCpuById } from "../../../../core/modules/CPU/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import CpuEdit from "./CpuEdit";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const CpuEditContainer = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const CpuEditContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />
   }
 
   return <CpuEdit cpu={cpu[0]} onUpdate={(data) => setData(data)} />;

@@ -5,6 +5,7 @@ import { fetchCaseById } from "../../../../core/modules/Case/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import CaseEdit from "./CaseEdit";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const CaseEditContainer = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const CaseEditContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />
   }
 
   return (

@@ -5,6 +5,7 @@ import { fetchPsuById } from "../../../../core/modules/Psu/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import PsuEdit from "./PsuEdit";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const PsuEditContainer = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const PsuEditContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />
   }
 
   return (

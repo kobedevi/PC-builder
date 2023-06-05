@@ -5,6 +5,7 @@ import { fetchMotherboardById } from "../../../../core/modules/Motherboard/api";
 import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import MotherboardEdit from "./MotherboardEdit";
+import ErrorAlert from "components/shared/ErrorAlert";
 
 const MotherboardEditContainer = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const MotherboardEditContainer = () => {
   }
 
   if (error) {
-    return <Alert color="danger">{error}</Alert>;
+    return <ErrorAlert error={error} />
   }
 
   return (
