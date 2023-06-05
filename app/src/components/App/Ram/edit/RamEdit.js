@@ -60,7 +60,7 @@ const RamEdit = ({ ram, onUpdate }) => {
 
   return (
     <>
-      <h1>Edit Ram</h1>
+      <h2>Edit Ram</h2>
       {error && <ErrorAlert error={error} />}
 
       <RamForm file={file} setFile={setFile} initialData={ram} onSubmit={handleSubmit} disabled={isLoading} />

@@ -61,7 +61,7 @@ const CpuCoolerEdit = ({ cooler, onUpdate }) => {
 
   return (
     <>
-      <h1>Edit CPU Cooler</h1>
+      <h2>Edit CPU Cooler</h2>
       {error && <ErrorAlert error={error} />}
       <CpuCoolerForm
         file={file} 

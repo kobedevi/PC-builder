@@ -27,7 +27,7 @@ const OriginalGpuOverview = ({query, setQuery}) => {
 
   return (
     <>
-      <h4>Original GPU:</h4>
+      <h4>Chipset:</h4>
 
       {
         error && (
@@ -61,7 +61,7 @@ const OriginalGpuOverview = ({query, setQuery}) => {
                       deleter={setDeleteGpu}
                       product={product}
                       img={false}
-                      link={PossibleRoutes.GpuDetail}
+                      link={PossibleRoutes.Detail}
                       id={product.idGpu}
                     >
                       Manufacturer: {product.manufacturerName}<br/>

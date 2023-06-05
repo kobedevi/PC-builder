@@ -60,7 +60,7 @@ const MotherboardEdit = ({ motherboard, onUpdate }) => {
 
   return (
     <>
-      <h1>Edit Motherboard</h1>
+      <h2>Edit Motherboard</h2>
       {error && <ErrorAlert error={error} />}
 
       <MotherboardForm

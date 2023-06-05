@@ -74,7 +74,7 @@ const GpuEdit = ({ gpu, onUpdate }) => {
     {
       gpu?.idGpuPartner && (
         <>
-          <h1>Edit Partner GPU</h1>
+          <h2>Edit Partner GPU</h2>
           {error && <ErrorAlert error={error} />}
           <GpuForm file={file} setFile={setFile} initialData={gpu} onSubmit={handleSubmit} disabled={isLoading} />
         </>
@@ -84,7 +84,7 @@ const GpuEdit = ({ gpu, onUpdate }) => {
     {
       !gpu?.idGpuPartner && (
         <>
-          <h1>Edit Original GPU</h1>
+          <h2>Edit Original GPU</h2>
           {error && <ErrorAlert error={error} />}
           <GpuOriginalForm
             initialData={gpu} 

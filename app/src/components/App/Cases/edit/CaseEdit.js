@@ -60,7 +60,7 @@ const CaseEdit = ({ pccase, onUpdate }) => {
 
   return (
     <>
-      <h1>Edit Case</h1>
+      <h2>Edit Case</h2>
       {error && <ErrorAlert error={error} />}
       
       <CaseForm

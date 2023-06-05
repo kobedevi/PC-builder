@@ -60,7 +60,7 @@ const CpuEdit = ({ cpu, onUpdate }) => {
 
   return (
     <>
-      <h1>Edit CPU</h1>
+      <h2>Edit CPU</h2>
       {error && <ErrorAlert error={error} />}
 
       <CpuForm file={file} setFile={setFile} initialData={cpu} onSubmit={handleSubmit} disabled={isLoading} />
