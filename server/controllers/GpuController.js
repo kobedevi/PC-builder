@@ -48,12 +48,12 @@ class GpuController {
 			encodedStr = query.replace(/[/^#\%]/g,"")
 			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
 
-			const userQuery = `SELECT gpu_has_partners.*, gpus.modelName AS og_card, gpus.vram, manufacturers.manufacturerName, gpus.deleted AS ogDeleted FROM gpu_has_partners
+			const userQuery = `SELECT gpu_has_partners.*, manufacturers.manufacturerName, gpus.modelName AS ogCard, gpus.vram FROM gpu_has_partners
 			LEFT JOIN manufacturers ON gpu_has_partners.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
 			WHERE CONCAT_WS('', gpu_has_partners.modelName, gpus.modelName, manufacturerName, clockspeed, vram) LIKE ?
 			AND gpu_has_partners.deleted = 0
-			AND gpus.deleted = 0;`;
+			AND gpus.deleted = 0;`
 			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
 			if (rows.length === 0) {
 				return res.status(200).json({ 

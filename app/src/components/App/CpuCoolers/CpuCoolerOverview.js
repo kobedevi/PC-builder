@@ -67,7 +67,7 @@ const CpuCoolerOverview = () => {
               setQuery={setQuery}
             />
 
-            <Link to={PossibleRoutes.CpuCoolerCreate} className="btn btn-primary">
+            <Link to={PossibleRoutes.Create} className="btn btn-primary">
               Add CPU cooler
             </Link>
 
@@ -83,7 +83,7 @@ const CpuCoolerOverview = () => {
                       <ProductCard
                         deleter={setDeleteCooler}
                         product={cc}
-                        link={PossibleRoutes.CpuCoolerDetail}
+                        link={PossibleRoutes.Detail}
                         id={cc.idCpuCooler}
                       >
                         Manufacturer: {cc.manufacturerName}<br/>

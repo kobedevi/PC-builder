@@ -6,7 +6,7 @@ import Spinner from "../../../Design/Spinner";
 import ErrorAlert from "../../../shared/ErrorAlert";
 import RamDetail from "./RamDetail";
 
-const CpuCoolerDetailContainer = () => {
+const RamDetailContainer = () => {
   const { id } = useParams();
   const apiCall = useCallback(() => {
     return fetchRamById(id);
@@ -24,4 +24,4 @@ const CpuCoolerDetailContainer = () => {
   return <RamDetail ram={ram[0]} />;
 };
 
-export default CpuCoolerDetailContainer;
+export default RamDetailContainer;

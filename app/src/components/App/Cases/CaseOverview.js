@@ -58,7 +58,7 @@ const CaseOverview = () => {
               setQuery={setQuery}
             />
 
-            <Link to={PossibleRoutes.CaseCreate} className="btn btn-primary">
+            <Link to={PossibleRoutes.Create} className="btn btn-primary">
               Add Case
             </Link>
 
@@ -74,7 +74,7 @@ const CaseOverview = () => {
                       <ProductCard
                         deleter={setDeleteCase}
                         product={c}
-                        link={PossibleRoutes.CaseDetail}
+                        link={PossibleRoutes.Detail}
                         id={c.idCase}
                       >
                         Manufacturer: {c.manufacturerName}<br/>

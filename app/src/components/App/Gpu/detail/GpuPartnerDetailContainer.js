@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../../../core/hooks/useFetch";
 import { fetchPartnerGpuById } from "../../../../core/modules/Gpu/api";
-import Alert from "../../../Design/Alert";
 import Spinner from "../../../Design/Spinner";
 import ErrorAlert from "../../../shared/ErrorAlert";
 import GpuDetail from "./GpuDetail";

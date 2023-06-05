@@ -47,7 +47,7 @@ const Result = ({result, deleter}) => {
                                 deleter={deleter}
                                 product={product}
                                 id={product.idProcessor}
-                                link={PossibleRoutes.CpuDetail}
+                                link={PossibleRoutes.Detail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
                                 Base Clock: {product.clockSpeed}Ghz<br/>

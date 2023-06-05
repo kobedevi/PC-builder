@@ -67,7 +67,7 @@ const MotherboardOverview = () => {
               setQuery={setQuery}
             />
 
-            <Link to={PossibleRoutes.MotherboardCreate} className="btn btn-primary">
+            <Link to={PossibleRoutes.Create} className="btn btn-primary">
               Add Motherboard
             </Link>
 
@@ -83,7 +83,7 @@ const MotherboardOverview = () => {
                       <ProductCard
                         deleter={setDeleteMotherboard}
                         product={mb}
-                        link={PossibleRoutes.MotherboardDetail}
+                        link={PossibleRoutes.Detail}
                         id={mb.idMotherboard}
                       >
                         Manufacturer: {mb.manufacturerName}<br/>

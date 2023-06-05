@@ -60,7 +60,7 @@ const RamOverview = () => {
             setQuery={setQuery}
           />
 
-          <Link to={PossibleRoutes.RamCreate} className="btn btn-primary">
+          <Link to={PossibleRoutes.Create} className="btn btn-primary">
             Add Ram
           </Link>
 
@@ -76,7 +76,7 @@ const RamOverview = () => {
                     <ProductCard
                       deleter={setDeleteRam}
                       product={product}
-                      link={PossibleRoutes.RamDetail}
+                      link={PossibleRoutes.Detail}
                       id={product.idRam}
                     >
                       Manufacturer: {product.manufacturerName}<br/>

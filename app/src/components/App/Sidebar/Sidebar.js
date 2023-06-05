@@ -3,6 +3,11 @@ import { PossibleRoutes } from "../../../core/routing";
 
 const items = [
   {
+    label: "Home",
+    route: PossibleRoutes.HomeParent,
+    icon: null,
+  },
+  {
     label: "CPU",
     route: PossibleRoutes.Cpus,
     icon: null,

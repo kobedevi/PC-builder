@@ -47,7 +47,7 @@ const ResultOriginalGpu = ({result, deleter}) => {
                                 product={product}
                                 img={false}
                                 id={product.idGpu}
-                                link={PossibleRoutes.GpuDetail}
+                                link={PossibleRoutes.Detail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
                                 Vram: {product.vram} GB<br/>

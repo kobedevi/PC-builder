@@ -144,7 +144,9 @@ authRouter.get("/gpu/:id", gpuController.fetchGpuById);
 // PSU
 authRouter.get("/psu", psuController.fetchPsu);
 authRouter.get("/psu/:id", psuController.fetchPsuById);
+authRouter.get("/psu/filter/:query", psuController.fetchPsuByFilter);
 authRouter.patch("/psu/:id", psuModel, psuController.patchPsuById);
+authRouter.delete("/psu/:id", psuModel, psuController.deletePsuById);
 authRouter.post("/psu", psuModel, psuController.createPsu);
 
 // Manufacturers

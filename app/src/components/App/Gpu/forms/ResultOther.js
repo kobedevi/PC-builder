@@ -42,19 +42,18 @@ const Result = ({result, deleter}) => {
             products && (
                 <ul className='movieList'>
                     { products.map((product) => (
-                        <li key={product.idRam}>
+                        <li key={product.id}>
                             <ProductCard
+                                subtitle={`Chipset: ${product.ogCard}`}
                                 deleter={deleter}
                                 product={product}
-                                id={product.idRam}
-                                link={PossibleRoutes.RamDetail}
-                            >
+                                link={PossibleRoutes.GpuPartnerDetail}
+                                id={product.idGpuPartner}
+                                >
                                 Manufacturer: {product.manufacturerName}<br/>
-                                Ram type: {product.type}<br/>
-                                Amount of sticks: {product.stickAmount}<br/>
-                                Size per stick: {product.sizePerStick} GB<br/>
-                                <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
-                                Ram speed: {product.speed}MHz<br/>
+                                Vram: {product.vram} GB<br/>
+                                Clockspeed: {product.clockspeed} MHz<br/>
+                                Watercooled: {product.watercooled ? 'Yes': 'No'}
                             </ProductCard>
                         </li>
                     ))}

@@ -47,7 +47,7 @@ const Result = ({result, deleter}) => {
                                 deleter={deleter}
                                 product={product}
                                 id={product.idCpuCooler}
-                                link={PossibleRoutes.CpuCoolerDetail}
+                                link={PossibleRoutes.Detail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
                                 compatible sockets: {product.socketType.join(', ')}<br/>

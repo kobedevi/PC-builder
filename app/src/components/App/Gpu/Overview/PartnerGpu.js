@@ -28,7 +28,7 @@ const PartnerGpuOverview = ({query, setQuery}) => {
 
   return (
     <>
-      <h4>Partner GPU:</h4>
+      <h4>GPU's:</h4>
 
       {
         error && (
@@ -59,7 +59,7 @@ const PartnerGpuOverview = ({query, setQuery}) => {
                 {data.map((product) => (
                   <li key={product.idGpuPartner}>
                     <ProductCard
-                      subtitle={`Original GPU: ${product.ogCard}`}
+                      subtitle={`Chipset: ${product.ogCard}`}
                       deleter={setDeleteGpu}
                       product={product}
                       link={PossibleRoutes.GpuPartnerDetail}

@@ -46,7 +46,7 @@ const Result = ({result, deleter}) => {
                                 deleter={deleter}
                                 product={product}
                                 id={product.idRam}
-                                link={PossibleRoutes.RamDetail}
+                                link={PossibleRoutes.Detail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
                                 Ram type: {product.type}<br/>

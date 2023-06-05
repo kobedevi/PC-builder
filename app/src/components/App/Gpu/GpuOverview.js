@@ -20,7 +20,7 @@ const GpuOverview = () => {
       <h2>GPU Overview</h2>
       {info && <Alert color="info">{info}</Alert>}
 
-      <Link to={PossibleRoutes.GpuCreate} className="btn btn-primary">
+      <Link to={PossibleRoutes.Create} className="btn btn-primary">
         Add GPU
       </Link>
 

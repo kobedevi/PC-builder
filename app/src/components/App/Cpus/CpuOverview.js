@@ -63,7 +63,7 @@ const CpuOverview = () => {
               setQuery={setQuery}
             />
 
-            <Link to={PossibleRoutes.CpuCreate} className="btn btn-primary">
+            <Link to={PossibleRoutes.Create} className="btn btn-primary">
               Add CPU
             </Link>
 
@@ -79,7 +79,7 @@ const CpuOverview = () => {
                       <ProductCard
                         deleter={setDeleteCpu}
                         product={cpu}
-                        link={PossibleRoutes.CpuDetail}
+                        link={PossibleRoutes.Detail}
                         id={cpu.idProcessor}
                       >
                         Manufacturer: {cpu.manufacturerName}<br/>

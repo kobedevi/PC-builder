@@ -46,7 +46,7 @@ const Result = ({result, deleter}) => {
                                 deleter={deleter}
                                 product={product}
                                 id={product.idMotherboard}
-                                link={PossibleRoutes.MotherboardDetail}
+                                link={PossibleRoutes.Detail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
                                 Formfactor: {product.formfactor}<br/>
