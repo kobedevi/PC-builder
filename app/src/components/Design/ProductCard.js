@@ -11,7 +11,7 @@ const ProductCard = ({product, subtitle, link, id, deleter, img=true, children})
           img && (
             <>
               <Link to={route(link, {id})}>
-                  <img src={`${product.image ? product.image : "./no-image.svg" }`} alt='Product preview'/>
+                  <img src={`${product.image ? product.image : "../no-image.svg" }`} alt='Product preview'/>
               </Link>
               <Link to={route(link, {id})}>
                   <section>

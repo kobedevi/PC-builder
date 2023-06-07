@@ -1,9 +1,10 @@
+import CrudRouting from "./CrudRouting";
 import MainRouting from "./MainRouting";
 import Sidebar from "./Sidebar/Sidebar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../Design/Header";
 
-function App() {
+function CrudApp() {
   return (
     <>
       <Header />
@@ -12,6 +13,7 @@ function App() {
           <div className="app">
             <Sidebar />
             <main>
+              {/* <CrudRouting /> */}
               <MainRouting />
             </main>
           </div>
@@ -21,4 +23,4 @@ function App() {
   );
 }
 
-export default App;
+export default CrudApp;

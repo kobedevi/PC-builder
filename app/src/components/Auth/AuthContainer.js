@@ -1,9 +1,10 @@
 import { createContext, useContext, useState } from "react";
-import App from "../App/App";
+import CrudApp from "../App/CrudApp";
 // import { Redirect, Route, Switch } from "react-router-dom";
 // import { PossibleRoutes } from "../../core/routing";
 import LoginPage from "../OnBoarding/Login/LoginPage";
 import storage from "../../core/storage";
+import App from "components/App/App/App";
 
 const AuthContext = createContext();
 
@@ -30,12 +31,17 @@ const AuthContainer = () => {
   if (user) {
     return (
       <AuthContext.Provider value={{ user, setUser: updateUser, logout }}>
-        <App />
+        <CrudApp />
       </AuthContext.Provider>
     );
   }
 
   return <LoginPage setUser={updateUser} />;
+  return (
+    <AuthContext.Provider value={{ user, setUser: updateUser, logout }}>
+      <App />
+    </AuthContext.Provider>
+  );
 };
 
 const useAuth = () => {

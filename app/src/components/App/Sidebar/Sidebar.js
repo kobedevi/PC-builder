@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { PossibleRoutes } from "../../../core/routing";
 
 const items = [
-  {
-    label: "Home",
-    route: PossibleRoutes.HomeParent,
-    icon: null,
-  },
+  // {
+  //   label: "Home",
+  //   route: PossibleRoutes.HomeParent,
+  //   icon: null,
+  // },
   {
     label: "CPU",
     route: PossibleRoutes.Cpus,
