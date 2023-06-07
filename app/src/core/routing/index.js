@@ -14,36 +14,39 @@ const PossibleRoutes = Object.freeze({
   Detail: ":id",
   Edit: ":id/edit",
 
+  Crud: "/crud/",
+  CrudParent: "/crud/*",
+
   CpuParent: "/cpu/*",
-  Cpus: "/cpu",
-  CpuEdit: "/cpu/:id/edit",
+  Cpus: "/crud/cpu",
+  CpuEdit: "/crud/cpu/:id/edit",
 
   CpuCoolerParent: "/cpucooler/*",
-  CpuCoolers: "/cpucooler",
-  CpuCoolerEdit: "/cpucooler/:id/edit",
+  CpuCoolers: "/crud/cpucooler",
+  CpuCoolerEdit: "/crud/cpucooler/:id/edit",
 
   MotherboardParent: "/motherboard/*",
-  Motherboards: "/motherboard",
-  MotherboardEdit: "/motherboard/:id/edit",
+  Motherboards: "/crud/motherboard",
+  MotherboardEdit: "/crud/motherboard/:id/edit",
 
   CaseParent: "/case/*",
-  Cases: "/case",
-  CaseEdit: "/case/:id/edit",
+  Cases: "/crud/case",
+  CaseEdit: "/crud/case/:id/edit",
 
   RamParent: "/ram/*",
-  Ram: "/ram",
-  RamEdit: "/ram/:id/edit",
+  Ram: "/crud/ram",
+  RamEdit: "/crud/ram/:id/edit",
 
   GpuParent: "/gpu/*",
-  Gpus: "/gpu",
-  GpuEdit: "/gpu/:id/edit",
+  Gpus: "/crud/gpu",
+  GpuEdit: "/crud/gpu/:id/edit",
   GpuPartnerDetail: "partner/:id",
   GpuPartnerEditRouter: "partner/:id/edit",
-  GpuPartnerEdit: "/gpu/partner/:id/edit",
+  GpuPartnerEdit: "/crud/gpu/partner/:id/edit",
 
   PsuParent: "/psu/*",
-  Psus: "/psu",
-  PsuEdit: "/psu/:id/edit",
+  Psus: "/crud/psu",
+  PsuEdit: "/crud/psu/:id/edit",
 });
 
 // replaces : values with values from object
