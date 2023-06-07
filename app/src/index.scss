@@ -17,14 +17,6 @@
     overflow: hidden;
 }
 
-#map{
-    display: flex;
-    position: absolute;
-    z-index: 10;
-    height: calc(100vh - 56px);
-    width: calc(100vw - 250px);
-}
-
 .blobContainer {
     display: flex;
     justify-content: center;
@@ -46,8 +38,8 @@ main {
     display: flex;
     flex-direction: column;
     position: relative;
-    height: calc(100vh - 56px);
     width: 100%;
+    max-height: calc(100vh - 58px);
     max-width: calc(100vw - 250px);
     padding: 1rem;
     box-sizing: border-box;

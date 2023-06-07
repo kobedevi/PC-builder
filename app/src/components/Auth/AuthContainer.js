@@ -1,10 +1,13 @@
 import { createContext, useContext, useState } from "react";
-import CrudApp from "../App/CrudApp";
 // import { Redirect, Route, Switch } from "react-router-dom";
 // import { PossibleRoutes } from "../../core/routing";
 import LoginPage from "../OnBoarding/Login/LoginPage";
 import storage from "../../core/storage";
 import App from "components/App/App/App";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { PossibleRoutes } from "core/routing";
+import Home from "components/App/App/Homepage/Home";
+import HomeRouter from "components/App/App/HomeRouter";
 
 const AuthContext = createContext();
 
@@ -31,17 +34,26 @@ const AuthContainer = () => {
   if (user) {
     return (
       <AuthContext.Provider value={{ user, setUser: updateUser, logout }}>
-        <CrudApp />
+        <App setUser={updateUser}/>
       </AuthContext.Provider>
     );
   }
 
-  return <LoginPage setUser={updateUser} />;
+  // return <LoginPage setUser={updateUser} />;
+  // return (
+  //   <AuthContext.Provider value={{ user, setUser: updateUser, logout }}>
+  //     <App setUser={updateUser}/>
+  //   </AuthContext.Provider>
+  // );
   return (
-    <AuthContext.Provider value={{ user, setUser: updateUser, logout }}>
-      <App />
-    </AuthContext.Provider>
-  );
+    <div className="App reset">
+      <div className="content">
+        <div className="app scroller">
+          <HomeRouter setUser={updateUser}/>
+        </div>
+      </div>
+    </div>
+  )
 };
 
 const useAuth = () => {

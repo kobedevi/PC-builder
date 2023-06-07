@@ -34,6 +34,7 @@
     flex-direction: column;
     background: $dark;
     width: 250px;
+    height: calc(100vh - 56px);
     box-shadow: 0 0.3125rem 0.625rem 0 rgba(0, 0, 0, .55);
     ul {
         padding: 0;

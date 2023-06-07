@@ -13,7 +13,6 @@ function CrudApp() {
           <div className="app">
             <Sidebar />
             <main>
-              {/* <CrudRouting /> */}
               <MainRouting />
             </main>
           </div>

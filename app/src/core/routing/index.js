@@ -8,7 +8,7 @@ const PossibleRoutes = Object.freeze({
   PartsOverview: "/",
 
   HomeParent: "/home/*",
-  HomeOverview: "/home",
+  Home: "/home",
 
   Create: "create",
   Detail: ":id",
