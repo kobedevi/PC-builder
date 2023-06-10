@@ -2,11 +2,13 @@ import { Link, Routes } from "react-router-dom"
 import DeleteButton from "./DeleteButton"
 import { route } from "core/routing"
 
-const ProductCard = ({product, subtitle, link, id, deleter, img=true, children}) => {
+const ProductCard = ({product, subtitle, link, id, deleter=false, img=true, children}) => {
 
   return (
     <div className='movieCard mt-4 mb-4'>
-        <DeleteButton deleter={() => deleter(product)}/>
+        {
+          deleter && <DeleteButton deleter={() => deleter(product)}/>
+        }
         {
           img && (
             <>

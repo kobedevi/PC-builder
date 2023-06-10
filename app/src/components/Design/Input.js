@@ -14,6 +14,7 @@ const Input = React.forwardRef(
       min = 1,
       max,
       placeholder,
+      onKeyDown,
       ...rest
     },
     ref
@@ -33,6 +34,7 @@ const Input = React.forwardRef(
           min={min}
           max={max}
           placeholder={placeholder}
+          onKeyDown={onKeyDown}
           {...rest}
         />
         {error && <div className="invalid-feedback">{error}</div>}

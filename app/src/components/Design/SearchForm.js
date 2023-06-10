@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import Input from './Input';
-import { getValidationErrors } from 'core/utils/validation';
+import { getValidationErrors } from '../../core/utils/validation';
 
 const schema = yup.object().shape({
     search: yup.string()
@@ -11,7 +11,7 @@ const defaultData = {
     search: '',
 }
 
-const SearchForm = ({onSubmit, setQuery, initialData={}, disabled}) => {
+const SearchForm = ({onSubmit, setQuery, initialData={}, disabled, isPublic=false}) => {
 
     const [data, setData] = useState({
         ...defaultData,
@@ -61,27 +61,61 @@ const SearchForm = ({onSubmit, setQuery, initialData={}, disabled}) => {
         });
     }
 
+    const handleEnter = (e) => {
+        if (e.which === 13) {
+            handleSubmit(e);
+        }
+    }
+
     return (
-        <form className="row align-items-end" onSubmit={handleSubmit}>
-            <div className="col-md-6">
+        <>
+            { !isPublic && (
+                <form className="row align-items-end" onSubmit={handleSubmit}>
+                    <p>Private</p>
+                    <div className="col-md-6">
 
-                <Input
-                    label="search"
-                    type="search"
-                    name="search"
-                    value={data.search}
-                    disabled={disabled}
-                    onChange={handleChange}
-                    error={errors.search}
-                    placeholder='Search...'
-                />
+                        <Input
+                            label="search"
+                            type="search"
+                            name="search"
+                            value={data.search}
+                            disabled={disabled}
+                            onChange={handleChange}
+                            error={errors.search}
+                            placeholder='Search...'
+                        />
 
-            </div>
-            <div className="col-md-4">
-                <button type="submit" className='me-2 btn btn-primary'>Search</button>
-                <button onClick={handleReset} className='me-2 btn btn-danger'>Reset</button>
-            </div>
-        </form>
+                    </div>
+                    <div className="col-md-4">
+                        <button type="submit" className='me-2 btn btn-primary'>Search</button>
+                        <button type="reset" onClick={handleReset} className='me-2 btn btn-danger'>Reset</button>
+                    </div>
+                </form>
+            )}
+            { isPublic && (
+                <div className="row align-items-end">
+                    <div className="col-md-6">
+
+                        <Input
+                            label="search"
+                            type="search"
+                            name="search"
+                            value={data.search}
+                            disabled={disabled}
+                            onChange={handleChange}
+                            error={errors.search}
+                            placeholder='Search...'
+                            onKeyDown={handleEnter}
+                        />
+
+                    </div>
+                    <div className="col-md-4">
+                        <button type="button" onClick={handleSubmit} className='me-2 btn btn-primary'>Search</button>
+                        <button type="reset" onClick={handleReset} className='me-2 btn btn-danger'>Reset</button>
+                    </div>
+                </div>
+            )}
+        </>
     )
 }
 

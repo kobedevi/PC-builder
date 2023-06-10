@@ -12,9 +12,10 @@ const Nav = () => {
   return (
     <nav>
         <ul>
+            <li><Link to={PossibleRoutes.Builder}>Pc-builder</Link></li>
+            {admin && <li><Link to={PossibleRoutes.Crud}>CRUD</Link></li>}
             {!user?.user &&<li> <Link to={PossibleRoutes.Login}>Login</Link></li>}
             {user?.user && <li> <Button onClick={user.logout} color="outline-light">Sign out</Button></li>}
-            {admin && <li><Link to={PossibleRoutes.Crud}>CRUD</Link></li>}
         </ul>
     </nav>
   )

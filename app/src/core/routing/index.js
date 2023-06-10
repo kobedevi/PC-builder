@@ -2,6 +2,8 @@ const PossibleRoutes = Object.freeze({
   splash: "/splash",
   Login: "/login",
 
+  Builder: "/builder",
+
   Users: "/users",
   UsersEdit: "/users/edit",
 

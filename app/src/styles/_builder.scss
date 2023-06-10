@@ -1,0 +1,10 @@
+form.builder{
+    *{
+        color: black;
+    }
+    .btnContainer {
+        display: flex;
+        gap: .5rem;
+        justify-content: flex-end;
+    }
+}
