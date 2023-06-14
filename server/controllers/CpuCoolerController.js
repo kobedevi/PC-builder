@@ -28,6 +28,53 @@ class CpuCoolerController {
 		}
 	};
 
+	fetchCpuCoolersByBuild = async (req, res, next) => {
+		// TODO: 
+		try {
+			let { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
+			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
+			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
+			WHERE cpucoolers.idCpuCooler IN (
+				SELECT idCpuCooler
+				FROM cpucooler_has_cpusockets
+				WHERE idCpuSocket = ?
+			)
+			AND cpucoolers.deleted = 0
+			ORDER BY idCpuCooler;`;
+			let [rows] = await db.promise().query(userQuery, [cpuSocketId]);
+			const data = rows;
+
+			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
+			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
+			.map(id => {
+				return {
+					...data.filter(s => s.idCpuCooler === id).map(rest => rest)[0],
+					socketType: data.filter(s => s.idCpuCooler === id).map(socket => socket.socketType),
+					idCpuSocket: data.filter(s => s.idCpuCooler === id).map(socket => socket.idCpuSocket)
+				}
+			})
+
+			if (result.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+
+			res.status(200).send(result);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchCpuCoolersByFilter = async (req, res, next) => {
 		try {
 			let { query } = req.params;
