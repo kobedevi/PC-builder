@@ -1,14 +1,13 @@
 import ErrorAlert from 'components/shared/ErrorAlert';
 import CpuSelect from 'components/util/builder/CpuSelect'
 
-const CpuPicker = ({updateFields}) => {
+const CpuPicker = ({idCpu, updateFields}) => {
   return (
     <div>
         cpu picker:
+        <input tabindex="-1" style={{color:"black"}} value={idCpu} required type="text"/>
         <CpuSelect
           updateFields={updateFields}
-          label="Cpu Socket"
-          name="idCpuSocket"
         />
     </div>
   )

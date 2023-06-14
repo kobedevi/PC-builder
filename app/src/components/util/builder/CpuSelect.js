@@ -10,7 +10,7 @@ import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 
-const CpuSelect = ({idcpu, updateFields}) => {
+const CpuSelect = ({updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -74,7 +74,7 @@ const CpuSelect = ({idcpu, updateFields}) => {
                         Cores: {cpu.cores}<br/>
                         Socket: {cpu.socketType}
                       </ProductCard>
-                      <button type="button" onClick={e => updateFields({idCpu: cpu.modelName})}>Add</button>
+                      <button type="button" onClick={e => updateFields({idCpu: cpu.modelName})}>Choose</button>
                     </li>
                   ))}
                 </ul>

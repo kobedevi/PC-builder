@@ -11,7 +11,7 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
 
-const CpuCoolerSelect = () => {
+const CpuCoolerSelect = ({updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -73,6 +73,7 @@ const CpuCoolerSelect = () => {
                         Manufacturer: {product.manufacturerName}<br/>
                         compatible sockets: {product.socketType.join(', ')}<br/>
                       </ProductCard>
+                      <button type="button" onClick={e => updateFields({idCpuCooler: product.modelName})}>Choose</button>
                     </li>
                   ))}
                 </ul>
