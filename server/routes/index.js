@@ -12,8 +12,8 @@ const registerRoutes = (app, db) => {
 	app.post("/register", userModel, userController.register);
 	app.post("/login", authLocal, userController.login);
 
+	app.use('/compatible', builderRoutes);
 	app.use(authJwt, authRoutes);
-	app.use(builderRoutes);
 
 	// default 404
 	app.use(function (req, res, next) {

@@ -24,7 +24,7 @@ const CpuSelect = ({updateFields}) => {
 
   const onSubmit = (query) => {
     setQuery(query.search)
-}
+  }
 
   return (
     <>
@@ -74,7 +74,7 @@ const CpuSelect = ({updateFields}) => {
                         Cores: {cpu.cores}<br/>
                         Socket: {cpu.socketType}
                       </ProductCard>
-                      <button type="button" onClick={e => updateFields({idCpu: cpu.modelName})}>Choose</button>
+                      <button type="button" onClick={e => updateFields({idCpu: cpu.idProcessor})}>Choose</button>
                     </li>
                   ))}
                 </ul>

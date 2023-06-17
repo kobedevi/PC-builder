@@ -9,19 +9,17 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
+import { fetchCompatibleCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
 
-const CpuCoolerSelect = ({updateFields}) => {
+const CpuCoolerSelect = ({idCpu, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
-  const {
-    data,
-    error,
-    setError,
-    isLoading,
-    refresh,
-  } = useFetch(fetchCpuCoolers);
+  const apiCall = useCallback(() => {
+    return fetchCompatibleCpuCoolers(idCpu);
+  }, [idCpu]);
+  
+  const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)
@@ -73,7 +71,7 @@ const CpuCoolerSelect = ({updateFields}) => {
                         Manufacturer: {product.manufacturerName}<br/>
                         compatible sockets: {product.socketType.join(', ')}<br/>
                       </ProductCard>
-                      <button type="button" onClick={e => updateFields({idCpuCooler: product.modelName})}>Choose</button>
+                      <button type="button" onClick={e => updateFields({idCpuCooler: product.idCpuCooler})}>Choose</button>
                     </li>
                   ))}
                 </ul>

@@ -1,7 +1,5 @@
 const StepCounter = ({steps, currentStepIndex}) => {
-    const spacing = (100 / (steps.length-1)) ;
-    console.log(currentStepIndex)
-    
+    const spacing = (100 / (steps.length-1)) ;    
 
     return (
         <>  

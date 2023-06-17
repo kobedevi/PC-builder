@@ -29,12 +29,16 @@ class CpuCoolerController {
 	};
 
 	fetchCpuCoolersByBuild = async (req, res, next) => {
-		// TODO: 
 		try {
-			let { query } = req.params;
-			let encodedStr = query.replace(/\%/g,"Percent");
-			encodedStr = query.replace(/[/^#\%]/g,"")
-			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+			const { id } = req.params;
+			
+			const query = `select idCpuSocket from cpus where idProcessor = ?`;
+			let [rows] = await db.promise().query(query, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given cpu does not exist" });
+			}
+
+			const cpuSocket = rows[0].idCpuSocket;
 
 			const userQuery = `SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
 			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
@@ -47,7 +51,7 @@ class CpuCoolerController {
 			)
 			AND cpucoolers.deleted = 0
 			ORDER BY idCpuCooler;`;
-			let [rows] = await db.promise().query(userQuery, [cpuSocketId]);
+			[rows] = await db.promise().query(userQuery, [cpuSocket]);
 			const data = rows;
 
 			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
@@ -63,7 +67,6 @@ class CpuCoolerController {
 			if (result.length === 0) {
 				return res.status(200).json({ 
 					message: "No results",
-					encodedStr,
 				});
 			}
 
@@ -115,7 +118,6 @@ class CpuCoolerController {
 			);
 		}
 	};
-
 
 	deleteCpuCoolerById = async (req, res, next) => {
 		try {
