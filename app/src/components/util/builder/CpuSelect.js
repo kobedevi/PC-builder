@@ -10,7 +10,7 @@ import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 
-const CpuSelect = ({updateFields}) => {
+const CpuSelect = ({idCpuSocket, cooler, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -24,6 +24,28 @@ const CpuSelect = ({updateFields}) => {
 
   const onSubmit = (query) => {
     setQuery(query.search)
+  }
+
+  const onClick = (cpu) => {
+    console.log(cooler);
+    if(cpu.idCpuSocket !== idCpuSocket) {
+      updateFields({
+        idCpu: cpu.idProcessor,
+        idCpuSocket: cpu.idCpuSocket,
+        // If new cpu has other socket reset motherboard
+        idMotherboard: '',
+      })
+      // If new cpu is not compatible with old cooler, reset
+      if(!cooler.includes(cpu.idCpuSocket)) {
+        updateFields({
+          idCpuCooler: '',
+        })
+      }
+    } else {
+      updateFields({
+        idCpu: cpu.idProcessor,
+      })
+    }
   }
 
   return (
@@ -74,7 +96,8 @@ const CpuSelect = ({updateFields}) => {
                         Cores: {cpu.cores}<br/>
                         Socket: {cpu.socketType}
                       </ProductCard>
-                      <button type="button" onClick={e => updateFields({idCpu: cpu.idProcessor})}>Choose</button>
+                      <button type="button" onClick={() => onClick(cpu)}>Choose</button>
+                      {/* <button type="button" onClick={e => updateFields({idCpu: cpu.idProcessor})}>Choose</button> */}
                     </li>
                   ))}
                 </ul>

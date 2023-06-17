@@ -3,6 +3,8 @@ import CpuPicker from "./forms/CpuPicker"
 import { useState } from "react"
 import CpuCoolerPicker from "./forms/CpuCoolerPicker"
 import StepCounter from "components/Design/StepCounter"
+import MotherboardPicker from "./forms/MotherboardPicker"
+import RamPicker from "./forms/RamPicker"
 
 const initialData = {
 	idCpu: "",
@@ -12,6 +14,10 @@ const initialData = {
 	idRam: "",
 	idGpu: "",
 	idPsu: "",
+
+	idCpuSocket: "",
+	cooler: [],
+	memorySlots: 0,
 }
 
 const Builder = () => {
@@ -28,6 +34,8 @@ const Builder = () => {
 		useMultiStepForm([
 			<CpuPicker {...data} updateFields={updateFields}/>, 
 			<CpuCoolerPicker {...data} updateFields={updateFields}/>,
+			<MotherboardPicker {...data} updateFields={updateFields}/>,
+			<RamPicker {...data} updateFields={updateFields}/>,
 		])
 
 

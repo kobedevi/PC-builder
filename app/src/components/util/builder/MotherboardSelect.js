@@ -9,14 +9,14 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCompatibleCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
+import { fetchCompatibleMotherboard, fetchFilteredMotherboards } from "core/modules/Motherboard/api";
 
-const CpuCoolerSelect = ({idCpu, updateFields}) => {
+const MotherboardSelect = ({idCpu, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleCpuCoolers(idCpu);
+    return fetchCompatibleMotherboard(idCpu);
   }, [idCpu]);
   
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
@@ -25,11 +25,10 @@ const CpuCoolerSelect = ({idCpu, updateFields}) => {
     setQuery(query.search)
   }
 
-  const onClick = (cooler) => {
+  const onClick = (product) => {
     updateFields({
-      idCpuCooler: cooler.idCpuCooler,
-      cooler: cooler.idCpuSocket,
-      idMotherboard: ''
+      idMotherboard: product.idMotherboard,
+      memorySlots: product.memorySlots
     })
   }
 
@@ -63,11 +62,8 @@ const CpuCoolerSelect = ({idCpu, updateFields}) => {
             />
 
             {
-              query && <Result filter={fetchFilteredCpuCoolers} result={query}/>
+              query && <Result filter={fetchFilteredMotherboards} result={query}/>
             }
-            {/* TODO: Clear next data: 
-            example -> you choose an AM5 cooler, it has multiple compatible products, you go back to cpus and change your mind.
-            cpu cooler is still saved and you can continue to a following step */}
             {(data.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
@@ -78,17 +74,17 @@ const CpuCoolerSelect = ({idCpu, updateFields}) => {
               !query && (
                 <ul className="movieList">
                   {data.map((product) => (
-                    <li key={product.idCpuCooler}>
+                    <li key={product.idMotherboard}>
                       <ProductCard
                         product={product}
                         link={PossibleRoutes.Detail}
-                        id={product.idProcessor}
+                        id={product.idMotherboard}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
-                        compatible sockets: {product.socketType.join(', ')}<br/>
+                        Formfactor: {product.formfactor}<br/>
+                        SocketType: {product.socketType}<br/>
                       </ProductCard>
                       <button type="button" onClick={() => onClick(product)}>Choose</button>
-                      {/* <button type="button" onClick={e => updateFields({idCpuCooler: product.idCpuCooler})}>Choose</button> */}
                     </li>
                   ))}
                 </ul>
@@ -101,4 +97,4 @@ const CpuCoolerSelect = ({idCpu, updateFields}) => {
   );
 };
 
-export default CpuCoolerSelect;
+export default MotherboardSelect;

@@ -17,6 +17,46 @@ class MotherboardController {
 		}
 	};
 
+	fetchMotherboardsByBuild = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			
+			const query = `select idCpuSocket from cpus where idProcessor = ?`;
+			let [rows] = await db.promise().query(query, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given cpu does not exist" });
+			}
+
+			const cpuSocket = rows[0].idCpuSocket;
+
+			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor FROM motherboards
+			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
+			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
+			WHERE motherboards.idCpuSocket = ?
+			AND motherboards.deleted = 0
+			ORDER BY idMotherboard;`;
+			[rows] = await db.promise().query(userQuery, [cpuSocket]);
+			const data = rows;
+
+			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
+			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
+			.map(id => {
+				return {
+					...data.filter(s => s.idCpuCooler === id).map(rest => rest)[0],
+					socketType: data.filter(s => s.idCpuCooler === id).map(socket => socket.socketType),
+					idCpuSocket: data.filter(s => s.idCpuCooler === id).map(socket => socket.idCpuSocket)
+				}
+			})
+
+			res.status(200).send(result);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchMotherboardsByFilter = async (req, res, next) => {
 		try {
 			let { query } = req.params;

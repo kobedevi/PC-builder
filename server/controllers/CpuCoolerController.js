@@ -64,12 +64,6 @@ class CpuCoolerController {
 				}
 			})
 
-			if (result.length === 0) {
-				return res.status(200).json({ 
-					message: "No results",
-				});
-			}
-
 			res.status(200).send(result);
 		} catch (e) {
 			next(

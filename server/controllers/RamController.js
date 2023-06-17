@@ -15,6 +15,23 @@ class RamController {
 		}
 	};
 
+	fetchRamByBuild = async (req, res, next) => {
+		try {
+			const { slots } = req.params;
+			const userQuery = `SELECT * FROM ram
+			LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
+			WHERE ram.stickAmount <= ?
+			AND ram.deleted = 0
+			ORDER BY idRam;`;
+			const [rows] = await db.promise().query(userQuery, [slots]);
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchRamByFilter = async (req, res, next) => {
 		try {
 			let { query } = req.params;
