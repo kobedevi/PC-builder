@@ -5,6 +5,8 @@ import CpuCoolerPicker from "./forms/CpuCoolerPicker"
 import StepCounter from "components/Design/StepCounter"
 import MotherboardPicker from "./forms/MotherboardPicker"
 import RamPicker from "./forms/RamPicker"
+import GpuPicker from "./forms/GpuPicker"
+import CasePicker from "./forms/CasePicker"
 
 const initialData = {
 	idCpu: "",
@@ -18,6 +20,8 @@ const initialData = {
 	idCpuSocket: "",
 	cooler: [],
 	memorySlots: 0,
+	pcieSlots: 0,
+	idFormfactor: "",
 }
 
 const Builder = () => {
@@ -36,6 +40,8 @@ const Builder = () => {
 			<CpuCoolerPicker {...data} updateFields={updateFields}/>,
 			<MotherboardPicker {...data} updateFields={updateFields}/>,
 			<RamPicker {...data} updateFields={updateFields}/>,
+			<GpuPicker {...data} updateFields={updateFields}/>,
+			<CasePicker {...data} updateFields={updateFields}/>,
 		])
 
 

@@ -9,28 +9,20 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCompatibleMotherboard, fetchFilteredMotherboards } from "core/modules/Motherboard/api";
+import { fetchCompatibleGpus, fetchFilteredPartnerGpu } from "core/modules/Gpu/api";
 
-const MotherboardSelect = ({idCpu, updateFields}) => {
+const GpuSelect = ({pcieSlots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleMotherboard(idCpu);
-  }, [idCpu]);
+    return fetchCompatibleGpus();
+  }, []);
   
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)
-  }
-
-  const onClick = (product) => {
-    updateFields({
-      idMotherboard: product.idMotherboard,
-      memorySlots: product.memorySlots,
-      pcieSlots: product.pcieSlots,
-    })
   }
 
   return (
@@ -63,29 +55,31 @@ const MotherboardSelect = ({idCpu, updateFields}) => {
             />
 
             {
-              query && <Result filter={fetchFilteredMotherboards} result={query}/>
+              query && <Result filter={fetchFilteredPartnerGpu} result={query}/>
             }
-            {(data.length === 0) && (
+            {(data.length === 0 || pcieSlots <= 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
                 <img src="./blob.svg" alt="blobby blobby blobby!"/>
               </div>
             )}
             {
-              !query && (
+              (!query && pcieSlots > 0) && (
                 <ul className="movieList">
                   {data.map((product) => (
                     <li key={product.idMotherboard}>
                       <ProductCard
+                        subtitle={`Chipset: ${product.chipset}`}
                         product={product}
                         link={PossibleRoutes.Detail}
                         id={product.idMotherboard}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
-                        Formfactor: {product.formfactor}<br/>
-                        SocketType: {product.socketType}<br/>
+                        Vram: {product.vram} GB<br/>
+                        Clockspeed: {product.clockspeed} MHz<br/>
+                        Watercooled: {product.watercooled ? 'Yes': 'No'}
                       </ProductCard>
-                      <button type="button" onClick={() => onClick(product)}>Choose</button>
+                      <button type="button" onClick={e => updateFields({idGpu: product.idGpu})}>Choose</button>
                     </li>
                   ))}
                 </ul>
@@ -98,4 +92,4 @@ const MotherboardSelect = ({idCpu, updateFields}) => {
   );
 };
 
-export default MotherboardSelect;
+export default GpuSelect;

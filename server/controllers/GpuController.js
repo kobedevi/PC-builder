@@ -41,6 +41,22 @@ class GpuController {
 		}
 	};
 
+	fetchGpuByBuild = async (req, res, next) => {
+		try {
+			const userQuery = `SELECT gpu_has_partners.*, manufacturers.manufacturerName, gpus.modelName AS chipset, gpus.vram FROM gpu_has_partners
+			LEFT JOIN manufacturers ON gpu_has_partners.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
+			WHERE gpu_has_partners.deleted = 0
+			AND gpus.deleted = 0;`;
+			const [rows] = await db.promise().query(userQuery);
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchPartnerGpusByFilter = async (req, res, next) => {
 		try {
 			let { query } = req.params;
@@ -333,7 +349,7 @@ class GpuController {
 		try {
 			const { id } = req.params;
 			const results = await db.promise()
-				.query(SQL`SELECT gpu_has_partners.*, gpus.modelName AS originalCard, gpus.vram, gpus.displayport, gpus.hdmi, gpus.vga, gpus.dvi, manufacturers.manufacturerName, partner.manufacturerName AS partnerName FROM gpu_has_partners
+				.query(SQL`SELECT gpu_has_partners.*, gpus.modelName AS chipset, gpus.vram, gpus.displayport, gpus.hdmi, gpus.vga, gpus.dvi, manufacturers.manufacturerName, partner.manufacturerName AS partnerName FROM gpu_has_partners
 				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
 				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
 				LEFT JOIN manufacturers AS partner ON gpu_has_partners.idManufacturer = partner.idManufacturer
