@@ -51,10 +51,10 @@ const GpuOriginalSelect = (props) => {
           <Select options={options} {...props} />
           {info && <Alert color="info">{info.message}</Alert>}
           <Link style={{ display: "inline-block" }} onClick={toggleHide}>
-            {isHidden ? "Add new original GPU" : "Cancel"}
+            {isHidden ? "Add new chipset" : "Cancel"}
           </Link>
           <div className={isHidden ? "hide" : "formShow"}>
-            <h4>Create original GPU:</h4>
+            <h4>Create new chipset:</h4>
             <GpuOriginalForm
               setInfo={setInfo}
               errors={error}

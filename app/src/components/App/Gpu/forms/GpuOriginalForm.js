@@ -233,7 +233,7 @@ const GpuOriginalForm = ({
         disabled={disabled}
         onClick={handleSubmit}
       >
-        {data.idGpu ? "Update" : "Add original GPU"}
+        {data.idGpu ? "Update" : "Add new chipset"}
       </Button>
     </>
   );

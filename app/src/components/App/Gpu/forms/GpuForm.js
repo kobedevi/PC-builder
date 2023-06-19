@@ -98,7 +98,7 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
     <form noValidate={true} onSubmit={handleSubmit}>
       <div className="form-parent">
         <GpuOriginalSelect
-          label="Original GPU"
+          label="Chipset"
           name="idGpu"
           value={data.idGpu}
           disabled={disabled}
