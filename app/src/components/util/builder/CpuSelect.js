@@ -27,7 +27,6 @@ const CpuSelect = ({idCpuSocket, cooler, updateFields}) => {
   }
 
   const onClick = (cpu) => {
-    console.log(cooler);
     if(cpu.idCpuSocket !== idCpuSocket) {
       updateFields({
         idCpu: cpu.idProcessor,
