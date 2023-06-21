@@ -74,6 +74,7 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
               !query && (
                 <ul className="movieList">
                   {data.map((product) => (
+                    console.log(product),
                     <li key={product.idCase}>
                       <ProductCard
                         product={product}
@@ -81,9 +82,7 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
                         id={product.idCase}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
-                        Vram: {product.vram} GB<br/>
-                        Clockspeed: {product.clockspeed} MHz<br/>
-                        Watercooled: {product.watercooled ? 'Yes': 'No'}
+                        Formfactor: {product.formfactor}<br/>
                       </ProductCard>
                       <button type="button" onClick={() => onClick(product)}>Choose</button>
                     </li>

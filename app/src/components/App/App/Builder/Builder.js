@@ -7,6 +7,8 @@ import MotherboardPicker from "./forms/MotherboardPicker"
 import RamPicker from "./forms/RamPicker"
 import GpuPicker from "./forms/GpuPicker"
 import CasePicker from "./forms/CasePicker"
+import StoragePicker from "./forms/StoragePicker"
+import PartsOverview from "./forms/PartsOverview"
 
 const initialData = {
 	idCpu: "",
@@ -16,6 +18,11 @@ const initialData = {
 	idRam: "",
 	idGpu: "",
 	idPsu: "",
+
+	storage: [],
+	smallSlots: 0,
+	largeSlots: 0,
+	m2Slots: 0,
 
 	idCpuSocket: "",
 	cooler: [],
@@ -43,8 +50,11 @@ const Builder = () => {
 			<CpuCoolerPicker {...data} updateFields={updateFields}/>,
 			<MotherboardPicker {...data} updateFields={updateFields}/>,
 			<RamPicker {...data} updateFields={updateFields}/>,
+			<StoragePicker {...data} updateFields={updateFields}/>,
 			<GpuPicker {...data} updateFields={updateFields}/>,
 			<CasePicker {...data} updateFields={updateFields}/>,
+			// TODO: PSU
+			<PartsOverview data={data}/>,
 		])
 
 
@@ -82,14 +92,14 @@ const Builder = () => {
 				</form>
 				{data && (
 					<div>
-						{Object.entries(data).map(([key, value]) => {
+						{/* {Object.entries(data).map(([key, value]) => {
 						// hide show id fields
 							return (
 								<p key={key}>
 									{key}: {value}
 								</p>
 							);
-						})}
+						})} */}
 					</div>
 				)}
 			</div>

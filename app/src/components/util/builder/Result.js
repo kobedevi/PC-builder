@@ -47,9 +47,7 @@ const Result = ({result, filter}) => {
                                 id={product.idProcessor}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
-                                Base Clock: {product.clockSpeed}Ghz<br/>
-                                Cores: {product.cores}<br/>
-                                Socket: {product.socketType}
+                                Formfactor: {product.formfactor}<br/>
                             </ProductCard>
                         </li>
                     ))}

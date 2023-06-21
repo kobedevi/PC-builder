@@ -61,6 +61,22 @@ class StorageController {
 		}
 	};
 
+	fetchStorageByBuild = async (req, res, next) => {
+		try {
+			const { slots } = req.params;
+			const userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
+			WHERE storage.deleted = 0`;
+			const [rows] = await db.promise().query(userQuery, [slots]);
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	deleteStorageById = async (req, res, next) => {
 		try {
 			const { id } = req.params;

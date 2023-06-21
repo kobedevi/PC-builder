@@ -22,9 +22,10 @@ class CaseController {
 			console.log(width, height, depth)
 			const userQuery = `SELECT * FROM cases
 			LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
-			WHERE width >= ?
-			AND height >= ?
-			AND DEPTH >= ?
+			LEFT JOIN formfactors ON cases.idFormfactor = formfactors.idFormfactor
+			WHERE cases.width >= ?
+			AND cases.height >= ?
+			AND cases.DEPTH >= ?
 			AND cases.deleted = 0
 			ORDER BY idCase;`;
 			const [rows] = await db.promise().query(userQuery, [width,height,depth]);
