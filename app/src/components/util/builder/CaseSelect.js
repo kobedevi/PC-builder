@@ -9,7 +9,7 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCompatibleCases, fetchFilteredPartnerGpu } from "core/modules/Case/api";
+import { fetchCompatibleCases, fetchFilteredCases } from "core/modules/Case/api";
 
 // TODO: everything here
 const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) => {
@@ -17,13 +17,19 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
   const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleCases();
-  }, []);
+    return fetchCompatibleCases(width,height, depth);
+  }, [width,height, depth]);
   
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)
+  }
+
+  const onClick = (product) => {
+    updateFields({
+      idCase: product.idCase,
+    })
   }
 
   return (
@@ -56,7 +62,7 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
             />
 
             {
-              query && <Result filter={fetchFilteredPartnerGpu} result={query}/>
+              query && <Result filter={fetchFilteredCases} result={query}/>
             }
             {(data.length === 0) && (
               <div className="blobContainer">
@@ -68,19 +74,18 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
               !query && (
                 <ul className="movieList">
                   {data.map((product) => (
-                    <li key={product.idMotherboard}>
+                    <li key={product.idCase}>
                       <ProductCard
-                        subtitle={`Chipset: ${product.chipset}`}
                         product={product}
                         link={PossibleRoutes.Detail}
-                        id={product.idMotherboard}
+                        id={product.idCase}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
                         Vram: {product.vram} GB<br/>
                         Clockspeed: {product.clockspeed} MHz<br/>
                         Watercooled: {product.watercooled ? 'Yes': 'No'}
                       </ProductCard>
-                      <button type="button" onClick={e => updateFields({idGpu: product.idGpu})}>Choose</button>
+                      <button type="button" onClick={() => onClick(product)}>Choose</button>
                     </li>
                   ))}
                 </ul>

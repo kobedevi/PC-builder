@@ -7,6 +7,9 @@ const fetchCases = () => async (headers) => {
   });
 };
 
+const fetchCompatibleCases = (width, height, depth) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/case/${width}/${height}/${depth}`);
+};
 
 const fetchFilteredCases = (query) => async (headers) => {
   return await Axios.get(
@@ -52,4 +55,4 @@ const deleteCase = (id) => async (headers) => {
   });
 };
 
-export { fetchCases, fetchFilteredCases, createCase, fetchCaseById, updateCase, deleteCase };
+export { fetchCases, fetchCompatibleCases, fetchFilteredCases, createCase, fetchCaseById, updateCase, deleteCase };

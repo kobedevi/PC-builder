@@ -67,11 +67,11 @@ const RamSelect = ({memorySlots, updateFields}) => {
               !query && (
                 <ul className="movieList">
                   {data.map((product) => (
-                    <li key={product.idMotherboard}>
+                    <li key={product.idRam}>
                       <ProductCard
                         product={product}
                         link={PossibleRoutes.Detail}
-                        id={product.idMotherboard}
+                        id={product.idRam}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
                         Ram type: {product.type}<br/>

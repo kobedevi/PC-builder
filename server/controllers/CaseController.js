@@ -16,6 +16,27 @@ class CaseController {
 		}
 	};
 
+	fetchCasesByBuild = async (req, res, next) => {
+		try {
+			const { width, height, depth } = req.params;
+			console.log(width, height, depth)
+			const userQuery = `SELECT * FROM cases
+			LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
+			WHERE width >= ?
+			AND height >= ?
+			AND DEPTH >= ?
+			AND cases.deleted = 0
+			ORDER BY idCase;`;
+			const [rows] = await db.promise().query(userQuery, [width,height,depth]);
+
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchCasesByFilter = async (req, res, next) => {
 		try {
 			let { query } = req.params;

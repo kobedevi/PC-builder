@@ -11,7 +11,7 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleMotherboard, fetchFilteredMotherboards } from "core/modules/Motherboard/api";
 
-const MotherboardSelect = ({idCpu, updateFields}) => {
+const MotherboardSelect = ({idCpu, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -30,6 +30,8 @@ const MotherboardSelect = ({idCpu, updateFields}) => {
       idMotherboard: product.idMotherboard,
       memorySlots: product.memorySlots,
       pcieSlots: product.pcieSlots,
+      maxWidth: product.width,
+      maxHeight: product.height
     })
   }
 

@@ -23,6 +23,11 @@ const items = [
     icon: null,
   },
   {
+    label: "Storage",
+    route: PossibleRoutes.Storage,
+    icon: null,
+  },
+  {
     label: "Case",
     route: PossibleRoutes.Cases,
     icon: null,

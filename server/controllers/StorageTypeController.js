@@ -6,7 +6,9 @@ const { v4: uuidv4 } = require("uuid");
 class StorageTypeController {
 	fetchStorageTypes = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT * FROM storagetypes`);
+			const results = await db.promise().query(`SELECT * FROM storagetypes
+			WHERE deleted = 0
+			ORDER BY storageType;`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);

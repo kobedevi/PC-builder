@@ -22,6 +22,9 @@ const initialData = {
 	memorySlots: 0,
 	pcieSlots: 0,
 	idFormfactor: "",
+	maxWidth:0,
+	maxHeight:0,
+	maxDepth:0,
 }
 
 const Builder = () => {

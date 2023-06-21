@@ -27,6 +27,10 @@ const PossibleRoutes = Object.freeze({
   CpuCoolers: "/crud/cpucooler",
   CpuCoolerEdit: "/crud/cpucooler/:id/edit",
 
+  StorageParent: "/storage/*",
+  Storage: "/crud/storage",
+  StorageEdit: "/crud/storage/:id/edit",
+
   MotherboardParent: "/motherboard/*",
   Motherboards: "/crud/motherboard",
   MotherboardEdit: "/crud/motherboard/:id/edit",

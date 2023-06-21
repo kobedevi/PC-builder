@@ -1,6 +1,6 @@
 import CaseSelect from 'components/util/builder/CaseSelect'
 
-const CasePicker = ({idCase, formfactor, height, width, depth , updateFields}) => {
+const CasePicker = ({idCase, formfactor, maxWidth, maxHeight, maxDepth , updateFields}) => {
   return (
     <div>
         Case picker:
@@ -8,9 +8,9 @@ const CasePicker = ({idCase, formfactor, height, width, depth , updateFields}) =
         <CaseSelect
           idCase={idCase}
           formfactor = {formfactor}
-          height = {height}
-          width = {width}
-          depth = {depth}
+          height = {maxHeight}
+          width = {maxWidth}
+          depth = {maxDepth}
           updateFields = {updateFields}
         />
     </div>

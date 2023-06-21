@@ -11,7 +11,7 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleGpus, fetchFilteredPartnerGpu } from "core/modules/Gpu/api";
 
-const GpuSelect = ({pcieSlots, updateFields}) => {
+const GpuSelect = ({pcieSlots, depth, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -23,6 +23,22 @@ const GpuSelect = ({pcieSlots, updateFields}) => {
 
   const onSubmit = (query) => {
     setQuery(query.search)
+  }
+
+  const onClick = (gpu) => {
+    updateFields({
+      idGpu: gpu.idGpuPartner,
+    })
+    if(gpu.depth > depth) {
+      updateFields({
+        maxDepth: gpu.depth,
+      })
+    }
+    if(gpu.width > width) {
+      updateFields({
+        maxWidth: gpu.width,
+      })
+    }
   }
 
   return (
@@ -67,19 +83,19 @@ const GpuSelect = ({pcieSlots, updateFields}) => {
               (!query && pcieSlots > 0) && (
                 <ul className="movieList">
                   {data.map((product) => (
-                    <li key={product.idMotherboard}>
+                    <li key={product.idGpuPartner}>
                       <ProductCard
                         subtitle={`Chipset: ${product.chipset}`}
                         product={product}
                         link={PossibleRoutes.Detail}
-                        id={product.idMotherboard}
+                        id={product.idGpuPartner}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
                         Vram: {product.vram} GB<br/>
                         Clockspeed: {product.clockspeed} MHz<br/>
                         Watercooled: {product.watercooled ? 'Yes': 'No'}
                       </ProductCard>
-                      <button type="button" onClick={e => updateFields({idGpu: product.idGpu})}>Choose</button>
+                      <button type="button" onClick={() => onClick(product)}>Choose</button>
                     </li>
                   ))}
                 </ul>

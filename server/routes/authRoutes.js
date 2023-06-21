@@ -13,6 +13,7 @@ const { motherboardModel } = require("../models/motherboard");
 const { caseModel } = require("../models/Case");
 const { ramModel } = require("../models/Ram");
 const { storageTypeModel } = require("../models/StorageType");
+const { storageModel } = require("../models/Storage");
 const { gpuModel, gpuPartnerModel } = require("../models/Gpu");
 const { psuModel } = require("../models/Psu");
 
@@ -25,6 +26,7 @@ const MotherboardController = require("../controllers/MotherboardController");
 const CaseController = require("../controllers/CaseController");
 const RamController = require("../controllers/RamController");
 const StorageTypeController = require("../controllers/StorageTypeController");
+const StorageController = require("../controllers/StorageController");
 const GpuController = require("../controllers/GpuController");
 const PsuController = require("../controllers/PsuController");
 const UploadController = require("../controllers/UploadController");
@@ -39,6 +41,7 @@ const motherboardController = new MotherboardController();
 const psuController = new PsuController();
 const caseController = new CaseController();
 const ramController = new RamController();
+const storageController = new StorageController();
 const storageTypeController = new StorageTypeController();
 const uploadController = new UploadController();
 
@@ -108,6 +111,13 @@ authRouter.delete("/ram/:id", ramModel, ramController.deleteRamById);
 authRouter.post("/ram", ramModel, ramController.createRam);
 
 // Storage Types
+authRouter.get("/storage", storageController.fetchStorage);
+authRouter.get("/storage/:id", storageController.fetchStorageById);
+authRouter.get("/storage/filter/:query", storageController.fetchStorageByFilter);
+authRouter.patch("/storage/:id", storageModel, storageController.patchStorageById);
+authRouter.delete("/storage/:id", storageModel, storageController.deleteStorageById);
+authRouter.post("/storage", storageModel, storageController.createStorage);
+
 authRouter.get("/storagetypes", storageTypeController.fetchStorageTypes);
 authRouter.post(
 	"/storagetypes",

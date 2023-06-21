@@ -29,6 +29,7 @@ const CpuCoolerSelect = ({idCpu, updateFields}) => {
     updateFields({
       idCpuCooler: cooler.idCpuCooler,
       cooler: cooler.idCpuSocket,
+      maxDepth: cooler.height,
       idMotherboard: ''
     })
   }

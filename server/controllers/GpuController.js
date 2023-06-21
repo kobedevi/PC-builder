@@ -41,7 +41,7 @@ class GpuController {
 		}
 	};
 
-	fetchGpuByBuild = async (req, res, next) => {
+	fetchGpusByBuild = async (req, res, next) => {
 		try {
 			const userQuery = `SELECT gpu_has_partners.*, manufacturers.manufacturerName, gpus.modelName AS chipset, gpus.vram FROM gpu_has_partners
 			LEFT JOIN manufacturers ON gpu_has_partners.idManufacturer = manufacturers.idManufacturer

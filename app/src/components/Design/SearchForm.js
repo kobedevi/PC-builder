@@ -71,7 +71,6 @@ const SearchForm = ({onSubmit, setQuery, initialData={}, disabled, isPublic=fals
         <>
             { !isPublic && (
                 <form className="row align-items-end" onSubmit={handleSubmit}>
-                    <p>Private</p>
                     <div className="col-md-6">
 
                         <Input

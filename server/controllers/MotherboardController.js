@@ -29,7 +29,7 @@ class MotherboardController {
 
 			const cpuSocket = rows[0].idCpuSocket;
 
-			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor FROM motherboards
+			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, formfactors.height, formfactors.width FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
 			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
