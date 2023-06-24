@@ -10,7 +10,7 @@ import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 
-const CpuSelect = ({idCpuSocket, cooler, updateFields}) => {
+const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -27,6 +27,9 @@ const CpuSelect = ({idCpuSocket, cooler, updateFields}) => {
   }
 
   const onClick = (cpu) => {
+    updateBuild({
+      cpu
+    })
     if(cpu.idCpuSocket !== idCpuSocket) {
       updateFields({
         idCpu: cpu.idProcessor,

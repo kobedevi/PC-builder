@@ -9,6 +9,9 @@ import GpuPicker from "./forms/GpuPicker"
 import CasePicker from "./forms/CasePicker"
 import StoragePicker from "./forms/StoragePicker"
 import PartsOverview from "./forms/PartsOverview"
+import ErrorAlert from "components/shared/ErrorAlert"
+import Alert from "components/Design/Alert"
+import ItemList from "components/Design/ItemList"
 
 const initialData = {
 	idCpu: "",
@@ -34,9 +37,22 @@ const initialData = {
 	maxDepth:0,
 }
 
+const initialBuild = {
+	cpu: {},
+	cpucooler: {},
+	motherboard: {},
+	case: {},
+	ram: {},
+	gpu: {},
+	psu: {},
+	storage: []
+}
+
 const Builder = () => {
 
-	const [data, setData] = useState(initialData)
+	const [data, setData] = useState(initialData);
+	const [alert, setAlert] = useState([{msg: "This is a test"}, {msg: "This is a test"}, {msg: "This is a test"}]);
+	const [currentBuild, setCurrentBuild] = useState(initialBuild)
 
 	const updateFields = (fields) => {
 		setData(prev => {
@@ -44,9 +60,15 @@ const Builder = () => {
 		})
 	}
 
+	const updateBuild = (fields) => {
+		setCurrentBuild(prev => {
+			return {...prev, ...fields}
+		})
+	}
+
 	const {steps, currentStepIndex, step, isFirstStep, isLastStep,back, next} = 
 		useMultiStepForm([
-			<CpuPicker {...data} updateFields={updateFields}/>, 
+			<CpuPicker {...data} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>, 
 			<CpuCoolerPicker {...data} updateFields={updateFields}/>,
 			<MotherboardPicker {...data} updateFields={updateFields}/>,
 			<RamPicker {...data} updateFields={updateFields}/>,
@@ -83,6 +105,12 @@ const Builder = () => {
 						{currentStepIndex + 1} / {steps.length}
 					</div>
 					<fieldset>
+						{alert && 
+							<ErrorAlert error={alert}/>
+						}
+						{currentBuild && 
+							<ItemList color="info" info={currentBuild}/>
+						}
 						<legend>{step}</legend>
 						<div className='btnContainer'>
 							{!isFirstStep && <button type="button" onClick={back}>Back</button>}
