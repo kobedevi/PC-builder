@@ -11,7 +11,7 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
 
-const CpuCoolerSelect = ({idCpu, updateFields}) => {
+const CpuCoolerSelect = ({idCpuCooler, idCpu, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -75,19 +75,22 @@ const CpuCoolerSelect = ({idCpu, updateFields}) => {
             {
               !query && (
                 <ul className="movieList">
-                  {data.map((product) => (
+                  {data.map((product) => {
+                    console.log(idCpuCooler)
+                    const disabled = product.idCpuCooler === idCpuCooler ? true : false;
+                    return (
                     <li key={product.idCpuCooler}>
                       <ProductCard
                         product={product}
                         link={PossibleRoutes.Detail}
-                        id={product.idProcessor}
+                        id={product.idCpuCooler}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
                         compatible sockets: {product.socketType.join(', ')}<br/>
                       </ProductCard>
-                      <button type="button" onClick={() => onClick(product)}>Choose</button>
+                      <button type="button" onClick={() => onClick(product)} disabled={disabled} >{!disabled ? 'Add' : 'Added'}</button>
                     </li>
-                  ))}
+                  )})}
                 </ul>
               )
             }

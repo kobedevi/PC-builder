@@ -26,16 +26,10 @@ const ErrorAlert = ({ error }) => {
       <Alert color="danger">{error.message || "Something went wrong"}</Alert>
     );
   }
-  else if (Array.isArray(error)) {
+  else if ((error.builderMsg)) {
     return (
-      <Alert color="warning">
-        <ul>
-          {error.map((x, index) => {
-            return (
-              <li key={index}>{x.msg.toString() || "Something went wrong"}</li>
-            );
-          })}
-        </ul>
+      <Alert color="danger">
+        {error.builderMsg.toString() || "Something went wrong"}
       </Alert>
     );
   }

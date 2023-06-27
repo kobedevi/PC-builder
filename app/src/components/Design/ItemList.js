@@ -1,18 +1,14 @@
 import PropTypes from "prop-types";
 import humps from "humps";
-import { CollapseProps } from 'rc-collapse';
-import Collapse from 'rc-collapse';
 import ItemCollapser from "../Design/ItemCollapser";
 
 const ItemList = ({ info, color = "primary" }) => {
 
-  const Panel = Collapse.items; 
-
   return (
-    <div className={`alert alert-${color}`} role="alert">
+    <div className="ItemList">
       {Object.entries(info).map(([key, value], i) => {
         return (
-          <div style={{display: "flex", flexDirection:"column", alignItems:"flex-start"}} key={key}>
+          <div className="item" key={key}>
             <h3><strong>{key.charAt(0).toUpperCase() + humps.decamelize(key, { separator: " " }).substring(1)}</strong></h3>
               {Object.keys(value).length > 0 &&
                 <div className="previewBox">

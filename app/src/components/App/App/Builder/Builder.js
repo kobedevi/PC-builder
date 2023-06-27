@@ -1,6 +1,6 @@
 import useMultiStepForm from "core/hooks/useMultiStepForm"
 import CpuPicker from "./forms/CpuPicker"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import CpuCoolerPicker from "./forms/CpuCoolerPicker"
 import StepCounter from "components/Design/StepCounter"
 import MotherboardPicker from "./forms/MotherboardPicker"
@@ -51,8 +51,11 @@ const initialBuild = {
 const Builder = () => {
 
 	const [data, setData] = useState(initialData);
-	const [alert, setAlert] = useState([{msg: "This is a test"}, {msg: "This is a test"}, {msg: "This is a test"}]);
+	const [alert, setAlert] = useState();
 	const [currentBuild, setCurrentBuild] = useState(initialBuild)
+
+	const builderForm = useRef(null);
+	const hiddenInput = useRef(null);
 
 	const updateFields = (fields) => {
 		setData(prev => {
@@ -68,13 +71,13 @@ const Builder = () => {
 
 	const {steps, currentStepIndex, step, isFirstStep, isLastStep,back, next} = 
 		useMultiStepForm([
-			<CpuPicker {...data} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>, 
-			<CpuCoolerPicker {...data} updateFields={updateFields}/>,
-			<MotherboardPicker {...data} updateFields={updateFields}/>,
-			<RamPicker {...data} updateFields={updateFields}/>,
-			<StoragePicker {...data} updateFields={updateFields}/>,
-			<GpuPicker {...data} updateFields={updateFields}/>,
-			<CasePicker {...data} updateFields={updateFields}/>,
+			<CpuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>, 
+			<CpuCoolerPicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
+			<MotherboardPicker {...data} hiddenInput={hiddenInput}  updateFields={updateFields}/>,
+			<RamPicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
+			<StoragePicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
+			<GpuPicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
+			<CasePicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
 			// TODO: PSU
 			<PartsOverview data={data}/>,
 		])
@@ -86,52 +89,57 @@ const Builder = () => {
 		alert("Success")
 	}
 
+	const validate = (e) => {
+		e.preventDefault();
+		if(hiddenInput.current.validity.valid) {
+			setAlert(null);
+			next();
+		} else {
+			setAlert({builderMsg: "Please pick a component"})
+		}
+	}
+
 	return (
-		<div className="formWrapper">
-			<div className="stepper">
-				<StepCounter steps={steps} currentStepIndex={currentStepIndex}/>
-			</div>
-			
-			<div style={{
-				position: "relative",
-				background: "white",
-				border: "1px solid black",
-				padding: "2rem",
-				margin: "1rem",
-				borderRadius: ".5rem",
-			}}>
-				<form className="builder" onSubmit={onSubmit}>
-					<div style={{position: "absolute", top: ".5rem", right:".5rem"}}>
-						{currentStepIndex + 1} / {steps.length}
-					</div>
-					<fieldset>
-						{alert && 
-							<ErrorAlert error={alert}/>
-						}
-						{currentBuild && 
-							<ItemList color="info" info={currentBuild}/>
-						}
-						<legend>{step}</legend>
-						<div className='btnContainer'>
-							{!isFirstStep && <button type="button" onClick={back}>Back</button>}
-							<button type="submit">{isLastStep ? "Finish" : "Next"}</button>
+		<>
+			<div className="formWrapper">
+				<div className="stepper">
+					<StepCounter steps={steps} currentStepIndex={currentStepIndex}/>
+				</div>
+				
+				<div className="builderParent">
+					<form className="builder" ref={builderForm} onSubmit={onSubmit}>
+						<div style={{position: "absolute", top: ".5rem", right:".5rem"}}>
+							{currentStepIndex + 1} / {steps.length}
 						</div>
-					</fieldset>
-				</form>
-				{data && (
-					<div>
-						{/* {Object.entries(data).map(([key, value]) => {
-						// hide show id fields
-							return (
-								<p key={key}>
-									{key}: {value}
-								</p>
-							);
-						})} */}
-					</div>
-				)}
+						<fieldset>
+							{alert && 
+								<ErrorAlert error={alert}/>
+							}
+							<legend>{step}</legend>
+							<div className='btnContainer'>
+								{!isFirstStep && <button type="button" onClick={back}>Back</button>}
+								<button type="submit" onClick={(e) => validate(e)}>{isLastStep ? "Finish" : "Next"}</button>
+							</div>
+						</fieldset>
+					</form>
+					{data && (
+						<div>
+							{/* {Object.entries(data).map(([key, value]) => {
+							// hide show id fields
+								return (
+									<p key={key}>
+										{key}: {value}
+									</p>
+								);
+							})} */}
+						</div>
+					)}
+				</div>
 			</div>
-		</div>
+			{currentBuild && 
+				<ItemList color="info" info={currentBuild}/>
+			}
+		</>
 	)
 }
 

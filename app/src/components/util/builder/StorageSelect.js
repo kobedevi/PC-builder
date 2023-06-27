@@ -91,7 +91,7 @@ const RamSelect = ({drives, setDrives, smallSlots, largeSlots, m2Slots, updateFi
                         <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
                         Ram speed: {product.speed}MHz<br/>
                       </ProductCard>
-                      <button type="button" onClick={() => onClick(product)}>Choose</button>
+                      <button type="button" onClick={() => onClick(product)}>Add</button>
                      
                     </li>
                   ))}

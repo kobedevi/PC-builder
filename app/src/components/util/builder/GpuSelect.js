@@ -11,7 +11,7 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleGpus, fetchFilteredPartnerGpu } from "core/modules/Gpu/api";
 
-const GpuSelect = ({pcieSlots, depth, width, updateFields}) => {
+const GpuSelect = ({idGpu, pcieSlots, depth, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -82,7 +82,9 @@ const GpuSelect = ({pcieSlots, depth, width, updateFields}) => {
             {
               (!query && pcieSlots > 0) && (
                 <ul className="movieList">
-                  {data.map((product) => (
+                  {data.map((product) => {
+                    const disabled = product.idGpuPartner === idGpu ? true : false;
+                    return (
                     <li key={product.idGpuPartner}>
                       <ProductCard
                         subtitle={`Chipset: ${product.chipset}`}
@@ -95,9 +97,9 @@ const GpuSelect = ({pcieSlots, depth, width, updateFields}) => {
                         Clockspeed: {product.clockspeed} MHz<br/>
                         Watercooled: {product.watercooled ? 'Yes': 'No'}
                       </ProductCard>
-                      <button type="button" onClick={() => onClick(product)}>Choose</button>
+                      <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                     </li>
-                  ))}
+                  )})}
                 </ul>
               )
             }

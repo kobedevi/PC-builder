@@ -11,7 +11,7 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleMotherboard, fetchFilteredMotherboards } from "core/modules/Motherboard/api";
 
-const MotherboardSelect = ({idCpu, width, updateFields}) => {
+const MotherboardSelect = ({idMotherboard, idCpu, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -76,7 +76,9 @@ const MotherboardSelect = ({idCpu, width, updateFields}) => {
             {
               !query && (
                 <ul className="movieList">
-                  {data.map((product) => (
+                  {data.map((product) => {
+                    const disabled = product.idMotherboard === idMotherboard ? true : false;
+                    return(
                     <li key={product.idMotherboard}>
                       <ProductCard
                         product={product}
@@ -87,9 +89,9 @@ const MotherboardSelect = ({idCpu, width, updateFields}) => {
                         Formfactor: {product.formfactor}<br/>
                         SocketType: {product.socketType}<br/>
                       </ProductCard>
-                      <button type="button" onClick={() => onClick(product)}>Choose</button>
+                      <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                     </li>
-                  ))}
+                  )})}
                 </ul>
               )
             }

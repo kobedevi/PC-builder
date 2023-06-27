@@ -1,10 +1,10 @@
 import MotherboardSelect from 'components/util/builder/MotherboardSelect'
 
-const MotherboardPicker = ({idMotherboard, idCpu, maxWidth, updateFields}) => {
+const MotherboardPicker = ({hiddenInput, idMotherboard, idCpu, maxWidth, updateFields}) => {
   return (
     <div>
         Motherboard picker:
-        <input tabIndex="-1" style={{color:"black"}} value={idMotherboard} required type="text"/>
+        <input className="HideInput" ref={hiddenInput} tabIndex="-1" style={{color:"black"}} value={idMotherboard} required type="text"/>
         <MotherboardSelect
           idMotherboard = {idMotherboard}
           idCpu = {idCpu}

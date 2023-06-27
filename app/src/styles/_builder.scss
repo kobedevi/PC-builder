@@ -13,6 +13,7 @@ form.builder{
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex-grow: 1;
     .stepper{
         margin: 30px 0;
         position: relative;
@@ -42,5 +43,32 @@ form.builder{
             height: 10px;
             background-color: $primary;
         }
+    }
+}
+
+.builderParent {
+    position: relative;
+    background: white;
+    border: 1px solid black;
+    padding: 64px 48px;
+    margin: 1rem;
+    border-radius: 25px;
+    .builder {
+        width: 100%;
+        max-width: 1200px;
+        .HideInput {
+            display: none;
+        }
+    }
+}
+
+.ItemList {
+    max-width: 200px;
+    width: 30%;
+    .item {
+        display: "flex";
+        flex-direction:"column";
+        align-items:"flex-start";
+        padding: .33rem 1rem;
     }
 }

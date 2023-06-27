@@ -517,6 +517,16 @@ form {
     }
 }
 
+.App {
+    min-height: 100dvh;
+    .content {
+        min-height: 100dvh;
+        .scroller {
+            flex: unset;
+        }
+    }
+}
+
 .previewBox{
     display:flex;
     flex-direction:column;

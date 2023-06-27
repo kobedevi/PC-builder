@@ -1,7 +1,7 @@
 import StorageSelect from 'components/util/builder/StorageSelect'
 import { useEffect, useState } from 'react'
 
-const StoragePicker = ({storage, smallSlots, largeSlots, m2Slots, updateFields}) => {
+const StoragePicker = ({hiddenInput, storage, smallSlots, largeSlots, m2Slots, updateFields}) => {
 
   const temp = storage
   const [drives, setDrives] = useState(storage);
@@ -15,13 +15,14 @@ const StoragePicker = ({storage, smallSlots, largeSlots, m2Slots, updateFields})
   return (
     <div>
         Storage picker:
-        {/* <input tabIndex="-1" style={{color:"black"}} value={storage[0]?.modelName} required type="text"/> */}
+        <input className='HiddenInput' ref={hiddenInput} tabIndex="-1" style={{color:"black"}} value={drives[0]?.modelName} readonly type="text"/>
         <div>
           {drives.map((s, index) => {
             return (
               <div key={s.localId} className="form-group selectArray">
                 <input
-                  className="form-control"
+                
+                  className="form-control hideInput"
                   readOnly
                   value={s.modelName || ""}
                 />

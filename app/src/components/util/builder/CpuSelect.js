@@ -86,7 +86,9 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
             {
               !query && (
                 <ul className="movieList">
-                  {cpus.map((cpu) => (
+                  {cpus.map((cpu) => {
+                    const disabled = cpu.idProcessor === currentBuild.cpu.idProcessor ? true : false;
+                    return(
                     <li key={cpu.idProcessor}>
                       <ProductCard
                         product={cpu}
@@ -98,10 +100,9 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
                         Cores: {cpu.cores}<br/>
                         Socket: {cpu.socketType}
                       </ProductCard>
-                      <button type="button" onClick={() => onClick(cpu)}>Choose</button>
-                      {/* <button type="button" onClick={e => updateFields({idCpu: cpu.idProcessor})}>Choose</button> */}
+                      <button type="button" onClick={() => onClick(cpu)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                     </li>
-                  ))}
+                  )})}
                 </ul>
               )
             }

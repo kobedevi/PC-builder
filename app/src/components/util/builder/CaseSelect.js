@@ -73,7 +73,9 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
             {
               !query && (
                 <ul className="movieList">
-                  {data.map((product) => (
+                  {data.map((product) => {
+                    const disabled = product.idCase === idCase ? true : false;
+                    return(
                     console.log(product),
                     <li key={product.idCase}>
                       <ProductCard
@@ -84,7 +86,7 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
                         Manufacturer: {product.manufacturerName}<br/>
                         Formfactor: {product.formfactor}<br/>
                       </ProductCard>
-                      <button type="button" onClick={() => onClick(product)}>Choose</button>
+                      <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                     </li>
                   ))}
                 </ul>

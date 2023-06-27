@@ -1,10 +1,11 @@
 import GpuSelect from 'components/util/builder/GpuSelect'
 
-const GpuPicker = ({idGpu, pcieSlots, maxDepth, maxWidth, updateFields}) => {
+const GpuPicker = ({idGpu, hiddenInput, pcieSlots, maxDepth, maxWidth, updateFields}) => {
   return (
     <div>
         Video Card picker:
-        <input tabIndex="-1" style={{color:"black"}} value={idGpu} type="text"/>
+        <input className="HideInput" ref={hiddenInput} tabIndex="-1" style={{color:"black"}} value={idGpu} type="text"/>
+        <p>idGpu: {idGpu}</p>
         <GpuSelect
           idGpu={idGpu}
           pcieSlots = {pcieSlots}

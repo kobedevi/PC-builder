@@ -11,7 +11,7 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleRam, fetchFilteredRam } from "core/modules/Ram/api";
 
-const RamSelect = ({memorySlots, updateFields}) => {
+const RamSelect = ({idRam, memorySlots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -66,7 +66,9 @@ const RamSelect = ({memorySlots, updateFields}) => {
             {
               !query && (
                 <ul className="movieList">
-                  {data.map((product) => (
+                  {data.map((product) => {
+                    const disabled = product.idRam === idRam ? true : false;
+                    return(
                     <li key={product.idRam}>
                       <ProductCard
                         product={product}
@@ -80,9 +82,9 @@ const RamSelect = ({memorySlots, updateFields}) => {
                         <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
                         Ram speed: {product.speed}MHz<br/>
                       </ProductCard>
-                      <button type="button" onClick={e => updateFields({idRam: product.idRam})}>Choose</button>
+                      <button type="button" onClick={e => updateFields({idRam: product.idRam})} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                     </li>
-                  ))}
+                  )})}
                 </ul>
               )
             }
