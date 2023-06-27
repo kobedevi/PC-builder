@@ -6,10 +6,10 @@ import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
-import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
+import BuilderProductCard from "components/Design/BuilderProductCard";
 
 const CpuCoolerSelect = ({idCpuCooler, idCpu, updateFields}) => {
   const [info, setInfo] = useState();
@@ -74,21 +74,21 @@ const CpuCoolerSelect = ({idCpuCooler, idCpu, updateFields}) => {
             )}
             {
               !query && (
-                <ul className="movieList">
+                <ul className="productList">
                   {data.map((product) => {
                     console.log(idCpuCooler)
                     const disabled = product.idCpuCooler === idCpuCooler ? true : false;
                     return (
                     <li key={product.idCpuCooler}>
-                      <ProductCard
+                      <BuilderProductCard
                         product={product}
                         link={PossibleRoutes.Detail}
                         id={product.idCpuCooler}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
                         compatible sockets: {product.socketType.join(', ')}<br/>
-                      </ProductCard>
-                      <button type="button" onClick={() => onClick(product)} disabled={disabled} >{!disabled ? 'Add' : 'Added'}</button>
+                        <button type="button" onClick={() => onClick(product)} disabled={disabled} >{!disabled ? 'Add' : 'Added'}</button>
+                      </BuilderProductCard>
                     </li>
                   )})}
                 </ul>

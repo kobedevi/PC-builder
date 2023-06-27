@@ -110,6 +110,7 @@ const Builder = () => {
 					<form className="builder" ref={builderForm} onSubmit={onSubmit}>
 						<div style={{position: "absolute", top: ".5rem", right:".5rem"}}>
 							{currentStepIndex + 1} / {steps.length}
+
 						</div>
 						<fieldset>
 							{alert && 
@@ -117,8 +118,8 @@ const Builder = () => {
 							}
 							<legend>{step}</legend>
 							<div className='btnContainer'>
-								{!isFirstStep && <button type="button" onClick={back}>Back</button>}
-								<button type="submit" onClick={(e) => validate(e)}>{isLastStep ? "Finish" : "Next"}</button>
+								{!isFirstStep && <button className="back" type="button" onClick={back}><span>Back </span>&lt;</button>}
+								<button className="next" type="submit" onClick={(e) => validate(e)}><span>{isLastStep ? "Finish " : "Next "}</span>&gt;</button>
 							</div>
 						</fieldset>
 					</form>

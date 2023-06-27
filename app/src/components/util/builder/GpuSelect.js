@@ -10,6 +10,7 @@ import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleGpus, fetchFilteredPartnerGpu } from "core/modules/Gpu/api";
+import BuilderProductCard from "components/Design/BuilderProductCard";
 
 const GpuSelect = ({idGpu, pcieSlots, depth, width, updateFields}) => {
   const [info, setInfo] = useState();
@@ -81,12 +82,12 @@ const GpuSelect = ({idGpu, pcieSlots, depth, width, updateFields}) => {
             )}
             {
               (!query && pcieSlots > 0) && (
-                <ul className="movieList">
+                <ul className="productList">
                   {data.map((product) => {
                     const disabled = product.idGpuPartner === idGpu ? true : false;
                     return (
                     <li key={product.idGpuPartner}>
-                      <ProductCard
+                      <BuilderProductCard
                         subtitle={`Chipset: ${product.chipset}`}
                         product={product}
                         link={PossibleRoutes.Detail}
@@ -96,8 +97,8 @@ const GpuSelect = ({idGpu, pcieSlots, depth, width, updateFields}) => {
                         Vram: {product.vram} GB<br/>
                         Clockspeed: {product.clockspeed} MHz<br/>
                         Watercooled: {product.watercooled ? 'Yes': 'No'}
-                      </ProductCard>
-                      <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                      </BuilderProductCard>
                     </li>
                   )})}
                 </ul>

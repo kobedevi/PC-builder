@@ -10,6 +10,7 @@ import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleRam, fetchFilteredRam } from "core/modules/Ram/api";
+import BuilderProductCard from "components/Design/BuilderProductCard";
 
 const RamSelect = ({idRam, memorySlots, updateFields}) => {
   const [info, setInfo] = useState();
@@ -65,12 +66,12 @@ const RamSelect = ({idRam, memorySlots, updateFields}) => {
             )}
             {
               !query && (
-                <ul className="movieList">
+                <ul className="productList">
                   {data.map((product) => {
                     const disabled = product.idRam === idRam ? true : false;
                     return(
                     <li key={product.idRam}>
-                      <ProductCard
+                      <BuilderProductCard
                         product={product}
                         link={PossibleRoutes.Detail}
                         id={product.idRam}
@@ -81,8 +82,8 @@ const RamSelect = ({idRam, memorySlots, updateFields}) => {
                         Size per stick: {product.sizePerStick} GB<br/>
                         <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
                         Ram speed: {product.speed}MHz<br/>
-                      </ProductCard>
-                      <button type="button" onClick={e => updateFields({idRam: product.idRam})} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        <button type="button" onClick={e => updateFields({idRam: product.idRam})} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                      </BuilderProductCard>
                     </li>
                   )})}
                 </ul>

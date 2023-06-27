@@ -9,6 +9,7 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
+import BuilderProductCard from "components/Design/BuilderProductCard";
 
 const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields}) => {
   const [info, setInfo] = useState();
@@ -85,22 +86,24 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
 
             {
               !query && (
-                <ul className="movieList">
+                <ul className="productList">
                   {cpus.map((cpu) => {
                     const disabled = cpu.idProcessor === currentBuild.cpu.idProcessor ? true : false;
                     return(
                     <li key={cpu.idProcessor}>
-                      <ProductCard
+                      <BuilderProductCard
                         product={cpu}
                         link={PossibleRoutes.Detail}
                         id={cpu.idProcessor}
                       >
-                        Manufacturer: {cpu.manufacturerName}<br/>
-                        Base Clock: {cpu.clockSpeed}Ghz<br/>
-                        Cores: {cpu.cores}<br/>
-                        Socket: {cpu.socketType}
-                      </ProductCard>
-                      <button type="button" onClick={() => onClick(cpu)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        <p>
+                          Manufacturer: {cpu.manufacturerName}<br/>
+                          Base Clock: {cpu.clockSpeed}Ghz<br/>
+                          Cores: {cpu.cores}<br/>
+                          Socket: {cpu.socketType}
+                        </p>
+                        <button type="button" onClick={() => onClick(cpu)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                      </BuilderProductCard>
                     </li>
                   )})}
                 </ul>

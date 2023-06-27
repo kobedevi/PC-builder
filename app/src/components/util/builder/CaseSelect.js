@@ -6,10 +6,10 @@ import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
-import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleCases, fetchFilteredCases } from "core/modules/Case/api";
+import BuilderProductCard from "components/Design/BuilderProductCard";
 
 // TODO: everything here
 const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) => {
@@ -72,23 +72,22 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
             )}
             {
               !query && (
-                <ul className="movieList">
+                <ul className="productList">
                   {data.map((product) => {
                     const disabled = product.idCase === idCase ? true : false;
                     return(
-                    console.log(product),
                     <li key={product.idCase}>
-                      <ProductCard
+                      <BuilderProductCard
                         product={product}
                         link={PossibleRoutes.Detail}
                         id={product.idCase}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
                         Formfactor: {product.formfactor}<br/>
-                      </ProductCard>
-                      <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                      </BuilderProductCard>
                     </li>
-                  ))}
+                  )})}
                 </ul>
               )
             }

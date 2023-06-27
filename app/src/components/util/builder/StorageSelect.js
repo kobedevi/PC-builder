@@ -9,6 +9,7 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleStorage, fetchFilteredStorage } from "core/modules/Storage/api";
 import { v4 as uuidv4 } from "uuid";
+import BuilderProductCard from "components/Design/BuilderProductCard";
 
 
 const RamSelect = ({drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
@@ -76,10 +77,10 @@ const RamSelect = ({drives, setDrives, smallSlots, largeSlots, m2Slots, updateFi
             )}
             {
               !query && (
-                <ul className="movieList">
+                <ul className="productList">
                   {data.map((product) => (
                     <li key={product.idStorage}>
-                      <ProductCard
+                      <BuilderProductCard
                         product={product}
                         link={PossibleRoutes.Detail}
                         id={product.idRam}
@@ -90,8 +91,8 @@ const RamSelect = ({drives, setDrives, smallSlots, largeSlots, m2Slots, updateFi
                         Size per stick: {product.sizePerStick} GB<br/>
                         <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
                         Ram speed: {product.speed}MHz<br/>
-                      </ProductCard>
-                      <button type="button" onClick={() => onClick(product)}>Add</button>
+                        <button type="button" onClick={() => onClick(product)}>Add</button>
+                      </BuilderProductCard>
                      
                     </li>
                   ))}

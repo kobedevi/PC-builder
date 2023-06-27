@@ -2,8 +2,8 @@ import { useCallback } from "react";
 import ErrorAlert from "components/shared/ErrorAlert";
 import useFetch from "core/hooks/useFetch";
 import Spinner from "components/Design/Spinner";
-import ProductCard from "components/Design/ProductCard";
 import { PossibleRoutes } from "core/routing";
+import BuilderProductCard from "components/Design/BuilderProductCard";
 
 const Result = ({result, filter}) => {
 
@@ -38,17 +38,17 @@ const Result = ({result, filter}) => {
         <>
         {
             products && (
-                <ul className='movieList'>
+                <ul className='productList'>
                     { products.map((product) => (
                         <li key={product.idProcessor}>
-                            <ProductCard
+                            <BuilderProductCard
                                 product={product}
                                 link={PossibleRoutes.Detail}
                                 id={product.idProcessor}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
                                 Formfactor: {product.formfactor}<br/>
-                            </ProductCard>
+                            </BuilderProductCard>
                         </li>
                     ))}
                 </ul>
