@@ -10,8 +10,8 @@ import CasePicker from "./forms/CasePicker"
 import StoragePicker from "./forms/StoragePicker"
 import PartsOverview from "./forms/PartsOverview"
 import ErrorAlert from "components/shared/ErrorAlert"
-import Alert from "components/Design/Alert"
 import ItemList from "components/Design/ItemList"
+import PsuPicker from "./forms/PsuPicker"
 
 const initialData = {
 	idCpu: "",
@@ -41,11 +41,11 @@ const initialBuild = {
 	cpu: {},
 	cpucooler: {},
 	motherboard: {},
-	case: {},
 	ram: {},
+	storage: [],
 	gpu: {},
 	psu: {},
-	storage: []
+	case: {},
 }
 
 const Builder = () => {
@@ -72,12 +72,14 @@ const Builder = () => {
 	const {steps, currentStepIndex, step, isFirstStep, isLastStep,back, next} = 
 		useMultiStepForm([
 			<CpuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>, 
-			<CpuCoolerPicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
-			<MotherboardPicker {...data} hiddenInput={hiddenInput}  updateFields={updateFields}/>,
-			<RamPicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
-			<StoragePicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
-			<GpuPicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
-			<CasePicker {...data} hiddenInput={hiddenInput} updateFields={updateFields}/>,
+			<CpuCoolerPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
+			<MotherboardPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
+			<RamPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
+			// TODO: add currentBuild and updateBuild from here on
+			<StoragePicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
+			<GpuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
+			<CasePicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
+			<PsuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
 			// TODO: PSU
 			<PartsOverview data={data}/>,
 		])

@@ -58,6 +58,23 @@ class PsuController {
 		}
 	};
 
+	fetchPsusByBuild = async(req, res, next) => {
+		try {
+			const { wattage } = req.params;
+			const userQuery = `SELECT * FROM psu
+			LEFT JOIN manufacturers ON psu.idManufacturer = manufacturers.idManufacturer
+			WHERE psu.wattage >= ?
+			AND psu.deleted = 0
+			ORDER BY wattage;`;
+			const [rows] = await db.promise().query(userQuery, [wattage]);
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	}
+
 	patchPsuById = async (req, res, next) => {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
