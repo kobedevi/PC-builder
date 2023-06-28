@@ -86,11 +86,9 @@ const RamSelect = ({drives, setDrives, smallSlots, largeSlots, m2Slots, updateFi
                         id={product.idRam}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
-                        Ram type: {product.type}<br/>
-                        Amount of sticks: {product.stickAmount}<br/>
-                        Size per stick: {product.sizePerStick} GB<br/>
-                        <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
-                        Ram speed: {product.speed}MHz<br/>
+                        Capacity: {product.capacity}<br/>
+                        Storage Type: {product.storageType}<br/>
+                        {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}
                         <button type="button" onClick={() => onClick(product)}>Add</button>
                       </BuilderProductCard>
                      

@@ -12,7 +12,7 @@ import Result from "./Result";
 import { fetchCompatibleRam, fetchFilteredRam } from "core/modules/Ram/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
-const RamSelect = ({idRam, memorySlots, updateFields}) => {
+const RamSelect = ({currentBuild, updateBuild, idRam, memorySlots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -24,6 +24,15 @@ const RamSelect = ({idRam, memorySlots, updateFields}) => {
 
   const onSubmit = (query) => {
     setQuery(query.search)
+  }
+
+  const onClick = (product) => {
+    updateBuild({
+      ram: product
+    })
+    updateFields({
+      idRam: product.idRam
+    })
   }
 
   return (
@@ -68,7 +77,7 @@ const RamSelect = ({idRam, memorySlots, updateFields}) => {
               !query && (
                 <ul className="productList">
                   {data.map((product) => {
-                    const disabled = product.idRam === idRam ? true : false;
+                    const disabled = product.idRam === currentBuild.ram.idRam ? true : false;
                     return(
                     <li key={product.idRam}>
                       <BuilderProductCard
@@ -82,7 +91,7 @@ const RamSelect = ({idRam, memorySlots, updateFields}) => {
                         Size per stick: {product.sizePerStick} GB<br/>
                         <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
                         Ram speed: {product.speed}MHz<br/>
-                        <button type="button" onClick={e => updateFields({idRam: product.idRam})} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                       </BuilderProductCard>
                     </li>
                   )})}

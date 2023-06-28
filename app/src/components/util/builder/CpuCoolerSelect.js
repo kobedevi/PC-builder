@@ -11,7 +11,7 @@ import Result from "./Result";
 import { fetchCompatibleCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
-const CpuCoolerSelect = ({idCpuCooler, idCpu, updateFields}) => {
+const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -26,6 +26,9 @@ const CpuCoolerSelect = ({idCpuCooler, idCpu, updateFields}) => {
   }
 
   const onClick = (cooler) => {
+    updateBuild({
+      cpucooler: cooler
+    })
     updateFields({
       idCpuCooler: cooler.idCpuCooler,
       cooler: cooler.idCpuSocket,
@@ -77,7 +80,7 @@ const CpuCoolerSelect = ({idCpuCooler, idCpu, updateFields}) => {
                 <ul className="productList">
                   {data.map((product) => {
                     console.log(idCpuCooler)
-                    const disabled = product.idCpuCooler === idCpuCooler ? true : false;
+                    const disabled = product.idCpuCooler === currentBuild.cpucooler.idCpuCooler ? true : false;
                     return (
                     <li key={product.idCpuCooler}>
                       <BuilderProductCard

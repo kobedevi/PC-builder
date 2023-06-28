@@ -12,7 +12,7 @@ import Result from "./Result";
 import { fetchCompatibleMotherboard, fetchFilteredMotherboards } from "core/modules/Motherboard/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
-const MotherboardSelect = ({idMotherboard, idCpu, width, updateFields}) => {
+const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -27,6 +27,9 @@ const MotherboardSelect = ({idMotherboard, idCpu, width, updateFields}) => {
   }
 
   const onClick = (product) => {
+    updateBuild({
+      motherboard: product
+    })
     updateFields({
       idMotherboard: product.idMotherboard,
       memorySlots: product.memorySlots,
@@ -78,7 +81,7 @@ const MotherboardSelect = ({idMotherboard, idCpu, width, updateFields}) => {
               !query && (
                 <ul className="productList">
                   {data.map((product) => {
-                    const disabled = product.idMotherboard === idMotherboard ? true : false;
+                    const disabled = product.idMotherboard === currentBuild.motherboard.idMotherboard ? true : false;
                     return(
                     <li key={product.idMotherboard}>
                       <BuilderProductCard

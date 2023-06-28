@@ -11,7 +11,7 @@ const ItemCollapser = ({item}) => {
 
   return (
 	<>
-		<p style={{color: "black", marginBottom: 0}}><strong>{item.modelName}</strong><a href="#" onClick={(e) => handleClick(e)}>{!collapse ? "More..." : "Less..."}</a></p>
+		<p style={{color: "black", marginBottom: 0}}><strong>{item.modelName}</strong> <a href="#" onClick={(e) => handleClick(e)}>{!collapse ? "More..." : "Less..."}</a></p>
 		
 		<ul className={collapse ? "list-unstyled collapser show" : "hide"}>
 			{Object.entries(item).map(([key, item]) => {

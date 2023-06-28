@@ -94,8 +94,8 @@ const GpuSelect = ({idGpu, pcieSlots, depth, width, updateFields}) => {
                         id={product.idGpuPartner}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
-                        Vram: {product.vram} GB<br/>
-                        Clockspeed: {product.clockspeed} MHz<br/>
+                        Vram: {product.vram}GB<br/>
+                        Clockspeed: {product.clockspeed}MHz<br/>
                         Watercooled: {product.watercooled ? 'Yes': 'No'}
                         <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                       </BuilderProductCard>
