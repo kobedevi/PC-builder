@@ -115,7 +115,7 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
       />
 
       <NumberInput
-        label="Height in cm"
+        label="Height"
         type="number"
         name="height"
         value={data.height}
@@ -124,11 +124,12 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         max={"1000"}
         step={1}
         onChange={handleChange}
+        unit={"cm"}
         error={errors.height}
       />
 
       <NumberInput
-        label="Width in cm"
+        label="Width"
         type="number"
         name="width"
         value={data.width}
@@ -137,11 +138,12 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         max={"1000"}
         step={1}
         onChange={handleChange}
+        unit={"cm"}
         error={errors.width}
       />
 
       <NumberInput
-        label="Depth in cm"
+        label="Depth"
         type="number"
         name="depth"
         value={data.depth}
@@ -150,6 +152,7 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         max={"1000"}
         step={1}
         onChange={handleChange}
+        unit={"cm"}
         error={errors.depth}
       />
 
@@ -180,7 +183,7 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
       />
 
       
-      <div>
+      <div className="form-group">
         <Input
           label="Product image"
           type="file"

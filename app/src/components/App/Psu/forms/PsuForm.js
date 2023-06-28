@@ -137,7 +137,7 @@ const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
       />
 
       <NumberInput
-        label="Height in mm"
+        label="Height"
         type="number"
         name="height"
         value={data.height}
@@ -146,11 +146,12 @@ const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         max={1000}
         step={1}
         onChange={handleChange}
+        unit={"mm"}
         error={errors.height}
       />
 
       <NumberInput
-        label="Width in mm"
+        label="Width"
         type="number"
         name="width"
         value={data.width}
@@ -158,12 +159,13 @@ const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         min={1}
         max={1000}
         step={1}
+        unit={"mm"}
         onChange={handleChange}
         error={errors.width}
       />
 
       <NumberInput
-        label="Depth in mm"
+        label="Depth"
         type="number"
         name="depth"
         value={data.depth}
@@ -171,11 +173,12 @@ const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         min={1}
         max={1000}
         step={1}
+        unit={"mm"}
         onChange={handleChange}
         error={errors.depth}
       />
       
-      <div>
+      <div className="form-group">
         <Input
           label="Product image"
           type="file"

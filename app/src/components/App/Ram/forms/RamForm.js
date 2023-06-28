@@ -126,6 +126,7 @@ const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         max={"512"}
         step={1}
         onChange={handleChange}
+        unit={"GB"}
         error={errors.sizePerStick}
       />
 
@@ -143,7 +144,7 @@ const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
       />
 
       <NumberInput
-        label="Speed in MHz"
+        label="Speed"
         type="number"
         name="speed"
         value={data.speed}
@@ -151,6 +152,7 @@ const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         min={"1"}
         max={"12000"}
         step={100}
+        unit={"MHz"}
         onChange={handleChange}
         error={errors.speed}
       />
@@ -165,7 +167,7 @@ const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         error={errors.type}
       />
 
-      <div>
+      <div className="form-group">
         <Input
           label="Product image"
           type="file"

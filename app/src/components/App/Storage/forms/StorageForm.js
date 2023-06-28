@@ -97,7 +97,7 @@ const StorageForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) =>
       />
       
       <NumberInput
-        label="Storage capacity in GB"
+        label="Storage capacity"
         type="number"
         name="capacity"
         value={data.capacity}
@@ -106,6 +106,7 @@ const StorageForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) =>
         max={250000}
         step={1000}
         onChange={handleChange}
+        unit={"GB"}
         error={errors.capacity}
       />
 

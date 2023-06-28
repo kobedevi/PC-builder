@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 const NumberInput = React.forwardRef(
   (
     {
+      unit,
       type = "number",
       label,
       name,
@@ -19,22 +20,29 @@ const NumberInput = React.forwardRef(
     ref
   ) => {
     return (
-      <div className="form-group">
+      <div className="form-group" style={{position: "relative"}}>
         {label && <label htmlFor={name}>{label}:</label>}
-        <input
-          id={name}
-          className={`form-control ${error ? "is-invalid" : ""}`}
-          type={type}
-          name={name}
-          ref={ref}
-          disabled={disabled}
-          value={value}
-          onChange={onChange}
-          min={min}
-          max={max}
-          placeholder={placeholder}
-          {...rest}
-        />
+        <div className="inputParent">
+          <input
+            id={name}
+            className={`form-control ${error ? "is-invalid" : ""} ${unit ? "square" : ""}`}
+            type={type}
+            name={name}
+            ref={ref}
+            disabled={disabled}
+            value={value}
+            onChange={onChange}
+            min={min}
+            max={max}
+            placeholder={placeholder}
+            {...rest}
+          />
+          {unit && (
+            <div className="formUnit">
+              <span>{unit}</span>
+            </div>
+          )}
+        </div>
         {error && <div className="invalid-feedback">{error}</div>}
       </div>
     );

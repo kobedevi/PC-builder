@@ -122,7 +122,7 @@ const CpuCoolerForm = ({ file, setFile, onSubmit, initialData = { idCpuSocket: {
         error={errors.modelName}
       />
       <NumberInput
-        label="Height in mm"
+        label="Height"
         type="number"
         name="height"
         value={data.height}
@@ -131,10 +131,11 @@ const CpuCoolerForm = ({ file, setFile, onSubmit, initialData = { idCpuSocket: {
         max={1000}
         step={1}
         onChange={handleChange}
+        unit={'mm'}
         error={errors.height}
       />
       <NumberInput
-        label="Width in mm"
+        label="Width"
         type="number"
         name="width"
         value={data.width}
@@ -143,10 +144,11 @@ const CpuCoolerForm = ({ file, setFile, onSubmit, initialData = { idCpuSocket: {
         max={1000}
         step={1}
         onChange={handleChange}
+        unit={'mm'}
         error={errors.width}
       />
       <NumberInput
-        label="Depth in mm"
+        label="Depth"
         type="number"
         name="depth"
         value={data.depth}
@@ -155,6 +157,7 @@ const CpuCoolerForm = ({ file, setFile, onSubmit, initialData = { idCpuSocket: {
         max={1000}
         step={1}
         onChange={handleChange}
+        unit={'mm'}
         error={errors.depth}
       />
       <ArrayCpuSocketSelect
@@ -169,7 +172,7 @@ const CpuCoolerForm = ({ file, setFile, onSubmit, initialData = { idCpuSocket: {
         error={errors.cpuSockets}
       />
 
-      <div>
+      <div className="form-group">
         <Input
           label="Product image"
           type="file"
