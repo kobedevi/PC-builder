@@ -14,6 +14,7 @@ const schema = yup.object().shape({
   clockSpeed: yup.number().required().positive(),
   cores: yup.number().required().positive().integer(),
   image: yup.string().nullable(),
+  tdp: yup.number().required().positive().integer()
 });
 
 const defaultData = {
@@ -23,6 +24,7 @@ const defaultData = {
   clockSpeed: 3.5,
   cores: 4,
   image: "",
+  tdp: 100,
 };
 
 const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -115,6 +117,7 @@ const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         disabled={disabled}
         min={".1"}
         step={0.1}
+        unit={'GHz'}
         onChange={handleChange}
         error={errors.clockSpeed}
       />
@@ -131,7 +134,20 @@ const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         error={errors.cores}
       />
 
-      <div>
+      <NumberInput
+        label="TDP"
+        type="number"
+        name="tdp"
+        value={data.tdp}
+        disabled={disabled}
+        min={"1"}
+        step={1}
+        onChange={handleChange}
+        unit={'W'}
+        error={errors.tdp}
+      />
+
+      <div className="form-group">
         <Input
           label="Product image"
           type="file"

@@ -159,7 +159,7 @@ const GpuOriginalForm = ({
       />
 
       <NumberInput
-        label="VRAM in GB"
+        label="VRAM"
         type="number"
         name="vram"
         value={data.vram}
@@ -168,6 +168,7 @@ const GpuOriginalForm = ({
         max={1024}
         step={1}
         onChange={handleChange}
+        unit={"GB"}
         error={errors.vram}
       />
 

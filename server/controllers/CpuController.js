@@ -85,7 +85,7 @@ class CpuController {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image } =
+		const { idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image, tdp } =
 			req.body;
 		if (modelName && clockSpeed && cores) {
 			try {
@@ -104,7 +104,7 @@ class CpuController {
 
 				const idProcessor = uuidv4();
 				const sqlInsert =
-					"INSERT INTO cpus (idProcessor, idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image) VALUES (?,?,?,?,?,?,?)";
+					"INSERT INTO cpus (idProcessor, idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image, tdp) VALUES (?,?,?,?,?,?,?,?)";
 				await db
 					.promise()
 					.query(sqlInsert, [
@@ -115,6 +115,7 @@ class CpuController {
 						clockSpeed,
 						cores,
 						image,
+						tdp
 					]);
 				res.status(201).send({
 					message: "CPU added",
@@ -134,7 +135,7 @@ class CpuController {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image } =
+		const { idManufacturer, idCpuSocket, modelName, clockSpeed, cores, image, tdp } =
 			req.body;
 		if (modelName && clockSpeed && cores) {
 			try {
@@ -153,7 +154,7 @@ class CpuController {
 				if (rows.length === 0) {
 					return res.status(400).json({ message: "Given idCpuSocket does not exist" });
 				}
-				const sql = `UPDATE cpus SET idManufacturer = ?, idCpuSocket = ?, modelName = ?, clockSpeed = ?, cores = ?, image = ? WHERE idProcessor=?`;
+				const sql = `UPDATE cpus SET idManufacturer = ?, idCpuSocket = ?, modelName = ?, clockSpeed = ?, cores = ?, image = ?, wattage = ? WHERE idProcessor=?`;
 				let data = [
 					idManufacturer,
 					idCpuSocket,
@@ -161,6 +162,7 @@ class CpuController {
 					clockSpeed,
 					cores,
 					image,
+					tdp,
 					id,
 				];
 

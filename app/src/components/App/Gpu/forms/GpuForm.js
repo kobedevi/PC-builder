@@ -14,18 +14,18 @@ const schema = yup.object().shape({
   modelName: yup.string().required(),
   clockspeed: yup
     .number()
-    .min(1, "Min. speed amount is 1, unit is MHz.")
-    .max(99999, "Max. speed amount is 99999, unit is MHz.")
+    .min(1, "Min. speed amount is 1MHz.")
+    .max(99999, "Max. speed amount is 99999MHz.")
     .required()
     .positive(),
   watercooled: yup.boolean().required(),
   height: yup.number().notRequired().positive().integer(),
   width: yup.number().notRequired().positive().integer(),
   depth: yup.number().notRequired().positive().integer(),
-  wattage: yup
+  tdp: yup
     .number()
-    .min(1, "Min. wattage amount is 1, unit is W.")
-    .max(10000, "Max. wattage amount is 10000, unit is W.")
+    .min(1, "Min. TDP amount is 1W.")
+    .max(10000, "Max. TDP amount is 10000W.")
     .required()
     .positive(),
 });
@@ -39,7 +39,7 @@ const defaultData = {
   height: undefined,
   width: undefined,
   depth: undefined,
-  wattage: undefined,
+  tdp: 200,
 };
 
 const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -126,7 +126,7 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
         />
 
         <NumberInput
-          label="Clock speed in MHz"
+          label="Clock speed"
           type="number"
           name="clockspeed"
           value={data.clockspeed}
@@ -135,6 +135,7 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           max={99999}
           step={1}
           onChange={handleChange}
+          unit={"MHz"}
           error={errors.clockspeed}
         />
 
@@ -149,7 +150,7 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
         />
 
         <NumberInput
-          label="Height in cm"
+          label="Height"
           type="number"
           name="height"
           value={data.height}
@@ -158,11 +159,12 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           max={1000}
           step={1}
           onChange={handleChange}
+          unit={"cm"}
           error={errors.height}
         />
 
         <NumberInput
-          label="Width in cm"
+          label="Width"
           type="number"
           name="width"
           value={data.width}
@@ -170,12 +172,13 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           min={1}
           max={1000}
           step={1}
+          unit={"cm"}
           onChange={handleChange}
           error={errors.width}
         />
 
         <NumberInput
-          label="Depth in cm"
+          label="Depth"
           type="number"
           name="depth"
           value={data.depth}
@@ -183,24 +186,26 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           min={1}
           max={1000}
           step={1}
+          unit={"cm"}
           onChange={handleChange}
           error={errors.depth}
         />
 
         <NumberInput
-          label="Wattage"
+          label="TDP"
           type="number"
-          name="wattage"
-          value={data.wattage}
+          name="tdp"
+          value={data.tdp}
           disabled={disabled}
           min={100}
           max={10000}
           step={50}
+          unit={"W"}
           onChange={handleChange}
-          error={errors.wattage}
+          error={errors.tdp}
         />
 
-        <div>
+        <div className="form-group">
           <Input
             label="Product image"
             type="file"
