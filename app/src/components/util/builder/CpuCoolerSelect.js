@@ -79,7 +79,6 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
               !query && (
                 <ul className="productList">
                   {data.map((product) => {
-                    console.log(idCpuCooler)
                     const disabled = product.idCpuCooler === currentBuild.cpucooler.idCpuCooler ? true : false;
                     return (
                     <li key={product.idCpuCooler}>

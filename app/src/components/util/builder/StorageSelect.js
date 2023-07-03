@@ -30,9 +30,8 @@ const RamSelect = ({drives, setDrives, smallSlots, largeSlots, m2Slots, updateFi
     setDrives(currentDrives => [
       ...currentDrives,
       {
-        localId:uuidv4(), 
-        idStorage: product.idStorage, 
-        modelName: product.modelName, 
+        idLocal:uuidv4(), 
+        ...product
       }
     ]);
   }

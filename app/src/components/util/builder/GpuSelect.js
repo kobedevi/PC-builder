@@ -12,7 +12,7 @@ import Result from "./Result";
 import { fetchCompatibleGpus, fetchFilteredPartnerGpu } from "core/modules/Gpu/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
-const GpuSelect = ({idGpu, pcieSlots, depth, width, updateFields}) => {
+const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -27,6 +27,9 @@ const GpuSelect = ({idGpu, pcieSlots, depth, width, updateFields}) => {
   }
 
   const onClick = (gpu) => {
+    updateBuild({
+      gpu
+    })
     updateFields({
       idGpu: gpu.idGpuPartner,
     })
@@ -84,7 +87,7 @@ const GpuSelect = ({idGpu, pcieSlots, depth, width, updateFields}) => {
               (!query && pcieSlots > 0) && (
                 <ul className="productList">
                   {data.map((product) => {
-                    const disabled = product.idGpuPartner === idGpu ? true : false;
+                    const disabled = product.idGpuPartner === currentBuild.gpu.idGpuPartner ? true : false;
                     return (
                     <li key={product.idGpuPartner}>
                       <BuilderProductCard

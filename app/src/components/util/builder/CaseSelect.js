@@ -12,7 +12,7 @@ import { fetchCompatibleCases, fetchFilteredCases } from "core/modules/Case/api"
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
 // TODO: everything here
-const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) => {
+const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, height, depth, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
@@ -27,6 +27,9 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
   }
 
   const onClick = (product) => {
+    updateBuild({
+      case: product
+    })
     updateFields({
       idCase: product.idCase,
     })
@@ -74,7 +77,7 @@ const CaseSelect = ({idCase, formfactor, width, height, depth, updateFields}) =>
               !query && (
                 <ul className="productList">
                   {data.map((product) => {
-                    const disabled = product.idCase === idCase ? true : false;
+                    const disabled = product.idCase === currentBuild.case.idCase ? true : false;
                     return(
                     <li key={product.idCase}>
                       <BuilderProductCard

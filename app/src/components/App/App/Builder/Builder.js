@@ -75,12 +75,10 @@ const Builder = () => {
 			<CpuCoolerPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
 			<MotherboardPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
 			<RamPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
-			// TODO: add currentBuild and updateBuild from here on
 			<StoragePicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
 			<GpuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
 			<CasePicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
 			<PsuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
-			// TODO: PSU
 			<PartsOverview data={data}/>,
 		])
 
@@ -140,7 +138,9 @@ const Builder = () => {
 				</div>
 			</div>
 			{currentBuild && 
-				<ItemList color="info" info={currentBuild}/>
+				<>
+					<ItemList color="info" info={currentBuild}/>
+				</>
 			}
 		</>
 	)
