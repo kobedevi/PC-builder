@@ -128,7 +128,7 @@ const FormfactorSelect = (
   };
 
   return (
-    <div>
+    <div className="form-group">
       {isLoading && <Spinner />}
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info.message}</Alert>}

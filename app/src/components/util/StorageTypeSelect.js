@@ -1,9 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Select from "../Design/Select";
-import {
-  createStorageType,
-  fetchStorageTypes,
-} from "../../core/modules/StorageType/api";
+import { createStorageType, fetchStorageTypes } from "../../core/modules/StorageType/api";
 import useFetch from "../../core/hooks/useFetch";
 import Alert from "../Design/Alert";
 import * as yup from "yup";
@@ -110,7 +107,7 @@ const StorageTypeSelect = (props) => {
   };
 
   return (
-    <div>
+    <div className="form-group">
       {error && <Alert color="danger">{error.message}</Alert>}
       
       {info && <Alert color="info">{info.message}</Alert>}

@@ -108,7 +108,7 @@ const CpuSocketSelect = (props) => {
   };
 
   return (
-    <div>
+    <div className="form-group">
       {error && <Alert color="danger">{error.message}</Alert>}
       {info && <Alert color="info">{info.message}</Alert>}
       {isLoading && <Spinner />}

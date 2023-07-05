@@ -39,7 +39,7 @@ const GpuOriginalSelect = (props) => {
   };
 
   return (
-    <div>
+    <div className="form-group">
       {isLoading && <Spinner />}
 
       {/* errors*/}
