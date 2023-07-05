@@ -8,11 +8,13 @@ import ManufacturerSelect from "../../../util/ManufacturerSelect";
 import CpuSocketSelect from "../../../util/CpuSocketSelect";
 import FormfactorSelect from "../../../util/FormfactorSelect";
 import Toggle from "../../../Design/Toggle";
+import RamTypeSelect from "components/util/RamTypeSelect";
 
 const schema = yup.object().shape({
   idManufacturer: yup.string().required(),
   idCpuSocket: yup.string().required(),
   idFormfactor: yup.string().required(),
+  idRamType: yup.string().required(),
   modelName: yup.string().required(),
   wifi: yup.boolean().required(),
   memorySlots: yup.number().max(32).required().positive().integer(),
@@ -25,6 +27,7 @@ const defaultData = {
   idManufacturer: "",
   idCpuSocket: "",
   idFormfactor: "",
+  idRamType: "",
   modelName: "",
   wifi: 0,
   memorySlots: 4,
@@ -119,6 +122,15 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = {}, disabled }
         disabled={disabled}
         onChange={handleChange}
         error={errors.idCpuSocket}
+      />
+
+      <RamTypeSelect
+        label="Ram type"
+        name="idRamType"
+        value={data.idRamType}
+        disabled={disabled}
+        onChange={handleChange}
+        error={errors.idRamType}
       />
 
       <FormfactorSelect

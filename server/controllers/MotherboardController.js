@@ -6,11 +6,12 @@ const SQL = require("@nearform/sql");
 class MotherboardController {
 	fetchMotherboards = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor FROM motherboards
+			const results = await db.promise().query(`SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, ramtypes.ramType FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
 			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
-			WHERE deleted = 0;`);
+			LEFT JOIN ramtypes ON motherboards.idRamType = ramtypes.idRamType
+			WHERE motherboards.deleted = 0;`);
 			res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
@@ -29,10 +30,11 @@ class MotherboardController {
 
 			const cpuSocket = rows[0].idCpuSocket;
 
-			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, formfactors.height, formfactors.width FROM motherboards
+			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, formfactors.height, formfactors.width, ramtypes.ramType FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
 			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
+			LEFT JOIN ramtypes ON motherboards.idRamType = ramtypes.idRamType
 			WHERE motherboards.idCpuSocket = ?
 			AND motherboards.deleted = 0
 			ORDER BY idMotherboard;`;
@@ -40,16 +42,8 @@ class MotherboardController {
 			const data = rows;
 
 			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
-			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
-			.map(id => {
-				return {
-					...data.filter(s => s.idCpuCooler === id).map(rest => rest)[0],
-					socketType: data.filter(s => s.idCpuCooler === id).map(socket => socket.socketType),
-					idCpuSocket: data.filter(s => s.idCpuCooler === id).map(socket => socket.idCpuSocket)
-				}
-			})
 
-			res.status(200).send(result);
+			res.status(200).send(data);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -64,12 +58,13 @@ class MotherboardController {
 			encodedStr = query.replace(/[/^#\%]/g,"")
 			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
 
-			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor FROM motherboards
+			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, ramtypes.ramType FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
 			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
-			WHERE CONCAT_WS('', modelName, manufacturerName, socketType, formfactor) LIKE ?
-			AND deleted = 0;`;
+			LEFT JOIN ramtypes ON motherboards.idRamType = ramtypes.idRamType
+			WHERE CONCAT_WS('', modelName, manufacturerName, socketType, ramType, formfactor) LIKE ?
+			AND motherboards.deleted = 0;`;
 			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
 			if (rows.length === 0) {
 				return res.status(200).json({ 
@@ -88,14 +83,17 @@ class MotherboardController {
 	fetchMotherboardById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const results = await db.promise()
-				.query(SQL`SELECT motherboards.*, manufacturers.manufacturerName FROM motherboards
-				LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
-				WHERE motherboards.idMotherboard=${id} LIMIT 1;`);
-			if (results[0].length === 0) {
+			let userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, ramtypes.ramType FROM motherboards
+			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
+			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
+			LEFT JOIN ramtypes ON motherboards.idRamType = ramtypes.idRamType
+			WHERE motherboards.idMotherboard= ? LIMIT 1;`;
+			let [rows] = await db.promise().query(userQuery, [id]);
+			if (rows.length === 0) {
 				return res.status(400).json({ message: "Motherboard does not exist" });
 			}
-			res.status(200).send(results[0]);
+			res.status(200).send(rows);
 		} catch (e) {
 			next(e);
 		}
@@ -111,6 +109,7 @@ class MotherboardController {
 			idManufacturer,
 			idCpuSocket,
 			idFormfactor,
+			idRamType,
 			modelName,
 			wifi,
 			sataPorts,
@@ -119,44 +118,35 @@ class MotherboardController {
 			image,
 		} = req.body;
 		try {
-			const manufacturer = await db
-				.promise()
-				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
-			if (manufacturer[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idManufacturer does not exist" });
+			let userQuery = `select idManufacturer from manufacturers where idManufacturer = ?;`;
+			let [rows] = await db.promise().query(userQuery, [idManufacturer]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idManufacturer does not exist" });
 			}
-			const cpuSocket = await db
-				.promise()
-				.query(
-					SQL`select idCpuSocket from cpusockets where idCpuSocket = ${idCpuSocket}`
-				);
-			if (cpuSocket[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idCpuSocket does not exist" });
+			userQuery = `select idCpuSocket from cpusockets where idCpuSocket = ?;`;
+			[rows] = await db.promise().query(userQuery, [idCpuSocket]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idCpuSocket does not exist" });
 			}
-			const formfactor = await db
-				.promise()
-				.query(
-					SQL`select idFormfactor from formfactors where idFormfactor = ${idFormfactor}`
-				);
-			if (formfactor[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idFormfactor does not exist" });
+			userQuery = `select idFormfactor from formfactors where idFormfactor = ?;`;
+			[rows] = await db.promise().query(userQuery, [idFormfactor]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idFormfactor does not exist" });
+			}
+			userQuery = `select idRamType from ramtypes where idRamType = ?;`;
+			[rows] = await db.promise().query(userQuery, [idRamType]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idRamType does not exist" });
 			}
 			const id = uuidv4();
 			const sqlInsert =
-				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots, image) VALUES (?,?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idRamType, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots, image) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					id,
 					idManufacturer,
 					idCpuSocket,
+					idRamType,
 					idFormfactor,
 					modelName,
 					wifi,
@@ -186,6 +176,7 @@ class MotherboardController {
 			idManufacturer,
 			idCpuSocket,
 			idFormfactor,
+			idRamType,
 			modelName,
 			wifi,
 			sataPorts,
@@ -195,41 +186,32 @@ class MotherboardController {
 		} = req.body;
 		try {
 			const { id } = req.params;
-			const manufacturer = await db
-				.promise()
-				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
-			if (manufacturer[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idManufacturer does not exist" });
+			let userQuery = `select idManufacturer from manufacturers where idManufacturer = ?;`;
+			let [rows] = await db.promise().query(userQuery, [idManufacturer]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idManufacturer does not exist" });
 			}
-			const cpuSocket = await db
-				.promise()
-				.query(
-					SQL`select idCpuSocket from cpusockets where idCpuSocket = ${idCpuSocket}`
-				);
-			if (cpuSocket[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idCpuSocket does not exist" });
+			userQuery = `select idCpuSocket from cpusockets where idCpuSocket = ?;`;
+			[rows] = await db.promise().query(userQuery, [idCpuSocket]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idCpuSocket does not exist" });
 			}
-			const formfactor = await db
-				.promise()
-				.query(
-					SQL`select idFormfactor from formfactors where idFormfactor = ${idFormfactor}`
-				);
-			if (formfactor[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idFormfactor does not exist" });
+			userQuery = `select idFormfactor from formfactors where idFormfactor = ?;`;
+			[rows] = await db.promise().query(userQuery, [idFormfactor]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idFormfactor does not exist" });
 			}
-			const sql = `UPDATE motherboards SET idManufacturer = ?, idCpuSocket = ?, idFormfactor = ?, modelName = ?, wifi = ?, sataPorts = ?, pcieSlots = ?, memorySlots = ?, image = ? WHERE idMotherboard=?`;
+			userQuery = `select idRamType from ramtypes where idRamType = ?;`;
+			[rows] = await db.promise().query(userQuery, [idRamType]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idRamType does not exist" });
+			}
+			const sql = `UPDATE motherboards SET idManufacturer = ?, idCpuSocket = ?, idFormfactor = ?, idRamType = ?, modelName = ?, wifi = ?, sataPorts = ?, pcieSlots = ?, memorySlots = ?, image = ? WHERE idMotherboard=?`;
 			let data = [
 				idManufacturer,
 				idCpuSocket,
 				idFormfactor,
+				idRamType,
 				modelName,
 				wifi,
 				sataPorts,

@@ -32,6 +32,7 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
     })
     updateFields({
       idMotherboard: product.idMotherboard,
+      idRamType: product.idRamType,
       memorySlots: product.memorySlots,
       pcieSlots: product.pcieSlots,
       maxWidth: product.width,

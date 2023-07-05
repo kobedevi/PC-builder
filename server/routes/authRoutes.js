@@ -25,6 +25,7 @@ const FormfactorController = require("../controllers/FormfactorController");
 const MotherboardController = require("../controllers/MotherboardController");
 const CaseController = require("../controllers/CaseController");
 const RamController = require("../controllers/RamController");
+const RamTypeController = require("../controllers/RamTypeController");
 const StorageTypeController = require("../controllers/StorageTypeController");
 const StorageController = require("../controllers/StorageController");
 const GpuController = require("../controllers/GpuController");
@@ -41,6 +42,7 @@ const motherboardController = new MotherboardController();
 const psuController = new PsuController();
 const caseController = new CaseController();
 const ramController = new RamController();
+const ramTypeController = new RamTypeController();
 const storageController = new StorageController();
 const storageTypeController = new StorageTypeController();
 const uploadController = new UploadController();
@@ -48,6 +50,7 @@ const uploadController = new UploadController();
 const authRouter = express.Router();
 const adminRouter = express.Router();
 const { ROLES } = require("../utils/globals");
+const { ramTypeModel } = require("../models/RamType");
 authRouter.use(bodyParser.urlencoded({ extended: true }));
 
 // CPUS
@@ -109,6 +112,9 @@ authRouter.get("/ram/filter/:query", ramController.fetchRamByFilter);
 authRouter.patch("/ram/:id", ramModel, ramController.patchRamById);
 authRouter.delete("/ram/:id", ramModel, ramController.deleteRamById);
 authRouter.post("/ram", ramModel, ramController.createRam);
+
+authRouter.get("/ramtypes", ramTypeController.fetchRamTypes);
+authRouter.post("/ramtypes", ramTypeModel, ramTypeController.createRamTypes);
 
 // Storage Types
 authRouter.get("/storage", storageController.fetchStorage);

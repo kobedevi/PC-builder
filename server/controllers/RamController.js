@@ -1,15 +1,16 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
-const SQL = require("@nearform/sql");
 
 class RamController {
 	fetchRam = async (req, res, next) => {
 		try {
 			const results = await db.promise().query(`SELECT * FROM ram
 			LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
-			WHERE deleted = 0;`);
+			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
+			WHERE ram.deleted = 0;`);
 			res.status(200).send(results[0]);
+			console.log(results[0])
 		} catch (e) {
 			next(e);
 		}
@@ -17,13 +18,15 @@ class RamController {
 
 	fetchRamByBuild = async (req, res, next) => {
 		try {
-			const { slots } = req.params;
+			const {slots, id} = req.params;
 			const userQuery = `SELECT * FROM ram
 			LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
-			WHERE ram.stickAmount <= ?
-			AND ram.deleted = 0
+			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
+			WHERE ${slots !== 'undefined' ? 'ram.stickAmount <= ? AND ram.deleted = 0' : 'ram.deleted = 0'}
+			AND ram.idRamType = ?
 			ORDER BY idRam;`;
-			const [rows] = await db.promise().query(userQuery, [slots]);
+			console.log(userQuery)
+			const [rows] = await db.promise().query(userQuery, (slots !== 'undefined' ? [slots, id] : [id]));
 			res.status(200).send(rows);
 		} catch (e) {
 			next(
@@ -41,8 +44,9 @@ class RamController {
 
 			const userQuery = `SELECT * FROM ram
 			LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
-			WHERE CONCAT_WS('', modelName, manufacturerName, speed, type, sizePerStick) LIKE ?
-			AND deleted = 0;`;
+			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
+			WHERE CONCAT_WS('', modelName, manufacturerName, speed, ramType, sizePerStick) LIKE ?
+			AND ram.deleted = 0;`;
 			let [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
 			if (rows.length === 0) {
 				return res.status(200).json({ 
@@ -78,14 +82,16 @@ class RamController {
 	fetchRamById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			const results = await db.promise()
-				.query(SQL`SELECT ram.*, manufacturers.manufacturerName FROM ram
-				LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
-				WHERE ram.idRam=${id} AND deleted = 0 LIMIT 1;`);
-			if (results[0].length === 0) {
+			const userQuery = `SELECT ram.*, manufacturers.manufacturerName, ramtypes.ramType FROM ram
+			LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
+			WHERE ram.idRam= ? AND ram.deleted = 0 LIMIT 1;`;
+			const [rows] = await db.promise().query(userQuery, [id]);
+			if (rows.length === 0) {
 				return res.status(400).json({ message: "RAM does not exist" });
 			}
-			res.status(200).send(results[0]);
+			console.log(rows);
+			res.status(200).send(rows);
 		} catch (e) {
 			next(e);
 		}
@@ -105,29 +111,29 @@ class RamController {
 			sizePerStick,
 			stickAmount,
 			speed,
-			type,
+			idRamType,
 			image
 		} = req.body;
 		try {
 			const { id } = req.params;
-			const manufacturer = await db
-				.promise()
-				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
-			if (manufacturer[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idManufacturer does not exist" });
+			let userQuery = `select idManufacturer from manufacturers where idManufacturer =  ?;`;
+			let [rows] = await db.promise().query(userQuery, [idManufacturer]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idManufacturer does not exist" });
 			}
-			const sql = "UPDATE ram SET idManufacturer = ?, modelName = ?, sizePerStick = ?, stickAmount = ?, speed = ?, type = ?, image = ? WHERE idRam = ?";
+			userQuery = `select idRamType from ramtypes where idRamType = ?;`;
+			[rows] = await db.promise().query(userQuery, [idRamType]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idRamType does not exist" });
+			}
+			const sql = "UPDATE ram SET idManufacturer = ?, modelName = ?, sizePerStick = ?, stickAmount = ?, speed = ?, idRamType = ?, image = ? WHERE idRam = ?";
 			let data = [
 				idManufacturer,
 				modelName,
 				sizePerStick,
 				stickAmount,
 				speed,
-				type,
+				idRamType,
 				image,
 				id,
 			];
@@ -154,29 +160,30 @@ class RamController {
 
 		const {
 			idManufacturer,
+			idRamType,
 			modelName,
 			sizePerStick,
 			stickAmount,
 			speed,
-			type,
 			image
 		} = req.body;
+		
 
 		try {
-			const manufacturer = await db
-				.promise()
-				.query(
-					`select idManufacturer from manufacturers where idManufacturer = "${idManufacturer}"`
-				);
-			if (manufacturer[0].length === 0) {
-				return res
-					.status(400)
-					.json({ message: "Given idManufacturer does not exist" });
+			let userQuery = `select idManufacturer from manufacturers where idManufacturer =  ?;`;
+			let [rows] = await db.promise().query(userQuery, [idManufacturer]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idManufacturer does not exist" });
 			}
+			userQuery = `select idRamType from ramtypes where idRamType = ?;`;
+			[rows] = await db.promise().query(userQuery, [idRamType]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given idRamType does not exist" });
+			}		
 
 			const idRam = uuidv4();
 			const sqlInsert =
-				"INSERT INTO ram (idRam, idManufacturer, modelName, sizePerStick, stickAmount, speed, type, image) VALUES (?,?,?,?,?,?,?,?)";
+				"INSERT INTO ram (idRam, idManufacturer, modelName, sizePerStick, stickAmount, speed, idRamType, image) VALUES (?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					idRam,
@@ -185,7 +192,7 @@ class RamController {
 					sizePerStick,
 					stickAmount,
 					speed,
-					type,
+					idRamType,
 					image
 				])
 				.then(() => {
@@ -195,6 +202,7 @@ class RamController {
 					});
 				});
 		} catch (e) {
+			console.log(e)
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};

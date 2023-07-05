@@ -49,7 +49,7 @@ const Result = ({result, deleter}) => {
                                 link={PossibleRoutes.Detail}
                             >
                                 Manufacturer: {product.manufacturerName}<br/>
-                                Ram type: {product.type}<br/>
+                                Ram type: {product.ramType}<br/>
                                 Amount of sticks: {product.stickAmount}<br/>
                                 Size per stick: {product.sizePerStick} GB<br/>
                                 <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>

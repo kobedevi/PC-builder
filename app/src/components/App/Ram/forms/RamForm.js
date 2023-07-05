@@ -6,9 +6,11 @@ import Button from "../../../Design/Button";
 import NumberInput from "../../../Design/NumberInput";
 import ManufacturerSelect from "../../../util/ManufacturerSelect";
 import Toggle2 from "../../../Design/Toggle2";
+import RamTypeSelect from "components/util/RamTypeSelect";
 
 const schema = yup.object().shape({
   idManufacturer: yup.string().required(),
+  idRamType: yup.string().required(),
   modelName: yup.string().required(),
   sizePerStick: yup
     .number()
@@ -31,16 +33,15 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .integer(),
-  type: yup.string().oneOf(["DDR4", "DDR5"]).required(),
 });
 
 const defaultData = {
   idManufacturer: "",
+  idRamType: "",
   modelName: "",
   sizePerStick: 8,
   stickAmount: 2,
   speed: 3600,
-  type: "DDR4",
 };
 
 const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -106,6 +107,15 @@ const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         error={errors.idManufacturer}
       />
 
+      <RamTypeSelect
+        label="Ram type"
+        name="idRamType"
+        value={data.idRamType}
+        disabled={disabled}
+        onChange={handleChange}
+        error={errors.idRamType}
+      />
+
       <Input
         label="Model name"
         type="text"
@@ -156,7 +166,7 @@ const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         error={errors.speed}
       />
-
+{/* 
       <Toggle2
         label="DIMM Type"
         name="type"
@@ -165,7 +175,7 @@ const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         disabled={disabled}
         onChange={handleChange}
         error={errors.type}
-      />
+      /> */}
 
       <div className="form-group">
         <Input
