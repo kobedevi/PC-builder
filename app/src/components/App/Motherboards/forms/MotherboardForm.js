@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getValidationErrors } from "../../../../core/utils/validation";
 import * as yup from "yup";
 import Input from "../../../Design/Input";
@@ -9,6 +9,9 @@ import CpuSocketSelect from "../../../util/CpuSocketSelect";
 import FormfactorSelect from "../../../util/FormfactorSelect";
 import Toggle from "../../../Design/Toggle";
 import RamTypeSelect from "components/util/RamTypeSelect";
+import ArrayStorageSelect from "components/util/ArrayStorageSelect";
+import { v4 as uuidv4 } from "uuid";
+
 
 const schema = yup.object().shape({
   idManufacturer: yup.string().required(),
@@ -20,6 +23,7 @@ const schema = yup.object().shape({
   memorySlots: yup.number().max(32).required().positive().integer(),
   sataPorts: yup.number().required().positive().integer(),
   pcieSlots: yup.number().max(8).required().positive().integer(),
+  storageMethods: yup.array().nullable(),
   image: yup.string().nullable(),
 });
 
@@ -33,6 +37,7 @@ const defaultData = {
   memorySlots: 4,
   sataPorts: 4,
   pcieSlots: 3,
+  storageMethods: [],
   image: ""
 };
 
@@ -42,6 +47,24 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = {}, disabled }
     ...defaultData,
     ...initialData,
   });
+
+  const temp = [];
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  //   if (Object.keys(initialData.storageType).length > 0) {
+  //     initialData.storageType.map((socket) => {
+  //       const socketData = {
+  //         storageType: socket,
+  //         tempId: uuidv4(),
+  //       };
+  //       temp.push(socketData);
+  //     });
+  //   } else {
+  //     temp.push({ storageType: "", tempId: uuidv4() });
+  //   }
+  // });
+
+  const [storageMethods, setStorageMethods] = useState(temp);
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -81,6 +104,7 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = {}, disabled }
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(data);
     setIsTouched(true);
     validate(data, () => onSubmit(data));
   };
@@ -188,6 +212,20 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = {}, disabled }
         onChange={handleChange}
         error={errors.pcieSlots}
       />
+
+      {/*------- TEST --------- */}
+        <ArrayStorageSelect
+          label="Storage Methods"
+          name="storageMethods"
+          disabled={disabled}
+          value={data.storageMethods}
+          storageMethods={storageMethods}
+          setStorageMethods={setStorageMethods}
+          setData={setData}
+          data={data}
+          error={errors.storageMethods}
+        />
+      {/* --------------------- */}
 
       <div>
         <Input

@@ -138,6 +138,79 @@ class MotherboardController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "Given idRamType does not exist" });
 			}
+
+
+
+
+
+
+
+
+
+
+
+
+			// TODO: motherboard_has_storage toevoegen en correct toevoegen in DB, edit en detail herwerken
+
+
+
+			
+			// const coolerId = uuidv4();
+			// const sqlInsert =
+			// 	"INSERT INTO cpucoolers (idCpuCooler, idManufacturer, modelName, height, width, depth, image) VALUES (?,?,?,?,?,?,?)";
+			// await db
+			// 	.promise()
+			// 	.query(sqlInsert, [
+			// 		coolerId,
+			// 		idManufacturer,
+			// 		modelName,
+			// 		height,
+			// 		width,
+			// 		depth,
+			// 		image
+			// 	]);
+
+			// const inserter = [];
+			// cpuSockets.forEach((socket) => {
+			// 	// only add valid cpusockets
+			// 	if (uuidValidate(socket.idCpuSocket)) {
+			// 		inserter.push(
+			// 			`('${uuidv4()}', '${coolerId}', '${socket.idCpuSocket}')`
+			// 		);
+			// 	}
+			// });
+			// if (inserter.length > 0) {
+			// 	const socketsSqlInsert = `INSERT INTO cpucooler_has_cpusockets (id, idCpuCooler, idCpuSocket) VALUES ${inserter.join(
+			// 		", "
+			// 	)}`;
+			// 	await db.promise().query(socketsSqlInsert);
+			// }
+			// res.status(201).send({
+			// 	message: "CPU cooler added",
+			// 	id: coolerId,
+			// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			const id = uuidv4();
 			const sqlInsert =
 				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idRamType, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots, image) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
