@@ -12,7 +12,7 @@ import Result from "./Result";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
 const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields}) => {
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState([]);
   const [query, setQuery] = useState('');
 
   const {
@@ -31,15 +31,33 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
     updateBuild({
       cpu
     })
+    
     if(cpu.idCpuSocket !== idCpuSocket) {
+      setInfo([]);
       updateFields({
         idCpu: cpu.idProcessor,
         idCpuSocket: cpu.idCpuSocket,
         // If new cpu has other socket reset motherboard
         idMotherboard: '',
       })
+      if(Object.keys(currentBuild.motherboard).length > 0) {
+        updateBuild({
+          motherboard: {},
+        })
+        setInfo(info => [...info, 'Incompatible motherboard removed'])
+      }
+
       // If new cpu is not compatible with old cooler, reset
       if(!cooler.includes(cpu.idCpuSocket)) {
+        if(Object.keys(currentBuild.cpucooler).length > 0) {
+          updateBuild({
+            cpucooler: {},
+          })
+          setInfo(info => [...info, 'Incompatible CPU cooler removed'])
+        }
+        updateBuild({
+          cpucooler: {},
+        })
         updateFields({
           idCpuCooler: '',
         })

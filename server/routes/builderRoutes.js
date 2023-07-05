@@ -27,7 +27,7 @@ builderRouter.use(bodyParser.urlencoded({ extended: true }));
 
 builderRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolersByBuild);
 builderRouter.get("/motherboard/:id", motherboardController.fetchMotherboardsByBuild);
-builderRouter.get("/ram/:slots", ramController.fetchRamByBuild);
+builderRouter.get("/ram/:slots/:id", ramController.fetchRamByBuild);
 builderRouter.get("/storage/:small/:large/:m2", storageController.fetchStorageByBuild);
 builderRouter.get("/gpu", gpuController.fetchGpusByBuild);
 builderRouter.get("/case/:width/:height/:depth", caseController.fetchCasesByBuild);

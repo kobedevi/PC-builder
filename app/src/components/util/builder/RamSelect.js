@@ -1,5 +1,4 @@
-import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useState, useEffect } from "react";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchCpus } from "../../../core/modules/CPU/api";
 import { PossibleRoutes, route } from "../../../core/routing";
@@ -12,13 +11,17 @@ import Result from "./Result";
 import { fetchCompatibleRam, fetchFilteredRam } from "core/modules/Ram/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
-const RamSelect = ({currentBuild, updateBuild, idRam, memorySlots, updateFields}) => {
+const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamType, idRam, memorySlots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleRam(memorySlots);
-  }, [memorySlots]);
+    if(!strictMode) {
+      return fetchCompatibleRam(undefined, idRamType);
+    } else {
+      return fetchCompatibleRam(memorySlots, idRamType);
+    }
+  }, [memorySlots, strictMode]);
   
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
@@ -35,6 +38,15 @@ const RamSelect = ({currentBuild, updateBuild, idRam, memorySlots, updateFields}
     })
   }
 
+  useEffect(() => {
+    refresh();
+  }, [strictMode])
+  
+
+  const handleStrict = () => {
+    setStrictMode(!strictMode);
+  }
+
   return (
     <>
 
@@ -43,6 +55,18 @@ const RamSelect = ({currentBuild, updateBuild, idRam, memorySlots, updateFields}
           <ErrorAlert error={error} />
         )
       }
+
+      {
+        currentBuild.motherboard.memorySlots < currentBuild.ram.stickAmount && <Alert color="warning">You don't have enough memory slots available for all the selected ram</Alert>
+      }
+
+      {<p>{idRamType}</p>}
+
+      <div className="custom-control custom-checkbox text">
+        <input type="checkbox" id="strictMode" name="strictMode" className="custom-control-input" onClick={handleStrict} checked={strictMode}/>
+        <label className="custom-control-label" for="strictMode" style={{marginLeft: ".5rem"}}>Strict mode<span style={{color: "#C665EA"}}>*</span></label>
+        <p style={{opacity:.5, fontSize: "1rem"}}>You will see all compatible products, but for some you might not have enough connections</p>
+      </div>
 
       {
         isLoading && (
@@ -86,7 +110,7 @@ const RamSelect = ({currentBuild, updateBuild, idRam, memorySlots, updateFields}
                         id={product.idRam}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
-                        Ram type: {product.type}<br/>
+                        Ram type: {product.ramType}<br/>
                         Amount of sticks: {product.stickAmount}<br/>
                         Size per stick: {product.sizePerStick} GB<br/>
                         <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>

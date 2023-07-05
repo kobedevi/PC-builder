@@ -16,8 +16,8 @@ const fetchFilteredRam = (query) => async (headers) => {
   );
 };
 
-const fetchCompatibleRam = (slots) => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/ram/${slots}`);
+const fetchCompatibleRam = (slots, idRamType) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/ram/${slots}/${idRamType}`);
 };
 
 const fetchRamById = (id) => async (headers) => {

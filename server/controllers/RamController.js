@@ -10,7 +10,6 @@ class RamController {
 			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
 			WHERE ram.deleted = 0;`);
 			res.status(200).send(results[0]);
-			console.log(results[0])
 		} catch (e) {
 			next(e);
 		}
@@ -25,7 +24,6 @@ class RamController {
 			WHERE ${slots !== 'undefined' ? 'ram.stickAmount <= ? AND ram.deleted = 0' : 'ram.deleted = 0'}
 			AND ram.idRamType = ?
 			ORDER BY idRam;`;
-			console.log(userQuery)
 			const [rows] = await db.promise().query(userQuery, (slots !== 'undefined' ? [slots, id] : [id]));
 			res.status(200).send(rows);
 		} catch (e) {
@@ -90,7 +88,6 @@ class RamController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "RAM does not exist" });
 			}
-			console.log(rows);
 			res.status(200).send(rows);
 		} catch (e) {
 			next(e);
@@ -202,7 +199,6 @@ class RamController {
 					});
 				});
 		} catch (e) {
-			console.log(e)
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
