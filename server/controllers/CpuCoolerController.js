@@ -147,7 +147,7 @@ class CpuCoolerController {
 			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
 			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
 			WHERE cpucoolers.idCpuCooler = ? 
-			AND deleted = 0 LIMIT 1;`;
+			AND deleted = 0`;
 			const results = await db.promise()
 				.query(query, [id]);
 			if (results[0].length === 0) {

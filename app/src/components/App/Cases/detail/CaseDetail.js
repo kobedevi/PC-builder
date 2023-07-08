@@ -8,7 +8,6 @@ const CaseDetail = ({pccase}) => {
   return (
     <div className="fullSize">
       <div className="detail">
-        {/* TODO: cpusockets mapping */}
         <DetailCard data={pccase} />
         <Link
           to={route(PossibleRoutes.CaseEdit, {
