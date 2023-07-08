@@ -41,7 +41,7 @@ const defaultData = {
   image: ""
 };
 
-const MotherboardForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
+const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageType: {}, amount: 1 }, disabled }) => {
   const [isTouched, setIsTouched] = useState(false);
   const [data, setData] = useState({
     ...defaultData,
@@ -49,20 +49,21 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = {}, disabled }
   });
 
   const temp = [];
-  // useEffect(() => {
-  //   // Update the document title using the browser API
-  //   if (Object.keys(initialData.storageType).length > 0) {
-  //     initialData.storageType.map((socket) => {
-  //       const socketData = {
-  //         storageType: socket,
-  //         tempId: uuidv4(),
-  //       };
-  //       temp.push(socketData);
-  //     });
-  //   } else {
-  //     temp.push({ storageType: "", tempId: uuidv4() });
-  //   }
-  // });
+  useEffect(() => {
+    // Update the document title using the browser API
+    if (Object.keys(initialData.idStorageType).length > 0) {
+      initialData.idStorageType.map((x, index) => {
+        const storageMethods = {
+          idStorageType: initialData.idStorageType[index],
+          amount: initialData.amount[index],
+          tempId: uuidv4(),
+        };
+        temp.push(storageMethods);
+      });
+    } else {
+      temp.push({ storageType: "", tempId: uuidv4() });
+    }
+  }, [initialData]);
 
   const [storageMethods, setStorageMethods] = useState(temp);
   const [errors, setErrors] = useState({});
@@ -104,7 +105,6 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = {}, disabled }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
     setIsTouched(true);
     validate(data, () => onSubmit(data));
   };

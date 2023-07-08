@@ -48,8 +48,7 @@ const MotherboardEdit = ({ motherboard, onUpdate }) => {
       data.image = null;
     }
     withAuth(updateMotherboard(data))
-    .then((data) => {
-      onUpdate(data);
+    .then(() => {
       navigate(PossibleRoutes.Motherboards, { replace: true });
     })
     .catch((err) => {

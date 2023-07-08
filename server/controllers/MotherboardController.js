@@ -1,6 +1,7 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4, validate: uuidValidate } = require("uuid");
+const mysql = require('mysql2');
 const SQL = require("@nearform/sql");
 
 class MotherboardController {
@@ -83,17 +84,36 @@ class MotherboardController {
 	fetchMotherboardById = async (req, res, next) => {
 		try {
 			const { id } = req.params;
-			let userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, ramtypes.ramType FROM motherboards
+			let userQuery = `SELECT 
+			motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, ramtypes.ramType,
+			motherboard_has_storagetypes.idStorageType, motherboard_has_storagetypes.amount, storagetypes.storageType
+			FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
 			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
 			LEFT JOIN ramtypes ON motherboards.idRamType = ramtypes.idRamType
-			WHERE motherboards.idMotherboard= ? LIMIT 1;`;
+			LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
+			LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
+			WHERE motherboards.idMotherboard= ?;`;
 			let [rows] = await db.promise().query(userQuery, [id]);
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "Motherboard does not exist" });
 			}
-			res.status(200).send(rows);
+
+			const finalResult = {
+				...rows[0],
+				idStorageType: [],
+				storageType: [],
+				amount: []
+			}
+
+			rows.map(item => {
+				finalResult.idStorageType.push(item.idStorageType)
+				finalResult.storageType.push(item.storageType)
+				finalResult.amount.push(item.amount)
+			});
+
+			res.status(200).send(finalResult);
 		} catch (e) {
 			next(e);
 		}
@@ -116,6 +136,7 @@ class MotherboardController {
 			pcieSlots,
 			memorySlots,
 			image,
+			storageMethods
 		} = req.body;
 		try {
 			let userQuery = `select idManufacturer from manufacturers where idManufacturer = ?;`;
@@ -139,101 +160,43 @@ class MotherboardController {
 				return res.status(400).json({ message: "Given idRamType does not exist" });
 			}
 
-
-
-
-
-
-
-
-
-
-
-
-			// TODO: motherboard_has_storage toevoegen en correct toevoegen in DB, edit en detail herwerken
-
-
-
-			
-			// const coolerId = uuidv4();
-			// const sqlInsert =
-			// 	"INSERT INTO cpucoolers (idCpuCooler, idManufacturer, modelName, height, width, depth, image) VALUES (?,?,?,?,?,?,?)";
-			// await db
-			// 	.promise()
-			// 	.query(sqlInsert, [
-			// 		coolerId,
-			// 		idManufacturer,
-			// 		modelName,
-			// 		height,
-			// 		width,
-			// 		depth,
-			// 		image
-			// 	]);
-
-			// const inserter = [];
-			// cpuSockets.forEach((socket) => {
-			// 	// only add valid cpusockets
-			// 	if (uuidValidate(socket.idCpuSocket)) {
-			// 		inserter.push(
-			// 			`('${uuidv4()}', '${coolerId}', '${socket.idCpuSocket}')`
-			// 		);
-			// 	}
-			// });
-			// if (inserter.length > 0) {
-			// 	const socketsSqlInsert = `INSERT INTO cpucooler_has_cpusockets (id, idCpuCooler, idCpuSocket) VALUES ${inserter.join(
-			// 		", "
-			// 	)}`;
-			// 	await db.promise().query(socketsSqlInsert);
-			// }
-			// res.status(201).send({
-			// 	message: "CPU cooler added",
-			// 	id: coolerId,
-			// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			const id = uuidv4();
-			const sqlInsert =
+			let sqlInsert =
 				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idRamType, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots, image) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
-				.query(sqlInsert, [
-					id,
-					idManufacturer,
-					idCpuSocket,
-					idRamType,
-					idFormfactor,
-					modelName,
-					wifi,
-					sataPorts,
-					pcieSlots,
-					memorySlots,
-					image,
-				])
-				.then(() => {
-					res.status(201).send({
-						message: "Motherboard added",
-						id,
-					});
-				});
+			.query(sqlInsert, [
+				id,
+				idManufacturer,
+				idCpuSocket,
+				idRamType,
+				idFormfactor,
+				modelName,
+				wifi,
+				sataPorts,
+				pcieSlots,
+				memorySlots,
+				image,
+			])
+				
+			const inserter = [];
+			storageMethods.map((storage) => {
+				// only add valid storageTypes
+				if (uuidValidate(storage.idStorageType)) {
+					inserter.push(
+						`('${uuidv4()}', '${id}', '${storage.idStorageType}', ${storage.amount})`
+					);
+				}
+			});
+			if (inserter.length > 0) {
+				const storageSqlInsert = `INSERT INTO motherboard_has_storagetypes (id, idMotherboard, idStorageType, amount) VALUES ${inserter.join(
+					", "
+				)}`;
+				await db.promise().query(storageSqlInsert);
+			}
+			res.status(201).send({
+				message: "Storage method",
+				id: id,
+			});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
@@ -255,8 +218,10 @@ class MotherboardController {
 			sataPorts,
 			pcieSlots,
 			memorySlots,
+			storageMethods,
 			image,
 		} = req.body;
+
 		try {
 			const { id } = req.params;
 			let userQuery = `select idManufacturer from manufacturers where idManufacturer = ?;`;
@@ -293,15 +258,97 @@ class MotherboardController {
 				image,
 				id,
 			];
+			await db.promise().query(sql, data);
 
-			db.promise()
-				.query(sql, data)
-				.then(() => {
-					res.status(201).send({
-						message: "Motherboard updated",
-						id,
-					});
-				});
+			// TODO: REMOVE and fix redirect on update
+			const query = `SELECT id, idStorageType, amount FROM motherboard_has_storagetypes WHERE idMotherboard = ? ;`;
+			const results = await db
+				.promise()
+				.query(
+					query, [id]
+				);
+
+			let AA = [], //add
+				RA = [], //remove
+				updateArray = []; //remove
+			
+			// Compare user input vs old input for new/ updates
+			storageMethods.map((x) => {
+				const tempIndex = results[0].findIndex(obj => obj.idStorageType === x.idStorageType);
+				if(tempIndex >= 0) {
+					// This was already in the list and should be updated or ignored
+					if( storageMethods[tempIndex].amount !== results[0][tempIndex].amount ) {
+						updateArray.push({...storageMethods[tempIndex], id: results[0][tempIndex].id})
+					} else return;
+				} else {
+					// Otherwise this is new and should be added
+					console.log('This is new')
+					AA.push(x)
+				}
+			})
+
+			// Compare old input vs user input for inputs that should be removed
+			results[0].map((x, i) => {
+				const tempIndex = storageMethods.findIndex(obj => obj.idStorageType === x.idStorageType);
+				if(tempIndex === -1) {
+					console.log('This should be removed');
+					RA.push(results[0][i])
+				}
+			})
+
+			const inserter = [],
+				updater = [],
+				remover = [];
+
+			// Add completely new storage here
+			AA.forEach((storage) => {
+				if (uuidValidate(storage.idStorageType)) {
+					inserter.push(`('${uuidv4()}', '${id}', '${storage.idStorageType}', ${storage.amount})`);
+				}
+			});
+			if (inserter.length > 0) {
+				const storageSqlInsert = `INSERT INTO motherboard_has_storagetypes (id, idMotherboard, idStorageType, amount) VALUES ${inserter.join(
+					", "
+				)}`;
+				await db.promise().query(storageSqlInsert);
+			}
+
+			// Add completely new storage here
+			updateArray.map((storage) => {
+				if (uuidValidate(storage.idStorageType)) {
+					updater.push(storage);
+				}
+			});
+
+			if (updater.length > 0) {
+				let storageSqlInsert = '';
+				// console.log(updater);
+
+				updater.map((val) => {
+					storageSqlInsert += mysql.format(`UPDATE motherboard_has_storagetypes SET amount = ? WHERE id = ?; `, [val.amount, val.id]);
+				})
+				await db.promise().query(storageSqlInsert);
+			}
+			
+
+			RA.forEach((storage) => {
+				// only remove valid storage
+				console.log(storage)
+				if (uuidValidate(storage.idStorageType)) {
+					remover.push(`'${storage.idStorageType}'`);
+				}
+			});
+			if (remover.length > 0) {
+				const storageSqlRemover = `DELETE FROM motherboard_has_storagetypes WHERE idMotherboard = ? AND idStorageType IN (${remover.join(
+					", "
+				)})`;
+				await db.promise().query(storageSqlRemover, [id]);
+			}
+			
+			res.status(201).send({
+				message: "Motherboard updated",
+				id: id
+			});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}

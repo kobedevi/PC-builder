@@ -23,9 +23,10 @@ const MotherboardEditContainer = () => {
     return <ErrorAlert error={error} />
   }
 
+
   return (
     <MotherboardEdit
-      motherboard={{ ...data[0] }}
+      motherboard={{ ...data }}
       onUpdate={(data) => setData(data)}
     />
   );

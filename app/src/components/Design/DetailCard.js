@@ -12,7 +12,7 @@ const DetailCard = ({ data }) => {
         <tbody>
           {Object.entries(data).map(([key, value]) => {
             // hide show id fields
-            if (!key.startsWith("id") && !key.startsWith("image") && !key.startsWith("deleted")) {
+            if (!key.startsWith("id") && !key.startsWith("image") && !key.startsWith("deleted") && !key.startsWith("amount") && !key.startsWith("storage")) {
               return (
                 <tr key={key}>
                   <td>
@@ -20,11 +20,26 @@ const DetailCard = ({ data }) => {
                       humps.decamelize(key, { separator: " " }).substring(1)}
                     :
                   </td>
-                  <td>{value !== null ? (!Array.isArray(value) ? value : value.join(', ')) : "unknown"}</td>
+                  <td>{value !== null ? (!Array.isArray(value) ? value : value.join(', ') ) : "unknown"} </td>
                 </tr>
               );
             }
+            return null;
           })}
+
+          {(Array.isArray(data?.idStorageType) && data?.idStorageType.length > 0) && (
+            <tr>
+              <td>Storage methods:</td>
+              <td>
+              {
+                data.idStorageType.map((x, index)=> {
+                  return <span>{data.storageType[index]}: x{data.amount[index]}{(data.idStorageType.length-1 === index) ? '' : ', '}</span>
+                })
+              }
+              </td>
+            </tr>
+          )}
+          
           {data.image && (
             <tr key="image">
               <td>Product image:</td>

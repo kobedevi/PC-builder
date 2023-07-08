@@ -26,7 +26,7 @@ const MotherboardDetailContainer = () => {
   if (data) {
     return (
       <MotherboardDetail
-        motherboard={{ ...data[0], wifi: data[0].wifi >= 1 ? true : false }}
+        motherboard={{ ...data, wifi: data.wifi >= 1 ? true : false }}
       />
     );
   }

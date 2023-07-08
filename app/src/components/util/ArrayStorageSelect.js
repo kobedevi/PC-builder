@@ -163,8 +163,9 @@ const ArrayStorageSelect = (
               name="amount" 
               style={{borderRadius: 0}}
               className="form-control" 
-              type="number" 
+              type="number"
               placeholder="Amount" 
+              value={c.amount || ""}
               onChange={(e) => {
                 const amount = e.target.value;
                 setStorageMethods((currentStorageMethods) =>
