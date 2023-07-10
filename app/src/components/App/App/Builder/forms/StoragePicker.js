@@ -14,7 +14,6 @@ const StoragePicker = ({currentBuild, updateBuild, hiddenInput, storage, smallSl
     })
  }, [drives]);
 
-
   return (
     <div>
         Storage picker:
@@ -44,6 +43,8 @@ const StoragePicker = ({currentBuild, updateBuild, hiddenInput, storage, smallSl
           })}
         </div>
         <StorageSelect
+          currentBuild={currentBuild}
+          updateBuild={updateBuild}
           drives={drives}
           setDrives={setDrives}
           smallSlots={smallSlots}
