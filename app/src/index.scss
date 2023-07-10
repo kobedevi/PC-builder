@@ -527,13 +527,6 @@ form {
     }
 }
 
-.previewBox{
-    display:flex;
-    flex-direction:column;
-    border-radius: 15px;
-    border: 2px solid grey;
-}
-
 @media screen and (max-width: 780px) {
     .app{
         flex-direction: column;

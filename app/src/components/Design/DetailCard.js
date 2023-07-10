@@ -1,6 +1,6 @@
-import humps from "humps";
 import { useState } from "react";
 import ProductView from "./ProductView";
+import { ObjectKeysToText } from "components/util/ObjectKeysToText";
 
 const DetailCard = ({ data }) => {
 
@@ -16,8 +16,7 @@ const DetailCard = ({ data }) => {
               return (
                 <tr key={key}>
                   <td>
-                    {key.charAt(0).toUpperCase() +
-                      humps.decamelize(key, { separator: " " }).substring(1)}
+                    {ObjectKeysToText(key)}
                     :
                   </td>
                   <td>{value !== null ? (!Array.isArray(value) ? value : value.join(', ') ) : "unknown"} </td>

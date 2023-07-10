@@ -110,6 +110,13 @@ form.builder{
         flex-direction:"column";
         align-items:"flex-start";
         padding: .33rem 1rem;
+        .previewBox{
+            display:flex;
+            flex-direction:column;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid grey;
+        }
     }
 }
 
