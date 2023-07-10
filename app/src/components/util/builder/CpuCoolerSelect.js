@@ -32,14 +32,12 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
     updateFields({
       idCpuCooler: cooler.idCpuCooler,
       cooler: cooler.idCpuSocket,
-      maxDepth: cooler.height,
-      idMotherboard: ''
+      maxDepth: cooler.height
     })
   }
 
   return (
     <>
-
       {
         error && (
           <ErrorAlert error={error} />
