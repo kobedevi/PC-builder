@@ -31,11 +31,14 @@ class MotherboardController {
 
 			const cpuSocket = rows[0].idCpuSocket;
 
-			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, formfactors.height, formfactors.width, ramtypes.ramType FROM motherboards
+			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, formfactors.height, formfactors.width, ramtypes.ramType,
+			motherboard_has_storagetypes.amount, storagetypes.idStorageType, storagetypes.storageType FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
 			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
 			LEFT JOIN ramtypes ON motherboards.idRamType = ramtypes.idRamType
+			LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
+			LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
 			WHERE motherboards.idCpuSocket = ?
 			AND motherboards.deleted = 0
 			ORDER BY idMotherboard;`;
@@ -44,7 +47,21 @@ class MotherboardController {
 
 			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
 
-			res.status(200).send(data);
+
+			const result = Array.from(new Set(data.map(s => s.idMotherboard)))
+			.map(id => {
+				const test = {
+					...data.filter(s => s.idMotherboard === id).map(rest => rest)[0],
+					storage: data.filter(s => s.idMotherboard === id).map(storage => {return {idStorageType: storage.idStorageType, type: storage.storageType, amount: storage.amount}}),
+					// idStorage: data.filter(s => s.idMotherboard === id).map(storage => storage.idStorageType)
+				}
+				delete test.idStorageType;
+				delete test.storageType;
+				delete test.amount;
+				return test;
+			})
+
+			res.status(200).send(result);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -322,8 +339,6 @@ class MotherboardController {
 
 			if (updater.length > 0) {
 				let storageSqlInsert = '';
-				// console.log(updater);
-
 				updater.map((val) => {
 					storageSqlInsert += mysql.format(`UPDATE motherboard_has_storagetypes SET amount = ? WHERE id = ?; `, [val.amount, val.id]);
 				})

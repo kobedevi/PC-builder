@@ -1,5 +1,5 @@
 import { useState } from "react";
-import humps from "humps";
+import { ObjectKeysToText } from "components/util/ObjectKeysToText";
 
 const ItemCollapser = ({item}) => {
     const [collapse, setCollapse] = useState(false)
@@ -16,11 +16,38 @@ const ItemCollapser = ({item}) => {
 		<ul className={collapse ? "list-unstyled collapser show" : "hide"}>
 			{Object.entries(item).map(([key, item]) => {
 				if (!key.startsWith("id") && !key.startsWith("image") && !key.startsWith("deleted") && !key.startsWith("modelName")) {
-				return (
-				<li key={key}>
-					<strong>{key.charAt(0).toUpperCase() + humps.decamelize(key, { separator: " " }).substring(1)}
-					:</strong> {item}
-				</li>)
+					if(item !== null && typeof item[0] === 'object'){	
+						return (
+							<li key={key}>
+								<strong>{ObjectKeysToText(key)}:</strong> 
+								<ul>
+									{item.map(x => {
+										return (
+										<li style={{marginTop:'.25rem'}}>
+											<ul style={{listStyle: 'none', padding: 0}}>
+											{Object.entries(x).map(([key, s]) => {
+												if(!key.startsWith("id")) {
+													return (
+														<li>
+															<strong>{ObjectKeysToText(key)}:</strong> {s}
+														</li>
+													)
+												}
+												return;
+											})}
+
+											</ul>
+										</li>)
+									})}
+								</ul>
+							</li>
+						)
+					}
+					return (
+						<li key={key}>
+							<strong>{ObjectKeysToText(key)}:</strong> {item && item !== null ? item :'unknown'}
+						</li>
+					)
 				}
 			})}
 		</ul>

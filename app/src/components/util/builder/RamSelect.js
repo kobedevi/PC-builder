@@ -60,11 +60,9 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
         currentBuild.motherboard.memorySlots < currentBuild.ram.stickAmount && <Alert color="warning">You don't have enough memory slots available for all the selected ram</Alert>
       }
 
-      {<p>{idRamType}</p>}
-
       <div className="custom-control custom-checkbox text">
-        <input type="checkbox" id="strictMode" name="strictMode" className="custom-control-input" onClick={handleStrict} checked={strictMode}/>
-        <label className="custom-control-label" for="strictMode" style={{marginLeft: ".5rem"}}>Strict mode<span style={{color: "#C665EA"}}>*</span></label>
+        <input type="checkbox" id="strictMode" name="strictMode" className="custom-control-input" onChange={handleStrict} checked={strictMode}/>
+        <label className="custom-control-label" htmlFor="strictMode" style={{marginLeft: ".5rem"}}>Strict mode<span style={{color: "#C665EA"}}>*</span></label>
         <p style={{opacity:.5, fontSize: "1rem"}}>You will see all compatible products, but for some you might not have enough connections</p>
       </div>
 
