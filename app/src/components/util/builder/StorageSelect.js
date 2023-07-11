@@ -12,10 +12,9 @@ import { v4 as uuidv4 } from "uuid";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
 
-const StorageSelect = ({currentBuild, updateBuild, drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
+const StorageSelect = ({warnings, currentBuild, updateBuild, drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
-  const [uniqueSet, setUniqueSet] = useState(new Set())
 
   const apiCall = useCallback(() => {
     return fetchCompatibleStorage(smallSlots, largeSlots, m2Slots);
@@ -47,21 +46,16 @@ const StorageSelect = ({currentBuild, updateBuild, drives, setDrives, smallSlots
       }
 
       {
-        drives && (
-          currentBuild.motherboard.storage.map((item) => {
-            const id = item.idStorageType
-            const count = drives.filter((obj) => obj.idStorageType === id).length;
-
-            if(count > item.amount){
-              return <Alert color="warning"><li>You don't have enough {item.type} connections for all the selected storage</li></Alert>
-            }
-          })
+        isLoading && (
+          <Spinner />
         )
       }
 
       {
-        isLoading && (
-          <Spinner />
+        warnings && (
+          <Alert color="warning">
+            {Array.from(warnings)}
+          </Alert>
         )
       }
 

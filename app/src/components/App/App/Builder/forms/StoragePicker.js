@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 const StoragePicker = ({currentBuild, updateBuild, hiddenInput, storage, smallSlots, largeSlots, m2Slots, updateFields}) => {
 
   const [drives, setDrives] = useState(storage);
+  const [warnings, setWarnings] = useState(new Set())
 
   useEffect(() => {
     updateBuild({
@@ -13,6 +14,51 @@ const StoragePicker = ({currentBuild, updateBuild, hiddenInput, storage, smallSl
       storage: drives
     })
  }, [drives]);
+
+  const addWarning = (item) => {
+    setWarnings(prev => new Set(prev).add(item));
+  }
+
+  const removeWarning = (item) => {
+    setWarnings(prev => {
+      const next = new Set(prev);
+      next.delete(item);
+      return next;
+    });
+  }
+
+  const warningChecker = useMemo(() => {
+    setWarnings(new Set());
+    currentBuild.motherboard.storage.map((item) => {
+      const id = item.idStorageType
+      const count = drives.filter((obj) => obj.idStorageType === id).length;    
+      // Creating unique set of only idStorageType, converting to array so filter can be used
+      const keyArray = drives.map((item) => { 
+        return { 
+          idStorageType: item.idStorageType, 
+          storageType: item.storageType
+        } 
+      });
+      const tempDrives = Array.from(new Set(keyArray))
+      const results = new Set(tempDrives.filter(({ idStorageType: id1 }) => !currentBuild.motherboard.storage.some(({ idStorageType: id2 }) => id2 === id1)));
+      
+      if(count > item.amount){
+        addWarning(`You don't have enough ${item.type} connections for all the selected storage`);
+      } else if (count <= item.amount) {
+        removeWarning(`You don't have enough ${item.type} connections for all the selected storage`);
+      }if(results.size === 0) {
+        Array.from(results).map(item => {
+          removeWarning(`You don't have enough ${item.storageType} connections for all the selected storage`);
+        })
+      }
+      if(results.size > 0) {
+        Array.from(results).map(item => {
+          addWarning(`You don't have enough ${item.storageType} connections for all the selected storage`);
+        })
+      }
+      return;
+    })
+  }, [drives, currentBuild.motherboard]);
 
   return (
     <div>
@@ -43,6 +89,7 @@ const StoragePicker = ({currentBuild, updateBuild, hiddenInput, storage, smallSl
           })}
         </div>
         <StorageSelect
+          warnings={warnings}
           currentBuild={currentBuild}
           updateBuild={updateBuild}
           drives={drives}
