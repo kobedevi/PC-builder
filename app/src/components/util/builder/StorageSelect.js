@@ -21,8 +21,8 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
       return fetchCompatibleStorage(undefined);
     } else {
     return fetchCompatibleStorage(currentBuild.motherboard.idMotherboard);
-    }
-  }, [currentBuild.motherboard, strictMode]);
+  }
+  }, [currentBuild.motherboard.idMotherboard, strictMode]);
   
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
@@ -39,11 +39,6 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
       }
     ]);
   }
-
-  useEffect(() => {
-    refresh();
-  }, [strictMode])
-  
 
   const handleStrict = () => {
     setStrictMode(!strictMode);

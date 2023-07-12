@@ -15,13 +15,17 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
   const [info, setInfo] = useState([]);
   const [query, setQuery] = useState('');
 
+  const apiCall = useCallback(() => {
+    return fetchCpus();
+  }, []);
+
   const {
     data: cpus,
     error,
     setError,
     isLoading,
     refresh,
-  } = useFetch(fetchCpus);
+  } = useFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)
@@ -87,7 +91,6 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
       {
         cpus && (
           <>
-
             {
               info && <Alert color="info">{info}</Alert>
             }

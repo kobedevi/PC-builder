@@ -21,7 +21,7 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
     } else {
       return fetchCompatibleRam(memorySlots, idRamType);
     }
-  }, [memorySlots, strictMode]);
+  }, [memorySlots, idRamType, strictMode]);
   
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
@@ -37,11 +37,6 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
       idRam: product.idRam
     })
   }
-
-  useEffect(() => {
-    refresh();
-  }, [strictMode])
-  
 
   const handleStrict = () => {
     setStrictMode(!strictMode);
