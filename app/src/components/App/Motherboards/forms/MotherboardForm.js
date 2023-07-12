@@ -213,21 +213,19 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
         error={errors.pcieSlots}
       />
 
-      {/*------- TEST --------- */}
-        <ArrayStorageSelect
-          label="Storage Methods"
-          name="storageMethods"
-          disabled={disabled}
-          value={data.storageMethods}
-          storageMethods={storageMethods}
-          setStorageMethods={setStorageMethods}
-          setData={setData}
-          data={data}
-          error={errors.storageMethods}
-        />
-      {/* --------------------- */}
+      <ArrayStorageSelect
+        label="Storage Methods"
+        name="storageMethods"
+        disabled={disabled}
+        value={data.storageMethods}
+        storageMethods={storageMethods}
+        setStorageMethods={setStorageMethods}
+        setData={setData}
+        data={data}
+        error={errors.storageMethods}
+      />
 
-      <div>
+      <div className="form-group">
         <Input
           label="Product image"
           type="file"

@@ -128,7 +128,7 @@ const ArrayCpuSocketSelect = (
   };
 
   return (
-    <div>
+    <div className="form-group">
       {label && <label htmlFor={name}>{label}:</label>}
       {error && <Alert color="danger">{error.message}</Alert>}
       {formError && <Alert color="danger">{formError.message}</Alert>}
@@ -138,7 +138,7 @@ const ArrayCpuSocketSelect = (
       https://www.youtube.com/watch?v=3GtAE9RZHVc */}
       {cpuSockets.map((c, index) => {
         return (
-          <div key={c.tempId} className="form-group selectArray">
+          <div key={c.tempId} className="selectArray">
             <select
               className="form-control"
               disabled={localDisabled}

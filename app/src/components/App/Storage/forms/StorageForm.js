@@ -141,7 +141,7 @@ const StorageForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) =>
         error={errors.RPM}
       />
 
-      <div>
+      <div className="form-group">
         <Input
           label="Product image"
           type="file"
