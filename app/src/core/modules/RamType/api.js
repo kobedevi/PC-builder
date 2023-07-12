@@ -8,7 +8,6 @@ const fetchRamTypes = () => async (headers) => {
 };
 
 const createRamType = (data) => async (headers) => {
-  console.log(data)
   return await Axios.post(
     `${process.env.REACT_APP_BASE_API}/ramtypes`,
     data,

@@ -19,7 +19,6 @@ class CaseController {
 	fetchCasesByBuild = async (req, res, next) => {
 		try {
 			const { width, height, depth } = req.params;
-			console.log(width, height, depth)
 			const userQuery = `SELECT * FROM cases
 			LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN formfactors ON cases.idFormfactor = formfactors.idFormfactor
