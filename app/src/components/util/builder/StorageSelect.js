@@ -12,13 +12,17 @@ import { v4 as uuidv4 } from "uuid";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 
 
-const StorageSelect = ({warnings, currentBuild, updateBuild, drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
+const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updateBuild, drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleStorage(smallSlots, largeSlots, m2Slots);
-  }, [smallSlots, largeSlots, m2Slots]);
+    if(!strictMode) {
+      return fetchCompatibleStorage(undefined);
+    } else {
+    return fetchCompatibleStorage(currentBuild.motherboard.idMotherboard);
+    }
+  }, [currentBuild.motherboard, strictMode]);
   
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
@@ -36,6 +40,15 @@ const StorageSelect = ({warnings, currentBuild, updateBuild, drives, setDrives, 
     ]);
   }
 
+  useEffect(() => {
+    refresh();
+  }, [strictMode])
+  
+
+  const handleStrict = () => {
+    setStrictMode(!strictMode);
+  }
+
   return (
     <>
 
@@ -50,6 +63,12 @@ const StorageSelect = ({warnings, currentBuild, updateBuild, drives, setDrives, 
           <Spinner />
         )
       }
+
+      <div className="custom-control custom-checkbox text">
+        <input type="checkbox" id="strictMode" name="strictMode" className="custom-control-input" onChange={handleStrict} checked={strictMode}/>
+        <label className="custom-control-label" htmlFor="strictMode" style={{marginLeft: ".5rem"}}>Strict mode<span style={{color: "#C665EA"}}>*</span></label>
+        <p style={{opacity:.5, fontSize: "1rem"}}>You will see all compatible products, but for some you might not have enough connections</p>
+      </div>
 
       {
         warnings && (

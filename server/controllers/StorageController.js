@@ -2,6 +2,7 @@ const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const ValidationError = require("../errors/ValidationError");
 const { v4: uuidv4 } = require("uuid");
+const mysql = require('mysql2');
 
 class StorageController {
 	fetchStorage = async (req, res, next) => {
@@ -63,12 +64,29 @@ class StorageController {
 
 	fetchStorageByBuild = async (req, res, next) => {
 		try {
-			const { slots } = req.params;
-			const userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+			const {motherboardId} = req.params;
+			let userQuery, rows;
+			if(motherboardId !== 'undefined') {
+				userQuery = `SELECT storagetypes.idStorageType FROM motherboards
+				LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
+				LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
+				WHERE motherboards.idMotherboard = ?
+				AND motherboards.deleted = 0`;
+				[rows] = await db.promise().query(userQuery, [motherboardId]);
+				if (rows.length === 0) {
+					return res.status(400).json({ message: "Given motherboard does not exist" });
+				}
+			}
+			// https://stackoverflow.com/questions/33957252/node-js-mysql-query-where-id-array
+			const arr = (motherboardId !== 'undefined') ? Array.from(rows.map(val => { return val?.idStorageType; })) : [] ;
+			console.log(arr)
+			userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
-			WHERE storage.deleted = 0`;
-			const [rows] = await db.promise().query(userQuery, [slots]);
+			WHERE ${arr.length > 0 ? `storage.idStorageType IN (${mysql.escape(arr)}) AND` : ''}
+			storage.deleted = 0`;
+			console.log(userQuery);
+			[rows] = await db.promise().query(userQuery);
 			res.status(200).send(rows);
 		} catch (e) {
 			next(

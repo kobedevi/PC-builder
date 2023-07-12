@@ -1,7 +1,7 @@
 import StorageSelect from 'components/util/builder/StorageSelect'
 import { useEffect, useMemo, useState } from 'react'
 
-const StoragePicker = ({currentBuild, updateBuild, hiddenInput, storage, smallSlots, largeSlots, m2Slots, updateFields}) => {
+const StoragePicker = ({strictMode, setStrictMode, currentBuild, updateBuild, hiddenInput, storage, smallSlots, largeSlots, m2Slots, updateFields}) => {
 
   const [drives, setDrives] = useState(storage);
   const [warnings, setWarnings] = useState(new Set())
@@ -89,6 +89,8 @@ const StoragePicker = ({currentBuild, updateBuild, hiddenInput, storage, smallSl
           })}
         </div>
         <StorageSelect
+          strictMode={strictMode} 
+          setStrictMode={setStrictMode}
           warnings={warnings}
           currentBuild={currentBuild}
           updateBuild={updateBuild}

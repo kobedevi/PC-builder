@@ -25,8 +25,9 @@ const fetchFilteredStorage = (query) => async (headers) => {
   );
 };
 
-const fetchCompatibleStorage = (smallSlots, largeSlots, m2Slots) => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/storage/${smallSlots}/${largeSlots}/${m2Slots}`);
+const fetchCompatibleStorage = (storage) => async (headers) => {
+  console.log(storage)
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/storage/${storage}`);
 };
 
 const updateStorage = (data) => async (headers) => {
