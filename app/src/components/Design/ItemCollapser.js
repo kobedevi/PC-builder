@@ -21,14 +21,14 @@ const ItemCollapser = ({item}) => {
 							<li key={key}>
 								<strong>{ObjectKeysToText(key)}:</strong> 
 								<ul>
-									{item.map(x => {
+									{item.map((x) => {
 										return (
-										<li style={{marginTop:'.25rem'}}>
+										<li style={{marginTop:'.25rem'}} key={x.idStorageType}>
 											<ul style={{listStyle: 'none', padding: 0}}>
 											{Object.entries(x).map(([key, s]) => {
 												if(!key.startsWith("id")) {
 													return (
-														<li>
+														<li key={x.idStorageType}>
 															<strong>{ObjectKeysToText(key)}:</strong> {s}
 														</li>
 													)
