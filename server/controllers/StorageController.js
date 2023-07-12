@@ -57,7 +57,6 @@ class StorageController {
 			}
 			res.status(200).send(results[0]);
 		} catch (e) {
-			console.log(e);
 			next(e);
 		}
 	};
@@ -79,13 +78,11 @@ class StorageController {
 			}
 			// https://stackoverflow.com/questions/33957252/node-js-mysql-query-where-id-array
 			const arr = (motherboardId !== 'undefined') ? Array.from(rows.map(val => { return val?.idStorageType; })) : [] ;
-			console.log(arr)
 			userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			WHERE ${arr.length > 0 ? `storage.idStorageType IN (${mysql.escape(arr)}) AND` : ''}
 			storage.deleted = 0`;
-			console.log(userQuery);
 			[rows] = await db.promise().query(userQuery);
 			res.status(200).send(rows);
 		} catch (e) {
@@ -142,7 +139,6 @@ class StorageController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "Given idStorageType does not exist" });
 			}
-			console.log(req.body);
 
 			const sql = `UPDATE storage SET modelName = ?, capacity = ?, idManufacturer = ?, idStorageType = ?, RPM = ?, image = ? WHERE idStorage = ?`;
 			let data = [
@@ -171,7 +167,6 @@ class StorageController {
 					});
 				})
 				.catch((e) => {
-					console.log(e);
 					next(e);
 				});
 		} catch (e) {

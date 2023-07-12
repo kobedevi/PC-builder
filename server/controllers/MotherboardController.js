@@ -299,7 +299,6 @@ class MotherboardController {
 					} else return;
 				} else {
 					// Otherwise this is new and should be added
-					console.log('This is new')
 					AA.push(x)
 				}
 			})
@@ -308,7 +307,6 @@ class MotherboardController {
 			results[0].map((x, i) => {
 				const tempIndex = storageMethods.findIndex(obj => obj.idStorageType === x.idStorageType);
 				if(tempIndex === -1) {
-					console.log('This should be removed');
 					RA.push(results[0][i])
 				}
 			})
@@ -348,7 +346,6 @@ class MotherboardController {
 
 			RA.forEach((storage) => {
 				// only remove valid storage
-				console.log(storage)
 				if (uuidValidate(storage.idStorageType)) {
 					remover.push(`'${storage.idStorageType}'`);
 				}
