@@ -71,6 +71,7 @@ const Builder = () => {
 		})
 	}
 
+	// TODO: pagination
 	const {steps, currentStepIndex, step, isFirstStep, isLastStep,back, next} = 
 		useMultiStepForm([
 			<CpuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>, 
