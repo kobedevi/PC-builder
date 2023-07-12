@@ -4,7 +4,7 @@ const MotherboardPicker = ({currentBuild, updateBuild, hiddenInput, idMotherboar
   return (
     <div>
         Motherboard picker:
-        <input className="HideInput" ref={hiddenInput} tabIndex="-1" style={{color:"black"}} value={idMotherboard} required type="text"/>
+        <input className="HideInput" ref={hiddenInput} readOnly={true} tabIndex="-1" style={{color:"black"}} value={idMotherboard} required type="text"/>
         <MotherboardSelect
           currentBuild={currentBuild}
           updateBuild={updateBuild}

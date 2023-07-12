@@ -4,7 +4,7 @@ const GpuPicker = ({currentBuild, updateBuild, idGpu, hiddenInput, pcieSlots, ma
   return (
     <div>
         Video Card picker:
-        <input className="HideInput" ref={hiddenInput} tabIndex="-1" style={{color:"black"}} value={idGpu} type="text"/>
+        <input className="HideInput" ref={hiddenInput} readOnly={true} tabIndex="-1" style={{color:"black"}} value={idGpu} type="text"/>
         <GpuSelect
           currentBuild = {currentBuild}
           updateBuild = {updateBuild}

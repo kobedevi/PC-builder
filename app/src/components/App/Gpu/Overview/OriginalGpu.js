@@ -66,12 +66,12 @@ const OriginalGpuOverview = ({query, setQuery}) => {
                     >
                       Manufacturer: {product.manufacturerName}<br/>
                       Vram: {product.vram} GB<br/>
-                      <div>
+                      <span>
                         Displayport out: {product.displayport}<br/>
                         HDMI out: {product.hdmi}<br/>
                         VGA out: {product.vga}<br/>
                         DVI out: {product.dvi}<br/>
-                      </div>
+                      </span>
                     </ProductCard>
                   </li>
                 ))}
