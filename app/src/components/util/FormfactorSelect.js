@@ -161,7 +161,8 @@ const FormfactorSelect = (
             />
 
             <NumberInput
-              label="Height in mm"
+              label="Height"
+              unit={"mm"}
               type="number"
               name="height"
               value={data.height}
@@ -174,7 +175,8 @@ const FormfactorSelect = (
             />
 
             <NumberInput
-              label="Width in mm"
+              label="Width"
+              unit={"mm"}
               type="number"
               name="width"
               value={data.width}
