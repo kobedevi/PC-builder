@@ -54,10 +54,8 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
           tempId: uuidv4(),
         };
         temp.push(storageMethods);
-        console.log('if')
       });
     } else {
-      console.log('else')
       temp.push({ storageType: "", tempId: uuidv4() });
     }
     setData({...defaultData, ...initialData, storageMethods})
@@ -110,7 +108,7 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
     e.preventDefault();
     setIsTouched(true);
     console.log(data);
-    // validate(data, () => onSubmit(data));
+    validate(data, () => onSubmit(data));
   };
   
   const removeImage = (e) => {
