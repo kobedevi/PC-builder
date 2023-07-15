@@ -1,11 +1,12 @@
-import { Text, useGLTF } from "@react-three/drei";
-import React from "react";
+import { useGLTF } from "@react-three/drei";
+import React, {useRef,} from "react";
 import memorySlotModel from "./assets/DIMMSlot.glb";
 import pcieModel from "./assets/Pcie.glb";
 import socketModel from "./assets/Socket.glb";
 import sataModel from "./assets/Sata.glb";
 import powerModel from "./assets/Power.glb";
 
+import {Nvme} from "./Nvme";
 
 const Model = ({ motherboard }) => {
   const { scene: memorySlot } = useGLTF(memorySlotModel, true);
@@ -13,14 +14,17 @@ const Model = ({ motherboard }) => {
   const { scene: socket } = useGLTF(socketModel, true);
   const { scene: sataPort } = useGLTF(sataModel, true);
   const { scene: power } = useGLTF(powerModel, true);
+
   motherboard = {
     ...motherboard,
     width: (motherboard.width / 100),
     height: (motherboard.height / 100)
   }
   const offset = .2;
+
+  console.log(motherboard)
   return (
-    // TODO fallback box
+    <>
     <group name="mb" rotation={[Math.PI / 2, 0, 0]} scale={1} position={[0 , 0, 0]}>
       <group name="base" scale={1} position={[0, 0, 0]} >
         <mesh
@@ -28,7 +32,7 @@ const Model = ({ motherboard }) => {
           receiveShadow={true}
         >
           <boxGeometry args={[ motherboard.width, 0.02, motherboard.height]}/>
-          <meshStandardMaterial/>
+          <meshStandardMaterial metalness={1}/>
         </mesh>
       </group>
       <group name="socket" rotation={[Math.PI / -2, 0, 0]} position={[motherboard.width * .185  ,0 , -motherboard.height * .3]}>
@@ -40,6 +44,11 @@ const Model = ({ motherboard }) => {
             object={socket}
           />
         </mesh>
+      </group>
+      <group name="nvme" rotation={[Math.PI / -2, 0, 0]} position={[(motherboard.width /2)  , 0, ((-motherboard.height / 2))]} scale={1}>
+        <group name="nvmeScaler" scale={.1} position={[-offset, -motherboard.height * .8, 0]}>
+          <Nvme/>
+        </group>
       </group>
       <group name="io" position={[-motherboard.width / 2 + .25, .21, -motherboard.height / 2 + motherboard.height / 4]}>
         <mesh
@@ -127,6 +136,7 @@ const Model = ({ motherboard }) => {
         </mesh>
       </group>
     </group>
+    </>
   );
 };
 
