@@ -102,7 +102,7 @@ class MotherboardController {
 		try {
 			const { id } = req.params;
 			let userQuery = `SELECT 
-			motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, ramtypes.ramType,
+			motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, formfactors.height, formfactors.width, ramtypes.ramType,
 			motherboard_has_storagetypes.idStorageType, motherboard_has_storagetypes.amount, storagetypes.storageType
 			FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
