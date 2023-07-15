@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ObjectKeysToText } from "components/util/ObjectKeysToText";
+const { v4: uuidv4 } = require("uuid");
 
 const ItemCollapser = ({item}) => {
     const [collapse, setCollapse] = useState(false)
@@ -23,12 +24,12 @@ const ItemCollapser = ({item}) => {
 								<ul>
 									{item.map((x) => {
 										return (
-										<li style={{marginTop:'.25rem'}} key={x.idStorageType}>
+										<li style={{marginTop:'.25rem'}} key={uuidv4()}>
 											<ul style={{listStyle: 'none', padding: 0}}>
 											{Object.entries(x).map(([key, s]) => {
 												if(!key.startsWith("id")) {
 													return (
-														<li key={x.idStorageType}>
+														<li key={x.idStorageType + s}>
 															<strong>{ObjectKeysToText(key)}:</strong> {s}
 														</li>
 													)

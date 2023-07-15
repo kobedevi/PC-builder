@@ -69,6 +69,7 @@ const StoragePicker = ({strictMode, setStrictMode, currentBuild, updateBuild, hi
             return (
               <div key={s.localId} className="form-group selectArray">
                 <input
+                  key={index}
                   className="form-control hideInput"
                   readOnly={true}
                   value={s.modelName || ""}

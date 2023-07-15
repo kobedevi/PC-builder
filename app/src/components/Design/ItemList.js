@@ -12,9 +12,9 @@ const ItemList = ({ info, color = "primary" }) => {
             <h3><strong>{ObjectKeysToText(key)}</strong></h3>
               {
                 (Array.isArray(value) && value.length > 0) &&
-                value.map(val => {
+                value.map((val, index) => {
                   return (
-                    <div className="previewBox">
+                    <div className="previewBox" key={index}>
                       {val.image && <img style={{width: "100%", height: "auto", maxHeight: "300px", objectFit:"cover"}} src={val.image} alt="Product"/>}
                       <ItemCollapser item={val}/>
                     </div>
