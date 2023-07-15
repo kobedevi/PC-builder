@@ -82,7 +82,7 @@ const Builder = () => {
 			<GpuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
 			<CasePicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
 			<PsuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
-			<PartsOverview data={data}/>,
+			<PartsOverview data={data} currentBuild={currentBuild}/>,
 		])
 
 

@@ -1,9 +1,25 @@
+import Layout from 'components/Design/Models/Layout'
 import React from 'react'
+import CpuCoolerModel from './Model/CpuCooler/CpuCoolerModel'
+import CpuModel from './Model/Cpu/CpuModel'
 
-const PartsOverview = ({data}) => {
+const PartsOverview = ({currentBuild}) => {
   return (
-    // TODO:
-    <div>PartsOverview</div>
+    // TODO: overview model
+    <>    
+      <div>
+        <p>PartsOverview<br/>
+        <span style={{opacity: '0.5', fontSize: '1rem'}}>This render may not be fully accurate to your build</span>
+        </p>
+      </div>
+      <div className="model">
+        <Layout>
+          {/* <CpuModel currentBuild={currentBuild} /> */}
+          {/* <CpuCoolerModel currentBuild={currentBuild} /> */}
+          {/* <MotherboardModel currentBuild={currentBuild} /> */}
+        </Layout>
+      </div>
+    </>
   )
 }
 
