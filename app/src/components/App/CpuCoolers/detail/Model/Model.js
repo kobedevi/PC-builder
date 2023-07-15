@@ -1,11 +1,11 @@
 import { Text, useGLTF } from "@react-three/drei";
 
-import cpuCooler from "./assets/cooler_base.glb";
-import cpuFins from "./assets/cooler_fins.glb";
+import { Base } from "./assets/Base";
+import { Fin } from "./assets/Fin";
 
 const Model = ({ cooler }) => {
-  const { scene: base } = useGLTF(cpuCooler, true);
-  const { scene: fins } = useGLTF(cpuFins, true);
+
+  // Model modified from Fochdog on sketchfab: https://sketchfab.com/3d-models/cpu-cooler-672a0a74a98c452a862016bee99f3579
 
   // NATIVE FIN SIZES
   // X: 148mm
@@ -29,19 +29,16 @@ const Model = ({ cooler }) => {
       position={[0, -temp * (0.136 / 2) + 0.88, 0]}
     >
       <group name="base" position={[0, 0, 0]}>
-        <primitive object={base} />
+        <Base/>
       </group>
       <group name="fins" position={[0, 1.62, 0]} scale={[width, 1, depth]}>
         {Array(temp)
           .fill(null)
           .map((value, index) => {
-            const clone = fins.clone();
             return (
-              <primitive
-                key={index}
-                object={clone}
-                position={[0, index * 0.136, 0]}
-              />
+              <group name="fin" key={index} position={[0, index * 0.136, 0]}>
+                <Fin/>  
+              </group>
             );
           })}
       </group>
