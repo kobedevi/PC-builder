@@ -44,7 +44,7 @@ const deletePsu = (id) => async (headers) => {
   });
 };
 
-const fetchCompatiblePsu = (wattage) => async (headers) => {
+const fetchCompatiblePsu = async (wattage) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/psu/${wattage}`);
 };
 

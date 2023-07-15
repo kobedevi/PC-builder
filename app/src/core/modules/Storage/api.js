@@ -25,7 +25,7 @@ const fetchFilteredStorage = (query) => async (headers) => {
   );
 };
 
-const fetchCompatibleStorage = (storage) => async (headers) => {
+const fetchCompatibleStorage = async (storage) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/storage/${storage}`);
 };
 

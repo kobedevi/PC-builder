@@ -7,7 +7,7 @@ const fetchCases = () => async (headers) => {
   });
 };
 
-const fetchCompatibleCases = (width, height, depth) => async (headers) => {
+const fetchCompatibleCases = async (width, height, depth) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/case/${width}/${height}/${depth}`);
 };
 

@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import useFetch from "../../../core/hooks/useFetch";
+import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
 import { fetchCpus } from "../../../core/modules/CPU/api";
 import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
@@ -23,7 +23,7 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
     }
   }, [memorySlots, idRamType, strictMode]);
   
-  const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
+  const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)

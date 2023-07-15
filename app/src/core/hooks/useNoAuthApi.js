@@ -1,15 +1,13 @@
 import { useCallback } from "react";
-import { useAuth } from "../../components/Auth/AuthContainer";
 import ApiError from "../error/ApiError";
 import AppError from "../error/AppError";
-import { handleApiResult, withToken } from "../utils/api";
+import { handleApiResult } from "../utils/api";
 
 const useNoAuthApi = () => {
-  const { user, logout } = useAuth();
 
-  const withAuth = useCallback((promise) => {
+  const withNoAuth = useCallback((promise) => {
     return new Promise((resolve, reject) => {
-      withToken(promise, user.token)
+      promise
         .then(handleApiResult)
         .then((data) => resolve(data))
         .catch((err) => {
@@ -22,7 +20,7 @@ const useNoAuthApi = () => {
     });
   }, []);
 
-  return withAuth;
+  return withNoAuth;
 };
 
 export default useNoAuthApi;

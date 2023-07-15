@@ -1,12 +1,10 @@
 import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
-import useFetch from "../../../core/hooks/useFetch";
-import { fetchCpus, fetchFilteredCpus } from "../../../core/modules/CPU/api";
-import { PossibleRoutes, route } from "../../../core/routing";
+import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
+import { fetchCompatibleCpus, fetchFilteredCpus } from "../../../core/modules/CPU/api";
+import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
-import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import BuilderProductCard from "components/Design/BuilderProductCard";
@@ -16,7 +14,7 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
   const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
-    return fetchCpus();
+    return fetchCompatibleCpus();
   }, []);
 
   const {
@@ -25,7 +23,7 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
     setError,
     isLoading,
     refresh,
-  } = useFetch(apiCall);
+  } = useNoAuthFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)

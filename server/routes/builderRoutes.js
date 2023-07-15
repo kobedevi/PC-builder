@@ -1,11 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { withRole } = require("../services/auth/auth.services");
-const { roles } = require("../models/User");
 
-const { cpuModel } = require("../models/Cpu");
-const { cpuCoolerModel } = require("../models/CpuCooler");
-
+const CpuController = require("../controllers/CpuController");
 const CpuCoolerController = require("../controllers/CpuCoolerController");
 const MotherboardController = require("../controllers/MotherboardController");
 const RamController = require("../controllers/RamController");
@@ -14,6 +10,7 @@ const CaseController = require("../controllers/CaseController");
 const StorageController = require("../controllers/StorageController");
 const PsuController = require("../controllers/PsuController");
 
+const cpuController = new CpuController();
 const cpuCoolerController = new CpuCoolerController();
 const motherboardController = new MotherboardController();
 const ramController = new RamController();
@@ -25,6 +22,7 @@ const psuController = new PsuController();
 const builderRouter = express.Router();
 builderRouter.use(bodyParser.urlencoded({ extended: true }));
 
+builderRouter.get("/cpu", cpuController.fetchCpus);
 builderRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolersByBuild);
 builderRouter.get("/motherboard/:id", motherboardController.fetchMotherboardsByBuild);
 builderRouter.get("/ram/:slots/:id", ramController.fetchRamByBuild);

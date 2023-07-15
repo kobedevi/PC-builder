@@ -1,5 +1,5 @@
 import { useCallback, useState, useEffect } from "react";
-import useFetch from "../../../core/hooks/useFetch";
+import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
 import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
@@ -24,7 +24,7 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
   }
   }, [currentBuild.motherboard.idMotherboard, strictMode]);
   
-  const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
+  const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)

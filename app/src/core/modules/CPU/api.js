@@ -7,6 +7,10 @@ const fetchCpus = () => async (headers) => {
   });
 };
 
+const fetchCompatibleCpus = async () => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/cpu`);
+};
+
 const fetchCpuById = (id) => async (headers) => {
   return await Axios.get(
     `${process.env.REACT_APP_BASE_API}/cpu/${id}`, 
@@ -47,4 +51,4 @@ const deleteCpu = (id) => async (headers) => {
   });
 };
 
-export { fetchCpus, fetchCpuById, fetchFilteredCpus, updateCpu, createCpu, deleteCpu };
+export { fetchCpus, fetchCompatibleCpus, fetchCpuById, fetchFilteredCpus, updateCpu, createCpu, deleteCpu };

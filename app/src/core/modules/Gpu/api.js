@@ -25,7 +25,7 @@ const fetchFilteredPartnerGpu = (query) => async (headers) => {
   );
 };
 
-const fetchCompatibleGpus = (id) => async (headers) => {
+const fetchCompatibleGpus = async (id) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/gpu/`);
 };
 

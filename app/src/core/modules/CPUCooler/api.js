@@ -7,7 +7,7 @@ const fetchCpuCoolers = () => async (headers) => {
   });
 };
 
-const fetchCompatibleCpuCoolers = (id) => async (headers) => {
+const fetchCompatibleCpuCoolers = async (id) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/cpucooler/${id}`);
 };
 

@@ -16,7 +16,7 @@ const fetchFilteredMotherboards = (query) => async (headers) => {
   );
 };
 
-const fetchCompatibleMotherboard = (id) => async (headers) => {
+const fetchCompatibleMotherboard = async (id) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/motherboard/${id}`);
 };
 

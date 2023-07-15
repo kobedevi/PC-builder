@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import useFetch from "../../../core/hooks/useFetch";
+import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
 import { fetchCpus } from "../../../core/modules/CPU/api";
 import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
@@ -19,7 +19,7 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
     return fetchCompatibleCpuCoolers(idCpu);
   }, [idCpu]);
   
-  const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
+  const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)

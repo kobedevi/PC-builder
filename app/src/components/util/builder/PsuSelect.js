@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
-import useFetch from "../../../core/hooks/useFetch";
+import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
 import { fetchCpus } from "../../../core/modules/CPU/api";
 import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
@@ -19,7 +19,7 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
     return fetchCompatiblePsu(minWat);
   }, [minWat]);
   
-  const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
+  const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)
@@ -78,7 +78,7 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
                   {data.map((product) => {
                     const disabled = product.idPsu === currentBuild.psu.idPsu ? true : false;
                     return(
-                    <li key={product.idRam}>
+                    <li key={product.idPsu}>
                       <BuilderProductCard
                         product={product}
                         link={PossibleRoutes.Detail}
