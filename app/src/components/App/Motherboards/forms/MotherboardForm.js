@@ -43,14 +43,9 @@ const defaultData = {
 
 const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageType: {}, amount: 1 }, disabled }) => {
   const [isTouched, setIsTouched] = useState(false);
-  const [data, setData] = useState({
-    ...defaultData,
-    ...initialData,
-  });
 
   const temp = [];
   useEffect(() => {
-    // Update the document title using the browser API
     if (Object.keys(initialData.idStorageType).length > 0) {
       initialData.idStorageType.map((x, index) => {
         const storageMethods = {
@@ -59,13 +54,21 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
           tempId: uuidv4(),
         };
         temp.push(storageMethods);
+        console.log('if')
       });
     } else {
+      console.log('else')
       temp.push({ storageType: "", tempId: uuidv4() });
     }
+    setData({...defaultData, ...initialData, storageMethods})
   }, [initialData]);
 
   const [storageMethods, setStorageMethods] = useState(temp);
+  const [data, setData] = useState({
+    ...defaultData,
+    ...initialData,
+    storageMethods,
+  });
   const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
@@ -106,7 +109,8 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsTouched(true);
-    validate(data, () => onSubmit(data));
+    console.log(data);
+    // validate(data, () => onSubmit(data));
   };
   
   const removeImage = (e) => {
