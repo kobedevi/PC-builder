@@ -14,6 +14,8 @@ const Layout = ({ children }) => {
             enablePan={true}
             enableZoom={true}
           />
+          <axesHelper args={[3]} />
+          <gridHelper />
           {children}
         </Suspense>
       </Canvas>

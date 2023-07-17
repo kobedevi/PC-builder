@@ -159,7 +159,7 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           max={1000}
           step={1}
           onChange={handleChange}
-          unit={"cm"}
+          unit={"mm"}
           error={errors.height}
         />
 
@@ -172,7 +172,7 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           min={1}
           max={1000}
           step={1}
-          unit={"cm"}
+          unit={"mm"}
           onChange={handleChange}
           error={errors.width}
         />
@@ -186,7 +186,7 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           min={1}
           max={1000}
           step={1}
-          unit={"cm"}
+          unit={"mm"}
           onChange={handleChange}
           error={errors.depth}
         />

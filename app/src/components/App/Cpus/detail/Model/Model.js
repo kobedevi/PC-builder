@@ -7,7 +7,7 @@ import {Cpu} from "./Cpu";
 const Model = ({ cpu }) => {
 
   return (
-    <group name="cpu" scale={3}>
+    <group name="cpu" scale={2.5}>
       <group name="base" position={[0, 0, 0]} scale={.05}rotation={[Math.PI / 2, 0, 0]}>
          <Cpu/>
       </group>
