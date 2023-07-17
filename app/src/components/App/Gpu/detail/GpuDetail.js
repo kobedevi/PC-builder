@@ -5,7 +5,6 @@ import Layout from "components/Design/Models/Layout";
 import Model from "./Model/Model";
 
 const GpuDetail = ({ gpu }) => {
-  console.log(gpu)
   return (
     <div className="fullSize">
       <div className="detail">

@@ -4,9 +4,17 @@ import { Gpu } from "./assets/Gpu";
 
 const Model = ({ gpu }) => {
 
+  const offset = gpu.width/1000 * 2
+  gpu = {
+    ...gpu,
+    width: gpu.width/100,
+    depth: gpu.depth/100,
+    height: gpu.height/100
+  }
+
   return (
-    <group name="Gpu" anchorX={"left"} position={[-(gpu.width/100) , 0 ,0]}>
-      <group name="text" position={[.4, (gpu.depth/100) , -.01]}>
+    <group name="Gpu" anchorX={"left"} position={[-gpu.width , 0 ,0]}>
+      <group name="text" position={[offset, gpu.depth , -.01]}>
         <Text
           // Google fonts now only uses woff2 which isnt supported, solution is to host own woff files but cors policy gets in the way for localhost
           font="https://fonts.gstatic.com/s/raleway/v14/1Ptrg8zYS_SKggPNwK4vaqI.woff"
@@ -35,7 +43,7 @@ const Model = ({ gpu }) => {
           {gpu.modelName}
         </Text>
       </group>
-      <group name="scaler" scale={[gpu.width/100, gpu.depth/100, gpu.height/100 ]}>
+      <group name="scaler" scale={[gpu.width, gpu.depth, gpu.height]}>
         <Gpu scale={1}/>
       </group>
     </group>
