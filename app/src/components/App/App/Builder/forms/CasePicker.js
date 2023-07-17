@@ -4,7 +4,7 @@ const CasePicker = ({currentBuild, updateBuild, idCase, hiddenInput, formfactor,
   return (
     <div>
         Case picker:
-        <input className="HideInput" ref={hiddenInput} readOnly={true} tabIndex="-1" style={{color:"black"}} value={idCase} required type="text"/>
+        <input className="HideInput" ref={hiddenInput} onChange={() => {}} tabIndex="-1" style={{color:"black"}} value={idCase} required type="text"/>
         <CaseSelect
           currentBuild = {currentBuild}
           updateBuild = {updateBuild}

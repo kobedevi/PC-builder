@@ -4,7 +4,7 @@ const RamPicker = ({idRamType, strictMode, setStrictMode, currentBuild, updateBu
   return (
     <div>
         Memory picker:
-        <input className="HideInput" ref={hiddenInput} readOnly={true} tabIndex="-1" style={{color:"black"}} value={idRam} required type="text"/>
+        <input className="HideInput" ref={hiddenInput} onChange={() => {}} tabIndex="-1" style={{color:"black"}} value={idRam} required type="text"/>
         <RamSelect
           strictMode={strictMode} 
           setStrictMode={setStrictMode}

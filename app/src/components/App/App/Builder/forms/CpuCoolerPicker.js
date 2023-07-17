@@ -4,7 +4,7 @@ const CpuCoolerPicker = ({currentBuild, updateBuild, hiddenInput, idCpuCooler, i
   return (
     <div>
         cpu cooler picker:
-        <input className="HideInput" ref={hiddenInput} readOnly={true} tabIndex="-1" style={{color:"black"}} value={idCpuCooler} required type="text"/>
+        <input className="HideInput" ref={hiddenInput} onChange={() => {}} tabIndex="-1" style={{color:"black"}} value={idCpuCooler} required type="text"/>
         <CpuCoolerSelect
           currentBuild={currentBuild}
           updateBuild={updateBuild}

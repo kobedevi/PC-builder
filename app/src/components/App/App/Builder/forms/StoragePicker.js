@@ -63,6 +63,7 @@ const StoragePicker = ({strictMode, setStrictMode, currentBuild, updateBuild, hi
   return (
     <div>
         Storage picker:
+        {/* Read only because, "read only is more correct and input is not required" */}
         <input className="HideInput" ref={hiddenInput} readOnly={true} tabIndex="-1" style={{color:"black"}} value={drives[0]?.modelName} type="text"/>
         <div>
           {drives.map((s, index) => {
