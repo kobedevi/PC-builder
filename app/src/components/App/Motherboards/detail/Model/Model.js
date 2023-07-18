@@ -22,10 +22,9 @@ const Model = ({ motherboard }) => {
   }
   const offset = .2;
 
-  console.log(motherboard)
   return (
     <>
-    <group name="mb" rotation={[Math.PI / 2, 0, 0]} scale={1} position={[0 , 0, 0]}>
+    <group name="mb" rotation={[Math.PI / 2, 0, 0]} scale={1.75} position={[0 , 0, -offset]}>
       <group name="base" scale={1} position={[0, 0, 0]} >
         <mesh
           castShadow={true}

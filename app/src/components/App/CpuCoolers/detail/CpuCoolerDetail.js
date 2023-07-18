@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { PossibleRoutes, route } from "../../../../core/routing";
 import DetailCard from "components/Design/DetailCard";
 import Layout from "../../../Design/Models/Layout";
-import { Model } from "./Model/Model";
+import Model from "./Model/Model";
 
 const CpuCoolerDetail = ({ cooler }) => {
   return (

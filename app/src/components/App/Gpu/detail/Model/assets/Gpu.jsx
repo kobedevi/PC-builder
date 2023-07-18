@@ -10,61 +10,54 @@ export function Gpu(props) {
   const { nodes, materials } = useGLTF('/models/Gpu/gpuCube.glb')
   return (
     <group {...props} dispose={null}>
-      {/* <mesh geometry={nodes.Fan_B_Black_Fan_0.geometry} material={materials.Black_Fan} position={[-1.239, 0.885, -0.378]} rotation={[Math.PI / 2, -0.05, Math.PI]} scale={0.003} />
-      <mesh geometry={nodes.Fan_B_Slot1_0.geometry} material={materials['Slot.1']} position={[-1.239, 0.885, -0.378]} rotation={[Math.PI / 2, -0.05, Math.PI]} scale={0.003} />
-      <mesh geometry={nodes.Front_Cover_Black_0.geometry} material={materials.Black} position={[-1.223, 0.897, 0.121]} rotation={[Math.PI / 2, 0, 0]} scale={[0.01, 0.01, 0.008]} />
-      <mesh geometry={nodes.Grills_F002_Metal_Black_0.geometry} material={materials.PaletteMaterial001} position={[-1.282, 0.888, -0.042]} rotation={[Math.PI / 2, 0, Math.PI]} scale={0.01} />
-      <mesh geometry={nodes.Metal_Frame_Metal_0.geometry} material={materials.Metal} position={[0, 0.883, -0.085]} rotation={[Math.PI / 2, 0, 0]} scale={0.01} />
-      <mesh geometry={nodes.Side_Metal_Part_Metal_S_0.geometry} material={materials.Metal_S} position={[-2.259, 1.181, -0.125]} rotation={[Math.PI / 2, 0, 0]} scale={0.01} />
-      <mesh geometry={nodes.Socket_Slot_0.geometry} material={materials.Slot} position={[-1.497, 1.875, -0.39]} rotation={[Math.PI / 2, 0, 0]} scale={[0.01, 0.019, 0.01]} /> */}
-      <group position={[1.035, 0, -0.558]} rotation={[-Math.PI / 2, 0, 0]} scale={[0.426, 3.258, 0.911]}>
+      <group position={[1.035, -1.701, -0.399]} rotation={[-Math.PI / 2, 0, 0]} scale={[0.426, 3.258, 0.911]}>
         <group rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
           <group position={[-123.897, 88.512, -37.824]} rotation={[Math.PI / 2, -0.05, Math.PI]} scale={0.304}>
-            <mesh geometry={nodes.Fan_B_Black_Fan_0.geometry} material={materials.Black_Fan} position={[0.001, -20.623, 0]} />
-            <mesh geometry={nodes.Fan_B_Slot1_0.geometry} material={materials['Slot.1']} position={[-0.002, -38.794, 0]} />
+            <mesh geometry={nodes.Fan_B_Black_Fan_0.geometry} material={materials['Black_Fan.001']} position={[0.001, -20.623, 0]} />
+            <mesh geometry={nodes.Fan_B_Slot1_0.geometry} material={materials['Slot.002']} position={[-0.002, -38.794, 0]} />
           </group>
           <group position={[127.5, 88.512, 10.288]} rotation={[Math.PI / 2, 0, 0]} scale={0.794}>
-            <mesh geometry={nodes.Fan_Circle_Black_Fan_0.geometry} material={materials.Black_Fan} position={[0.011, -16.46, 0]} />
+            <mesh geometry={nodes.Fan_Circle_Black_Fan_0.geometry} material={materials['Black_Fan.001']} position={[0.011, -16.46, 0]} />
           </group>
           <group position={[-124.154, 88.512, -40.178]} rotation={[Math.PI / 2, 0, Math.PI]} scale={0.794}>
-            <mesh geometry={nodes.Fan_Circle_B_Black_Fan_0.geometry} material={materials.Black_Fan} position={[-0.003, -16.458, 0]} />
+            <mesh geometry={nodes.Fan_Circle_B_Black_Fan_0.geometry} material={materials['Black_Fan.001']} position={[-0.003, -16.458, 0]} />
           </group>
           <group position={[127.5, 88.512, 10.288]} rotation={[Math.PI / 2, 0.05, 0]} scale={0.304}>
-            <mesh geometry={nodes.Fan_F_Black_Fan_0.geometry} material={materials.Black_Fan} position={[-0.001, -20.415, 0]} />
-            <mesh geometry={nodes.Fan_F_Slot1_0.geometry} material={materials['Slot.1']} position={[0.003, -38.795, 0]} />
+            <mesh geometry={nodes.Fan_F_Black_Fan_0.geometry} material={materials['Black_Fan.001']} position={[-0.001, -20.415, 0]} />
+            <mesh geometry={nodes.Fan_F_Slot1_0.geometry} material={materials['Slot.002']} position={[0.003, -38.795, 0]} />
           </group>
           <group position={[-122.303, 89.693, 12.112]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 0.836]}>
-            <mesh geometry={nodes.Front_Cover_Black_0.geometry} material={materials.Black} position={[-6.835, 0, 0]} />
+            <mesh geometry={nodes.Front_Cover_Black_0.geometry} material={materials['Black.002']} position={[-6.835, 0, 0]} />
           </group>
           <group position={[-4.752, 163.401, 14.089]} rotation={[-Math.PI / 2, 0, -Math.PI]}>
-            <mesh geometry={nodes.Front_Cover_T_Black_0.geometry} material={materials.Black} position={[-4.957, -5.193, -13.849]} />
+            <mesh geometry={nodes.Front_Cover_T_Black_0.geometry} material={materials['Black.002']} position={[-4.957, -5.193, -13.849]} />
           </group>
           <group position={[0.021, 26.082, 14.089]} rotation={[Math.PI / 2, 0, 0]}>
-            <mesh geometry={nodes.Front_Cover_U_Black_0.geometry} material={materials.Black} position={[0, -5.192, -1.521]} />
+            <mesh geometry={nodes.Front_Cover_U_Black_0.geometry} material={materials['Black.002']} position={[0, -5.192, -1.521]} />
           </group>
           <group position={[-128.175, 88.839, -4.172]} rotation={[Math.PI / 2, 0, Math.PI]} scale={[1, 0.97, 1.023]}>
-            <mesh geometry={nodes.Grills_F002_Metal_Black_0.geometry} material={materials.Metal_Black} position={[5.292, 3.585, 0.001]} />
+            <mesh geometry={nodes.Grills_F002_Metal_Black_0.geometry} material={materials['Metal_Black.001']} position={[5.292, 3.585, 0.001]} />
           </group>
           <group position={[131.494, 88.839, -23.017]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1, 1.023]}>
-            <mesh geometry={nodes.Grills_F003_Metal_Black_0.geometry} material={materials.Metal_Black} position={[5.171, 3.526, -0.034]} />
+            <mesh geometry={nodes.Grills_F003_Metal_Black_0.geometry} material={materials['Metal_Black.001']} position={[5.171, 3.526, -0.034]} />
           </group>
           <group position={[0.798, 174.492, 3.087]} rotation={[-Math.PI / 2, Math.PI / 4, -Math.PI]} scale={[0.547, 11.753, 0.547]}>
-            <mesh geometry={nodes.Grills_T_Metal_Black_0.geometry} material={materials.Metal_Black} position={[-37.226, -1.936, -33.354]} />
+            <mesh geometry={nodes.Grills_T_Metal_Black_0.geometry} material={materials['Metal_Black.001']} position={[-37.227, -1.936, -33.354]} />
           </group>
           <group position={[-0.119, 3.157, 3.087]} rotation={[Math.PI / 2, -Math.PI / 4, 0]} scale={[0.547, 11.753, 0.547]}>
-            <mesh geometry={nodes.Grills_U_Metal_Black_0.geometry} material={materials.Metal_Black} position={[-37.227, -1.936, -33.354]} />
+            <mesh geometry={nodes.Grills_U_Metal_Black_0.geometry} material={materials['Metal_Black.001']} position={[-37.227, -1.936, -33.354]} />
           </group>
           <group position={[-0.001, 88.305, -8.473]} rotation={[Math.PI / 2, 0, 0]}>
-            <mesh geometry={nodes.Metal_Frame_Metal_0.geometry} material={materials.Metal} position={[-0.001, -4.888, 0.013]} />
+            <mesh geometry={nodes.Metal_Frame_Metal_0.geometry} material={materials['Metal.001']} position={[-0.001, -4.888, 0.013]} />
           </group>
           <group position={[121.838, 88.416, -34.24]} rotation={[-Math.PI / 2, 0, -Math.PI]} scale={[1, 1, 0.836]}>
-            <mesh geometry={nodes.Plane010_Black001_0.geometry} material={materials['Black.001']} position={[-6.839, 0.366, 0]} />
+            <mesh geometry={nodes.Plane010_Black001_0.geometry} material={materials['Black.003']} position={[-6.839, 0.366, 0]} />
           </group>
           <group position={[-225.871, 118.087, -12.542]} rotation={[Math.PI / 2, 0, 0]}>
-            <mesh geometry={nodes.Side_Metal_Part_Metal_S_0.geometry} material={materials.Metal_S} position={[-0.67, 0, -6.09]} />
+            <mesh geometry={nodes.Side_Metal_Part_Metal_S_0.geometry} material={materials['Metal_S.001']} position={[-0.67, 0, -6.09]} />
           </group>
           <group position={[-149.707, 187.465, -39.009]} rotation={[Math.PI / 2, 0, 0]} scale={[1, 1.929, 1]}>
-            <mesh geometry={nodes.Socket_Slot_0.geometry} material={materials.Slot} position={[59.466, 0.809, 3.005]} />
+            <mesh geometry={nodes.Socket_Slot_0.geometry} material={materials['Slot.003']} position={[50.069, 25.698, 3.005]} />
           </group>
         </group>
       </group>

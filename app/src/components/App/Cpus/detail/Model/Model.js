@@ -4,11 +4,11 @@ import React from "react";
 import {Cpu} from "./Cpu";
 
 
-const Model = ({ cpu }) => {
+const Model = ({ cpu, scale=2.5, rotation=[0,0,0], position=[0,0,0] }) => {
 
   return (
-    <group name="cpu" scale={2.5}>
-      <group name="base" position={[0, 0, 0]} scale={.05}rotation={[Math.PI / 2, 0, 0]}>
+    <group name="cpu" position={position} scale={scale} rotation={rotation}>
+      <group name="base" scale={.05} rotation={[Math.PI / 2, 0, 0]}>
          <Cpu/>
       </group>
       <group name="info">
