@@ -42,3 +42,13 @@ header{
         height: 22px;
     }
 }
+
+.mainNav {
+    ul{
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        list-style: none;
+        padding: 0;
+    }
+}

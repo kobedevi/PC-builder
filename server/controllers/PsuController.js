@@ -2,6 +2,10 @@ const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
 const SQL = require("@nearform/sql");
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+const path = require('path');
+
 
 class PsuController {
 	fetchPsu = async (req, res, next) => {
@@ -226,6 +230,104 @@ class PsuController {
 			next(e);
 		}
 	};
+
+	scrape = async(req,res,next) => {
+		try {
+			// Launch the browser and open a new blank page
+			// const browser = await puppeteer.launch({
+			// 	headless: false, //debugging
+			// 	defaultViewport: false,
+			// });
+			// const page = await browser.newPage();
+			// let currentPage = 1;
+			// // const url = "https://azerty.nl/componenten/cpu?p=1&product_list_limit=50"
+			// let url = `https://azerty.nl/componenten/voedingen?p=${currentPage}&product_list_limit=50`
+			// await page.goto(`${url}`, {
+			// 	waitUntil: "networkidle0",
+			// });
+
+			// const productAmount = await page.evaluate(() =>{
+			// 	const amount = document.querySelector("#toolbar-amount span.toolbar-number").innerHTML;
+			// 	return parseInt(amount)
+			// });
+			// let currentProduct = 0;
+			// let is_disabled = false;
+
+			// while (!is_disabled) {
+
+			// 	const products = await page.$$(".product-items > .product-item");
+
+			// 	for (const product of products) {
+
+			// 		let title = "Null";
+			// 		let price = "Null";
+			// 		let img = "Null";
+
+			// 		try {
+			// 			title = await page.evaluate(
+			// 			  (el) => el.querySelector(".product-item-name").textContent,
+			// 			  product
+			// 			);
+			// 		} catch (error) {}
+			// 		try {
+			// 			price = await page.evaluate(
+			// 			  (el) => el.querySelector(".price").textContent,
+			// 			  product
+			// 			);
+			// 		} catch (error) {}
+			// 		try {
+			// 			img = await page.evaluate(
+			// 			  (el) => el.querySelector(".product-image-photo").getAttribute("src"),
+			// 			  product
+			// 			);
+			// 		} catch (error) {}
+			// 		if (title !== "Null") {
+			// 			fs.appendFile(
+			// 			  `${__dirname}/results.csv`,
+			// 			  `${title.replace(/,/g, ".")},${price.replace(/,/g, ".")},${img.split('?')[0]}\n`,
+			// 			  function (err) {
+			// 				if (err) throw err;
+			// 			  }
+			// 			);
+			// 		}
+			// 	}
+
+			// 	currentPage = currentPage+1;
+			// 	currentProduct = currentProduct + 50;
+			// 	is_disabled = productAmount < currentProduct;
+				
+			// 	if(!is_disabled) {
+			// 		await page.goto(`https://azerty.nl/componenten/voedingen?p=${currentPage}&product_list_limit=50`);
+			// 	}
+			// }
+
+			// await browser.close();
+			
+			fs.appendFile(
+				`${__dirname}/results.csv`,
+				`${'zever'},${'nog wa zever'},${'en nog wa'}\n`,
+				function (err) {
+					if (err) throw err;
+				}
+			);
+
+			const options = {
+				root: path.join(__dirname)
+			};
+			const fileName = './results.csv';
+			res.sendFile(fileName, options,  function (err) {
+				if (err) {
+					next(err);
+				} else {
+					console.log('Sent:', fileName);
+				}
+			});
+
+		} catch (e) {
+			console.log(e);
+			next(e);
+		}
+	}
 }
 
 module.exports = PsuController;

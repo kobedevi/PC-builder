@@ -31,4 +31,6 @@ builderRouter.get("/gpu", gpuController.fetchGpusByBuild);
 builderRouter.get("/case/:width/:height/:depth", caseController.fetchCasesByBuild);
 builderRouter.get("/psu/:wattage", psuController.fetchPsusByBuild);
 
+builderRouter.get("/scrape", psuController.scrape);
+
 module.exports = builderRouter;
