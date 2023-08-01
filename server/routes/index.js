@@ -2,6 +2,7 @@ const NotFoundError = require("../errors/NotFoundError");
 const ValidationError = require("../errors/ValidationError");
 const authRoutes = require("./authRoutes");
 const builderRoutes = require("./builderRoutes");
+const authBuilderRoutes = require("./authBuilderRoutes");
 const { authLocal, authJwt } = require("../services/auth/auth.services");
 const { userModel } = require("../models/User");
 const UserController = require("../controllers/UserController");
@@ -13,6 +14,7 @@ const registerRoutes = (app, db) => {
 	app.post("/login", authLocal, userController.login);
 
 	app.use('/compatible', builderRoutes);
+	app.use(authJwt, authBuilderRoutes);
 	app.use(authJwt, authRoutes);
 
 	// default 404

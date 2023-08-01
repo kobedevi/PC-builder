@@ -12,6 +12,10 @@ import PartsOverview from "./forms/PartsOverview"
 import ErrorAlert from "components/shared/ErrorAlert"
 import ItemList from "components/Design/ItemList"
 import PsuPicker from "./forms/PsuPicker"
+import Nav from "../Homepage/Nav"
+import { createBuild } from "../../../../core/modules/Builds/api"
+import { useAuth } from "../../../Auth/AuthContainer"
+import useNoAuthApi from "core/hooks/useNoAuthApi"
 
 const initialData = {
 	idCpu: "",
@@ -47,9 +51,13 @@ const initialBuild = {
 	gpu: {},
 	psu: {},
 	case: {},
+	id: '',
 }
 
 const Builder = () => {
+
+	const auth = useAuth();
+	const withNoAuth = useNoAuthApi();
 
 	const [data, setData] = useState(initialData);
 	const [alert, setAlert] = useState();
@@ -72,7 +80,7 @@ const Builder = () => {
 	}
 
 	// TODO: pagination
-	const {steps, currentStepIndex, step, isFirstStep, isLastStep,back, next} = 
+	const {steps, currentStepIndex, step, isFirstStep, isLastStep, isFinish, back, next} = 
 		useMultiStepForm([
 			<CpuPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>, 
 			<CpuCoolerPicker {...data} hiddenInput={hiddenInput} currentBuild={currentBuild} updateBuild={updateBuild} updateFields={updateFields}/>,
@@ -85,18 +93,19 @@ const Builder = () => {
 			<PartsOverview data={data} currentBuild={currentBuild}/>,
 		])
 
-
-	const onSubmit = (e) => {
-		e.preventDefault();
-		if (!isLastStep) return next();
-		alert("Success")
-	}
-
 	const validate = (e) => {
 		e.preventDefault();
 		if(hiddenInput.current.validity.valid) {
 			setAlert(null);
-			next();
+			if (!isLastStep) return next();
+			return withNoAuth(createBuild(currentBuild, auth?.user))
+			.then((res) => {
+				updateBuild({
+					id: res.id
+				})
+				next();
+			})
+			.catch((err) => setAlert(err));
 		} else {
 			setAlert({builderMsg: "Please pick a component"})
 		}
@@ -104,13 +113,14 @@ const Builder = () => {
 
 	return (
 		<>
+			<Nav/>
 			<div className="formWrapper">
 				<div className="stepper">
 					<StepCounter steps={steps} currentStepIndex={currentStepIndex}/>
 				</div>
 				
 				<div className="builderParent">
-					<form className="builder" ref={builderForm} onSubmit={onSubmit}>
+					<form className="builder" ref={builderForm}>
 						<div style={{position: "absolute", top: ".5rem", right:".5rem"}}>
 							{currentStepIndex + 1} / {steps.length}
 
@@ -121,8 +131,9 @@ const Builder = () => {
 							}
 							<legend>{step}</legend>
 							<div className='btnContainer'>
-								{!isFirstStep && <button className="back" type="button" onClick={back}><span>Back </span>&lt;</button>}
-								<button className="next" type="submit" onClick={(e) => validate(e)}><span>{isLastStep ? "Finish " : "Next "}</span>&gt;</button>
+								{!isFirstStep  && <button className="back" type="button" onClick={back}><span>Back </span>&lt;</button>}
+								{/* {(!isFirstStep && !isFinish) && <button className="back" type="button" onClick={back}><span>Back </span>&lt;</button>} */}
+								<button className="next" type="submit" onClick={(e) => validate(e)}><span className={isLastStep ? "finish" : ""}>{isLastStep ? "Finish  " : "Next "}</span>&gt;</button>
 							</div>
 						</fieldset>
 					</form>

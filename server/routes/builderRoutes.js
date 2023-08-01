@@ -9,6 +9,7 @@ const GpuController = require("../controllers/GpuController");
 const CaseController = require("../controllers/CaseController");
 const StorageController = require("../controllers/StorageController");
 const PsuController = require("../controllers/PsuController");
+const BuildController = require("../controllers/BuildController");
 
 const cpuController = new CpuController();
 const cpuCoolerController = new CpuCoolerController();
@@ -18,6 +19,9 @@ const gpuController = new GpuController();
 const caseController = new CaseController();
 const storageController = new StorageController();
 const psuController = new PsuController();
+const buildController = new BuildController();
+
+const { buildModel } = require("../models/Build");
 
 const builderRouter = express.Router();
 builderRouter.use(bodyParser.urlencoded({ extended: true }));
@@ -30,6 +34,10 @@ builderRouter.get("/storage/:motherboardId", storageController.fetchStorageByBui
 builderRouter.get("/gpu", gpuController.fetchGpusByBuild);
 builderRouter.get("/case/:width/:height/:depth", caseController.fetchCasesByBuild);
 builderRouter.get("/psu/:wattage", psuController.fetchPsusByBuild);
+
+builderRouter.get("/builds", buildController.fetchBuilds);
+builderRouter.post("/builds", buildModel, buildController.createBuild);
+
 
 builderRouter.get("/scrape", psuController.scrape);
 
