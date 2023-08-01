@@ -1,7 +1,6 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
-const SQL = require("@nearform/sql");
 
 class CpuController {
 	fetchCpus = async (req, res, next) => {
