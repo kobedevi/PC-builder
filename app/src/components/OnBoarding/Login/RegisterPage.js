@@ -6,21 +6,25 @@ import * as yup from "yup";
 import { getValidationErrors } from "../../../core/utils/validation";
 import ApiError from "../../../core/error/ApiError";
 import AppError from "../../../core/error/AppError";
-import { login } from "../../../core/modules/Auth/api";
+import { register } from "../../../core/modules/Auth/api";
 import { handleApiResult } from "../../../core/utils/api";
 import ErrorAlert from "../../shared/ErrorAlert";
 import { Link } from "react-router-dom";
 import { PossibleRoutes } from "core/routing";
 
 let schema = yup.object().shape({
+  userName: yup.string().required("Username is a required field"),
   email: yup.string().email().required(),
-  password: yup.string().required(),
+  password: yup.string().required().min(6, 'Password must be a minimum of 6 characters').max(32, 'Password must be a maximum of 32 characters'),
+  repeatPassword: yup.string().required("Repeat password is a required field"),
 });
 
-const LoginPage = ({ setUser }) => {
+const RegisterPage = ({ setUser }) => {
   const [data, setData] = useState({
+    userName: "",
     email: "",
     password: "",
+    repeatPassword: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -38,14 +42,16 @@ const LoginPage = ({ setUser }) => {
     schema
       .validate(data, { abortEarly: false })
       .then(() => {
-        login(data)
+        if(data.password === data.repeatPassword) {
+          register(data)
           .then((res) => handleApiResult(res))
           .then((data) => {
             setUser(data);
           })
           .catch((err) => {
+            console.log(err);
             let e;
-            if (typeof err.response !== "undefined") {
+            if (err.response.status >= 400) {
               e = new ApiError(err);
             }
             if (e instanceof ApiError) {
@@ -58,6 +64,9 @@ const LoginPage = ({ setUser }) => {
               setError(new AppError(err));
             }
           });
+        } else {
+          setError(new AppError('Passwords do not match'));
+        }
       })
       .catch((e) => {
         setErrors(getValidationErrors(e));
@@ -74,8 +83,16 @@ const LoginPage = ({ setUser }) => {
             onSubmit={handleSubmit}
             noValidate={true}
           >
-            <h2 className="h3 mb-3 font-weight-normal">Please sign in</h2>
-            <ErrorAlert error={error}></ErrorAlert>
+            <h2 className="h3 mb-3 font-weight-normal">Please register</h2>
+            <ErrorAlert error={error} />
+            <Input
+              label="Username"
+              type="text"
+              name="userName"
+              value={data.userName}
+              onChange={handleChange}
+              error={errors.userName}
+            />
             <Input
               label="Email"
               type="email"
@@ -92,16 +109,24 @@ const LoginPage = ({ setUser }) => {
               onChange={handleChange}
               error={errors.password}
             />
+            <Input
+              label="Repeat password"
+              type="password"
+              name="repeatPassword"
+              value={data.repeatPassword}
+              onChange={handleChange}
+              error={errors.repeatPassword}
+            />
             <div className="specialButton">
               <div className="btnContainer">
                 <Button color="primary" type="submit">
-                  Log in
+                  Register
                 </Button>
               </div>
             </div>
           </form>
           <div className="mt-5 mb-3">
-            <Link to={PossibleRoutes.Register} style={{textDecoration: "underline", color: "white"}}>Don't have an account? <span style={{fontWeight: "bold"}}>Sign up!</span></Link>
+            <Link to={PossibleRoutes.Login} style={{textDecoration: "underline", color: "white"}}>Already have an account? <span style={{fontWeight: "bold"}}>Login!</span></Link>
           </div>
         </div>
       </div>
@@ -109,4 +134,4 @@ const LoginPage = ({ setUser }) => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

@@ -6,4 +6,10 @@ const login = (data) => {
   });
 };
 
-export { login };
+const register = (data) => {
+  return Axios.post(`${process.env.REACT_APP_BASE_API}/register`, {
+    ...data,
+  });
+};
+
+export { login, register };

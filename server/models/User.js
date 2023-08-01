@@ -2,7 +2,10 @@ const { check } = require("express-validator");
 const { ROLES } = require("../utils/globals");
 
 const userModel = [
-	check("email").notEmpty().isEmail().withMessage("email is not valid."),
+	check("email")
+		.notEmpty()
+		.isEmail()
+		.withMessage("email is not valid."),
 	check("email")
 		.notEmpty()
 		.isString()
@@ -22,14 +25,14 @@ const userModel = [
 		.withMessage(
 			"password can not be empty, and has to be between 6 and 32 characters."
 		),
-	check("role")
-		.notEmpty()
-		.isIn(ROLES)
-		.withMessage(
-			`role must be one of the following: ${[ROLES.user, ROLES.admin].join(
-				","
-			)}`
-		),
+	// check("role")
+	// 	.notEmpty()
+	// 	.isIn(ROLES)
+	// 	.withMessage(
+	// 		`role must be one of the following: ${[ROLES.user, ROLES.admin].join(
+	// 			","
+	// 		)}`
+	// 	),
 ];
 
 module.exports = {

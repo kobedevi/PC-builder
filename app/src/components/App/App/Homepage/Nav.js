@@ -20,6 +20,7 @@ const Nav = () => {
   return (
     <nav className="mainNav">
         <ul>
+            <li><Link to={PossibleRoutes.Home}>Home</Link></li>
             <li><Link to={PossibleRoutes.Builder}>Pc-builder</Link></li>
             {admin && <li><Link to={PossibleRoutes.Crud}>CRUD</Link></li>}
             {admin && <li><Button onClick={() => handleClick()} color="outline-light">Scrape-test</Button></li>}

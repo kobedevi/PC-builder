@@ -24,7 +24,9 @@ class UserController {
 			return res.status(400).json({ errors: errors.array() });
 		}
 		let user = req.body;
+		user.role = ROLES.user;
 		try {
+			console.log('test')
 			bcrypt.hash(user.password, 10, async function (err, hash) {
 				if (err) {
 					throw err;
@@ -44,6 +46,7 @@ class UserController {
 				res.status(200).json(user);
 			});
 		} catch (e) {
+			console.log(e);
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
