@@ -131,8 +131,7 @@ const Builder = () => {
 							}
 							<legend>{step}</legend>
 							<div className='btnContainer'>
-								{!isFirstStep  && <button className="back" type="button" onClick={back}><span>Back </span>&lt;</button>}
-								{/* {(!isFirstStep && !isFinish) && <button className="back" type="button" onClick={back}><span>Back </span>&lt;</button>} */}
+								{(!isFirstStep && !isFinish) && <button className="back" type="button" onClick={back}><span>Back </span>&lt;</button>}
 								<button className="next" type="submit" onClick={(e) => validate(e)}><span className={isLastStep ? "finish" : ""}>{isLastStep ? "Finish  " : "Next "}</span>&gt;</button>
 							</div>
 						</fieldset>
