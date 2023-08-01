@@ -44,11 +44,15 @@ header{
 }
 
 .mainNav {
+    display: flex;
+    width: 100%;
     ul{
+        list-style: none;
         display: flex;
         align-items: center;
+        width: 100%;
         gap: 16px;
-        list-style: none;
+        margin: 0 8px;
         padding: 0;
     }
 }
