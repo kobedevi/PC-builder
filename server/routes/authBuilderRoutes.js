@@ -14,6 +14,4 @@ authBuilderRouter.use(bodyParser.urlencoded({ extended: true }));
 
 authBuilderRouter.post("/auth/builds", buildModel, buildController.createBuild);
 
-authBuilderRouter.use(withRole(ROLES.user || roles.admin), userRouter);
-
 module.exports = authBuilderRouter;

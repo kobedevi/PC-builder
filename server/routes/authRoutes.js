@@ -54,139 +54,139 @@ const { ramTypeModel } = require("../models/RamType");
 authRouter.use(bodyParser.urlencoded({ extended: true }));
 
 // CPUS
-authRouter.get("/cpu", cpuController.fetchCpus);
-authRouter.get("/cpu/:id", cpuController.fetchCpuById);
-authRouter.get("/cpu/filter/:query", cpuController.fetchCpusByFilter);
-authRouter.patch("/cpu/:id", cpuModel, cpuController.patchCpuById);
-authRouter.delete("/cpu/:id", cpuModel, cpuController.deleteCpuById);
-authRouter.post("/cpu", cpuModel, cpuController.createCpu);
+adminRouter.get("/cpu", cpuController.fetchCpus);
+adminRouter.get("/cpu/:id", cpuController.fetchCpuById);
+adminRouter.get("/cpu/filter/:query", cpuController.fetchCpusByFilter);
+adminRouter.patch("/cpu/:id", cpuModel, cpuController.patchCpuById);
+adminRouter.delete("/cpu/:id", cpuModel, cpuController.deleteCpuById);
+adminRouter.post("/cpu", cpuModel, cpuController.createCpu);
 
 // Cases
-authRouter.get("/case", caseController.fetchCases);
-authRouter.get("/case/:id", caseController.fetchCaseById);
-authRouter.get("/case/filter/:query", caseController.fetchCasesByFilter);
-authRouter.patch(
+adminRouter.get("/case", caseController.fetchCases);
+adminRouter.get("/case/:id", caseController.fetchCaseById);
+adminRouter.get("/case/filter/:query", caseController.fetchCasesByFilter);
+adminRouter.patch(
 	"/case/:id",
 	caseModel,
 	caseController.patchCaseById
 );
-authRouter.delete("/case/:id", caseModel, caseController.deleteCaseById);
-authRouter.post("/case", caseModel, caseController.createCase);
+adminRouter.delete("/case/:id", caseModel, caseController.deleteCaseById);
+adminRouter.post("/case", caseModel, caseController.createCase);
 
 // CPUCoolers
-authRouter.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
-authRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolerById);
-authRouter.get("/cpucooler/filter/:query", cpuCoolerController.fetchCpuCoolersByFilter);
-authRouter.patch(
+adminRouter.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
+adminRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolerById);
+adminRouter.get("/cpucooler/filter/:query", cpuCoolerController.fetchCpuCoolersByFilter);
+adminRouter.patch(
 	"/cpucooler/:id",
 	cpuCoolerModel,
 	cpuCoolerController.patchCpuCoolerById
 );
-authRouter.delete("/cpucooler/:id", cpuCoolerModel, cpuCoolerController.deleteCpuCoolerById);
-authRouter.post(
+adminRouter.delete("/cpucooler/:id", cpuCoolerModel, cpuCoolerController.deleteCpuCoolerById);
+adminRouter.post(
 	"/cpucooler",
 	cpuCoolerModel,
 	cpuCoolerController.createCpuCooler
 );
 
 // Motherboards
-authRouter.get("/motherboard", motherboardController.fetchMotherboards);
-authRouter.get("/motherboard/:id", motherboardController.fetchMotherboardById);
-authRouter.get("/motherboard/filter/:query", motherboardController.fetchMotherboardsByFilter);
-authRouter.patch(
+adminRouter.get("/motherboard", motherboardController.fetchMotherboards);
+adminRouter.get("/motherboard/:id", motherboardController.fetchMotherboardById);
+adminRouter.get("/motherboard/filter/:query", motherboardController.fetchMotherboardsByFilter);
+adminRouter.patch(
 	"/motherboard/:id",
 	motherboardModel,
 	motherboardController.patchMotherboardById
 );
-authRouter.delete("/motherboard/:id", motherboardModel, motherboardController.deleteMotherboardById);
-authRouter.post(
+adminRouter.delete("/motherboard/:id", motherboardModel, motherboardController.deleteMotherboardById);
+adminRouter.post(
 	"/motherboard",
 	motherboardModel,
 	motherboardController.createMotherboard
 );
 
 // RAM
-authRouter.get("/ram", ramController.fetchRam);
-authRouter.get("/ram/:id", ramController.fetchRamById);
-authRouter.get("/ram/filter/:query", ramController.fetchRamByFilter);
-authRouter.patch("/ram/:id", ramModel, ramController.patchRamById);
-authRouter.delete("/ram/:id", ramModel, ramController.deleteRamById);
-authRouter.post("/ram", ramModel, ramController.createRam);
+adminRouter.get("/ram", ramController.fetchRam);
+adminRouter.get("/ram/:id", ramController.fetchRamById);
+adminRouter.get("/ram/filter/:query", ramController.fetchRamByFilter);
+adminRouter.patch("/ram/:id", ramModel, ramController.patchRamById);
+adminRouter.delete("/ram/:id", ramModel, ramController.deleteRamById);
+adminRouter.post("/ram", ramModel, ramController.createRam);
 
-authRouter.get("/ramtypes", ramTypeController.fetchRamTypes);
-authRouter.post("/ramtypes", ramTypeModel, ramTypeController.createRamTypes);
+adminRouter.get("/ramtypes", ramTypeController.fetchRamTypes);
+adminRouter.post("/ramtypes", ramTypeModel, ramTypeController.createRamTypes);
 
 // Storage Types
-authRouter.get("/storage", storageController.fetchStorage);
-authRouter.get("/storage/:id", storageController.fetchStorageById);
-authRouter.get("/storage/filter/:query", storageController.fetchStorageByFilter);
-authRouter.patch("/storage/:id", storageModel, storageController.patchStorageById);
-authRouter.delete("/storage/:id", storageModel, storageController.deleteStorageById);
-authRouter.post("/storage", storageModel, storageController.createStorage);
+adminRouter.get("/storage", storageController.fetchStorage);
+adminRouter.get("/storage/:id", storageController.fetchStorageById);
+adminRouter.get("/storage/filter/:query", storageController.fetchStorageByFilter);
+adminRouter.patch("/storage/:id", storageModel, storageController.patchStorageById);
+adminRouter.delete("/storage/:id", storageModel, storageController.deleteStorageById);
+adminRouter.post("/storage", storageModel, storageController.createStorage);
 
-authRouter.get("/storagetypes", storageTypeController.fetchStorageTypes);
-authRouter.post(
+adminRouter.get("/storagetypes", storageTypeController.fetchStorageTypes);
+adminRouter.post(
 	"/storagetypes",
 	storageTypeModel,
 	storageTypeController.createStorageTypes
 );
 
 // CPU sockets
-authRouter.get("/cpusocket", cpuSocketController.fetchCpuSockets);
-authRouter.post(
+adminRouter.get("/cpusocket", cpuSocketController.fetchCpuSockets);
+adminRouter.post(
 	"/cpusocket",
 	cpuSocketModel,
 	cpuSocketController.createCpuSocket
 );
 
 // GPUS general and GPU partners
-authRouter.get("/gpu", gpuController.fetchGpus);
-authRouter.get("/gpu/filter/:query", gpuController.fetchOriginalGpusByFilter);
-authRouter.patch("/gpu/:id", gpuModel, gpuController.patchGpuById);
-authRouter.delete("/gpu/:id", gpuModel, gpuController.deleteGpuById);
-authRouter.patch("/gpu/partner/:id", gpuModel, gpuController.patchGpuPartnerById);
-authRouter.delete("/gpu/partner/:id", gpuModel, gpuController.deletePartnerGpuById);
-authRouter.post("/gpu", gpuModel, gpuController.createGpu);
-authRouter.post(
+adminRouter.get("/gpu", gpuController.fetchGpus);
+adminRouter.get("/gpu/filter/:query", gpuController.fetchOriginalGpusByFilter);
+adminRouter.patch("/gpu/:id", gpuModel, gpuController.patchGpuById);
+adminRouter.delete("/gpu/:id", gpuModel, gpuController.deleteGpuById);
+adminRouter.patch("/gpu/partner/:id", gpuModel, gpuController.patchGpuPartnerById);
+adminRouter.delete("/gpu/partner/:id", gpuModel, gpuController.deletePartnerGpuById);
+adminRouter.post("/gpu", gpuModel, gpuController.createGpu);
+adminRouter.post(
 	"/gpu/partner",
 	gpuPartnerModel,
 	gpuController.createGpuPartner
 );
-authRouter.get("/gpu/partner", gpuController.fetchGpuPartners);
-authRouter.get("/gpu/partner/filter/:query", gpuController.fetchPartnerGpusByFilter);
-authRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
-authRouter.get("/gpu/:id", gpuController.fetchGpuById);
+adminRouter.get("/gpu/partner", gpuController.fetchGpuPartners);
+adminRouter.get("/gpu/partner/filter/:query", gpuController.fetchPartnerGpusByFilter);
+adminRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
+adminRouter.get("/gpu/:id", gpuController.fetchGpuById);
 
 // PSU
-authRouter.get("/psu", psuController.fetchPsu);
-authRouter.get("/psu/:id", psuController.fetchPsuById);
-authRouter.get("/psu/filter/:query", psuController.fetchPsuByFilter);
-authRouter.patch("/psu/:id", psuModel, psuController.patchPsuById);
-authRouter.delete("/psu/:id", psuModel, psuController.deletePsuById);
-authRouter.post("/psu", psuModel, psuController.createPsu);
+adminRouter.get("/psu", psuController.fetchPsu);
+adminRouter.get("/psu/:id", psuController.fetchPsuById);
+adminRouter.get("/psu/filter/:query", psuController.fetchPsuByFilter);
+adminRouter.patch("/psu/:id", psuModel, psuController.patchPsuById);
+adminRouter.delete("/psu/:id", psuModel, psuController.deletePsuById);
+adminRouter.post("/psu", psuModel, psuController.createPsu);
 
 // Manufacturers
-authRouter.get("/manufacturer", manufacturerController.fetchManufacturers);
-authRouter.get(
+adminRouter.get("/manufacturer", manufacturerController.fetchManufacturers);
+adminRouter.get(
 	"/manufacturer/:id",
 	manufacturerController.fetchManufacturerById
 );
-authRouter.post(
+adminRouter.post(
 	"/manufacturer",
 	manufacturerModel,
 	manufacturerController.createManufacturer
 );
 
 // Formfactors
-authRouter.get("/formfactor", formfactorController.fetchFormfactors);
-authRouter.post(
+adminRouter.get("/formfactor", formfactorController.fetchFormfactors);
+adminRouter.post(
 	"/formfactor",
 	formfactorModel,
 	formfactorController.createFormfactor
 );
 
 // uploads
-authRouter.post('/uploads', upload.single('file') ,uploadController.uploadImage);
+adminRouter.post('/uploads', upload.single('file') ,uploadController.uploadImage);
 
 authRouter.use(withRole(ROLES.admin), adminRouter);
 

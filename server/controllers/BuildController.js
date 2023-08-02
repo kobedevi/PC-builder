@@ -182,7 +182,11 @@ class BuildController {
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-        const { user=null } = req;
+		console.log(req.user);
+		let user = null;
+		if(req?.user) {
+			user = req.user
+		}
 
 		const {
 			idProcessor,

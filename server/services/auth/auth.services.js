@@ -27,7 +27,7 @@ const authLocal = passportWithErrorHandling("local");
 const authJwt = passportWithErrorHandling("jwt");
 
 const withRole = (role) => (req, res, next) => {
-	const user = req.body;
+	const user = req.user;
 	if (user.role === role) {
 		next();
 	} else {

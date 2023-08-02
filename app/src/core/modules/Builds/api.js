@@ -12,7 +12,6 @@ const createBuild = async (data, user) => {
         storage: data.storage
     };
     if(user?.token) {
-        console.log('token');
         return await Axios.post(
           `${process.env.REACT_APP_BASE_API}/auth/builds`, 
           tempData,
