@@ -26,7 +26,6 @@ class UserController {
 		let user = req.body;
 		user.role = ROLES.user;
 		try {
-			console.log('test')
 			bcrypt.hash(user.password, 10, async function (err, hash) {
 				if (err) {
 					throw err;
