@@ -49,7 +49,6 @@ const RegisterPage = ({ setUser }) => {
             setUser(data);
           })
           .catch((err) => {
-            console.log(err);
             let e;
             if (err.response.status >= 400) {
               e = new ApiError(err);

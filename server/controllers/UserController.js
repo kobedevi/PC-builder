@@ -45,7 +45,6 @@ class UserController {
 				res.status(200).json(user);
 			});
 		} catch (e) {
-			console.log(e);
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};

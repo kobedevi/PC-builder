@@ -107,7 +107,6 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsTouched(true);
-    console.log(data);
     validate(data, () => onSubmit(data));
   };
   
