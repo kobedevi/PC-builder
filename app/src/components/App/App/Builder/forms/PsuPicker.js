@@ -2,7 +2,6 @@ import PsuSelect from 'components/util/builder/PsuSelect'
 
 const PsuPicker = ({currentBuild, updateBuild, hiddenInput, idPsu, memorySlots, updateFields}) => {
   const totalTdp = Math.round(( parseInt((currentBuild.cpu.wattage ??=0)) + parseInt((currentBuild.gpu.wattage ??=0))  + parseInt(((currentBuild.motherboard.sataPorts ??=0) * 5) + 75)) / 50)*50;
-  console.log(totalTdp);
 
   return (
     <div>
