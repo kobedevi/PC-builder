@@ -8,8 +8,6 @@ const buildController = new BuildController();
 const { buildModel } = require("../models/Build");
 
 const authBuilderRouter = express.Router();
-const userRouter = express.Router();
-const { ROLES } = require("../utils/globals");
 authBuilderRouter.use(bodyParser.urlencoded({ extended: true }));
 
 authBuilderRouter.post("/auth/builds", buildModel, buildController.createBuild);

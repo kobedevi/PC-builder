@@ -26,6 +26,7 @@ const Nav = () => {
             {admin && <li><Button onClick={() => handleClick()} color="outline-light">Scrape-test</Button></li>}
             {!user?.user &&<li> <Link to={PossibleRoutes.Login}>Login</Link></li>}
             {user?.user && <li> <Button onClick={user.logout} color="outline-light">Sign out</Button></li>}
+            {user?.user && <li>{user.user.userName}</li>}
         </ul>
     </nav>
   )

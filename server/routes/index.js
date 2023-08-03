@@ -5,13 +5,16 @@ const builderRoutes = require("./builderRoutes");
 const authBuilderRoutes = require("./authBuilderRoutes");
 const { authLocal, authJwt } = require("../services/auth/auth.services");
 const { userModel } = require("../models/User");
+
 const UserController = require("../controllers/UserController");
+const BuildController = require("../controllers/BuildController");
+const buildController = new BuildController();
 const userController = new UserController();
 
 const registerRoutes = (app, db) => {
-	// TODO: Register page
 	app.post("/register", userModel, userController.register);
 	app.post("/login", authLocal, userController.login);
+	app.get('/featured/builds', buildController.fetchFeaturedBuilds);
 
 	app.use('/compatible', builderRoutes);
 	app.use(authJwt, authBuilderRoutes);
