@@ -180,13 +180,16 @@ class BuildController {
 			idCpuCooler,
 			idMotherboard,
 			idRam,
-			idGpu,
+			idGpu = null,
 			idCase,
             idPsu,
             storage,
 		} = req.body;
 
+
+
 		try {
+			const unixDate = Math.floor(Date.now() / 1000);
             let [rows] = await db.promise().query(`select idProcessor from cpus where idProcessor = ?`, [idProcessor]);
             if (rows.length === 0) {
                 return res.status(400).json({ message: "Given CPU does not exist" });
@@ -203,10 +206,13 @@ class BuildController {
             if (rows.length === 0) {
                 return res.status(400).json({ message: "Given memory does not exist" });
             }
-            [rows] = await db.promise().query(`select idGpuPartner from gpu_has_partners where idGpuPartner = ?`, [idGpu]);
-            if (rows.length === 0) {
-                return res.status(400).json({ message: "Given GPU does not exist" });
-            }
+			if(idGpu) {
+				console.log(idGpu);
+				[rows] = await db.promise().query(`select idGpuPartner from gpu_has_partners where idGpuPartner = ?`, [idGpu]);
+				if (rows.length === 0) {
+					return res.status(400).json({ message: "Given GPU does not exist" });
+				}
+			}
             [rows] = await db.promise().query(`select idCase from cases where idCase = ?`, [idCase]);
             if (rows.length === 0) {
                 return res.status(400).json({ message: "Given case does not exist" });
@@ -216,7 +222,6 @@ class BuildController {
                 return res.status(400).json({ message: "Given PSU does not exist" });
             }
 
-			const unixDate = Math.floor(Date.now() / 1000);
 			const idBuild = uuidv4();
 			const sqlInsert =
 				`INSERT INTO builds (date, idBuild, idUser, idProcessor, idCpuCooler, idMotherboard, idRam, idGpu, idCase, idPsu) VALUES (?,?,?,?,?,?,?,?,?,?)`;

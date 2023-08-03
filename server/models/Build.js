@@ -29,7 +29,7 @@ const buildModel = [
 	check("storage")
 		.optional({ nullable: true }),
 	check("idGpu")
-		.notEmpty()
+		.optional({ nullable: true })
 		.isString()
 		.isLength({ min: 36, max: 36 })
 		.withMessage("Given GPU does not exist"),
