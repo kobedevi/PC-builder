@@ -522,6 +522,7 @@ form {
     .content {
         min-height: 100dvh;
         .scroller {
+            background: $dark-purple;
             flex: unset;
         }
     }

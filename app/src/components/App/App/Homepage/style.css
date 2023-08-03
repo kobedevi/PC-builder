@@ -45,11 +45,7 @@ h1{
     color: white;
     font-family: sans-serif;
     font-size: 15rem;
-    position: absolute;
     margin: 0;
-    height: 100%;
-    display: flex;
-    align-items:center;
 }
 
 h1 span {

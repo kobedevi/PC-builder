@@ -44,6 +44,8 @@ header{
 }
 
 .mainNav {
+    position: absolute;
+    z-index: 3;
     display: flex;
     width: 100%;
     ul{
