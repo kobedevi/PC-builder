@@ -8,9 +8,13 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import BuilderProductCard from "components/Design/BuilderProductCard";
+import InfoModal from "components/Design/InfoModal";
+import { fetchCpuByIdBuilder } from '../../../core/modules/CPU/api';
+
 
 const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields}) => {
   const [info, setInfo] = useState([]);
+  const [productInfo, setProductInfo] = useState();
   const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
@@ -111,6 +115,7 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
                     return(
                     <li key={cpu.idProcessor}>
                       <BuilderProductCard
+                        setProductInfo={setProductInfo}
                         product={cpu}
                         link={PossibleRoutes.Detail}
                         id={cpu.idProcessor}
@@ -126,6 +131,16 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
                     </li>
                   )})}
                 </ul>
+              )
+            }
+
+            {
+              productInfo && (
+                <InfoModal
+                  onDismiss={() => setProductInfo(null)}
+                  fetcher={fetchCpuByIdBuilder}
+                  productInfo={productInfo}
+                />
               )
             }
           </>

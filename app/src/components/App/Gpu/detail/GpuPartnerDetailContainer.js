@@ -21,7 +21,7 @@ const GpuPartnerDetailContainer = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  return <GpuDetail gpu={gpu[0]} />;
+  return <GpuDetail gpu={gpu} />;
 };
 
 export default GpuPartnerDetailContainer;

@@ -21,7 +21,7 @@ const RamDetailContainer = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  return <RamDetail ram={ram[0]} />;
+  return <RamDetail ram={ram} />;
 };
 
 export default RamDetailContainer;

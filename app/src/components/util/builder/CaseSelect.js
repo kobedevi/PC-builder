@@ -8,13 +8,14 @@ import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCompatibleCases, fetchFilteredCases } from "core/modules/Case/api";
+import { fetchCaseByIdBuilder, fetchCompatibleCases, fetchFilteredCases } from "core/modules/Case/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
+import InfoModal from "components/Design/InfoModal";
 
-// TODO: everything here
 const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, height, depth, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
+  const [productInfo, setProductInfo] = useState();
 
   const apiCall = useCallback(() => {
     return fetchCompatibleCases(width,height, depth);
@@ -82,6 +83,7 @@ const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, heigh
                     <li key={product.idCase}>
                       <BuilderProductCard
                         product={product}
+                        setProductInfo={setProductInfo}
                         link={PossibleRoutes.Detail}
                         id={product.idCase}
                       >
@@ -92,6 +94,16 @@ const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, heigh
                     </li>
                   )})}
                 </ul>
+              )
+            }
+
+            {
+              productInfo && (
+                <InfoModal
+                  onDismiss={() => setProductInfo(null)}
+                  fetcher={fetchCaseByIdBuilder}
+                  productInfo={productInfo}
+                />
               )
             }
           </>

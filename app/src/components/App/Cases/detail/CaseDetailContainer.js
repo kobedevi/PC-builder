@@ -26,7 +26,7 @@ const CaseDetailContainer = () => {
   if (data) {
     return (
       <CaseDetail
-        pccase = {{ ...data[0]}}
+        pccase = {{ ...data}}
       />
     );
   }

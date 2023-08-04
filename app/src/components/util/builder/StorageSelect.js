@@ -7,14 +7,16 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCompatibleStorage, fetchFilteredStorage } from "core/modules/Storage/api";
+import { fetchCompatibleStorage, fetchFilteredStorage, fetchStorageByIdBuilder } from "core/modules/Storage/api";
 import { v4 as uuidv4 } from "uuid";
 import BuilderProductCard from "components/Design/BuilderProductCard";
+import InfoModal from "components/Design/InfoModal";
 
 
 const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updateBuild, drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
+  const [productInfo, setProductInfo] = useState();
 
   const apiCall = useCallback(() => {
     if(!strictMode) {
@@ -103,8 +105,9 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
                     <li key={product.idStorage}>
                       <BuilderProductCard
                         product={product}
+                        setProductInfo={setProductInfo}
                         link={PossibleRoutes.Detail}
-                        id={product.idRam}
+                        id={product.idStorage}
                       >
                         Manufacturer: {product.manufacturerName}<br/>
                         Capacity: {product.capacity}<br/>
@@ -116,6 +119,16 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
                     </li>
                   ))}
                 </ul>
+              )
+            }
+
+            {
+              productInfo && (
+                <InfoModal
+                  onDismiss={() => setProductInfo(null)}
+                  fetcher={fetchStorageByIdBuilder}
+                  productInfo={productInfo}
+                />
               )
             }
           </>

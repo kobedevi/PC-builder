@@ -61,6 +61,10 @@ const fetchPartnerGpuById = (id) => async (headers) => {
   });
 };
 
+const fetchPartnerGpuByIdBuilder = async (id) => {
+  return await Axios.get(`${process.env.REACT_APP_BASE_API}/compatible/gpu/info/${id}`);
+};
+
 const fetchPartnerGpus = () => async (headers) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/gpu/partner`, {
     headers: createHeaders(headers),
@@ -100,6 +104,7 @@ export {
   updateOriginalGpu,
   updatePartnerGpu,
   fetchPartnerGpuById,
+  fetchPartnerGpuByIdBuilder,
   fetchPartnerGpus,
   createOriginalGpu,
   createPartnerGpu,

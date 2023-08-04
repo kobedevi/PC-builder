@@ -26,7 +26,7 @@ const StorageDetailContainer = () => {
   if (data) {
     return (
       <StorageDetail
-        storage={{ ...data[0] }}
+        storage={{ ...data }}
       />
     );
   }

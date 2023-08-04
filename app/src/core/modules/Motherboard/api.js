@@ -29,6 +29,12 @@ const fetchMotherboardById = (id) => async (headers) => {
   );
 };
 
+const fetchMotherboardByIdBuilder = async(id) => {
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/compatible/motherboard/info/${id}`
+  );
+};
+
 const updateMotherboard = (data) => async (headers) => {
   return await Axios.patch(
     `${process.env.REACT_APP_BASE_API}/motherboard/${data.idMotherboard}`,
@@ -60,6 +66,7 @@ export {
   fetchCompatibleMotherboard,
   fetchFilteredMotherboards,
   fetchMotherboardById,
+  fetchMotherboardByIdBuilder,
   updateMotherboard,
   createMotherboard,
   deleteMotherboard

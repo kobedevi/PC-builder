@@ -22,7 +22,7 @@ const PsuDetailContainer = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  return <PsuDetail psu={psu[0]} />;
+  return <PsuDetail psu={psu} />;
 };
 
 export default PsuDetailContainer;

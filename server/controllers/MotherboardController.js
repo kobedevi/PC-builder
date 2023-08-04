@@ -277,7 +277,6 @@ class MotherboardController {
 			];
 			await db.promise().query(sql, data);
 
-			// TODO: REMOVE and fix redirect on update
 			const query = `SELECT id, idStorageType, amount FROM motherboard_has_storagetypes WHERE idMotherboard = ? ;`;
 			const results = await db
 				.promise()

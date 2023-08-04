@@ -88,7 +88,7 @@ class RamController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "RAM does not exist" });
 			}
-			res.status(200).send(rows);
+			res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}

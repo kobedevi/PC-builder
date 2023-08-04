@@ -22,7 +22,7 @@ const CpuDetailContainer = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  return <CpuDetail cpu={cpu[0]} />;
+  return <CpuDetail cpu={cpu} />;
 };
 
 export default CpuDetailContainer;

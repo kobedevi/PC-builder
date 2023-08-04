@@ -16,6 +16,12 @@ const fetchStorageById = (id) => async (headers) => {
   );
 };
 
+const fetchStorageByIdBuilder = async (id) => {
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/compatible/storage/info/${id}`
+  );
+};
+
 const fetchFilteredStorage = (query) => async (headers) => {
   return await Axios.get(
     `${process.env.REACT_APP_BASE_API}/storage/filter/${query.replace(/[/^#\%]/g,"")}`, 
@@ -51,4 +57,4 @@ const deleteStorage = (id) => async (headers) => {
   });
 };
 
-export { fetchStorage, fetchStorageById, fetchFilteredStorage, fetchCompatibleStorage, updateStorage, createStorage, deleteStorage };
+export { fetchStorage, fetchStorageById, fetchStorageByIdBuilder, fetchFilteredStorage, fetchCompatibleStorage, updateStorage, createStorage, deleteStorage };

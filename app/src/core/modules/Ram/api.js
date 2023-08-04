@@ -29,6 +29,12 @@ const fetchRamById = (id) => async (headers) => {
   );
 };
 
+const fetchRamByIdBuilder = async (id) => {
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/compatible/ram/info/${id}`
+  );
+};
+
 const updateRam = (data) => async (headers) => {
   return await Axios.patch(
     `${process.env.REACT_APP_BASE_API}/ram/${data.idRam}`,
@@ -55,4 +61,4 @@ const deleteRam = (id) => async (headers) => {
   });
 };
 
-export { fetchRam, fetchCompatibleRam, fetchFilteredRam, createRam, fetchRamById, updateRam, deleteRam };
+export { fetchRam, fetchCompatibleRam, fetchFilteredRam, createRam, fetchRamById, fetchRamByIdBuilder, updateRam, deleteRam };

@@ -45,9 +45,9 @@ class CpuController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "CPU does not exist" });
 			}
-			res.status(200).send(rows);
+			res.status(200).send(rows[0]);
 		} catch (e) {
-			next(e);
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
 

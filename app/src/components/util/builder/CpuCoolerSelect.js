@@ -1,8 +1,6 @@
 import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
-import { fetchCpus } from "../../../core/modules/CPU/api";
-import { PossibleRoutes, route } from "../../../core/routing";
+import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
@@ -10,9 +8,12 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
+import InfoModal from "components/Design/InfoModal";
+import { fetchCpuCoolerByIdBuilder } from '../../../core/modules/CPUCooler/api';
 
 const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateFields}) => {
   const [info, setInfo] = useState();
+  const [productInfo, setProductInfo] = useState();
   const [query, setQuery] = useState('');
 
   const apiCall = useCallback(() => {
@@ -81,6 +82,7 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
                     return (
                     <li key={product.idCpuCooler}>
                       <BuilderProductCard
+                        setProductInfo={setProductInfo}
                         product={product}
                         link={PossibleRoutes.Detail}
                         id={product.idCpuCooler}
@@ -92,6 +94,16 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
                     </li>
                   )})}
                 </ul>
+              )
+            }
+
+            {
+              productInfo && (
+                <InfoModal
+                  onDismiss={() => setProductInfo(null)}
+                  fetcher={fetchCpuCoolerByIdBuilder}
+                  productInfo={productInfo}
+                />
               )
             }
           </>

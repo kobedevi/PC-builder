@@ -9,12 +9,15 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCompatibleMotherboard, fetchFilteredMotherboards } from "core/modules/Motherboard/api";
+import { fetchCompatibleMotherboard, fetchFilteredMotherboards, fetchMotherboardByIdBuilder } from "core/modules/Motherboard/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
+import InfoModal from "components/Design/InfoModal";
 
 const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
+  const [productInfo, setProductInfo] = useState();
+
 
   const apiCall = useCallback(() => {
     return fetchCompatibleMotherboard(idCpu);
@@ -86,6 +89,7 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
                     return(
                     <li key={product.idMotherboard}>
                       <BuilderProductCard
+                        setProductInfo={setProductInfo}
                         product={product}
                         link={PossibleRoutes.Detail}
                         id={product.idMotherboard}
@@ -100,6 +104,17 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
                 </ul>
               )
             }
+
+            {
+              productInfo && (
+                <InfoModal
+                  onDismiss={() => setProductInfo(null)}
+                  fetcher={fetchMotherboardByIdBuilder}
+                  productInfo={productInfo}
+                />
+              )
+            }
+
           </>
         )
       }

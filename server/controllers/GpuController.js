@@ -361,7 +361,7 @@ class GpuController {
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "GPU does not exist" });
 			}
-			res.status(200).send(results[0]);
+			res.status(200).send(results[0][0]);
 		} catch (e) {
 			next(e);
 		}

@@ -207,7 +207,6 @@ class BuildController {
                 return res.status(400).json({ message: "Given memory does not exist" });
             }
 			if(idGpu) {
-				console.log(idGpu);
 				[rows] = await db.promise().query(`select idGpuPartner from gpu_has_partners where idGpuPartner = ?`, [idGpu]);
 				if (rows.length === 0) {
 					return res.status(400).json({ message: "Given GPU does not exist" });

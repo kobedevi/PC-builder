@@ -8,12 +8,14 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCompatibleRam, fetchFilteredRam } from "core/modules/Ram/api";
+import { fetchCompatibleRam, fetchFilteredRam, fetchRamByIdBuilder } from "core/modules/Ram/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
+import InfoModal from "components/Design/InfoModal";
 
 const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamType, idRam, memorySlots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
+  const [productInfo, setProductInfo] = useState();
 
   const apiCall = useCallback(() => {
     if(!strictMode) {
@@ -99,6 +101,7 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
                     <li key={product.idRam}>
                       <BuilderProductCard
                         product={product}
+                        setProductInfo={setProductInfo}
                         link={PossibleRoutes.Detail}
                         id={product.idRam}
                       >
@@ -115,6 +118,17 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
                 </ul>
               )
             }
+            
+            {
+              productInfo && (
+                <InfoModal
+                  onDismiss={() => setProductInfo(null)}
+                  fetcher={fetchRamByIdBuilder}
+                  productInfo={productInfo}
+                />
+              )
+            }
+
           </>
         )
       }

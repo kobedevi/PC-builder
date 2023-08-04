@@ -11,10 +11,13 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleGpus, fetchFilteredPartnerGpu } from "core/modules/Gpu/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
+import InfoModal from "components/Design/InfoModal";
+import {fetchPartnerGpuByIdBuilder} from "../../../core/modules/Gpu/api"
 
 const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
+  const [productInfo, setProductInfo] = useState()
 
   const apiCall = useCallback(() => {
     return fetchCompatibleGpus();
@@ -93,6 +96,7 @@ const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, u
                       <BuilderProductCard
                         subtitle={`Chipset: ${product.chipset}`}
                         product={product}
+                        setProductInfo={setProductInfo}
                         link={PossibleRoutes.Detail}
                         id={product.idGpuPartner}
                       >
@@ -107,6 +111,17 @@ const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, u
                 </ul>
               )
             }
+
+            {
+              productInfo && (
+                <InfoModal
+                  onDismiss={() => setProductInfo(null)}
+                  fetcher={fetchPartnerGpuByIdBuilder}
+                  productInfo={productInfo}
+                />
+              )
+            }
+
           </>
         )
       }

@@ -29,6 +29,12 @@ const fetchCaseById = (id) => async (headers) => {
   );
 };
 
+const fetchCaseByIdBuilder = async (id) => {
+  return await Axios.get(
+    `${process.env.REACT_APP_BASE_API}/compatible/case/info/${id}`
+  );
+};
+
 const updateCase = (data) => async (headers) => {
   return await Axios.patch(
     `${process.env.REACT_APP_BASE_API}/case/${data.idCase}`,
@@ -55,4 +61,4 @@ const deleteCase = (id) => async (headers) => {
   });
 };
 
-export { fetchCases, fetchCompatibleCases, fetchFilteredCases, createCase, fetchCaseById, updateCase, deleteCase };
+export { fetchCases, fetchCompatibleCases, fetchFilteredCases, createCase, fetchCaseById, fetchCaseByIdBuilder, updateCase, deleteCase };

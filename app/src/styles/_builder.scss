@@ -143,6 +143,15 @@ form.builder{
         position: relative;
         margin-right: 10px;
         box-shadow: 0px 0px 23px -4px #000000;
+        .productTitle
+        {   
+            cursor: pointer;
+            text-decoration: none;
+            transition: .2s;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
         img{
             border-radius: 25px 25px 0 0;
             overflow: hidden;
@@ -203,4 +212,10 @@ form.builder{
             }
         }
     }
+}
+.alert {
+    color: var(--bs-alert-color);
+}
+.productModal .modal-content .modalContent * {
+    color: $white;
 }

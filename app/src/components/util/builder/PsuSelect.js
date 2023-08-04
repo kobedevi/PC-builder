@@ -8,12 +8,14 @@ import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
-import { fetchCompatiblePsu, fetchFilteredPsus } from "core/modules/Psu/api";
+import { fetchCompatiblePsu, fetchFilteredPsus, fetchPsuByIdBuilder } from "core/modules/Psu/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
+import InfoModal from "components/Design/InfoModal";
 
 const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
+  const [productInfo, setProductInfo] = useState();
 
   const apiCall = useCallback(() => {
     return fetchCompatiblePsu(minWat);
@@ -81,6 +83,7 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
                     <li key={product.idPsu}>
                       <BuilderProductCard
                         product={product}
+                        setProductInfo={setProductInfo}
                         link={PossibleRoutes.Detail}
                         id={product.idPsu}
                       >
@@ -92,6 +95,16 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
                     </li>
                   )})}
                 </ul>
+              )
+            }
+
+            {
+              productInfo && (
+                <InfoModal
+                  onDismiss={() => setProductInfo(null)}
+                  fetcher={fetchPsuByIdBuilder}
+                  productInfo={productInfo}
+                />
               )
             }
           </>

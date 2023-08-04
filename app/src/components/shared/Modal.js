@@ -1,18 +1,21 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 const Modal = ({ children, center=false, title, onDismiss }) => {
-    useEffect(() => {
-        document.body.classList.add('modal-open');
-        return () => {
-            document.body.classList.remove('modal-open');
-        };
-    }, []);
 
-    window.onkeydown = function( event ) {
-        if ( event.keyCode === 27 ) {
+    const escFunction = useCallback((event) => {
+        if (event.key === "Escape") {
             onDismiss();
         }
-    };
+    }, [onDismiss]);
+
+    useEffect(() => {
+        document.body.classList.add('modal-open');
+        document.addEventListener("keydown", escFunction, false);
+        return () => {
+            document.body.classList.remove('modal-open');
+            document.removeEventListener("keydown", escFunction, false);
+        };
+    }, [escFunction, onDismiss]);
 
     return (
         <>
