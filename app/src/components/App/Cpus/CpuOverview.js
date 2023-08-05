@@ -10,11 +10,18 @@ import DeleteCpu from "./Delete/DeleteCpu";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./forms/Result";
+import Pagination from "components/Design/Pagination";
 
 const CpuOverview = () => {
   const [info, setInfo] = useState();
   const [deleteCpu, setDeleteCpu] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
+
+  const apiCall = useCallback(() => {
+    return fetchCpus(page, perPage);
+  }, [page, perPage]);
 
   const {
     data: cpus,
@@ -22,13 +29,21 @@ const CpuOverview = () => {
     setError,
     isLoading,
     refresh,
-  } = useFetch(fetchCpus);
+  } = useFetch(apiCall);
 
   const onUpdate = () => {
     setDeleteCpu(null);
     setQuery(null);
     refresh();
   };
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
 
   const onSubmit = (query) => {
     setQuery(query.search)
@@ -73,23 +88,32 @@ const CpuOverview = () => {
 
             {
               !query && (
-                <ul className="movieList">
-                  {cpus.map((cpu) => (
-                    <li key={cpu.idProcessor}>
-                      <ProductCard
-                        deleter={setDeleteCpu}
-                        product={cpu}
-                        link={PossibleRoutes.Detail}
-                        id={cpu.idProcessor}
-                      >
-                        Manufacturer: {cpu.manufacturerName}<br/>
-                        Base Clock: {cpu.clockSpeed}Ghz<br/>
-                        Cores: {cpu.cores}<br/>
-                        Socket: {cpu.socketType}
-                      </ProductCard>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="movieList">
+                    {cpus.cpus.map((cpu) => (
+                      <li key={cpu.idProcessor}>
+                        <ProductCard
+                          deleter={setDeleteCpu}
+                          product={cpu}
+                          link={PossibleRoutes.Detail}
+                          id={cpu.idProcessor}
+                        >
+                          Manufacturer: {cpu.manufacturerName}<br/>
+                          Base Clock: {cpu.clockSpeed}Ghz<br/>
+                          Cores: {cpu.cores}<br/>
+                          Socket: {cpu.socketType}
+                        </ProductCard>
+                      </li>
+                    ))}
+                  </ul>
+                  <Pagination 
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={cpus.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 

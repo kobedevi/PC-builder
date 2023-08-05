@@ -10,16 +10,19 @@ import Result from "./Result";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import { fetchCpuByIdBuilder } from '../../../core/modules/CPU/api';
+import Pagination from "components/Design/Pagination";
 
 
 const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields}) => {
   const [info, setInfo] = useState([]);
   const [productInfo, setProductInfo] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleCpus();
-  }, []);
+    return fetchCompatibleCpus(page, perPage);
+  }, [page, perPage]);
 
   const {
     data: cpus,
@@ -28,6 +31,14 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
     isLoading,
     refresh,
   } = useNoAuthFetch(apiCall);
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
 
   const onSubmit = (query) => {
     setQuery(query.search)
@@ -109,28 +120,37 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
 
             {
               !query && (
-                <ul className="productList">
-                  {cpus.map((cpu) => {
-                    const disabled = cpu.idProcessor === currentBuild.cpu.idProcessor ? true : false;
-                    return(
-                    <li key={cpu.idProcessor}>
-                      <BuilderProductCard
-                        setProductInfo={setProductInfo}
-                        product={cpu}
-                        link={PossibleRoutes.Detail}
-                        id={cpu.idProcessor}
-                      >
-                        <p>
-                          Manufacturer: {cpu.manufacturerName}<br/>
-                          Base Clock: {cpu.clockSpeed}Ghz<br/>
-                          Cores: {cpu.cores}<br/>
-                          Socket: {cpu.socketType}
-                        </p>
-                        <button type="button" onClick={() => onClick(cpu)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
-                      </BuilderProductCard>
-                    </li>
-                  )})}
-                </ul>
+                <>
+                  <ul className="productList">
+                    {cpus.cpus.map((cpu) => {
+                      const disabled = cpu.idProcessor === currentBuild.cpu.idProcessor ? true : false;
+                      return(
+                      <li key={cpu.idProcessor}>
+                        <BuilderProductCard
+                          setProductInfo={setProductInfo}
+                          product={cpu}
+                          link={PossibleRoutes.Detail}
+                          id={cpu.idProcessor}
+                        >
+                          <p>
+                            Manufacturer: {cpu.manufacturerName}<br/>
+                            Base Clock: {cpu.clockSpeed}Ghz<br/>
+                            Cores: {cpu.cores}<br/>
+                            Socket: {cpu.socketType}
+                          </p>
+                          <button type="button" onClick={() => onClick(cpu)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        </BuilderProductCard>
+                      </li>
+                    )})}
+                  </ul>
+                  <Pagination 
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={cpus.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 

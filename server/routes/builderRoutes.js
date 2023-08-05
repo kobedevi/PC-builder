@@ -27,10 +27,10 @@ const builderRouter = express.Router();
 builderRouter.use(bodyParser.urlencoded({ extended: true }));
 
 builderRouter.get("/cpu/info/:id", cpuController.fetchCpuById);
-builderRouter.get("/cpu", cpuController.fetchCpus);
+builderRouter.get("/cpu/:page/:perPage", cpuController.fetchCpus);
 
 builderRouter.get("/cpucooler/info/:id", cpuCoolerController.fetchCpuCoolerById);
-builderRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolersByBuild);
+builderRouter.get("/cpucooler/:id/:page/:perPage", cpuCoolerController.fetchCpuCoolersByBuild);
 
 builderRouter.get("/motherboard/info/:id", motherboardController.fetchMotherboardById);
 builderRouter.get("/motherboard/:id", motherboardController.fetchMotherboardsByBuild);

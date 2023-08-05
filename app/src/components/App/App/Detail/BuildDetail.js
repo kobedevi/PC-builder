@@ -30,8 +30,9 @@ const BuildDetail = () => {
         )}
         {data && (
           <div>
-            <h1>{id}</h1>
-            {console.log(data)}
+            <h3>{id}</h3>
+            <p>3D model here?</p>
+            {/* TODO: Map over each item and then show DetailCard of that specific item */}
           </div>
         )}
       </div>

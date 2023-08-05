@@ -1,14 +1,14 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchCpuCoolers = () => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/cpucooler`, {
+const fetchCpuCoolers = (page=0, perPage=20) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/cpucooler/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };
 
-const fetchCompatibleCpuCoolers = async (id) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/cpucooler/${id}`);
+const fetchCompatibleCpuCoolers = async (id, page=0, perPage=20) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/cpucooler/${id}/${page}/${perPage}`);
 };
 
 const fetchCpuCoolerById = (id) => async (headers) => {

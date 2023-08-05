@@ -54,7 +54,7 @@ const { ramTypeModel } = require("../models/RamType");
 authRouter.use(bodyParser.urlencoded({ extended: true }));
 
 // CPUS
-adminRouter.get("/cpu", cpuController.fetchCpus);
+adminRouter.get("/cpu/:page/:perPage", cpuController.fetchCpus);
 adminRouter.get("/cpu/:id", cpuController.fetchCpuById);
 adminRouter.get("/cpu/filter/:query", cpuController.fetchCpusByFilter);
 adminRouter.patch("/cpu/:id", cpuModel, cpuController.patchCpuById);
@@ -74,7 +74,7 @@ adminRouter.delete("/case/:id", caseModel, caseController.deleteCaseById);
 adminRouter.post("/case", caseModel, caseController.createCase);
 
 // CPUCoolers
-adminRouter.get("/cpucooler", cpuCoolerController.fetchCpuCoolers);
+adminRouter.get("/cpucooler/:page/:perPage", cpuCoolerController.fetchCpuCoolers);
 adminRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolerById);
 adminRouter.get("/cpucooler/filter/:query", cpuCoolerController.fetchCpuCoolersByFilter);
 adminRouter.patch(

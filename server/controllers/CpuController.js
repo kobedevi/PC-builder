@@ -5,11 +5,21 @@ const { v4: uuidv4 } = require("uuid");
 class CpuController {
 	fetchCpus = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT *, manufacturers.manufacturerName, cpusockets.socketType FROM cpus
+			const { page=Math.abs(page) || 0, perPage=10 } = req.params;
+			const results = await db.promise().query(`
+			SELECT *, manufacturers.manufacturerName, cpusockets.socketType FROM cpus
 			LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON cpus.idCpuSocket = cpusockets.idCpuSocket
-			WHERE deleted = 0`);
-			res.status(200).send(results[0]);
+			WHERE deleted = 0
+			LIMIT ? OFFSET ?`, [parseInt(perPage), parseInt(page*perPage)]);
+			let pageAmount = await db.promise().query("SELECT COUNT(idProcessor) as totalProducts FROM cpus WHERE deleted = 0 ")
+				.then(res => {
+					return (Math.ceil(res[0][0].totalProducts / perPage))
+				})
+			res.status(200).send({
+				cpus: results[0],
+				pageAmount
+			});
 		} catch (e) {
 			next(e);
 		}

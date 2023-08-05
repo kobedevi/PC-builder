@@ -10,15 +10,18 @@ import ProductCard from "components/Design/ProductCard";
 import DeleteCpuCooler from "./Delete/DeleteCpuCooler";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./forms/Result";
+import Pagination from "components/Design/Pagination";
 
 const CpuCoolerOverview = () => {
   const [info, setInfo] = useState();
   const [deleteCooler, setDeleteCooler] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
 
   const apiCall = useCallback(() => {
-    return fetchCpuCoolers();
-  }, []);
+    return fetchCpuCoolers(page,perPage);
+  }, [page,perPage]);
 
   const {
     data: cpuCoolers,
@@ -27,6 +30,7 @@ const CpuCoolerOverview = () => {
     isLoading,
     refresh,
   } = useFetch(apiCall);
+  console.log(cpuCoolers);
 
   const onUpdate = () => {
     setDeleteCooler(null);
@@ -34,6 +38,13 @@ const CpuCoolerOverview = () => {
     refresh();
   };
 
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
   
   const onSubmit = (query) => {
     setQuery(query.search)
@@ -77,21 +88,30 @@ const CpuCoolerOverview = () => {
 
             {
               !query && (
-                <ul className="movieList">
-                  {cpuCoolers.map((cc) => (
-                    <li key={cc.idCpuCooler}>
-                      <ProductCard
-                        deleter={setDeleteCooler}
-                        product={cc}
-                        link={PossibleRoutes.Detail}
-                        id={cc.idCpuCooler}
-                      >
-                        Manufacturer: {cc.manufacturerName}<br/>
-                        compatible sockets: {cc.socketType.join(', ')}<br/>
-                      </ProductCard>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="movieList">
+                    {cpuCoolers.result.map((cc) => (
+                      <li key={cc.idCpuCooler}>
+                        <ProductCard
+                          deleter={setDeleteCooler}
+                          product={cc}
+                          link={PossibleRoutes.Detail}
+                          id={cc.idCpuCooler}
+                          >
+                          Manufacturer: {cc.manufacturerName}<br/>
+                          compatible sockets: {cc.socketType.join(', ')}<br/>
+                        </ProductCard>
+                      </li>
+                    ))}
+                  </ul>
+                  <Pagination 
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={cpuCoolers.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 

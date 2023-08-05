@@ -98,7 +98,6 @@ class BuildController {
 
 			res.status(200).send(finalResult);
 		} catch (e) {
-			console.log(e);
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};

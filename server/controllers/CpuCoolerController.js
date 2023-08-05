@@ -5,12 +5,18 @@ const { v4: uuidv4, validate: uuidValidate } = require("uuid");
 class CpuCoolerController {
 	fetchCpuCoolers = async (req, res, next) => {
 		try {
-			const [rows] = await db.promise().query(`SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
+			const { page=Math.abs(page) || 0, perPage=10 } = req.params;
+			let [rows] = await db.promise().query(`SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
 			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
 			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
-			WHERE deleted = 0;`);
+			WHERE deleted = 0 LIMIT ? OFFSET ?`, [parseInt(perPage), parseInt(page*perPage)]);
 			const data = rows;
+
+			let pageAmount = await db.promise().query("SELECT COUNT(idCpuCooler) as totalProducts FROM cpucoolers WHERE deleted = 0")
+			.then(res => {
+				return (Math.ceil(res[0][0].totalProducts / perPage))
+			})
 
 			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
 			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
@@ -22,7 +28,7 @@ class CpuCoolerController {
 				}
 			})
 
-			res.status(200).send(result);
+			res.status(200).send({result, pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -30,13 +36,16 @@ class CpuCoolerController {
 
 	fetchCpuCoolersByBuild = async (req, res, next) => {
 		try {
-			const { id } = req.params;
-			
+			const { id, page=Math.abs(page) || 0, perPage=10 } = req.params;
 			const query = `select idCpuSocket from cpus where idProcessor = ?`;
 			let [rows] = await db.promise().query(query, [id]);
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "Given cpu does not exist" });
 			}
+			let pageAmount = await db.promise().query("SELECT COUNT(idCpuCooler) as totalProducts FROM cpucoolers WHERE deleted = 0")
+			.then(res => {
+				return (Math.ceil(res[0][0].totalProducts / perPage))
+			})
 
 			const cpuSocket = rows[0].idCpuSocket;
 
@@ -50,8 +59,8 @@ class CpuCoolerController {
 				WHERE idCpuSocket = ?
 			)
 			AND cpucoolers.deleted = 0
-			ORDER BY idCpuCooler;`;
-			[rows] = await db.promise().query(userQuery, [cpuSocket]);
+			ORDER BY idCpuCooler LIMIT ? OFFSET ?`;
+			[rows] = await db.promise().query(userQuery, [cpuSocket, parseInt(perPage), parseInt(page*perPage)]);
 			const data = rows;
 
 			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
@@ -64,11 +73,9 @@ class CpuCoolerController {
 				}
 			})
 
-			res.status(200).send(result);
+			res.status(200).send({result, pageAmount});
 		} catch (e) {
-			next(
-				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
-			);
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
 

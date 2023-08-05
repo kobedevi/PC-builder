@@ -1,14 +1,14 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchCpus = () => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/cpu`, {
+const fetchCpus = (page=0, perPage=20) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/cpu/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };
 
-const fetchCompatibleCpus = async () => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/cpu`);
+const fetchCompatibleCpus = async (page=0, perPage=20) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/cpu/${page}/${perPage}`);
 };
 
 const fetchCpuById = (id) => async (headers) => {

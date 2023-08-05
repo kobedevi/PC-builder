@@ -17,7 +17,6 @@ const InfoModal = ({onDismiss, productInfo, fetcher}) => {
         isLoading,
         refresh,
     } = useNoAuthFetch(apiCall);
-    console.log(data);
 
     return(
         <ProductModal

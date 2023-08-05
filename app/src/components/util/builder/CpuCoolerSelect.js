@@ -10,20 +10,31 @@ import { fetchCompatibleCpuCoolers, fetchFilteredCpuCoolers } from "core/modules
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import { fetchCpuCoolerByIdBuilder } from '../../../core/modules/CPUCooler/api';
+import Pagination from "components/Design/Pagination";
 
 const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateFields}) => {
   const [info, setInfo] = useState();
   const [productInfo, setProductInfo] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleCpuCoolers(idCpu);
-  }, [idCpu]);
+    return fetchCompatibleCpuCoolers(idCpu, page, perPage);
+  }, [idCpu, page, perPage]);
   
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)
+  }
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
   }
 
   const onClick = (cooler) => {
@@ -76,24 +87,33 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
             )}
             {
               !query && (
-                <ul className="productList">
-                  {data.map((product) => {
-                    const disabled = product.idCpuCooler === currentBuild.cpucooler.idCpuCooler ? true : false;
-                    return (
-                    <li key={product.idCpuCooler}>
-                      <BuilderProductCard
-                        setProductInfo={setProductInfo}
-                        product={product}
-                        link={PossibleRoutes.Detail}
-                        id={product.idCpuCooler}
-                      >
-                        Manufacturer: {product.manufacturerName}<br/>
-                        compatible sockets: {product.socketType.join(', ')}<br/>
-                        <button type="button" onClick={() => onClick(product)} disabled={disabled} >{!disabled ? 'Add' : 'Added'}</button>
-                      </BuilderProductCard>
-                    </li>
-                  )})}
-                </ul>
+                <>
+                  <ul className="productList">
+                    {data.result.map((product) => {
+                      const disabled = product.idCpuCooler === currentBuild.cpucooler.idCpuCooler ? true : false;
+                      return (
+                      <li key={product.idCpuCooler}>
+                        <BuilderProductCard
+                          setProductInfo={setProductInfo}
+                          product={product}
+                          link={PossibleRoutes.Detail}
+                          id={product.idCpuCooler}
+                        >
+                          Manufacturer: {product.manufacturerName}<br/>
+                          compatible sockets: {product.socketType.join(', ')}<br/>
+                          <button type="button" onClick={() => onClick(product)} disabled={disabled} >{!disabled ? 'Add' : 'Added'}</button>
+                        </BuilderProductCard>
+                      </li>
+                    )})}
+                  </ul>
+                  <Pagination 
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 
