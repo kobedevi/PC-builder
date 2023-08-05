@@ -11,8 +11,16 @@ const useNoAuthApi = () => {
         .then(handleApiResult)
         .then((data) => resolve(data))
         .catch((err) => {
-          if (err instanceof ApiError) {
-            reject(err);
+          let e;
+          if (err.response.status >= 400) {
+            e = new ApiError(err);
+          }
+          if (e instanceof ApiError) {
+            if (e.isUnauthorized()) {
+              return;
+            } else {
+              reject(err);
+            }
           } else {
             reject(new AppError(err));
           }
