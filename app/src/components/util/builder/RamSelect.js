@@ -11,19 +11,30 @@ import Result from "./Result";
 import { fetchCompatibleRam, fetchFilteredRam, fetchRamByIdBuilder } from "core/modules/Ram/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
+import Pagination from "components/Design/Pagination";
 
 const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamType, idRam, memorySlots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState();
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
 
   const apiCall = useCallback(() => {
     if(!strictMode) {
-      return fetchCompatibleRam(undefined, idRamType);
+      return fetchCompatibleRam(undefined, idRamType, page, perPage);
     } else {
-      return fetchCompatibleRam(memorySlots, idRamType);
+      return fetchCompatibleRam(memorySlots, idRamType, page, perPage);
     }
-  }, [memorySlots, idRamType, strictMode]);
+  }, [memorySlots, idRamType, strictMode, page, perPage]);
   
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
@@ -86,7 +97,7 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
             {
               query && <Result filter={fetchFilteredRam} result={query}/>
             }
-            {(data.length === 0) && (
+            {(data.result.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
                 <img src="./blob.svg" alt="blobby blobby blobby!"/>
@@ -94,28 +105,38 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
             )}
             {
               !query && (
-                <ul className="productList">
-                  {data.map((product) => {
-                    const disabled = product.idRam === currentBuild.ram.idRam ? true : false;
-                    return(
-                    <li key={product.idRam}>
-                      <BuilderProductCard
-                        product={product}
-                        setProductInfo={setProductInfo}
-                        link={PossibleRoutes.Detail}
-                        id={product.idRam}
-                      >
-                        Manufacturer: {product.manufacturerName}<br/>
-                        Ram type: {product.ramType}<br/>
-                        Amount of sticks: {product.stickAmount}<br/>
-                        Size per stick: {product.sizePerStick} GB<br/>
-                        <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
-                        Ram speed: {product.speed}MHz<br/>
-                        <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
-                      </BuilderProductCard>
-                    </li>
-                  )})}
-                </ul>
+                <>
+
+                  <ul className="productList">
+                    {data.result.map((product) => {
+                      const disabled = product.idRam === currentBuild.ram.idRam ? true : false;
+                      return(
+                      <li key={product.idRam}>
+                        <BuilderProductCard
+                          product={product}
+                          setProductInfo={setProductInfo}
+                          link={PossibleRoutes.Detail}
+                          id={product.idRam}
+                        >
+                          Manufacturer: {product.manufacturerName}<br/>
+                          Ram type: {product.ramType}<br/>
+                          Amount of sticks: {product.stickAmount}<br/>
+                          Size per stick: {product.sizePerStick} GB<br/>
+                          <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
+                          Ram speed: {product.speed}MHz<br/>
+                          <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        </BuilderProductCard>
+                      </li>
+                    )})}
+                  </ul>
+                  <Pagination 
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
             

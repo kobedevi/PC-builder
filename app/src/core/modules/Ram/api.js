@@ -1,8 +1,8 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchRam = () => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/ram`, {
+const fetchRam = (page=0, perPage=20) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/ram/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };
@@ -16,8 +16,8 @@ const fetchFilteredRam = (query) => async (headers) => {
   );
 };
 
-const fetchCompatibleRam = async (slots, idRamType) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/ram/${slots}/${idRamType}`);
+const fetchCompatibleRam = async (slots, idRamType, page=0, perPage=20) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/ram/${slots}/${idRamType}/${page}/${perPage}`);
 };
 
 const fetchRamById = (id) => async (headers) => {

@@ -33,7 +33,6 @@ class MotherboardController {
 				return res.status(400).json({ message: "Given cpu does not exist" });
 			}
 
-
 			let pageAmount = await db.promise().query("SELECT COUNT(idMotherboard) as totalProducts FROM motherboards WHERE deleted = 0")
 			.then(res => {
 				return (Math.ceil(res[0][0].totalProducts / perPage))

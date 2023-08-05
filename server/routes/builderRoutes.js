@@ -36,7 +36,7 @@ builderRouter.get("/motherboard/info/:id", motherboardController.fetchMotherboar
 builderRouter.get("/motherboard/:id/:page/:perPage", motherboardController.fetchMotherboardsByBuild);
 
 builderRouter.get("/ram/info/:id", ramController.fetchRamById);
-builderRouter.get("/ram/:slots/:id", ramController.fetchRamByBuild);
+builderRouter.get("/ram/:slots/:id/:page/:perPage", ramController.fetchRamByBuild);
 
 builderRouter.get("/storage/info/:id", storageController.fetchStorageById);
 builderRouter.get("/storage/:motherboardId", storageController.fetchStorageByBuild);

@@ -10,15 +10,26 @@ import SearchForm from "components/Design/SearchForm";
 import ProductCard from "components/Design/ProductCard";
 import Result from "./forms/Result";
 import DeleteRam from "./Delete/DeleteRam";
+import Pagination from "components/Design/Pagination";
 
 const RamOverview = () => {
   const [info, setInfo] = useState();
   const [deleteRam, setDeleteRam] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
 
   const apiCall = useCallback(() => {
-    return fetchRam();
-  }, []);
+    return fetchRam(page, perPage);
+  }, [page, perPage]);
   
   const onSubmit = (query) => {
     setQuery(query.search)
@@ -70,8 +81,9 @@ const RamOverview = () => {
 
           {
             !query && (
+              <>
               <ul className="movieList">
-                {ram.map((product) => (
+                {ram.result.map((product) => (
                   <li key={product.idRam}>
                     <ProductCard
                       deleter={setDeleteRam}
@@ -89,6 +101,14 @@ const RamOverview = () => {
                   </li>
                 ))}
               </ul>
+              <Pagination
+                page={page}
+                perPage={perPage}
+                pageAmount={ram.pageAmount}
+                perPageClick={handlePerPageClick}
+                onClick={handlePageClick}
+              />
+              </>
             )
           }
 

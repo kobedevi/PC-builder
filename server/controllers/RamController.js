@@ -5,11 +5,17 @@ const { v4: uuidv4 } = require("uuid");
 class RamController {
 	fetchRam = async (req, res, next) => {
 		try {
+			const { page=Math.abs(page) || 0, perPage=20} = req.params;
+			let pageAmount = await db.promise().query("SELECT COUNT(idRam) as totalProducts FROM ram WHERE deleted = 0")
+			.then(res => {
+				return (Math.ceil(res[0][0].totalProducts / perPage))
+			})
 			const results = await db.promise().query(`SELECT * FROM ram
 			LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
-			WHERE ram.deleted = 0;`);
-			res.status(200).send(results[0]);
+			WHERE ram.deleted = 0
+			LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
+			res.status(200).send({result: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -17,15 +23,23 @@ class RamController {
 
 	fetchRamByBuild = async (req, res, next) => {
 		try {
-			const {slots, id} = req.params;
+			const {slots, id, page=Math.abs(page) || 0, perPage=20} = req.params;
+			
+			let pageAmount = await db.promise().query("SELECT COUNT(idRam) as totalProducts FROM ram WHERE deleted = 0")
+			.then(res => {
+				return (Math.ceil(res[0][0].totalProducts / perPage))
+			})
+
 			const userQuery = `SELECT * FROM ram
 			LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
 			WHERE ${slots !== 'undefined' ? 'ram.stickAmount <= ? AND ram.deleted = 0' : 'ram.deleted = 0'}
 			AND ram.idRamType = ?
-			ORDER BY idRam;`;
-			const [rows] = await db.promise().query(userQuery, (slots !== 'undefined' ? [slots, id] : [id]));
-			res.status(200).send(rows);
+			ORDER BY idRam
+			LIMIT ? OFFSET ?;`;
+
+			const [rows] = await db.promise().query(userQuery, (slots !== 'undefined' ? [slots, id, parseInt(perPage), parseInt(page*perPage)] : [id, parseInt(perPage), parseInt(page*perPage)]));
+			res.status(200).send({result: rows, pageAmount});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e

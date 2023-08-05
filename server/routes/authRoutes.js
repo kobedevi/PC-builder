@@ -106,7 +106,7 @@ adminRouter.post(
 );
 
 // RAM
-adminRouter.get("/ram", ramController.fetchRam);
+adminRouter.get("/ram/:page/:perPage", ramController.fetchRam);
 adminRouter.get("/ram/:id", ramController.fetchRamById);
 adminRouter.get("/ram/filter/:query", ramController.fetchRamByFilter);
 adminRouter.patch("/ram/:id", ramModel, ramController.patchRamById);
