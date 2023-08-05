@@ -7,13 +7,18 @@ const SQL = require("@nearform/sql");
 class MotherboardController {
 	fetchMotherboards = async (req, res, next) => {
 		try {
+			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
+			let pageAmount = await db.promise().query("SELECT COUNT(idMotherboard) as totalProducts FROM motherboards WHERE deleted = 0")
+			.then(res => {
+				return (Math.ceil(res[0][0].totalProducts / perPage))
+			})
 			const results = await db.promise().query(`SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, ramtypes.ramType FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpusockets ON motherboards.idCpuSocket = cpusockets.idCpuSocket
 			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
 			LEFT JOIN ramtypes ON motherboards.idRamType = ramtypes.idRamType
-			WHERE motherboards.deleted = 0;`);
-			res.status(200).send(results[0]);
+			WHERE motherboards.deleted = 0 LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
+			res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -21,16 +26,20 @@ class MotherboardController {
 
 	fetchMotherboardsByBuild = async (req, res, next) => {
 		try {
-			const { id } = req.params;
-			
+			const { id, page=Math.abs(page) || 0, perPage=20 } = req.params;
 			const query = `select idCpuSocket from cpus where idProcessor = ?`;
 			let [rows] = await db.promise().query(query, [id]);
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "Given cpu does not exist" });
 			}
 
-			const cpuSocket = rows[0].idCpuSocket;
 
+			let pageAmount = await db.promise().query("SELECT COUNT(idMotherboard) as totalProducts FROM motherboards WHERE deleted = 0")
+			.then(res => {
+				return (Math.ceil(res[0][0].totalProducts / perPage))
+			})
+
+			const cpuSocket = rows[0].idCpuSocket;
 			const userQuery = `SELECT motherboards.*, cpusockets.socketType, manufacturers.manufacturerName, formfactors.formfactor, formfactors.height, formfactors.width, ramtypes.ramType,
 			motherboard_has_storagetypes.amount, storagetypes.idStorageType, storagetypes.storageType FROM motherboards
 			LEFT JOIN manufacturers ON motherboards.idManufacturer = manufacturers.idManufacturer
@@ -41,8 +50,9 @@ class MotherboardController {
 			LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
 			WHERE motherboards.idCpuSocket = ?
 			AND motherboards.deleted = 0
-			ORDER BY idMotherboard;`;
-			[rows] = await db.promise().query(userQuery, [cpuSocket]);
+			ORDER BY idMotherboard
+			LIMIT ? OFFSET ?;`;
+			[rows] = await db.promise().query(userQuery, [cpuSocket, parseInt(perPage), parseInt(page*perPage)]);
 			const data = rows;
 
 			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
@@ -61,7 +71,7 @@ class MotherboardController {
 				return test;
 			})
 
-			res.status(200).send(result);
+			res.status(200).send({result, pageAmount});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e

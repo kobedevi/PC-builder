@@ -1,8 +1,8 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchMotherboards = () => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/motherboard`, {
+const fetchMotherboards = (page=0,perPage=20) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/motherboard/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };
@@ -16,8 +16,8 @@ const fetchFilteredMotherboards = (query) => async (headers) => {
   );
 };
 
-const fetchCompatibleMotherboard = async (id) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/motherboard/${id}`);
+const fetchCompatibleMotherboard = async (id, page=0, perPage=20) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/motherboard/${id}/${page}/${perPage}`);
 };
 
 const fetchMotherboardById = (id) => async (headers) => {

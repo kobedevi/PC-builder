@@ -11,15 +11,18 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./forms/Result";
 import ProductCard from "components/Design/ProductCard";
 import DeleteMotherboard from "./Delete/DeleteMotherboard";
+import Pagination from "components/Design/Pagination";
 
 const MotherboardOverview = () => {
   const [info, setInfo] = useState();
   const [deleteMotherboard, setDeleteMotherboard] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
 
   const apiCall = useCallback(() => {
-    return fetchMotherboards();
-  }, []);
+    return fetchMotherboards(page,perPage);
+  }, [page,perPage]);
 
   const { 
     data, 
@@ -29,7 +32,6 @@ const MotherboardOverview = () => {
     refresh 
   } = useFetch(apiCall);
 
-  
   const onUpdate = () => {
     setDeleteMotherboard(null);
     setQuery(null);
@@ -38,6 +40,14 @@ const MotherboardOverview = () => {
 
   const onSubmit = (query) => {
     setQuery(query.search)
+  }
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
   }
 
   return (
@@ -77,8 +87,9 @@ const MotherboardOverview = () => {
 
             {
               !query && (
+                <>
                 <ul className="movieList">
-                  {data.map((mb) => (
+                  {data.results.map((mb) => (
                     <li key={mb.idMotherboard}>
                       <ProductCard
                         deleter={setDeleteMotherboard}
@@ -93,6 +104,14 @@ const MotherboardOverview = () => {
                     </li>
                   ))}
                 </ul>
+                <Pagination 
+                 page={page}
+                 perPage={perPage}
+                 pageAmount={data.pageAmount}
+                 perPageClick={handlePerPageClick}
+                 onClick={handlePageClick}
+               />
+             </>
               )
             }
 

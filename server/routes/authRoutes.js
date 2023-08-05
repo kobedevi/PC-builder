@@ -90,7 +90,7 @@ adminRouter.post(
 );
 
 // Motherboards
-adminRouter.get("/motherboard", motherboardController.fetchMotherboards);
+adminRouter.get("/motherboard/:page/:perPage", motherboardController.fetchMotherboards);
 adminRouter.get("/motherboard/:id", motherboardController.fetchMotherboardById);
 adminRouter.get("/motherboard/filter/:query", motherboardController.fetchMotherboardsByFilter);
 adminRouter.patch(

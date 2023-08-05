@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 class CpuController {
 	fetchCpus = async (req, res, next) => {
 		try {
-			const { page=Math.abs(page) || 0, perPage=10 } = req.params;
+			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
 			const results = await db.promise().query(`
 			SELECT *, manufacturers.manufacturerName, cpusockets.socketType FROM cpus
 			LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer

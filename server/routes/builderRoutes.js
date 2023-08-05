@@ -33,7 +33,7 @@ builderRouter.get("/cpucooler/info/:id", cpuCoolerController.fetchCpuCoolerById)
 builderRouter.get("/cpucooler/:id/:page/:perPage", cpuCoolerController.fetchCpuCoolersByBuild);
 
 builderRouter.get("/motherboard/info/:id", motherboardController.fetchMotherboardById);
-builderRouter.get("/motherboard/:id", motherboardController.fetchMotherboardsByBuild);
+builderRouter.get("/motherboard/:id/:page/:perPage", motherboardController.fetchMotherboardsByBuild);
 
 builderRouter.get("/ram/info/:id", ramController.fetchRamById);
 builderRouter.get("/ram/:slots/:id", ramController.fetchRamByBuild);

@@ -5,7 +5,7 @@ const { v4: uuidv4, validate: uuidValidate } = require("uuid");
 class CpuCoolerController {
 	fetchCpuCoolers = async (req, res, next) => {
 		try {
-			const { page=Math.abs(page) || 0, perPage=10 } = req.params;
+			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
 			let [rows] = await db.promise().query(`SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
 			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
@@ -36,7 +36,7 @@ class CpuCoolerController {
 
 	fetchCpuCoolersByBuild = async (req, res, next) => {
 		try {
-			const { id, page=Math.abs(page) || 0, perPage=10 } = req.params;
+			const { id, page=Math.abs(page) || 0, perPage=20 } = req.params;
 			const query = `select idCpuSocket from cpus where idProcessor = ?`;
 			let [rows] = await db.promise().query(query, [id]);
 			if (rows.length === 0) {

@@ -1,27 +1,26 @@
 import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
-import { fetchCpus } from "../../../core/modules/CPU/api";
-import { PossibleRoutes, route } from "../../../core/routing";
+import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
-import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./Result";
 import { fetchCompatibleMotherboard, fetchFilteredMotherboards, fetchMotherboardByIdBuilder } from "core/modules/Motherboard/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
+import Pagination from "components/Design/Pagination";
 
 const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState();
-
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleMotherboard(idCpu);
-  }, [idCpu]);
+    return fetchCompatibleMotherboard(idCpu, page, perPage);
+  }, [idCpu, page, perPage]);
   
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
@@ -41,6 +40,14 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
       maxWidth: product.width,
       maxHeight: product.height
     })
+  }
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
   }
 
   return (
@@ -83,25 +90,34 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
             )}
             {
               !query && (
-                <ul className="productList">
-                  {data.map((product) => {
-                    const disabled = product.idMotherboard === currentBuild.motherboard.idMotherboard ? true : false;
-                    return(
-                    <li key={product.idMotherboard}>
-                      <BuilderProductCard
-                        setProductInfo={setProductInfo}
-                        product={product}
-                        link={PossibleRoutes.Detail}
-                        id={product.idMotherboard}
-                      >
-                        Manufacturer: {product.manufacturerName}<br/>
-                        Formfactor: {product.formfactor}<br/>
-                        SocketType: {product.socketType}<br/>
-                        <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
-                      </BuilderProductCard>
-                    </li>
-                  )})}
-                </ul>
+                <>
+                  <ul className="productList">
+                    {data.result.map((product) => {
+                      const disabled = product.idMotherboard === currentBuild.motherboard.idMotherboard ? true : false;
+                      return(
+                      <li key={product.idMotherboard}>
+                        <BuilderProductCard
+                          setProductInfo={setProductInfo}
+                          product={product}
+                          link={PossibleRoutes.Detail}
+                          id={product.idMotherboard}
+                        >
+                          Manufacturer: {product.manufacturerName}<br/>
+                          Formfactor: {product.formfactor}<br/>
+                          SocketType: {product.socketType}<br/>
+                          <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        </BuilderProductCard>
+                      </li>
+                    )})}
+                  </ul>
+                  <Pagination 
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 
