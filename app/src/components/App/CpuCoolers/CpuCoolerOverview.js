@@ -30,7 +30,6 @@ const CpuCoolerOverview = () => {
     isLoading,
     refresh,
   } = useFetch(apiCall);
-  console.log(cpuCoolers);
 
   const onUpdate = () => {
     setDeleteCooler(null);

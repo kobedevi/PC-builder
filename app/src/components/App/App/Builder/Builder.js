@@ -99,7 +99,6 @@ const Builder = () => {
 	const validate = (e) => {
 		e.preventDefault();
 		if (isFinish) {
-			console.log(currentBuild.id);
 			return navigate(route(PossibleRoutes.BuildDetail, {id: currentBuild.id}), { replace: true });
 		}
 		if(hiddenInput.current.validity.valid) {
