@@ -38,5 +38,9 @@ const fetchFeaturedBuilds = async () => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/featured/builds`);
 }
 
+const fetchBuild = async (id) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/build/${id}`);
+}
 
-export { createBuild, fetchFeaturedBuilds };
+
+export { createBuild, fetchFeaturedBuilds, fetchBuild };

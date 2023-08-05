@@ -14,6 +14,7 @@ const userController = new UserController();
 const registerRoutes = (app, db) => {
 	app.post("/register", userModel, userController.register);
 	app.post("/login", authLocal, userController.login);
+	app.get('/build/:id', buildController.fetchBuildById);
 	app.get('/featured/builds', buildController.fetchFeaturedBuilds);
 
 	app.use('/compatible', builderRoutes);

@@ -12,6 +12,7 @@ const PossibleRoutes = Object.freeze({
 
   HomeParent: "/home/*",
   Home: "/home",
+  BuildDetail: "/build/:id",
 
   Create: "create",
   Detail: ":id",
@@ -57,7 +58,7 @@ const PossibleRoutes = Object.freeze({
 });
 
 // replaces : values with values from object
-// e.g. route('/projects/:id', { id : 9 }) -> /movies/9
+// e.g. route('/projects/:id', { id : 9 }) -> /projects/9
 export const route = (path, options = {}) => {
   Object.keys(options).forEach((key) => {
     path = path.replace(`:${key}`, options[key]);

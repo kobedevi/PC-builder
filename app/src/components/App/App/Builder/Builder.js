@@ -16,6 +16,8 @@ import Nav from "../Homepage/Nav"
 import { createBuild } from "../../../../core/modules/Builds/api"
 import { useAuth } from "../../../Auth/AuthContainer"
 import useNoAuthApi from "core/hooks/useNoAuthApi"
+import { useNavigate } from "react-router-dom"
+import { PossibleRoutes, route } from "core/routing"
 
 const initialData = {
 	idCpu: "",
@@ -58,6 +60,7 @@ const Builder = () => {
 
 	const auth = useAuth();
 	const withNoAuth = useNoAuthApi();
+	const navigate = useNavigate();
 
 	const [data, setData] = useState(initialData);
 	const [alert, setAlert] = useState();
@@ -95,6 +98,10 @@ const Builder = () => {
 
 	const validate = (e) => {
 		e.preventDefault();
+		if (isFinish) {
+			console.log(currentBuild.id);
+			return navigate(route(PossibleRoutes.BuildDetail, {id: currentBuild.id}), { replace: true });
+		}
 		if(hiddenInput.current.validity.valid) {
 			setAlert(null);
 			if (!isLastStep) return next();
@@ -104,8 +111,8 @@ const Builder = () => {
 					id: res.id
 				})
 				next();
-			})
-			.catch((err) => setAlert(err));
+			}).catch((err) => setAlert(err));
+
 		} else {
 			setAlert({builderMsg: "Please pick a component"})
 		}

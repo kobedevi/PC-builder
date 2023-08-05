@@ -32,6 +32,77 @@ class BuildController {
 		}
 	};
 
+	fetchBuildById = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			let userQuery = `
+				SELECT builds.*,
+				users.idUsers as user_id, users.userName as user_userName, 
+				cpus.idProcessor as cpu_id, cpus.idManufacturer as cpu_idManufacturer, cpus.modelName as cpu_modelName, cpus.clockSpeed as cpu_clockSpeed, cpus.cores as cpu_cores, cpus.wattage as cpu_wattage, cpus.image as cpu_image,
+				cpucoolers.idCpuCooler as cpucooler_id, cpucoolers.idManufacturer as cpucooler_idManufacturer, cpucoolers.modelName as cpucooler_modelName, cpucoolers.height as cpucooler_height, cpucoolers.width as cpucooler_width, cpucoolers.depth as cpucooler_depth, cpucoolers.image as cpucooler_image,
+				motherboards.idMotherboard as motherboard_id, motherboards.idManufacturer as motherboard_idManufacturer, motherboards.modelName as motherboard_modelName, motherboards.wifi as motherboard_wifi, motherboards.memorySlots as motherboard_memorySlots, motherboards.sataPorts as motherboard_sataPorts, motherboards.pcieSlots as motherboard_pcieSlots, motherboards.image as motherboard_image,
+				ram.idRam as ram_id, ram.idManufacturer as ram_idManufacturer, ram.modelName as ram_modelName, ram.sizePerStick as ram_sizePerStick, ram.stickAmount as ram_stickAmount, ram.speed as ram_speed, ram.image as ram_image,
+				gpu_has_partners.idGpuPartner as gpu_id, gpu_has_partners.idManufacturer as gpu_idManufacturer, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.clockspeed as gpu_clockSpeed, gpu_has_partners.watercooled as gpu_watercooled, gpu_has_partners.wattage as gpu_wattage, gpu_has_partners.image as gpu_image, gpu_has_partners.height as gpu_height, gpu_has_partners.width as gpu_width, gpu_has_partners.depth as gpu_depth, 
+				cases.idCase as case_id, cases.idManufacturer as case_idManufacturer, cases.modelName as case_modelName, cases.height as case_height, cases.width as case_width, cases.depth as case_depth, cases.\`2-5_slots\` as case_smallSlots, cases.\`3-5_slots\` as case_bigSlots, cases.image as case_image,
+				psu.idPsu as psu_id, psu.idManufacturer as psu_idManufacturer, psu.modelName as psu_modelName, psu.modular as psu_modular, psu.wattage as psu_wattage
+				FROM builds
+				LEFT JOIN users ON builds.idUser = users.idUsers
+				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
+				LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
+				LEFT JOIN cpucoolers ON builds.idCpuCooler = cpucoolers.idCpuCooler
+				LEFT JOIN motherboards ON builds.idMotherboard = motherboards.idMotherboard
+				LEFT JOIN ram ON builds.idRam = ram.idRam
+				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
+				LEFT JOIN cases ON builds.idCase = cases.idCase
+				LEFT JOIN psu ON builds.idPsu = psu.idPsu
+				WHERE builds.idBuild = ? 
+				ORDER BY date LIMIT 1;
+			`;
+			let [rows] = await db.promise().query(userQuery, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Build does not exist" });
+			}
+
+			const finalResult = {}
+			let tempManuArr = []
+
+			Object.entries(rows[0]).map(([key, item]) => {
+				const category = key.split('_');
+				if(key.includes('idManufacturer')) {
+					tempManuArr.push(`'${item}'`)
+				}
+				if(!key.startsWith("id")){
+					finalResult[category[0]] = {...finalResult[category[0]]}
+					finalResult[category[0]][category[1]] = item
+				}
+			})
+
+			tempManuArr = Array.from(new Set(tempManuArr));
+
+			// Only doing this for manufacturers since this table would be joined many times over
+			// Get all the relevant manufacturers
+			userQuery = `
+				SELECT * FROM manufacturers
+				WHERE idManufacturer IN (${tempManuArr.join(
+					", "
+				)})
+			;`;
+			[rows] = await db.promise().query(userQuery);
+
+			// Add to relevant objects
+			Object.entries(finalResult).map(([key, item]) => {
+				if(item?.idManufacturer){
+					finalResult[key].manufacturerName = rows.find(x => x.idManufacturer === item.idManufacturer).manufacturerName;
+				}
+			})
+
+			res.status(200).send(finalResult);
+		} catch (e) {
+			console.log(e);
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
 	// fetchStorageById = async (req, res, next) => {
 	// 	try {
 	// 		const { id } = req.params;
