@@ -7,7 +7,6 @@ const ItemList = ({ info, color = "primary" }) => {
   return (
     <div className="ItemList">
       {Object.entries(info).map(([key, value], i) => {
-        console.log(key);
         if (!key.startsWith("id")){
           return (
             <div className="item" key={key}>

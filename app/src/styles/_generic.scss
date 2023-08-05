@@ -38,3 +38,19 @@ body {
 .mr-4 {
     margin-right:4rem;
 }
+
+a.btn.btn-big {
+    padding: 1rem 2rem;
+    border-radius: 500px;
+    background-color: $dark-purple;
+    color: $white;
+    transition: .2s;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 100;
+    letter-spacing: 2px;
+}
+a.btn.btn-big:hover {
+    opacity: .85;
+    transform: scale(1.025);
+}
