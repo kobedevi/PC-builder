@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
-import { fetchPsus } from "../../../core/modules/Psu/api";
+import { fetchPsus, scrape } from "../../../core/modules/Psu/api";
 import { PossibleRoutes, route } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
@@ -11,13 +11,16 @@ import ProductCard from "components/Design/ProductCard";
 import Result from "./forms/Result";
 import DeletePsu from "./Delete/DeletePsu";
 import Pagination from "components/Design/Pagination";
+import useAdmin from "core/hooks/useAdmin";
+import Button from "components/Design/Button";
 
 const PsuOverview = () => {
   const [info, setInfo] = useState();
   const [deletePsu, setDeletePsu] = useState();
   const [query, setQuery] = useState('');
-  const [page, setPage] = useState(0)
-  const [perPage, setPerPage] = useState(20)
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
+  const isAdmin = useAdmin();
 
   const apiCall = useCallback(() => {
     return fetchPsus(page, perPage);
@@ -41,7 +44,11 @@ const PsuOverview = () => {
 
   const onSubmit = (query) => {
     setQuery(query.search)
-}
+  }
+
+  const handleScrape = () => {
+    scrape();
+  }
 
 
   return (
@@ -74,6 +81,10 @@ const PsuOverview = () => {
             <Link to={PossibleRoutes.Create} className="btn btn-primary">
               Add Power supply
             </Link>
+            
+            {
+              isAdmin && <Button onClick={() => handleScrape()} color="outline-light">Scrape-test</Button>
+            }
 
             {
               query && <Result updateChecker={deletePsu} deleter={setDeletePsu} result={query}/>

@@ -13,20 +13,21 @@ const Nav = () => {
   const user = useAuth();
   const admin = useAdmin();
 
-  const handleClick = () => {
-    scrape();
-  }
-
   return (
     <nav className="mainNav">
         <ul>
-            <li><Link to={PossibleRoutes.Home}>Home</Link></li>
-            <li><Link to={PossibleRoutes.Builder}>Pc-builder</Link></li>
-            {admin && <li><Link to={PossibleRoutes.Crud}>CRUD</Link></li>}
-            {admin && <li><Button onClick={() => handleClick()} color="outline-light">Scrape-test</Button></li>}
-            {!user?.user &&<li> <Link to={PossibleRoutes.Login}>Login</Link></li>}
-            {user?.user && <li> <Button onClick={user.logout} color="outline-light">Sign out</Button></li>}
-            {user?.user && <li>{user.user.userName}</li>}
+            <div>
+              <li className="logo"><Link to={PossibleRoutes.Home}>Home</Link></li>
+            </div>
+            <div>
+              <li><Link to={PossibleRoutes.Builder}>Builder</Link></li>
+              <li><Link to={PossibleRoutes.Builder}>Completed builds</Link></li>
+              {admin && <li><Link to={PossibleRoutes.Crud}>CRUD</Link></li>}
+            </div>
+            <div>
+              {!user?.user &&<li> <Link to={PossibleRoutes.Login}>Login</Link></li>}
+              {user?.user && <li> <Button onClick={user.logout} color="outline-light">Sign out</Button></li>}
+            </div>
         </ul>
     </nav>
   )

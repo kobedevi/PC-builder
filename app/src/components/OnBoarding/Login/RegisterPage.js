@@ -73,7 +73,7 @@ const RegisterPage = ({ setUser }) => {
   };
 
   return (
-    <div className="middle">
+    <div className="middle center-form">
       <div className="container">
         <div className="text-center">
           <h1 className="title mb-5">PC-BUILDER</h1>

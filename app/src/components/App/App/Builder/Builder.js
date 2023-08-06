@@ -119,7 +119,9 @@ const Builder = () => {
 
 	return (
 		<>
-			<Nav/>
+			<header>
+				<Nav/>
+			</header>
 			<div className="formWrapper">
 				<div className="stepper">
 					<StepCounter steps={steps} currentStepIndex={currentStepIndex}/>

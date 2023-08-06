@@ -5,17 +5,23 @@ import LoginPage from "components/OnBoarding/Login/LoginPage"
 import Builder from "./Builder/Builder"
 import RegisterPage from "components/OnBoarding/Login/RegisterPage"
 import BuildDetail from "./Detail/BuildDetail"
+import Nav from "./Homepage/Nav"
 
 const HomeRouter = ({setUser}) => {
   return (
-    <Routes>
+    <>
+      <header>
+        <Nav/>
+      </header>
+      <Routes>
         <Route index path={PossibleRoutes.Home} element={<Home />} />
         <Route path={PossibleRoutes.Register} element={<RegisterPage setUser={setUser}/>} />
         <Route path={PossibleRoutes.Login} element={<LoginPage setUser={setUser}/>} />
         <Route index path={PossibleRoutes.Builder} element={<Builder />} />
         <Route index path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
         <Route path="*" element={<Navigate to={PossibleRoutes.Home} replace />} />
-    </Routes>
+      </Routes>
+    </>
   )
 }
 

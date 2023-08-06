@@ -1,45 +1,17 @@
 @import '_bootstrap';
 
 header{
-    display: flex;
-    padding: 10px;
-    height: 56px;
+    position: relative;
     width: 100%;
-    background: $darkest !important;
-    ul{
-        margin: 0;
-        padding: 0;
-        display: flex;
-        width: 100%;
-        flex-direction: row;
-        list-style: none;
-        align-items: center;
-        justify-content: space-between;
-    }
-    li{
-        .logo{
-            font-size: 24px;
-            font-weight: bolder;
-            text-decoration: none;
-            color: $text;
-            img{
-                width: 2rem;
-            }
+}
+
+.crudNav{
+    background-color: $darker;
+    .mainNav{
+        position: relative;
+        ul {
+            margin: 8px 10px;
         }
-        span{
-            height: 2px;
-            width: 30px;
-            background-color: $text;
-        }
-        color: $text;
-        padding: 0;
-    }
-    .menu{
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 22px;
     }
 }
 
@@ -52,9 +24,33 @@ header{
         list-style: none;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
         gap: 16px;
-        margin: 0 8px;
+        margin: 24px 32px;
         padding: 0;
+        div{
+            display: flex;
+            flex-direction: row;
+            gap: 32px;
+            a {
+                font-size: 1.25rem;
+                text-transform: uppercase;
+                text-decoration: none;
+                color: $white;
+                text-shadow: 2px 3px 5px rgba(0,0,0,0.5);
+            }
+            li{
+                &.logo{
+                    font-size: 1.5rem;
+                    font-weight: bolder;
+                    text-decoration: none;
+                    a{
+                        color: $pink;
+                    }
+                }
+                
+            }
+        }
     }
 }

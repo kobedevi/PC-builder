@@ -76,7 +76,8 @@ body{
     width: 600px;
     overflow: hidden;
     background: rgb(140,179,232);
-    background: linear-gradient(301deg, rgba(140,179,232,1) 0%, rgba(198,101,234,1) 33%, rgba(239,116,125,1) 66%, rgba(244,250,157,1) 100%);
+    // background: linear-gradient(301deg, rgba(140,179,232,1) 0%, rgba(198,101,234,1) 33%, rgba(239,116,125,1) 66%, rgba(244,250,157,1) 100%);
+    background: linear-gradient(301deg, rgba(244,250,157,1) 0%, rgba(239,116,125,1) 33%, rgba(198,101,234,1) 66%, rgba(140,179,232,1) 100%);
     &::before, &::after{
         content: " ";
         position: absolute;

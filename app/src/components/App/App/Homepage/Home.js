@@ -8,7 +8,9 @@ const Home = () => {
 
   return (
     <>
-      <Nav/>
+      <header>
+        <Nav/>
+      </header>
       <Banner/>
       <div className="container">
         <Featured/>
