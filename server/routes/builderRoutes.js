@@ -45,7 +45,7 @@ builderRouter.get("/gpu/info/:id", gpuController.fetchGpuPartnerById);
 builderRouter.get("/gpu/:page/:perPage", gpuController.fetchGpusByBuild);
 
 builderRouter.get("/case/info/:id", caseController.fetchCaseById);
-builderRouter.get("/case/:width/:height/:depth", caseController.fetchCasesByBuild);
+builderRouter.get("/case/:width/:height/:depth/:page/:perPage", caseController.fetchCasesByBuild);
 
 builderRouter.get("/psu/info/:id", psuController.fetchPsuById);
 builderRouter.get("/psu/:wattage", psuController.fetchPsusByBuild);

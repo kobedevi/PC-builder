@@ -11,15 +11,26 @@ import Result from "./Result";
 import { fetchCaseByIdBuilder, fetchCompatibleCases, fetchFilteredCases } from "core/modules/Case/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
+import Pagination from "components/Design/Pagination";
 
 const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, height, depth, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState();
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(20)
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage)
+  }
+
+  const handlePageClick = (page) => {
+    setPerPage(page)
+  }
 
   const apiCall = useCallback(() => {
-    return fetchCompatibleCases(width,height, depth);
-  }, [width,height, depth]);
+    return fetchCompatibleCases(width,height, depth, page, perPage);
+  }, [width,height, depth, page, perPage]);
   
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
@@ -68,7 +79,7 @@ const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, heigh
             {
               query && <Result filter={fetchFilteredCases} result={query}/>
             }
-            {(data.length === 0) && (
+            {(data.results.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
                 <img src="./blob.svg" alt="blobby blobby blobby!"/>
@@ -76,8 +87,9 @@ const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, heigh
             )}
             {
               !query && (
+                <>
                 <ul className="productList">
-                  {data.map((product) => {
+                  {data.results.map((product) => {
                     const disabled = product.idCase === currentBuild.case.idCase ? true : false;
                     return(
                     <li key={product.idCase}>
@@ -94,6 +106,14 @@ const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, heigh
                     </li>
                   )})}
                 </ul>
+                <Pagination
+                  page={page}
+                  perPage={perPage}
+                  pageAmount={data.pageAmount}
+                  perPageClick={handlePerPageClick}
+                  onClick={handlePageClick}
+                />
+                </>
               )
             }
 
