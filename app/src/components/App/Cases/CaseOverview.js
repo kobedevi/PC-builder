@@ -24,7 +24,7 @@ const CaseOverview = () => {
   }
 
   const handlePageClick = (page) => {
-    setPerPage(page)
+    setPage(page)
   }
 
   const apiCall = useCallback(() => {
