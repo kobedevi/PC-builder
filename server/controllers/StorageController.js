@@ -69,19 +69,26 @@ class StorageController {
 
 	fetchStorageByBuild = async (req, res, next) => {
 		try {
-			const {motherboardId} = req.params;
+			const { motherboardId, page=Math.abs(page) || 0, perPage=20 } = req.params;
 			let userQuery, rows;
 			if(motherboardId !== 'undefined') {
 				userQuery = `SELECT storagetypes.idStorageType FROM motherboards
 				LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
 				LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
 				WHERE motherboards.idMotherboard = ?
-				AND motherboards.deleted = 0`;
-				[rows] = await db.promise().query(userQuery, [motherboardId]);
+				AND motherboards.deleted = 0
+				LIMIT ? OFFSET ?`;
+				[rows] = await db.promise().query(userQuery, [motherboardId, parseInt(perPage), parseInt(page*perPage)]);
 				if (rows.length === 0) {
 					return res.status(400).json({ message: "Given motherboard does not exist" });
 				}
 			}
+
+			let pageAmount = await db.promise().query("SELECT COUNT(idStorage) as totalProducts FROM storage WHERE deleted = 0")
+				.then(res => {
+					return (Math.ceil(res[0][0].totalProducts / perPage))
+				})
+
 			// https://stackoverflow.com/questions/33957252/node-js-mysql-query-where-id-array
 			const arr = (motherboardId !== 'undefined') ? Array.from(rows.map(val => { return val?.idStorageType; })) : [] ;
 			userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
@@ -90,7 +97,7 @@ class StorageController {
 			WHERE ${arr.length > 0 ? `storage.idStorageType IN (${mysql.escape(arr)}) AND` : ''}
 			storage.deleted = 0`;
 			[rows] = await db.promise().query(userQuery);
-			res.status(200).send(rows);
+			res.status(200).send({pageAmount, result: rows});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e

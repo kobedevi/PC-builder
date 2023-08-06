@@ -11,22 +11,33 @@ import { fetchCompatibleStorage, fetchFilteredStorage, fetchStorageByIdBuilder }
 import { v4 as uuidv4 } from "uuid";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
+import Pagination from "components/Design/Pagination";
 
 
 const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updateBuild, drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState();
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(20)
 
   const apiCall = useCallback(() => {
     if(!strictMode) {
-      return fetchCompatibleStorage(undefined);
+      return fetchCompatibleStorage(undefined, page, perPage);
     } else {
-    return fetchCompatibleStorage(currentBuild.motherboard.idMotherboard);
+    return fetchCompatibleStorage(currentBuild.motherboard.idMotherboard, page, perPage);
   }
-  }, [currentBuild.motherboard.idMotherboard, strictMode]);
+  }, [currentBuild.motherboard.idMotherboard, strictMode, page, perPage]);
   
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
 
   const onSubmit = (query) => {
     setQuery(query.search)
@@ -92,7 +103,7 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
             {
               query && <Result filter={fetchFilteredStorage} result={query}/>
             }
-            {(data.length === 0) && (
+            {(data.result.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
                 <img src="./blob.svg" alt="blobby blobby blobby!"/>
@@ -100,25 +111,33 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
             )}
             {
               !query && (
-                <ul className="productList">
-                  {data.map((product) => (
-                    <li key={product.idStorage}>
-                      <BuilderProductCard
-                        product={product}
-                        setProductInfo={setProductInfo}
-                        link={PossibleRoutes.Detail}
-                        id={product.idStorage}
-                      >
-                        Manufacturer: {product.manufacturerName}<br/>
-                        Capacity: {product.capacity}<br/>
-                        Storage Type: {product.storageType}<br/>
-                        {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}
-                        <button type="button" onClick={() => onClick(product)}>Add</button>
-                      </BuilderProductCard>
-                     
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="productList">
+                    {data.result.map((product) => (
+                      <li key={product.idStorage}>
+                        <BuilderProductCard
+                          product={product}
+                          setProductInfo={setProductInfo}
+                          link={PossibleRoutes.Detail}
+                          id={product.idStorage}
+                        >
+                          Manufacturer: {product.manufacturerName}<br/>
+                          Capacity: {product.capacity}<br/>
+                          Storage Type: {product.storageType}<br/>
+                          {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}
+                          <button type="button" onClick={() => onClick(product)}>Add</button>
+                        </BuilderProductCard>
+                      </li>
+                    ))}
+                  </ul>
+                  <Pagination
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 

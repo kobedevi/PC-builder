@@ -39,7 +39,7 @@ builderRouter.get("/ram/info/:id", ramController.fetchRamById);
 builderRouter.get("/ram/:slots/:id/:page/:perPage", ramController.fetchRamByBuild);
 
 builderRouter.get("/storage/info/:id", storageController.fetchStorageById);
-builderRouter.get("/storage/:motherboardId", storageController.fetchStorageByBuild);
+builderRouter.get("/storage/:motherboardId/:page/:perPage", storageController.fetchStorageByBuild);
 
 builderRouter.get("/gpu/info/:id", gpuController.fetchGpuPartnerById);
 builderRouter.get("/gpu", gpuController.fetchGpusByBuild);
