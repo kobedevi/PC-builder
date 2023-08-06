@@ -158,7 +158,7 @@ adminRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
 adminRouter.get("/gpu/:id", gpuController.fetchGpuById);
 
 // PSU
-adminRouter.get("/psu", psuController.fetchPsu);
+adminRouter.get("/psu/:page/:perPage", psuController.fetchPsu);
 adminRouter.get("/psu/:id", psuController.fetchPsuById);
 adminRouter.get("/psu/filter/:query", psuController.fetchPsuByFilter);
 adminRouter.patch("/psu/:id", psuModel, psuController.patchPsuById);

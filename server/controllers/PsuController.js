@@ -1,7 +1,6 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
-const SQL = require("@nearform/sql");
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
@@ -10,10 +9,16 @@ const path = require('path');
 class PsuController {
 	fetchPsu = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(SQL`SELECT * FROM psu
-			WHERE deleted = 0;`);
-			res.status(200).send(results[0]);
+			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
+
+			const pageAmount = await db.promise().query("SELECT COUNT(idPsu) as totalProducts FROM psu WHERE deleted = 0")
+			.then(res => Math.ceil(res[0][0].totalProducts / perPage))
+
+			const results = await db.promise().query(`SELECT * FROM psu
+			WHERE deleted = 0 LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
+			res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
+			console.log(e);
 			next(e);
 		}
 	};
@@ -22,11 +27,11 @@ class PsuController {
 		try {
 			const { id } = req.params;
 			const results = await db.promise()
-				.query(SQL`SELECT psu.*, manufacturers.manufacturerName FROM psu
+				.query(`SELECT psu.*, manufacturers.manufacturerName FROM psu
 				LEFT JOIN manufacturers ON psu.idManufacturer = manufacturers.idManufacturer
-				WHERE psu.idPsu=${id} 
+				WHERE psu.idPsu= ?
 				AND deleted = 0
-				LIMIT 1;`);
+				LIMIT 1;`, [id]);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "PSU does not exist" });
 			}
@@ -64,14 +69,19 @@ class PsuController {
 
 	fetchPsusByBuild = async(req, res, next) => {
 		try {
-			const { wattage } = req.params;
+			const { wattage, page=Math.abs(page) || 0, perPage=20 } = req.params;
+
+			const pageAmount = await db.promise().query("SELECT COUNT(idPsu) as totalProducts FROM psu WHERE deleted = 0")
+			.then(res => Math.ceil(res[0][0].totalProducts / perPage))
+
 			const userQuery = `SELECT * FROM psu
 			LEFT JOIN manufacturers ON psu.idManufacturer = manufacturers.idManufacturer
 			WHERE psu.wattage >= ?
 			AND psu.deleted = 0
-			ORDER BY wattage;`;
-			const [rows] = await db.promise().query(userQuery, [wattage]);
-			res.status(200).send(rows);
+			ORDER BY wattage
+			LIMIT ? OFFSET ?;`;
+			const [rows] = await db.promise().query(userQuery, [wattage, parseInt(perPage), parseInt(page*perPage)]);
+			res.status(200).send({results: rows, pageAmount});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -103,8 +113,8 @@ class PsuController {
 			const manufacturer = await db
 				.promise()
 				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
+					`select idManufacturer from manufacturers where idManufacturer = ?`
+				,[idManufacturer]);
 			if (manufacturer[0].length === 0) {
 				return res
 					.status(400)
@@ -113,8 +123,8 @@ class PsuController {
 			const formfactor = await db
 				.promise()
 				.query(
-					SQL`select idFormfactor from formfactors where idFormfactor = ${idFormfactor}`
-				);
+					`select idFormfactor from formfactors where idFormfactor = ?`
+				,[idFormfactor]);
 			if (formfactor[0].length === 0) {
 				return res
 					.status(400)

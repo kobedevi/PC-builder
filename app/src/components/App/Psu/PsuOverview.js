@@ -10,17 +10,28 @@ import SearchForm from "components/Design/SearchForm";
 import ProductCard from "components/Design/ProductCard";
 import Result from "./forms/Result";
 import DeletePsu from "./Delete/DeletePsu";
+import Pagination from "components/Design/Pagination";
 
 const PsuOverview = () => {
   const [info, setInfo] = useState();
   const [deletePsu, setDeletePsu] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(20)
 
   const apiCall = useCallback(() => {
-    return fetchPsus();
-  }, []);
+    return fetchPsus(page, perPage);
+  }, [page, perPage]);
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
 
   const onUpdate = () => {
     setDeletePsu(null);
@@ -70,22 +81,31 @@ const PsuOverview = () => {
 
             {
               !query && (
-                <ul className="movieList">
-                  {data.map((product) => (
-                    <li key={product.idPsu}>
-                      <ProductCard
-                        deleter={setDeletePsu}
-                        product={product}
-                        id={product.idPsu}
-                        link={PossibleRoutes.Detail}
-                    >
-                        Manufacturer: {product.manufacturerName}<br/>
-                        Modular: {product.modular ? 'Yes': 'No'}<br/>
-                        wattage: {product.socketType}
-                    </ProductCard>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="movieList">
+                    {data.results.map((product) => (
+                      <li key={product.idPsu}>
+                        <ProductCard
+                          deleter={setDeletePsu}
+                          product={product}
+                          id={product.idPsu}
+                          link={PossibleRoutes.Detail}
+                      >
+                          Manufacturer: {product.manufacturerName}<br/>
+                          Modular: {product.modular ? 'Yes': 'No'}<br/>
+                          wattage: {product.socketType}
+                      </ProductCard>
+                      </li>
+                    ))}
+                  </ul>
+                  <Pagination
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 

@@ -48,7 +48,7 @@ builderRouter.get("/case/info/:id", caseController.fetchCaseById);
 builderRouter.get("/case/:width/:height/:depth/:page/:perPage", caseController.fetchCasesByBuild);
 
 builderRouter.get("/psu/info/:id", psuController.fetchPsuById);
-builderRouter.get("/psu/:wattage", psuController.fetchPsusByBuild);
+builderRouter.get("/psu/:wattage/:page/:perPage", psuController.fetchPsusByBuild);
 
 builderRouter.get("/builds", buildController.fetchBuilds);
 builderRouter.post("/builds", buildModel, buildController.createBuild);

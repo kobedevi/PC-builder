@@ -11,21 +11,34 @@ import Result from "./Result";
 import { fetchCompatiblePsu, fetchFilteredPsus, fetchPsuByIdBuilder } from "core/modules/Psu/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
+import Pagination from "components/Design/Pagination";
 
 const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState();
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
 
   const apiCall = useCallback(() => {
-    return fetchCompatiblePsu(minWat);
-  }, [minWat]);
+    return fetchCompatiblePsu(minWat, page, perPage);
+  }, [minWat, page, perPage]);
   
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
   const onSubmit = (query) => {
     setQuery(query.search)
   }
+
+  const handlePageClick = (page) => {
+    console.log(page);
+    setPage(page)
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage)
+  }
+
 
   const onClick = (product) => {
     updateBuild({
@@ -68,7 +81,7 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
             {
               query && <Result filter={fetchFilteredPsus} result={query}/>
             }
-            {(data.length === 0) && (
+            {(data.results.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
                 <img src="./blob.svg" alt="blobby blobby blobby!"/>
@@ -76,25 +89,34 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
             )}
             {
               !query && (
-                <ul className="productList">
-                  {data.map((product) => {
-                    const disabled = product.idPsu === currentBuild.psu.idPsu ? true : false;
-                    return(
-                    <li key={product.idPsu}>
-                      <BuilderProductCard
-                        product={product}
-                        setProductInfo={setProductInfo}
-                        link={PossibleRoutes.Detail}
-                        id={product.idPsu}
-                      >
-                        Manufacturer: {product.manufacturerName}<br/>
-                        Modular: {product.modular? "Yes": "No"}<br/>
-                        Wattage: {product.wattage}W
-                        <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
-                      </BuilderProductCard>
-                    </li>
-                  )})}
-                </ul>
+                <>
+                  <ul className="productList">
+                    {data.results.map((product) => {
+                      const disabled = product.idPsu === currentBuild.psu.idPsu ? true : false;
+                      return(
+                      <li key={product.idPsu}>
+                        <BuilderProductCard
+                          product={product}
+                          setProductInfo={setProductInfo}
+                          link={PossibleRoutes.Detail}
+                          id={product.idPsu}
+                        >
+                          Manufacturer: {product.manufacturerName}<br/>
+                          Modular: {product.modular? "Yes": "No"}<br/>
+                          Wattage: {product.wattage}W
+                          <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
+                        </BuilderProductCard>
+                      </li>
+                    )})}
+                  </ul>
+                  <Pagination
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 

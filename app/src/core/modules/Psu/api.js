@@ -1,8 +1,8 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchPsus = () => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/psu`, {
+const fetchPsus = (page=0, perPage=20) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/psu/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };
@@ -48,8 +48,8 @@ const deletePsu = (id) => async (headers) => {
   });
 };
 
-const fetchCompatiblePsu = async (wattage) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/psu/${wattage}`);
+const fetchCompatiblePsu = async (wattage, page=0, perPage=20) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/psu/${wattage}/${page}/${perPage}`);
 };
 
 const scrape = async () => {
