@@ -140,7 +140,7 @@ adminRouter.post(
 );
 
 // GPUS general and GPU partners
-adminRouter.get("/gpu", gpuController.fetchGpus);
+adminRouter.get("/gpu/:page/:perPage", gpuController.fetchGpus);
 adminRouter.get("/gpu/filter/:query", gpuController.fetchOriginalGpusByFilter);
 adminRouter.patch("/gpu/:id", gpuModel, gpuController.patchGpuById);
 adminRouter.delete("/gpu/:id", gpuModel, gpuController.deleteGpuById);
@@ -152,7 +152,7 @@ adminRouter.post(
 	gpuPartnerModel,
 	gpuController.createGpuPartner
 );
-adminRouter.get("/gpu/partner", gpuController.fetchGpuPartners);
+adminRouter.get("/gpu/partner/:page/:perPage", gpuController.fetchGpuPartners);
 adminRouter.get("/gpu/partner/filter/:query", gpuController.fetchPartnerGpusByFilter);
 adminRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
 adminRouter.get("/gpu/:id", gpuController.fetchGpuById);

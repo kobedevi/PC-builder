@@ -9,16 +9,27 @@ import ErrorAlert from "components/shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import ResultOther from "../forms/ResultOther";
 import DeletePartnerGpu from "../Delete/DeletePartnerGpu";
+import Pagination from "components/Design/Pagination";
 
 const PartnerGpuOverview = ({query, setQuery}) => {
   const [info, setInfo] = useState();
   const [deleteGpu, setDeleteGpu] = useState();
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(20)
 
   const apiCall = useCallback(() => {
-    return fetchPartnerGpus();
-  }, []);
+    return fetchPartnerGpus(page, perPage);
+  }, [page, perPage]);
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
 
   const onUpdate = () => {
     setDeleteGpu(null);
@@ -55,24 +66,33 @@ const PartnerGpuOverview = ({query, setQuery}) => {
 
           {
             !query && (
-              <ul className="movieList">
-                {data.map((product) => (
-                  <li key={product.idGpuPartner}>
-                    <ProductCard
-                      subtitle={`Chipset: ${product.ogCard}`}
-                      deleter={setDeleteGpu}
-                      product={product}
-                      link={PossibleRoutes.GpuPartnerDetail}
-                      id={product.idGpuPartner}
-                    >
-                      Manufacturer: {product.manufacturerName}<br/>
-                      Vram: {product.vram} GB<br/>
-                      Clockspeed: {product.clockspeed} MHz<br/>
-                      Watercooled: {product.watercooled ? 'Yes': 'No'}
-                    </ProductCard>
-                  </li>
-                ))}
-              </ul>
+              <>
+                <ul className="movieList">
+                  {data.results.map((product) => (
+                    <li key={product.idGpuPartner}>
+                      <ProductCard
+                        subtitle={`Chipset: ${product.ogCard}`}
+                        deleter={setDeleteGpu}
+                        product={product}
+                        link={PossibleRoutes.GpuPartnerDetail}
+                        id={product.idGpuPartner}
+                      >
+                        Manufacturer: {product.manufacturerName}<br/>
+                        Vram: {product.vram} GB<br/>
+                        Clockspeed: {product.clockspeed} MHz<br/>
+                        Watercooled: {product.watercooled ? 'Yes': 'No'}
+                      </ProductCard>
+                    </li>
+                  ))}
+                </ul>
+                <Pagination 
+                  page={page}
+                  perPage={perPage}
+                  pageAmount={data.pageAmount}
+                  perPageClick={handlePerPageClick}
+                  onClick={handlePageClick}
+                />
+              </>
             )
           }
 

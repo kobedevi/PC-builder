@@ -6,10 +6,16 @@ const SQL = require("@nearform/sql");
 class GpuController {
 	fetchGpus = async (req, res, next) => {
 		try {
+			const {page=Math.abs(page) || 0, perPage=20} = req.params;
+
+			let pageAmount = await db.promise().query("SELECT COUNT(idGpu) as totalProducts FROM gpus WHERE deleted = 0 ")
+			.then(res => Math.ceil(res[0][0].totalProducts / perPage))
+
 			const results = await db.promise().query(`SELECT * FROM gpus
 			LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
-			WHERE deleted = 0;`);
-			res.status(200).send(results[0]);
+			WHERE deleted = 0
+			LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
+			res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -87,14 +93,20 @@ class GpuController {
 	
 	fetchGpuPartners = async (req, res, next) => {
 		try {
+			const {page=Math.abs(page) || 0, perPage=20} = req.params;
+
+			let pageAmount = await db.promise().query("SELECT COUNT(idGpuPartner) as totalProducts FROM gpu_has_partners WHERE deleted = 0 ")
+			.then(res => Math.ceil(res[0][0].totalProducts / perPage))
+
 			const results = await db
 				.promise()
 				.query(`SELECT gpu_has_partners.*, manufacturers.manufacturerName, gpus.modelName AS ogCard, gpus.vram FROM gpu_has_partners
 				LEFT JOIN manufacturers ON gpu_has_partners.idManufacturer = manufacturers.idManufacturer
 				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
 				WHERE gpu_has_partners.deleted = 0
-				AND gpus.deleted = 0;`);
-			res.status(200).send(results[0]);
+				AND gpus.deleted = 0
+				LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
+			res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
