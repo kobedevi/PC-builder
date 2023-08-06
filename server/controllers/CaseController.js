@@ -6,11 +6,18 @@ const SQL = require("@nearform/sql");
 class CaseController {
 	fetchCases = async (req, res, next) => {
 		try {
+			
+			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
+
+			let pageAmount = await db.promise().query("SELECT COUNT(idCase) as totalProducts FROM cases WHERE deleted = 0")
+			.then(res => Math.ceil(res[0][0].totalProducts / perPage));
+
 			const results = await db.promise().query(`SELECT * FROM cases
 			LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN formfactors ON cases.idFormfactor = formfactors.idFormfactor
-			WHERE deleted = 0;`);
-			res.status(200).send(results[0]);
+			WHERE deleted = 0
+			LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
+			res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -18,7 +25,11 @@ class CaseController {
 
 	fetchCasesByBuild = async (req, res, next) => {
 		try {
-			const { width, height, depth } = req.params;
+			const { width, height, depth, page=Math.abs(page) || 0, perPage=20  } = req.params;
+
+			let pageAmount = await db.promise().query("SELECT COUNT(idCase) as totalProducts FROM cases WHERE deleted = 0")
+			.then(res => Math.ceil(res[0][0].totalProducts / perPage));
+
 			const userQuery = `SELECT * FROM cases
 			LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN formfactors ON cases.idFormfactor = formfactors.idFormfactor
@@ -26,10 +37,11 @@ class CaseController {
 			AND cases.height >= ?
 			AND cases.DEPTH >= ?
 			AND cases.deleted = 0
-			ORDER BY idCase;`;
-			const [rows] = await db.promise().query(userQuery, [width,height,depth]);
+			ORDER BY idCase
+			LIMIT ? OFFSET ?;`;
+			const [rows] = await db.promise().query(userQuery, [width,height,depth, parseInt(perPage), parseInt(page*perPage)]);
 
-			res.status(200).send(rows);
+			res.status(200).send({results: rows, pageAmount});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e

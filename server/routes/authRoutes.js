@@ -62,7 +62,7 @@ adminRouter.delete("/cpu/:id", cpuModel, cpuController.deleteCpuById);
 adminRouter.post("/cpu", cpuModel, cpuController.createCpu);
 
 // Cases
-adminRouter.get("/case", caseController.fetchCases);
+adminRouter.get("/case/:page/:perPage", caseController.fetchCases);
 adminRouter.get("/case/:id", caseController.fetchCaseById);
 adminRouter.get("/case/filter/:query", caseController.fetchCasesByFilter);
 adminRouter.patch(

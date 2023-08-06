@@ -1,14 +1,14 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchCases = () => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/case`, {
+const fetchCases = (page=0, perPage=20) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/case/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };
 
-const fetchCompatibleCases = async (width, height, depth) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/case/${width}/${height}/${depth}`);
+const fetchCompatibleCases = async (width, height, depth, page=0, perPage=20) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/case/${width}/${height}/${depth}/${page}/${perPage}`);
 };
 
 const fetchFilteredCases = (query) => async (headers) => {

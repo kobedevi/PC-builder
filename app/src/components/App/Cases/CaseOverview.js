@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchCases } from "../../../core/modules/Case/api";
@@ -10,14 +10,28 @@ import SearchForm from "components/Design/SearchForm";
 import ProductCard from "components/Design/ProductCard";
 import Result from "./forms/Result";
 import DeleteCase from "./Delete/DeleteCase";
+import Pagination from "components/Design/Pagination";
 
 const CaseOverview = () => {
   const [info, setInfo] = useState();
   const [deleteCase, setDeleteCase] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(20)
 
-  const { data, error, setError, isLoading, refresh } = useFetch(fetchCases);
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage)
+  }
 
+  const handlePageClick = (page) => {
+    setPerPage(page)
+  }
+
+  const apiCall = useCallback(() => {
+    return fetchCases(page, perPage);
+  }, [page, perPage]);
+
+  const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
   
   const onUpdate = () => {
     setDeleteCase(null);
@@ -68,21 +82,30 @@ const CaseOverview = () => {
 
             {
               !query && (
-                <ul className="movieList">
-                  {data.map((c) => (
-                    <li key={c.idCase}>
-                      <ProductCard
-                        deleter={setDeleteCase}
-                        product={c}
-                        link={PossibleRoutes.Detail}
-                        id={c.idCase}
-                      >
-                        Manufacturer: {c.manufacturerName}<br/>
-                        Formfactor: {c.formfactor}<br/>
-                      </ProductCard>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="movieList">
+                    {data.results.map((c) => (
+                      <li key={c.idCase}>
+                        <ProductCard
+                          deleter={setDeleteCase}
+                          product={c}
+                          link={PossibleRoutes.Detail}
+                          id={c.idCase}
+                          >
+                          Manufacturer: {c.manufacturerName}<br/>
+                          Formfactor: {c.formfactor}<br/>
+                        </ProductCard>
+                      </li>
+                    ))}
+                  </ul>
+                  <Pagination 
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 
