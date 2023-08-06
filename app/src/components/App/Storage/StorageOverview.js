@@ -11,15 +11,18 @@ import SearchForm from "components/Design/SearchForm";
 import Result from "./forms/Result";
 import ProductCard from "components/Design/ProductCard";
 import DeleteStorage from "./Delete/DeleteStorage";
+import Pagination from "components/Design/Pagination";
 
 const StorageOverview = () => {
   const [info, setInfo] = useState();
   const [deleteStorage, setDeleteStorage] = useState();
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(20)
 
   const apiCall = useCallback(() => {
-    return fetchStorage();
-  }, []);
+    return fetchStorage(page,  perPage);
+  }, [page, perPage]);
 
   const { 
     data, 
@@ -29,6 +32,14 @@ const StorageOverview = () => {
     refresh 
   } = useFetch(apiCall);
 
+  
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
   
   const onUpdate = () => {
     setDeleteStorage(null);
@@ -77,23 +88,32 @@ const StorageOverview = () => {
 
             {
               !query && (
-                <ul className="movieList">
-                  {data.map((product) => (
-                    <li key={product.idStorage}>
-                      <ProductCard
-                        deleter={setDeleteStorage}
-                        product={product}
-                        link={PossibleRoutes.Detail}
-                        id={product.idStorage}
-                      >
-                        Manufacturer: {product.manufacturerName}<br/>
-                        Capacity: {product.capacity}<br/>
-                        Storage Type: {product.storageType}<br/>
-                        {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}
-                      </ProductCard>
-                    </li>
-                  ))}
-                </ul>
+                <>
+                  <ul className="movieList">
+                    {data.result.map((product) => (
+                      <li key={product.idStorage}>
+                        <ProductCard
+                          deleter={setDeleteStorage}
+                          product={product}
+                          link={PossibleRoutes.Detail}
+                          id={product.idStorage}
+                        >
+                          Manufacturer: {product.manufacturerName}<br/>
+                          Capacity: {product.capacity}<br/>
+                          Storage Type: {product.storageType}<br/>
+                          {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}
+                        </ProductCard>
+                      </li>
+                    ))}
+                  </ul>
+                  <Pagination
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                  />
+                </>
               )
             }
 

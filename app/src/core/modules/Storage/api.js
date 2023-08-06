@@ -1,8 +1,8 @@
 import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
-const fetchStorage = () => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/storage`, {
+const fetchStorage = (page=0, perPage=20) => async (headers) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/storage/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };

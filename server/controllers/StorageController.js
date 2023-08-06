@@ -7,11 +7,17 @@ const mysql = require('mysql2');
 class StorageController {
 	fetchStorage = async (req, res, next) => {
 		try {
+			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
 			const results = await db.promise().query(`SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
-			WHERE storage.deleted = 0`);
-			res.status(200).send(results[0]);
+			WHERE storage.deleted = 0
+			LIMIT ? OFFSET ?`, [parseInt(perPage), parseInt(page*perPage)]);
+			let pageAmount = await db.promise().query("SELECT COUNT(idStorage) as totalProducts FROM storage WHERE deleted = 0")
+				.then(res => {
+					return (Math.ceil(res[0][0].totalProducts / perPage))
+				})
+			res.status(200).send({result: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}

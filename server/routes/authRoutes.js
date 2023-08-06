@@ -117,7 +117,7 @@ adminRouter.get("/ramtypes", ramTypeController.fetchRamTypes);
 adminRouter.post("/ramtypes", ramTypeModel, ramTypeController.createRamTypes);
 
 // Storage Types
-adminRouter.get("/storage", storageController.fetchStorage);
+adminRouter.get("/storage/:page/:perPage", storageController.fetchStorage);
 adminRouter.get("/storage/:id", storageController.fetchStorageById);
 adminRouter.get("/storage/filter/:query", storageController.fetchStorageByFilter);
 adminRouter.patch("/storage/:id", storageModel, storageController.patchStorageById);
