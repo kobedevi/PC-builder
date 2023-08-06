@@ -25,8 +25,8 @@ const fetchFilteredPartnerGpu = (query) => async (headers) => {
   );
 };
 
-const fetchCompatibleGpus = async (id) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/gpu/`);
+const fetchCompatibleGpus = async (page=0, perPage=20) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/gpu/${page}/${perPage}`);
 };
 
 const fetchOriginalGpuById = (id) => async (headers) => {
@@ -43,6 +43,7 @@ const updateOriginalGpu = (data) => async (headers) => {
       headers: createHeaders(headers),
     }
   );
+  
 };
 
 const updatePartnerGpu = (data) => async (headers) => {

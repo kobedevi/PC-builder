@@ -42,7 +42,7 @@ builderRouter.get("/storage/info/:id", storageController.fetchStorageById);
 builderRouter.get("/storage/:motherboardId/:page/:perPage", storageController.fetchStorageByBuild);
 
 builderRouter.get("/gpu/info/:id", gpuController.fetchGpuPartnerById);
-builderRouter.get("/gpu", gpuController.fetchGpusByBuild);
+builderRouter.get("/gpu/:page/:perPage", gpuController.fetchGpusByBuild);
 
 builderRouter.get("/case/info/:id", caseController.fetchCaseById);
 builderRouter.get("/case/:width/:height/:depth", caseController.fetchCasesByBuild);
