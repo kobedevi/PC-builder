@@ -2,7 +2,7 @@ import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
 const fetchOriginalGpus = (page=0, perPage=20) => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/gpu/${page}/${perPage}`, {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/gpu/paginate/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };
@@ -67,7 +67,7 @@ const fetchPartnerGpuByIdBuilder = async (id) => {
 };
 
 const fetchPartnerGpus = (page=0, perPage=20) => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/gpu/partner/${page}/${perPage}`, {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/gpu/partner/paginate/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };

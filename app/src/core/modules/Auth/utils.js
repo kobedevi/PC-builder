@@ -4,4 +4,11 @@ const isAdmin = (user) => {
   return user.role === roles.admin;
 };
 
-export default isAdmin;
+const isSuperAdmin = (user) => {
+  return user.role === roles.admin;
+};
+
+export {
+  isAdmin,
+  isSuperAdmin
+};

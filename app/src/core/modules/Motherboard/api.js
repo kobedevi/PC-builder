@@ -2,7 +2,7 @@ import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
 const fetchMotherboards = (page=0,perPage=20) => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/motherboard/${page}/${perPage}`, {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/motherboard/paginate/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };

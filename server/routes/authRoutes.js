@@ -54,7 +54,7 @@ const { ramTypeModel } = require("../models/RamType");
 authRouter.use(bodyParser.urlencoded({ extended: true }));
 
 // CPUS
-adminRouter.get("/cpu/:page/:perPage", cpuController.fetchCpus);
+adminRouter.get("/cpu/paginate/:page/:perPage", cpuController.fetchCpus);
 adminRouter.get("/cpu/:id", cpuController.fetchCpuById);
 adminRouter.get("/cpu/filter/:query", cpuController.fetchCpusByFilter);
 adminRouter.patch("/cpu/:id", cpuModel, cpuController.patchCpuById);
@@ -62,7 +62,7 @@ adminRouter.delete("/cpu/:id", cpuModel, cpuController.deleteCpuById);
 adminRouter.post("/cpu", cpuModel, cpuController.createCpu);
 
 // Cases
-adminRouter.get("/case/:page/:perPage", caseController.fetchCases);
+adminRouter.get("/case/paginate/:page/:perPage", caseController.fetchCases);
 adminRouter.get("/case/:id", caseController.fetchCaseById);
 adminRouter.get("/case/filter/:query", caseController.fetchCasesByFilter);
 adminRouter.patch(
@@ -74,7 +74,7 @@ adminRouter.delete("/case/:id", caseModel, caseController.deleteCaseById);
 adminRouter.post("/case", caseModel, caseController.createCase);
 
 // CPUCoolers
-adminRouter.get("/cpucooler/:page/:perPage", cpuCoolerController.fetchCpuCoolers);
+adminRouter.get("/cpucooler/paginate/:page/:perPage", cpuCoolerController.fetchCpuCoolers);
 adminRouter.get("/cpucooler/:id", cpuCoolerController.fetchCpuCoolerById);
 adminRouter.get("/cpucooler/filter/:query", cpuCoolerController.fetchCpuCoolersByFilter);
 adminRouter.patch(
@@ -90,7 +90,7 @@ adminRouter.post(
 );
 
 // Motherboards
-adminRouter.get("/motherboard/:page/:perPage", motherboardController.fetchMotherboards);
+adminRouter.get("/motherboard/paginate/:page/:perPage", motherboardController.fetchMotherboards);
 adminRouter.get("/motherboard/:id", motherboardController.fetchMotherboardById);
 adminRouter.get("/motherboard/filter/:query", motherboardController.fetchMotherboardsByFilter);
 adminRouter.patch(
@@ -106,7 +106,7 @@ adminRouter.post(
 );
 
 // RAM
-adminRouter.get("/ram/:page/:perPage", ramController.fetchRam);
+adminRouter.get("/ram/paginate/:page/:perPage", ramController.fetchRam);
 adminRouter.get("/ram/:id", ramController.fetchRamById);
 adminRouter.get("/ram/filter/:query", ramController.fetchRamByFilter);
 adminRouter.patch("/ram/:id", ramModel, ramController.patchRamById);
@@ -117,7 +117,7 @@ adminRouter.get("/ramtypes", ramTypeController.fetchRamTypes);
 adminRouter.post("/ramtypes", ramTypeModel, ramTypeController.createRamTypes);
 
 // Storage Types
-adminRouter.get("/storage/:page/:perPage", storageController.fetchStorage);
+adminRouter.get("/storage/paginate/:page/:perPage", storageController.fetchStorage);
 adminRouter.get("/storage/:id", storageController.fetchStorageById);
 adminRouter.get("/storage/filter/:query", storageController.fetchStorageByFilter);
 adminRouter.patch("/storage/:id", storageModel, storageController.patchStorageById);
@@ -140,7 +140,7 @@ adminRouter.post(
 );
 
 // GPUS general and GPU partners
-adminRouter.get("/gpu/:page/:perPage", gpuController.fetchGpus);
+adminRouter.get("/gpu/paginate/:page/:perPage", gpuController.fetchGpus);
 adminRouter.get("/gpu/filter/:query", gpuController.fetchOriginalGpusByFilter);
 adminRouter.patch("/gpu/:id", gpuModel, gpuController.patchGpuById);
 adminRouter.delete("/gpu/:id", gpuModel, gpuController.deleteGpuById);
@@ -152,13 +152,13 @@ adminRouter.post(
 	gpuPartnerModel,
 	gpuController.createGpuPartner
 );
-adminRouter.get("/gpu/partner/:page/:perPage", gpuController.fetchGpuPartners);
+adminRouter.get("/gpu/partner/paginate/:page/:perPage", gpuController.fetchGpuPartners);
 adminRouter.get("/gpu/partner/filter/:query", gpuController.fetchPartnerGpusByFilter);
 adminRouter.get("/gpu/partner/:id", gpuController.fetchGpuPartnerById);
 adminRouter.get("/gpu/:id", gpuController.fetchGpuById);
 
 // PSU
-adminRouter.get("/psu/:page/:perPage", psuController.fetchPsu);
+adminRouter.get("/psu/paginate/:page/:perPage", psuController.fetchPsu);
 adminRouter.get("/psu/:id", psuController.fetchPsuById);
 adminRouter.get("/psu/filter/:query", psuController.fetchPsuByFilter);
 adminRouter.patch("/psu/:id", psuModel, psuController.patchPsuById);

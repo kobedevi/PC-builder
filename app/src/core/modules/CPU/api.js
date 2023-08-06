@@ -2,7 +2,7 @@ import { createHeaders } from "../../utils/api";
 import Axios from "axios";
 
 const fetchCpus = (page=0, perPage=20) => async (headers) => {
-  return await Axios.request(`${process.env.REACT_APP_BASE_API}/cpu/${page}/${perPage}`, {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/cpu/paginate/${page}/${perPage}`, {
     headers: createHeaders(headers),
   });
 };
