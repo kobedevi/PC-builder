@@ -1,15 +1,16 @@
 import PropTypes from "prop-types";
 import ItemCollapserParent from "./ItemCollapserParent";
 import { useState } from "react";
+import Button from "./Button";
 
-const ItemList = ({ info, color = "primary" }) => {
+const ItemList = ({ info}) => {
 
   const [collapse, setCollapse] = useState(false);
 
   return (
-    <>
-      <button style={{zIndex: 9, position:"fixed", right:0, color: "black"}} onClick={() => setCollapse(!collapse)}>&gt;</button>
-      <div className={collapse ? 'hide ItemList' : 'show ItemList'}>
+    <div className={collapse ? 'hideWidth collapserParent' : 'showWidth collapserParent'}>
+      <button onClick={() => setCollapse(!collapse)}><span className={collapse ? 'rotator test' : 'test'}>&#9654;</span></button>
+      <div className="ItemList">
         <div style={{marginTop:"6rem", height:"100%", overflowY:"auto"}}>
           {Object.entries(info).map(([key, value], i) => {
             if (!key.startsWith("id")){
@@ -23,7 +24,7 @@ const ItemList = ({ info, color = "primary" }) => {
           })}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

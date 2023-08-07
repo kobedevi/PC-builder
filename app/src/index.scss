@@ -42,7 +42,7 @@ main {
     position: relative;
     width: 100%;
     max-height: calc(100vh - 58px);
-    max-width: calc(100vw - 250px);
+    max-width: calc(100vw - 250px - 2rem);
     padding: 1rem;
     box-sizing: border-box;
     overflow-y: auto;

@@ -107,14 +107,42 @@ form.builder{
     }
 }
 
-.ItemList {
-    max-width: 200px;
-    width: 30%;
+.collapserParent{
+    width: 220px;
+    height: 100%;
     position: fixed;
     right: 0;
+    display: flex;
+    flex-direction: row;
+    transition: right .2s ease-in-out;
+    box-shadow: -6px 0px 17px 0px rgba(0,0,0,0.5);
+    button{
+        background: $bg;
+        border: none;
+        width: 20px;
+        height: 100%;
+        span{
+            display:inline-block;
+            transition: .1s;
+        }
+        span.rotator {
+            transform: rotate(180deg);
+        }
+    }
+
+}
+
+.hideWidth{
+    right: -200px;
+}
+
+.ItemList {
+    width: 200px;
+    position: relative;
     height: 100vh;
     overflow: hidden;
     background: $light-purple;
+    transition: width .2s ease-in-out;
     .item {
         padding: .33rem 0;
         border-bottom: 2px solid $white;
