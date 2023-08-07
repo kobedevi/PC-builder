@@ -102,9 +102,11 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
                           link={PossibleRoutes.Detail}
                           id={product.idMotherboard}
                         >
+                          <p>
                           Manufacturer: {product.manufacturerName}<br/>
                           Formfactor: {product.formfactor}<br/>
                           SocketType: {product.socketType}<br/>
+                          </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>
                       </li>

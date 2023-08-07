@@ -99,8 +99,10 @@ const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, heigh
                         link={PossibleRoutes.Detail}
                         id={product.idCase}
                       >
+                        <p>
                         Manufacturer: {product.manufacturerName}<br/>
                         Formfactor: {product.formfactor}<br/>
+                        </p>
                         <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                       </BuilderProductCard>
                     </li>

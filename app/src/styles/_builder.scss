@@ -61,6 +61,9 @@ form.builder{
     box-sizing: border-box;
     max-width: 1296px;
     width: 100%;
+    * {
+        color: $text;
+    }
     .builder {
         width: 100%;
         .HideInput {
@@ -105,20 +108,61 @@ form.builder{
 }
 
 .ItemList {
-    padding-top: 6rem;
     max-width: 200px;
     width: 30%;
+    position: fixed;
+    right: 0;
+    height: 100vh;
+    overflow: hidden;
+    background: $light-purple;
     .item {
-        display: "flex";
-        flex-direction:"column";
-        align-items:"flex-start";
-        padding: .33rem 1rem;
+        padding: .33rem 0;
+        border-bottom: 2px solid $white;
+        h3{
+            display: flex;
+            justify-content: space-between;
+            text-transform: uppercase;
+            font-size: 1rem;
+            font-weight: 100;
+            padding: 0 1rem;
+            margin: .5rem 0;
+            cursor: pointer;
+            span{
+                transition: .1s;
+            }
+            .rotator{
+                transform: rotate(90deg);
+            }
+        }
         .previewBox{
             display:flex;
             flex-direction:column;
-            border-radius: 15px;
             overflow: hidden;
-            border: 2px solid grey;
+            p, ul {
+                padding: 0 1rem;
+                margin: 0;
+            }
+            p{
+                text-transform: uppercase;
+            }
+            div{
+                position: relative;
+                &::after {
+                    content: " ";
+                    position: absolute;
+                    display: block;
+                    height: 100%;
+                    width: 100%;
+                    top: 0;
+                    box-shadow: inset -21px 22px 6px -11px rgba(0,0,0,0.6), -1px 9px 6px -1px rgba(0,0,0,0.4);
+                }
+                img {
+                    width: 100%;
+                    height: auto;
+                    max-height: 125px;
+                    object-fit: cover;
+                }
+            }
         }
     }
 }

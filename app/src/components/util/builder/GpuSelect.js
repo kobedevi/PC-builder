@@ -112,10 +112,12 @@ const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, u
                           link={PossibleRoutes.Detail}
                           id={product.idGpuPartner}
                         >
+                          <p>
                           Manufacturer: {product.manufacturerName}<br/>
                           Vram: {product.vram}GB<br/>
                           Clockspeed: {product.clockspeed}MHz<br/>
                           Watercooled: {product.watercooled ? 'Yes': 'No'}
+                          </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>
                       </li>

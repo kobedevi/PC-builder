@@ -1,11 +1,20 @@
 @import '_bootstrap';
 
 header{
-    position: relative;
+    position: fixed;
+    z-index: 7;
     width: 100%;
+    .mainNav {
+        background-color: rgba(0,0,0,0);
+        transition: .2s;
+        &.headerBg {
+            background-color: rgba(0,0,0,0.8);
+        }
+    }
 }
 
 .crudNav{
+    position: relative;
     background-color: $darker;
     .mainNav{
         position: relative;
@@ -27,7 +36,7 @@ header{
         justify-content: space-between;
         width: 100%;
         gap: 16px;
-        margin: 24px 32px;
+        margin: 8px 32px;
         padding: 0;
         div{
             display: flex;

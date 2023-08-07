@@ -27,7 +27,7 @@ const GpuOriginalSelect = (props) => {
   } = useFetch(apiCall);
 
   const options = data
-    ? data.map((x) => ({
+    ? data.results.map((x) => ({
         value: x.idGpu,
         label: x.modelName,
       }))

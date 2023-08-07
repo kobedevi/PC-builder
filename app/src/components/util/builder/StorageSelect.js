@@ -121,10 +121,12 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
                           link={PossibleRoutes.Detail}
                           id={product.idStorage}
                         >
+                          <p>
                           Manufacturer: {product.manufacturerName}<br/>
                           Capacity: {product.capacity}<br/>
                           Storage Type: {product.storageType}<br/>
-                          {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}
+                          {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}'
+                          </p>
                           <button type="button" onClick={() => onClick(product)}>Add</button>
                         </BuilderProductCard>
                       </li>

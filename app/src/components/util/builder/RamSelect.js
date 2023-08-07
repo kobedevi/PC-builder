@@ -118,12 +118,14 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
                           link={PossibleRoutes.Detail}
                           id={product.idRam}
                         >
+                          <p>
                           Manufacturer: {product.manufacturerName}<br/>
                           Ram type: {product.ramType}<br/>
                           Amount of sticks: {product.stickAmount}<br/>
                           Size per stick: {product.sizePerStick} GB<br/>
                           <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
                           Ram speed: {product.speed}MHz<br/>
+                          </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>
                       </li>

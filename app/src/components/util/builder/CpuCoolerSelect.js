@@ -99,8 +99,10 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
                           link={PossibleRoutes.Detail}
                           id={product.idCpuCooler}
                         >
-                          Manufacturer: {product.manufacturerName}<br/>
-                          compatible sockets: {product.socketType.join(', ')}<br/>
+                          <p>
+                            Manufacturer: {product.manufacturerName}<br/>
+                            compatible sockets: {product.socketType.join(', ')}<br/>
+                          </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled} >{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>
                       </li>

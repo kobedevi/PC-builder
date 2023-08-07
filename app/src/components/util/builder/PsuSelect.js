@@ -31,7 +31,6 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
   }
 
   const handlePageClick = (page) => {
-    console.log(page);
     setPage(page)
   }
 
@@ -101,9 +100,11 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
                           link={PossibleRoutes.Detail}
                           id={product.idPsu}
                         >
+                          <p>
                           Manufacturer: {product.manufacturerName}<br/>
                           Modular: {product.modular? "Yes": "No"}<br/>
                           Wattage: {product.wattage}W
+                          </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>
                       </li>

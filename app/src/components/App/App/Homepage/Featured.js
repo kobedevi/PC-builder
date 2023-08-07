@@ -42,6 +42,7 @@ const Featured = () => {
                 {data.map((product) => {
                   return(
                   <li key={product.idBuild}>
+                    {/* TODO: convert to alternative card and redirect to build detail page */}
                     <BuilderProductCard
                       product={product}
                       id={product.idBuild}
