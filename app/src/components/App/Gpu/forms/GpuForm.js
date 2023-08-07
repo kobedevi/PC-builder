@@ -36,9 +36,9 @@ const defaultData = {
   modelName: "",
   clockspeed: 1440,
   watercooled: false,
-  height: undefined,
-  width: undefined,
-  depth: undefined,
+  height: 0,
+  width: 0,
+  depth: 0,
   tdp: 200,
 };
 

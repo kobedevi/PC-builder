@@ -21,7 +21,7 @@ const defaultData = {
   capacity: 1000,
   idManufacturer: "",
   idStorageType: "",
-  RPM: null,
+  RPM: 7200,
   image: ""
 };
 

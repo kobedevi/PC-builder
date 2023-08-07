@@ -124,7 +124,7 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         max={"1000"}
         step={1}
         onChange={handleChange}
-        unit={"cm"}
+        unit={"mm"}
         error={errors.height}
       />
 
@@ -138,7 +138,7 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         max={"1000"}
         step={1}
         onChange={handleChange}
-        unit={"cm"}
+        unit={"mm"}
         error={errors.width}
       />
 
@@ -152,7 +152,7 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         max={"1000"}
         step={1}
         onChange={handleChange}
-        unit={"cm"}
+        unit={"mm"}
         error={errors.depth}
       />
 

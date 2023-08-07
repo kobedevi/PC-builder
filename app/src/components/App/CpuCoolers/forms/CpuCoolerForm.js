@@ -21,9 +21,9 @@ const schema = yup.object().shape({
 const defaultData = {
   idManufacturer: "",
   modelName: "",
-  height: undefined,
-  width: undefined,
-  depth: undefined,
+  height: 0,
+  width: 0,
+  depth: 0,
   cpuSockets: [],
   image: "",
 };
