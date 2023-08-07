@@ -23,7 +23,7 @@ const CpuEditContainer = () => {
     return <ErrorAlert error={error} />
   }
 
-  return <CpuEdit cpu={cpu[0]} onUpdate={(data) => setData(data)} />;
+  return <CpuEdit cpu={cpu} onUpdate={(data) => setData(data)} />;
 };
 
 export default CpuEditContainer;

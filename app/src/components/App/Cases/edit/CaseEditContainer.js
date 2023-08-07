@@ -25,7 +25,7 @@ const CaseEditContainer = () => {
 
   return (
     <CaseEdit
-      pccase={{ ...data[0] }}
+      pccase={{ ...data }}
       onUpdate={(data) => setData(data)}
     />
   );

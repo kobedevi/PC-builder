@@ -25,7 +25,7 @@ const PsuEditContainer = () => {
 
   return (
     <PsuEdit
-      psu={{ ...psu[0] }}
+      psu={{ ...psu }}
       onUpdate={(data) => setData(data)}
     />
   );

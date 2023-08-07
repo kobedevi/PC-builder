@@ -24,7 +24,7 @@ const StorageEditContainer = () => {
 
   return (
     <StorageEdit
-      storage={ data[0] }
+      storage={data}
       onUpdate={(data) => setData(data)}
     />
   );

@@ -23,7 +23,7 @@ const RamEditContainer = () => {
     return <ErrorAlert error={error} />
   }
 
-  return <RamEdit ram={ram[0]} onUpdate={(data) => setData(data)} />;
+  return <RamEdit ram={ram} onUpdate={(data) => setData(data)} />;
 };
 
 export default RamEditContainer;
