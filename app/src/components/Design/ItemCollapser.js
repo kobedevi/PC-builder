@@ -1,4 +1,5 @@
 import { ObjectKeysToText } from "components/util/ObjectKeysToText";
+import { showUnit } from "components/util/showUnit";
 const { v4: uuidv4 } = require("uuid");
 
 const ItemCollapser = ({item, collapse}) => {
@@ -42,7 +43,7 @@ const ItemCollapser = ({item, collapse}) => {
 					}
 					return (
 						<li key={key}>
-							<strong>{ObjectKeysToText(key)}:</strong> {item && item !== null ? item :'unknown'}
+							<strong>{ObjectKeysToText(key)}:</strong> {item && item !== null ? item :'unknown'} {showUnit(key)}
 						</li>
 					)
 				}

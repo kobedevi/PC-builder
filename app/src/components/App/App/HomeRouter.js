@@ -6,6 +6,7 @@ import Builder from "./Builder/Builder"
 import RegisterPage from "components/OnBoarding/Login/RegisterPage"
 import BuildDetail from "./Detail/BuildDetail"
 import Nav from "./Homepage/Nav"
+import BuildsOverview from "./Builds/BuildsOverview"
 
 const HomeRouter = ({setUser}) => {
   return (
@@ -18,6 +19,7 @@ const HomeRouter = ({setUser}) => {
         <Route path={PossibleRoutes.Register} element={<RegisterPage setUser={setUser}/>} />
         <Route path={PossibleRoutes.Login} element={<LoginPage setUser={setUser}/>} />
         <Route index path={PossibleRoutes.Builder} element={<Builder />} />
+        <Route index path={PossibleRoutes.Builds} element={<BuildsOverview />} />
         <Route index path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
         <Route path="*" element={<Navigate to={PossibleRoutes.Home} replace />} />
       </Routes>

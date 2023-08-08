@@ -6,12 +6,13 @@ import Button from "./Button";
 const ItemList = ({ info}) => {
 
   const [collapse, setCollapse] = useState(false);
+  console.log(info);
 
   return (
     <div className={collapse ? 'hideWidth collapserParent' : 'showWidth collapserParent'}>
       <button onClick={() => setCollapse(!collapse)}><span className={collapse ? 'rotator test' : 'test'}>&#9654;</span></button>
       <div className="ItemList">
-        <div style={{marginTop:"6rem", height:"100%", overflowY:"auto"}}>
+        <div style={{marginTop:"6rem", overflowY:"auto"}}>
           {Object.entries(info).map(([key, value], i) => {
             if (!key.startsWith("id")){
               return (

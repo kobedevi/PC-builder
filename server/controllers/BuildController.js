@@ -20,11 +20,12 @@ class BuildController {
 	fetchFeaturedBuilds = async (req, res, next) => {
 		try {
 			const results = await db.promise().query(`
-				SELECT idBuild, users.userName, cpus.modelName as cpu_modelName, gpu_has_partners.modelName as gpu_modelName FROM builds
+				SELECT idBuild, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
 				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
-				ORDER BY date LIMIT 3;
+				LEFT JOIN cases ON builds.idCase = cases.idCase
+				ORDER BY date DESC LIMIT 3;
 			`);
 			res.status(200).send(results[0]);
 		} catch (e) {
@@ -38,21 +39,25 @@ class BuildController {
 			let userQuery = `
 				SELECT builds.*,
 				users.idUsers as user_id, users.userName as user_userName, 
-				cpus.idProcessor as cpu_id, cpus.idManufacturer as cpu_idManufacturer, cpus.modelName as cpu_modelName, cpus.clockSpeed as cpu_clockSpeed, cpus.cores as cpu_cores, cpus.wattage as cpu_wattage, cpus.image as cpu_image,
+				cpus.idProcessor as cpu_id, cpus.idManufacturer as cpu_idManufacturer, cpus.modelName as cpu_modelName, cpus.clockSpeed as cpu_clockSpeed, cpus.cores as cpu_cores, cpus.wattage as cpu_wattage, t1.socketType as cpu_socketType, cpus.image as cpu_image,
 				cpucoolers.idCpuCooler as cpucooler_id, cpucoolers.idManufacturer as cpucooler_idManufacturer, cpucoolers.modelName as cpucooler_modelName, cpucoolers.height as cpucooler_height, cpucoolers.width as cpucooler_width, cpucoolers.depth as cpucooler_depth, cpucoolers.image as cpucooler_image,
-				motherboards.idMotherboard as motherboard_id, motherboards.idManufacturer as motherboard_idManufacturer, motherboards.modelName as motherboard_modelName, motherboards.wifi as motherboard_wifi, motherboards.memorySlots as motherboard_memorySlots, motherboards.sataPorts as motherboard_sataPorts, motherboards.pcieSlots as motherboard_pcieSlots, motherboards.image as motherboard_image,
+				motherboards.idMotherboard as motherboard_id, motherboards.idManufacturer as motherboard_idManufacturer, motherboards.modelName as motherboard_modelName, motherboards.wifi as motherboard_wifi, motherboards.memorySlots as motherboard_memorySlots, motherboards.sataPorts as motherboard_sataPorts, motherboards.pcieSlots as motherboard_pcieSlots, t2.socketType as motherboard_sockettype, formfactors.formfactor as motherboard_formfactor, formfactors.height as motherboard_height, formfactors.width as motherboard_width, motherboards.image as motherboard_image,
 				ram.idRam as ram_id, ram.idManufacturer as ram_idManufacturer, ram.modelName as ram_modelName, ram.sizePerStick as ram_sizePerStick, ram.stickAmount as ram_stickAmount, ram.speed as ram_speed, ram.image as ram_image,
-				gpu_has_partners.idGpuPartner as gpu_id, gpu_has_partners.idManufacturer as gpu_idManufacturer, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.clockspeed as gpu_clockSpeed, gpu_has_partners.watercooled as gpu_watercooled, gpu_has_partners.wattage as gpu_wattage, gpu_has_partners.image as gpu_image, gpu_has_partners.height as gpu_height, gpu_has_partners.width as gpu_width, gpu_has_partners.depth as gpu_depth, 
+				gpu_has_partners.idGpuPartner as gpu_id, gpu_has_partners.idManufacturer as gpu_idManufacturer, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.clockspeed as gpu_clockSpeed, gpu_has_partners.watercooled as gpu_watercooled, gpu_has_partners.wattage as gpu_wattage, gpus.modelName as gpu_chipset, gpus.vram as gpu_vram, gpu_has_partners.image as gpu_image, gpu_has_partners.height as gpu_height, gpu_has_partners.width as gpu_width, gpu_has_partners.depth as gpu_depth, 
 				cases.idCase as case_id, cases.idManufacturer as case_idManufacturer, cases.modelName as case_modelName, cases.height as case_height, cases.width as case_width, cases.depth as case_depth, cases.\`2-5_slots\` as case_smallSlots, cases.\`3-5_slots\` as case_bigSlots, cases.image as case_image,
 				psu.idPsu as psu_id, psu.idManufacturer as psu_idManufacturer, psu.modelName as psu_modelName, psu.modular as psu_modular, psu.wattage as psu_wattage
 				FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
+				LEFT JOIN cpusockets AS t1 ON cpus.idCpuSocket = t1.idCpuSocket
 				LEFT JOIN manufacturers ON cpus.idManufacturer = manufacturers.idManufacturer
 				LEFT JOIN cpucoolers ON builds.idCpuCooler = cpucoolers.idCpuCooler
 				LEFT JOIN motherboards ON builds.idMotherboard = motherboards.idMotherboard
+				LEFT JOIN cpusockets AS t2 ON motherboards.idCpuSocket = t2.idCpuSocket
+				LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
 				LEFT JOIN ram ON builds.idRam = ram.idRam
 				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
+				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
 				LEFT JOIN cases ON builds.idCase = cases.idCase
 				LEFT JOIN psu ON builds.idPsu = psu.idPsu
 				WHERE builds.idBuild = ? 
@@ -65,11 +70,16 @@ class BuildController {
 
 			const finalResult = {}
 			let tempManuArr = []
+			let cpucoolerId;
 
+			// push manufacturer to items
 			Object.entries(rows[0]).map(([key, item]) => {
 				const category = key.split('_');
 				if(key.includes('idManufacturer')) {
 					tempManuArr.push(`'${item}'`)
+				}
+				if(key === 'cpucooler_id') {
+					cpucoolerId = item
 				}
 				if(!key.startsWith("id")){
 					finalResult[category[0]] = {...finalResult[category[0]]}
@@ -95,6 +105,47 @@ class BuildController {
 					finalResult[key].manufacturerName = rows.find(x => x.idManufacturer === item.idManufacturer).manufacturerName;
 				}
 			})
+
+			// 
+			userQuery =`SELECT cpusockets.socketType FROM cpucoolers
+			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
+			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
+			WHERE cpucoolers.idCpuCooler = ?`;
+			const results = await db.promise()
+				.query(userQuery, [cpucoolerId]);
+			if (results[0].length === 0) {
+				return res.status(400).json({ message: "CPU cooler does not exist" });
+			}
+
+			const socketType= [];
+			results[0].map(item => {
+				socketType.push(item.socketType)
+			});
+
+			// Add all storageTypes to final motherboard
+			finalResult.cpucooler.socketType = socketType;
+
+			userQuery = `SELECT 
+			motherboard_has_storagetypes.idStorageType, motherboard_has_storagetypes.amount, storagetypes.storageType
+			FROM motherboards
+			LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
+			LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
+			WHERE motherboards.idMotherboard= ?;`;
+			[rows] = await db.promise().query(userQuery, [finalResult.motherboard.id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Motherboard does not exist" });
+			}
+			finalResult.motherboard.storage = [];
+			rows.map(item => {
+				finalResult.motherboard.storage= [
+					...finalResult.motherboard.storage,
+					{
+						type:item.storageType,
+						amount:item.amount
+					}
+				]
+			});
+
 
 			res.status(200).send(finalResult);
 		} catch (e) {

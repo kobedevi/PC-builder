@@ -1,7 +1,5 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import { PossibleRoutes } from "../../core/routing";
-import GeneralOverview from "./GeneralOverview/GeneralOverview";
-import HomeRouter from "./App/HomeRouter";
 import CpuRouter from "./Cpus/CpuRouter";
 import CpuCoolerRouter from "./CpuCoolers/CpuCoolerRouter";
 import MotherboardRouter from "./Motherboards/MotherboardRouter";

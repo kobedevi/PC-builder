@@ -4,6 +4,9 @@ import useNoAuthFetch from "../../../../core/hooks/useNoAuthFetch";
 import ErrorAlert from 'components/shared/ErrorAlert';
 import Spinner from 'components/Design/Spinner';
 import { fetchFeaturedBuilds } from 'core/modules/Builds/api';
+import FeaturedProductCard from 'components/Design/FeaturedProductCard';
+import { Link } from 'react-router-dom';
+import { PossibleRoutes, route } from 'core/routing';
 
 const Featured = () => {
 
@@ -38,19 +41,21 @@ const Featured = () => {
           
           {
             data && (
-              <ul className="productList">
+              <ul className="productList featuredList">
                 {data.map((product) => {
                   return(
-                  <li key={product.idBuild}>
-                    {/* TODO: convert to alternative card and redirect to build detail page */}
-                    <BuilderProductCard
-                      product={product}
-                      id={product.idBuild}
-                    >
-                      CPU: {product.cpu_modelName}<br/>
-                      GPU: {product?.gpu_modelName}<br/>
-                    </BuilderProductCard>
-                  </li>
+                  <Link to={route(PossibleRoutes.BuildDetail, {id: product.idBuild})}>
+                    <li key={product.idBuild}>
+                      <FeaturedProductCard
+                        product={product}
+                        id={product.idBuild}
+                      >
+                        CPU: {product.cpu_modelName}<br/>
+                        GPU: {product?.gpu_modelName}<br/>
+                        CASE: {product?.case_modelName}<br/>
+                      </FeaturedProductCard>
+                    </li>
+                  </Link>
                 )})}
               </ul>
             )

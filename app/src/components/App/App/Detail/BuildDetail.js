@@ -5,6 +5,7 @@ import { fetchBuild } from "core/modules/Builds/api";
 import { useParams } from "react-router-dom";
 import ErrorAlert from "components/shared/ErrorAlert";
 import Spinner from "components/Design/Spinner";
+import ItemListDetail from "components/Design/ItemListDetail";
 
 
 const BuildDetail = () => {
@@ -20,21 +21,25 @@ const BuildDetail = () => {
   return (
     <>
 			<Nav/>
-      <div className="container">
-        <div>Detailpage</div>
-        {isLoading && (
-          <Spinner/>
-        )}
-        {error && (
-          <ErrorAlert error={error}/>
-        )}
-        {data && (
-          <div>
-            <h3>{id}</h3>
-            <p>3D model here?</p>
-            {/* TODO: Map over each item and then show DetailCard of that specific item */}
-          </div>
-        )}
+      <div className="container" style={{marginTop:"6rem"}}>
+        <div className="curvedContainer">
+          {isLoading && (
+            <Spinner/>
+          )}
+          {error && (
+            <ErrorAlert error={error}/>
+          )}
+          {data && (
+            <>
+              <div>
+                <ItemListDetail color="info" info={data} />
+              </div>
+              <div>
+                <p>3D model here?</p>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </>
   )

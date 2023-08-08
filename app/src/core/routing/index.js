@@ -3,13 +3,14 @@ const PossibleRoutes = Object.freeze({
   Login: "/login",
   Register: "/register",
 
-  Builder: "/builder",
-
+  
   Users: "/users",
   UsersEdit: "/users/edit",
-
+  
   PartsOverview: "/",
-
+  
+  Builder: "/builder",
+  Builds: "/builds",
   HomeParent: "/home/*",
   Home: "/home",
   BuildDetail: "/build/:id",

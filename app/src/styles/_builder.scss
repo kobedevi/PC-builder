@@ -143,6 +143,9 @@ form.builder{
     overflow: hidden;
     background: $light-purple;
     transition: width .2s ease-in-out;
+    & > div {
+        height: calc(100% - 6rem);
+    }
     .item {
         padding: .33rem 0;
         border-bottom: 2px solid $white;
@@ -152,8 +155,8 @@ form.builder{
             text-transform: uppercase;
             font-size: 1rem;
             font-weight: 100;
-            padding: 0 1rem;
-            margin: .5rem 0;
+            padding: .5rem 1rem;
+            margin: 0;
             cursor: pointer;
             span{
                 transition: .1s;
@@ -192,6 +195,25 @@ form.builder{
                 }
             }
         }
+    }
+}
+
+.itemListDetail {
+    position: relative;
+    box-shadow: none;
+    height: unset;
+    width: calc(100% + 32px);
+    height: calc(100% + 64px);
+    top: -32px;
+    left: -32px;
+    border-radius: 25px 0 0 25px;
+    overflow: hidden;
+    * {
+        color: $white;
+    }
+    .ItemList{
+        width: 100%;
+        height: unset;
     }
 }
 
@@ -284,6 +306,62 @@ form.builder{
         }
     }
 }
+
+figure{
+    width: 100%;
+    display: flex !important;
+    gap: 8px;
+    padding: 8px;
+    img {
+        height: auto !important;
+        object-fit: unset !important;
+        border-radius: unset !important;
+        border-radius: 0;
+    }
+    >img{
+        width: 50%;
+    }
+    div{
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        img{
+            width: 100%;
+        }
+    }
+}
+
+.productList.featuredList{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 20px;
+
+    a{
+        text-decoration: none;
+    }
+
+    li{
+        margin: 0;
+        width: unset;
+        gap: 8px;
+        .productCard {
+            margin-right: 0 !important;
+            width: unset;
+            section{
+                padding-bottom: 12px;
+            }
+        }
+    }    
+}
+
+.detailBuild {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0px 0px;
+}
+
 .alert {
     color: var(--bs-alert-color);
 }

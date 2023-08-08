@@ -35,7 +35,7 @@ const Nav = () => {
         </div>
         <div>
           <li><Link to={PossibleRoutes.Builder}>Builder</Link></li>
-          <li><Link to={PossibleRoutes.Builder}>Completed builds</Link></li>
+          <li><Link to={PossibleRoutes.Builds}>Completed builds</Link></li>
           {admin && <li><Link to={PossibleRoutes.Crud}>CRUD</Link></li>}
         </div>
         <div>
