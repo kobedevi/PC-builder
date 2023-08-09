@@ -11,6 +11,10 @@ const fetchCompatibleCpuCoolers = async (id, page=0, perPage=20) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/cpucooler/${id}/${page}/${perPage}`);
 };
 
+const fetchCompatibleFilteredCpuCoolers = async (id, query) => {
+  return await Axios.get(`${process.env.REACT_APP_BASE_API}/compatible/cpucooler/filter/${id}/${query.replace(/[/^#\%]/g,"")}`);
+};
+
 const fetchCpuCoolerById = (id) => async (headers) => {
   return await Axios.get(`${process.env.REACT_APP_BASE_API}/cpucooler/${id}`, {
     headers: createHeaders(headers),
@@ -55,6 +59,7 @@ const deleteCpuCooler = (id) => async (headers) => {
 export {
   fetchCpuCoolers,
   fetchCompatibleCpuCoolers,
+  fetchCompatibleFilteredCpuCoolers,
   createCpuCooler,
   fetchCpuCoolerById,
   fetchCpuCoolerByIdBuilder,

@@ -79,6 +79,60 @@ class CpuCoolerController {
 		}
 	};
 
+	fetchCpuCoolersByBuildFilter = async (req, res, next) => {
+		try {
+			console.log('yup');
+			const { id, query} = req.params;
+			let userQuery = `select idCpuSocket from cpus where idProcessor = ?`;
+			let [rows] = await db.promise().query(userQuery, [id]);
+			if (rows.length === 0) {
+				return res.status(400).json({ message: "Given cpu does not exist" });
+			}
+			const cpuSocket = rows[0].idCpuSocket;
+
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			userQuery = `SELECT cpucoolers.*, manufacturers.manufacturerName, cpusockets.socketType, cpusockets.idCpuSocket FROM cpucoolers
+			LEFT JOIN manufacturers ON cpucoolers.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN cpucooler_has_cpusockets ON cpucoolers.idCpuCooler = cpucooler_has_cpusockets.idCpuCooler
+			LEFT JOIN cpusockets ON cpucooler_has_cpusockets.idCpuSocket = cpusockets.idCpuSocket
+			WHERE cpucoolers.idCpuCooler IN (
+				SELECT idCpuCooler
+				FROM cpucooler_has_cpusockets
+				WHERE idCpuSocket = ?
+			)
+			AND CONCAT_WS('', modelName, manufacturerName, socketType) LIKE ?
+			AND cpucoolers.deleted = 0
+			ORDER BY idCpuCooler;`;
+			[rows] = await db.promise().query(userQuery, [cpuSocket, `%${encodedStr}%`]);
+			const data = rows;
+			
+			if (data.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+
+			// https://stackoverflow.com/questions/30025965/merge-duplicate-objects-in-array-of-objects?answertab=trending#tab-top
+			const result = Array.from(new Set(data.map(s => s.idCpuCooler)))
+			.map(id => {
+				return {
+					...data.filter(s => s.idCpuCooler === id).map(rest => rest)[0],
+					socketType: data.filter(s => s.idCpuCooler === id).map(socket => socket.socketType),
+					idCpuSocket: data.filter(s => s.idCpuCooler === id).map(socket => socket.idCpuSocket)
+				}
+			})
+
+			res.status(200).send(result);
+		} catch (e) {
+			console.log(e)
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
 	fetchCpuCoolersByFilter = async (req, res, next) => {
 		try {
 			let { query } = req.params;

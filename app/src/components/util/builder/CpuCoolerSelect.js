@@ -5,12 +5,12 @@ import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./Result";
-import { fetchCompatibleCpuCoolers, fetchFilteredCpuCoolers } from "core/modules/CPUCooler/api";
+import { fetchCompatibleCpuCoolers, fetchCompatibleFilteredCpuCoolers } from "core/modules/CPUCooler/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import { fetchCpuCoolerByIdBuilder } from '../../../core/modules/CPUCooler/api';
 import Pagination from "components/Design/Pagination";
+import CpuCoolerResult from "./CpuCoolerResult";
 
 const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateFields}) => {
   const [info, setInfo] = useState();
@@ -77,7 +77,14 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
             />
 
             {
-              query && <Result filter={fetchFilteredCpuCoolers} result={query}/>
+              query &&
+              <CpuCoolerResult 
+                filter={fetchCompatibleFilteredCpuCoolers}
+                setProductInfo={setProductInfo}
+                currentBuild={currentBuild}
+                onClick={onClick}
+                result={query}
+              />
             }
             {(data.length === 0) && (
               <div className="blobContainer">

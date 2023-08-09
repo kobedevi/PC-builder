@@ -6,7 +6,7 @@ import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./Result";
+import Result from "./CpuResult";
 import { fetchCompatibleStorage, fetchFilteredStorage, fetchStorageByIdBuilder } from "core/modules/Storage/api";
 import { v4 as uuidv4 } from "uuid";
 import BuilderProductCard from "components/Design/BuilderProductCard";

@@ -1,16 +1,16 @@
 import { useCallback, useState } from "react";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
-import { fetchCompatibleCpus, fetchFilteredCpus } from "../../../core/modules/CPU/api";
+import { fetchCompatibleCpus, fetchCompatibleFilteredCpus } from "../../../core/modules/CPU/api";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./Result";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import { fetchCpuByIdBuilder } from '../../../core/modules/CPU/api';
 import Pagination from "components/Design/Pagination";
+import CpuResult from "./CpuResult";
 
 
 const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields}) => {
@@ -115,7 +115,15 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
             />
 
             {
-              query && <Result filter={fetchFilteredCpus} result={query}/>
+              query && (
+              <CpuResult 
+                filter={fetchCompatibleFilteredCpus}
+                setProductInfo={setProductInfo}
+                currentBuild={currentBuild}
+                onClick={onClick}
+                result={query}
+              />
+              )
             }
 
             {
@@ -131,6 +139,7 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
                           product={cpu}
                           link={PossibleRoutes.Detail}
                           id={cpu.idProcessor}
+                          currentBuild={currentBuild}
                         >
                           <p>
                             Manufacturer: {cpu.manufacturerName}<br/>
