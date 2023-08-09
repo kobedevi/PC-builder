@@ -41,6 +41,7 @@ const GpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
                 products && (
                     <ul className='productList'>
                         { products.map((product) => {
+                            const disabled = product.idGpuPartner === currentBuild.gpu.idGpuPartner ? true : false;
                             return (
                                 <li key={product.idPartnerGpu}>
                                     <BuilderProductCard
@@ -55,7 +56,7 @@ const GpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
                                             Clockspeed: {product.clockspeed}MHz<br/>
                                             Watercooled: {product.watercooled ? 'Yes': 'No'}
                                         </p>
-                                        <button type="button" onClick={() => onClick(product)}>Add</button>
+                                        <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                                     </BuilderProductCard>
                                 </li>
                             )}
