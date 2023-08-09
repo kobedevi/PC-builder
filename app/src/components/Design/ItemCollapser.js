@@ -22,20 +22,23 @@ const ItemCollapser = ({item, collapse}) => {
 								<ul>
 									{item.map((x) => {
 										return (
-										<li style={{marginTop:'.25rem'}} key={uuidv4()}>
-											<ul style={{listStyle: 'none', padding: 0}}>
-												{Object.entries(x).map(([key, s]) => {
-													if(!key.startsWith("id")) {
-														return (
-															<li key={x.idStorageType + s}>
-																<strong>{ObjectKeysToText(key)}:</strong> {s}
-															</li>
-														)
-													}
-													return;
-												})}
-											</ul>
-										</li>)
+											<li style={{marginTop:'.25rem'}} key={uuidv4()}>
+												{x && (
+													<ul style={{listStyle: 'none', padding: 0}}>
+														{Object.entries(x).map(([key, s]) => {
+															if(!key.startsWith("id")) {
+																return (
+																	<li key={x.idStorageType + s}>
+																		<strong>{ObjectKeysToText(key)}:</strong> {s}
+																	</li>
+																)
+															}
+															return;
+														})}
+													</ul>
+												)}
+											</li>
+										)
 									})}
 								</ul>
 							</li>

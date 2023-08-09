@@ -6,7 +6,6 @@ import Button from "./Button";
 const ItemList = ({ info}) => {
 
   const [collapse, setCollapse] = useState(false);
-  console.log(info);
 
   return (
     <div className={collapse ? 'hideWidth collapserParent' : 'showWidth collapserParent'}>
