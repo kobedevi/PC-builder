@@ -67,6 +67,37 @@ class PsuController {
 		}
 	};
 
+	fetchPsusByBuildFilter = async(req, res, next) => {
+		try {
+			const { wattage, query } = req.params;
+
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT * FROM psu
+			LEFT JOIN manufacturers ON psu.idManufacturer = manufacturers.idManufacturer
+			WHERE psu.wattage >= ?
+			AND CONCAT_WS('', modelName, manufacturerName, modular, wattage) LIKE ?
+			AND psu.deleted = 0
+			ORDER BY wattage;`;
+			const [rows] = await db.promise().query(userQuery, [wattage, `%${encodedStr}%`]);
+
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	}
+
 	fetchPsusByBuild = async(req, res, next) => {
 		try {
 			const { wattage, page=Math.abs(page) || 0, perPage=20 } = req.params;

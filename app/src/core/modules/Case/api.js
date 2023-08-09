@@ -7,6 +7,10 @@ const fetchCases = (page=0, perPage=20) => async (headers) => {
   });
 };
 
+const fetchCompatibleCasesFilter = async (width, height, depth, query) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/case/filter/${width}/${height}/${depth}/${query.replace(/[/^#\%]/g,"")}`);
+};
+
 const fetchCompatibleCases = async (width, height, depth, page=0, perPage=20) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/case/${width}/${height}/${depth}/${page}/${perPage}`);
 };
@@ -61,4 +65,4 @@ const deleteCase = (id) => async (headers) => {
   });
 };
 
-export { fetchCases, fetchCompatibleCases, fetchFilteredCases, createCase, fetchCaseById, fetchCaseByIdBuilder, updateCase, deleteCase };
+export { fetchCases, fetchCompatibleCases, fetchCompatibleCasesFilter, fetchFilteredCases, createCase, fetchCaseById, fetchCaseByIdBuilder, updateCase, deleteCase };

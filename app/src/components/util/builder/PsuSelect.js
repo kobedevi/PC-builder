@@ -5,11 +5,11 @@ import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./CpuResult";
-import { fetchCompatiblePsu, fetchFilteredPsus, fetchPsuByIdBuilder } from "core/modules/Psu/api";
+import { fetchCompatiblePsu, fetchCompatiblePsuFilter, fetchPsuByIdBuilder } from "core/modules/Psu/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import Pagination from "components/Design/Pagination";
+import PsuResult from "./PsuResult";
 
 const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) => {
   const [info, setInfo] = useState();
@@ -76,7 +76,15 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
             />
 
             {
-              query && <Result filter={fetchFilteredPsus} result={query}/>
+              query && 
+              <PsuResult 
+                filter={fetchCompatiblePsuFilter}
+                setProductInfo={setProductInfo}
+                currentBuild={currentBuild}
+                onClick={onClick}
+                result={query}
+                minWat={minWat}
+              />
             }
             {(data.results.length === 0) && (
               <div className="blobContainer">

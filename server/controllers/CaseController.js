@@ -23,6 +23,33 @@ class CaseController {
 		}
 	};
 
+	fetchCasesByBuildFilter = async (req, res, next) => {
+		try {
+			const { width, height, depth, query} = req.params;
+
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT * FROM cases
+			LEFT JOIN manufacturers ON cases.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN formfactors ON cases.idFormfactor = formfactors.idFormfactor
+			WHERE cases.width >= ?
+			AND cases.height >= ?
+			AND cases.DEPTH >= ?
+			AND cases.deleted = 0
+			AND CONCAT_WS('', modelName, manufacturerName, formfactor) LIKE ?
+			ORDER BY idCase;`;
+			const [rows] = await db.promise().query(userQuery, [width,height,depth, `%${encodedStr}%`]);
+
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchCasesByBuild = async (req, res, next) => {
 		try {
 			const { width, height, depth, page=Math.abs(page) || 0, perPage=20  } = req.params;

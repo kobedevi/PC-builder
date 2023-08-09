@@ -52,6 +52,10 @@ const fetchCompatiblePsu = async (wattage, page=0, perPage=20) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/psu/${wattage}/${page}/${perPage}`);
 };
 
+const fetchCompatiblePsuFilter = async (wattage, query) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/psu/filter/${wattage}/${query.replace(/[/^#\%]/g,"")}`);
+};
+
 const scrape = async () => {
   await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/scrape`)
   .then((res) => {
@@ -61,4 +65,4 @@ const scrape = async () => {
 };
 
 
-export { fetchPsus, fetchPsuById, fetchPsuByIdBuilder, fetchFilteredPsus, fetchCompatiblePsu, updatePsu, createPsu, deletePsu, scrape };
+export { fetchPsus, fetchPsuById, fetchPsuByIdBuilder, fetchFilteredPsus, fetchCompatiblePsu, fetchCompatiblePsuFilter, updatePsu, createPsu, deletePsu, scrape };
