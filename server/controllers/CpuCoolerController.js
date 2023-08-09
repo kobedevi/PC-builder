@@ -128,7 +128,6 @@ class CpuCoolerController {
 
 			res.status(200).send(result);
 		} catch (e) {
-			console.log(e)
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};

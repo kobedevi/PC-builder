@@ -47,6 +47,37 @@ class RamController {
 		}
 	};
 
+	fetchRamByBuildFilter = async (req, res, next) => {
+		try {
+			const {slots, id, query} = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT * FROM ram
+			LEFT JOIN manufacturers ON ram.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
+			WHERE ${slots !== 'undefined' ? 'ram.stickAmount <= ? AND ram.deleted = 0' : 'ram.deleted = 0'}
+			AND ram.idRamType = ?
+			AND CONCAT_WS('', modelName, manufacturerName, speed, ramType, sizePerStick) LIKE ?
+			ORDER BY idRam;`;
+			const [rows] = await db.promise().query(userQuery, (slots !== 'undefined' ? [slots, id, `%${encodedStr}%`] : [id, `%${encodedStr}%`]));
+
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchRamByFilter = async (req, res, next) => {
 		try {
 			let { query } = req.params;

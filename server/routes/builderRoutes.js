@@ -35,9 +35,11 @@ builderRouter.get("/cpucooler/filter/:id/:query", cpuCoolerController.fetchCpuCo
 builderRouter.get("/cpucooler/:id/:page/:perPage", cpuCoolerController.fetchCpuCoolersByBuild);
 
 builderRouter.get("/motherboard/info/:id", motherboardController.fetchMotherboardById);
+builderRouter.get("/motherboard/filter/:id/:query", motherboardController.fetchMotherboardsByBuildFilter);
 builderRouter.get("/motherboard/:id/:page/:perPage", motherboardController.fetchMotherboardsByBuild);
 
 builderRouter.get("/ram/info/:id", ramController.fetchRamById);
+builderRouter.get("/ram/filter/:slots/:id/:query", ramController.fetchRamByBuildFilter);
 builderRouter.get("/ram/:slots/:id/:page/:perPage", ramController.fetchRamByBuild);
 
 builderRouter.get("/storage/info/:id", storageController.fetchStorageById);

@@ -1,17 +1,15 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState } from "react";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
-import { fetchCpus } from "../../../core/modules/CPU/api";
-import { PossibleRoutes, route } from "../../../core/routing";
+import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
-import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./Result";
-import { fetchCompatibleRam, fetchFilteredRam, fetchRamByIdBuilder } from "core/modules/Ram/api";
+import { fetchCompatibleRam, fetchCompatibleRamFilter, fetchRamByIdBuilder } from "core/modules/Ram/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import Pagination from "components/Design/Pagination";
+import RamResult from "./RamResult";
 
 const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamType, idRam, memorySlots, updateFields}) => {
   const [info, setInfo] = useState();
@@ -95,7 +93,15 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
             />
 
             {
-              query && <Result filter={fetchFilteredRam} result={query}/>
+              query &&
+              <RamResult 
+                filter={fetchCompatibleRamFilter}
+                setProductInfo={setProductInfo}
+                currentBuild={currentBuild}
+                onClick={onClick}
+                result={query}
+                strictMode={strictMode}
+              />
             }
             {(data.result.length === 0) && (
               <div className="blobContainer">

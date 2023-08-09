@@ -20,6 +20,11 @@ const fetchCompatibleMotherboard = async (id, page=0, perPage=20) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/motherboard/${id}/${page}/${perPage}`);
 };
 
+const fetchCompatibleFilteredMotherboards = async (id, query) => {
+  return await Axios.get(`${process.env.REACT_APP_BASE_API}/compatible/motherboard/filter/${id}/${query.replace(/[/^#\%]/g,"")}`);
+};
+
+
 const fetchMotherboardById = (id) => async (headers) => {
   return await Axios.get(
     `${process.env.REACT_APP_BASE_API}/motherboard/${id}`,
@@ -64,6 +69,7 @@ const deleteMotherboard = (id) => async (headers) => {
 export {
   fetchMotherboards,
   fetchCompatibleMotherboard,
+  fetchCompatibleFilteredMotherboards,
   fetchFilteredMotherboards,
   fetchMotherboardById,
   fetchMotherboardByIdBuilder,

@@ -20,6 +20,10 @@ const fetchCompatibleRam = async (slots, idRamType, page=0, perPage=20) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/ram/${slots}/${idRamType}/${page}/${perPage}`);
 };
 
+const fetchCompatibleRamFilter = async (slots, idRamType, query) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/ram/filter/${slots}/${idRamType}/${query.replace(/[/^#\%]/g,"")}`);
+};
+
 const fetchRamById = (id) => async (headers) => {
   return await Axios.get(
     `${process.env.REACT_APP_BASE_API}/ram/${id}`,
@@ -61,4 +65,4 @@ const deleteRam = (id) => async (headers) => {
   });
 };
 
-export { fetchRam, fetchCompatibleRam, fetchFilteredRam, createRam, fetchRamById, fetchRamByIdBuilder, updateRam, deleteRam };
+export { fetchRam, fetchCompatibleRam, fetchCompatibleRamFilter, fetchFilteredRam, createRam, fetchRamById, fetchRamByIdBuilder, updateRam, deleteRam };

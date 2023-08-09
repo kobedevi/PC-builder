@@ -5,11 +5,11 @@ import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./Result";
-import { fetchCompatibleMotherboard, fetchFilteredMotherboards, fetchMotherboardByIdBuilder } from "core/modules/Motherboard/api";
+import { fetchCompatibleMotherboard, fetchCompatibleFilteredMotherboards, fetchMotherboardByIdBuilder } from "core/modules/Motherboard/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import Pagination from "components/Design/Pagination";
+import MotherboardResult from "./MotherboardResult";
 
 const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, width, updateFields}) => {
   const [info, setInfo] = useState();
@@ -80,7 +80,14 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
             />
 
             {
-              query && <Result filter={fetchFilteredMotherboards} result={query}/>
+              query && 
+              <MotherboardResult 
+                filter={fetchCompatibleFilteredMotherboards}
+                setProductInfo={setProductInfo}
+                currentBuild={currentBuild}
+                onClick={onClick}
+                result={query}
+              />
             }
             {(data.length === 0) && (
               <div className="blobContainer">
