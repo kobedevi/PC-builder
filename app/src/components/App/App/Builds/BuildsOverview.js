@@ -1,21 +1,33 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import Nav from '../Homepage/Nav'
-import { fetchFeaturedBuilds } from 'core/modules/Builds/api';
+import { fetchBuildsOverview } from 'core/modules/Builds/api';
 import useNoAuthFetch from "../../../../core/hooks/useNoAuthFetch";
 import ErrorAlert from 'components/shared/ErrorAlert';
 import Spinner from 'components/Design/Spinner';
 import FeaturedProductCard from 'components/Design/FeaturedProductCard';
 import { Link } from 'react-router-dom';
 import { PossibleRoutes, route } from 'core/routing';
+import Pagination from 'components/Design/Pagination';
 
 
 const BuildsOverview = () => {
+  const [page, setPage] = useState(0);
+  const [perPage, setPerPage] = useState(20);
+
+  const handlePageClick = (page) => {
+    setPage(page);
+  }
+
+  const handlePerPageClick = (perPage) => {
+    setPerPage(perPage);
+  }
 
   const apiCall = useCallback(() => {
-    return fetchFeaturedBuilds();
-  }, []);
+    return fetchBuildsOverview(page,perPage);
+  }, [page,perPage]);
 
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
+  
 
   return (
     <>
@@ -37,24 +49,33 @@ const BuildsOverview = () => {
             
             {
               data && (
-                <ul className="productList featuredList" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr"}}>
-                  {data.map((product) => {
-                    return(
-                    <Link to={route(PossibleRoutes.BuildDetail, {id: product.idBuild})}>
-                      <li key={product.idBuild}>
-                        {/* TODO: convert to alternative card and redirect to build detail page */}
-                        <FeaturedProductCard
-                          product={product}
-                          id={product.idBuild}
-                        >
-                          CPU: {product.cpu_modelName}<br/>
-                          GPU: {product?.gpu_modelName}<br/>
-                          CASE: {product?.case_modelName}<br/>
-                        </FeaturedProductCard>
-                      </li>
-                    </Link>
-                  )})}
-                </ul>
+                <>
+                  <ul className="productList featuredList" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr"}}>
+                    {data.results.map((product) => {
+                      return(
+                      <Link to={route(PossibleRoutes.BuildDetail, {id: product.idBuild})} key={product.idBuild}>
+                        <li>
+                          {/* TODO: convert to alternative card and redirect to build detail page */}
+                          <FeaturedProductCard
+                            product={product}
+                            id={product.idBuild}
+                          >
+                            CPU: {product.cpu_modelName}<br/>
+                            GPU: {product?.gpu_modelName}<br/>
+                            CASE: {product?.case_modelName}<br/>
+                          </FeaturedProductCard>
+                        </li>
+                      </Link>
+                    )})}
+                  </ul>
+                  <Pagination 
+                    page={page}
+                    perPage={perPage}
+                    pageAmount={data.pageAmount}
+                    perPageClick={handlePerPageClick}
+                    onClick={handlePageClick}
+                />
+              </>
               )
             }
           </div>

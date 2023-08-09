@@ -17,6 +17,28 @@ class BuildController {
 		}
 	};
 
+	fetchBuildsOverview = async (req, res, next) => {
+		try {
+			
+			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
+			let pageAmount = await db.promise().query("SELECT COUNT(idBuild) as totalProducts FROM builds")
+			.then(res => Math.ceil(res[0][0].totalProducts / perPage));
+
+			const results = await db.promise().query(`
+				SELECT idBuild, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
+				LEFT JOIN users ON builds.idUser = users.idUsers
+				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
+				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
+				LEFT JOIN cases ON builds.idCase = cases.idCase
+				ORDER BY date DESC
+				LIMIT ? OFFSET ?;
+			`, [parseInt(perPage), parseInt(page*perPage)]);
+			res.status(200).send({results: results[0], pageAmount});
+		} catch (e) {
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
 	fetchFeaturedBuilds = async (req, res, next) => {
 		try {
 			const results = await db.promise().query(`
