@@ -1,13 +1,11 @@
 import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
-import { fetchCpus } from "../../../core/modules/CPU/api";
-import { PossibleRoutes, route } from "../../../core/routing";
+import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./Result";
+import Result from "./CpuResult";
 import { fetchCompatiblePsu, fetchFilteredPsus, fetchPsuByIdBuilder } from "core/modules/Psu/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";

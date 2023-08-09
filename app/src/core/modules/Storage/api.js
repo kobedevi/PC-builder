@@ -31,6 +31,10 @@ const fetchFilteredStorage = (query) => async (headers) => {
   );
 };
 
+const fetchCompatibleStorageByFilter = async (motherboardId, query) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/storage/filter/${motherboardId}/${query.replace(/[/^#\%]/g,"")}`);
+};
+
 const fetchCompatibleStorage = async (storage, page=0, perPage=20) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/compatible/storage/${storage}/${page}/${perPage}`);
 };
@@ -57,4 +61,4 @@ const deleteStorage = (id) => async (headers) => {
   });
 };
 
-export { fetchStorage, fetchStorageById, fetchStorageByIdBuilder, fetchFilteredStorage, fetchCompatibleStorage, updateStorage, createStorage, deleteStorage };
+export { fetchStorage, fetchStorageById, fetchStorageByIdBuilder, fetchCompatibleStorageByFilter, fetchFilteredStorage, fetchCompatibleStorage, updateStorage, createStorage, deleteStorage };

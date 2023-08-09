@@ -43,9 +43,11 @@ builderRouter.get("/ram/filter/:slots/:id/:query", ramController.fetchRamByBuild
 builderRouter.get("/ram/:slots/:id/:page/:perPage", ramController.fetchRamByBuild);
 
 builderRouter.get("/storage/info/:id", storageController.fetchStorageById);
+builderRouter.get("/storage/filter/:motherboardId/:query", storageController.fetchStorageByBuildFilter);
 builderRouter.get("/storage/:motherboardId/:page/:perPage", storageController.fetchStorageByBuild);
 
 builderRouter.get("/gpu/info/:id", gpuController.fetchGpuPartnerById);
+builderRouter.get("/gpu/filter/:query", gpuController.fetchGpusByBuildFilter);
 builderRouter.get("/gpu/:page/:perPage", gpuController.fetchGpusByBuild);
 
 builderRouter.get("/case/info/:id", caseController.fetchCaseById);

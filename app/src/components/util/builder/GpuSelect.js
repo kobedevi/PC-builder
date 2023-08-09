@@ -1,19 +1,16 @@
 import { useCallback, useState } from "react";
-import { Link } from "react-router-dom";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
-import { fetchCpus } from "../../../core/modules/CPU/api";
-import { PossibleRoutes, route } from "../../../core/routing";
+import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
-import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./Result";
-import { fetchCompatibleGpus, fetchFilteredPartnerGpu } from "core/modules/Gpu/api";
+import { fetchCompatibleGpus, fetchCompatibleGpusFilter } from "core/modules/Gpu/api";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import {fetchPartnerGpuByIdBuilder} from "../../../core/modules/Gpu/api"
 import Pagination from "components/Design/Pagination";
+import GpuResult from "./GpuResult";
 
 const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, updateFields}) => {
   const [info, setInfo] = useState();
@@ -89,7 +86,14 @@ const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, u
             />
 
             {
-              query && <Result filter={fetchFilteredPartnerGpu} result={query}/>
+              query &&               
+              <GpuResult 
+                filter={fetchCompatibleGpusFilter}
+                setProductInfo={setProductInfo}
+                currentBuild={currentBuild}
+                onClick={onClick}
+                result={query}
+              />
             }
             {(data.results.length === 0 || pcieSlots <= 0) && (
               <div className="blobContainer">

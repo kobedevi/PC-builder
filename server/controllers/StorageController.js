@@ -67,6 +67,44 @@ class StorageController {
 		}
 	};
 
+	fetchStorageByBuildFilter = async (req, res, next) => {
+		try {
+			const { motherboardId, query } = req.params;
+			let userQuery, rows;
+			if(motherboardId !== 'undefined') {
+				userQuery = `SELECT storagetypes.idStorageType FROM motherboards
+				LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
+				LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
+				WHERE motherboards.idMotherboard = ?
+				AND motherboards.deleted = 0`;
+				[rows] = await db.promise().query(userQuery, [motherboardId]);
+				if (rows.length === 0) {
+					return res.status(400).json({ message: "Given motherboard does not exist" });
+				}
+			}
+
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			// https://stackoverflow.com/questions/33957252/node-js-mysql-query-where-id-array
+			const arr = (motherboardId !== 'undefined') ? Array.from(rows.map(val => { return val?.idStorageType; })) : [] ;
+			userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
+			WHERE ${arr.length > 0 ? `storage.idStorageType IN (${mysql.escape(arr)}) AND` : ''}
+			storage.deleted = 0
+			AND CONCAT_WS('', modelName, manufacturerName, capacity, RPM) LIKE ?`;
+			[rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchStorageByBuild = async (req, res, next) => {
 		try {
 			const { motherboardId, page=Math.abs(page) || 0, perPage=20 } = req.params;
@@ -76,9 +114,8 @@ class StorageController {
 				LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
 				LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
 				WHERE motherboards.idMotherboard = ?
-				AND motherboards.deleted = 0
-				LIMIT ? OFFSET ?`;
-				[rows] = await db.promise().query(userQuery, [motherboardId, parseInt(perPage), parseInt(page*perPage)]);
+				AND motherboards.deleted = 0`;
+				[rows] = await db.promise().query(userQuery, [motherboardId]);
 				if (rows.length === 0) {
 					return res.status(400).json({ message: "Given motherboard does not exist" });
 				}
@@ -95,8 +132,10 @@ class StorageController {
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			WHERE ${arr.length > 0 ? `storage.idStorageType IN (${mysql.escape(arr)}) AND` : ''}
-			storage.deleted = 0`;
-			[rows] = await db.promise().query(userQuery);
+			storage.deleted = 0
+			LIMIT ? OFFSET ?`;
+			[rows] = await db.promise().query(userQuery, [parseInt(perPage), parseInt(page*perPage)]);
+
 			res.status(200).send({pageAmount, result: rows});
 		} catch (e) {
 			next(

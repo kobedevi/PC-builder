@@ -7,11 +7,12 @@ import ErrorAlert from "../../shared/ErrorAlert";
 import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
 import Result from "./CpuResult";
-import { fetchCompatibleStorage, fetchFilteredStorage, fetchStorageByIdBuilder } from "core/modules/Storage/api";
+import { fetchCompatibleStorage, fetchCompatibleStorageByFilter, fetchStorageByIdBuilder } from "core/modules/Storage/api";
 import { v4 as uuidv4 } from "uuid";
 import BuilderProductCard from "components/Design/BuilderProductCard";
 import InfoModal from "components/Design/InfoModal";
 import Pagination from "components/Design/Pagination";
+import StorageResult from "./StorageResult";
 
 
 const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updateBuild, drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
@@ -25,8 +26,8 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
     if(!strictMode) {
       return fetchCompatibleStorage(undefined, page, perPage);
     } else {
-    return fetchCompatibleStorage(currentBuild.motherboard.idMotherboard, page, perPage);
-  }
+      return fetchCompatibleStorage(currentBuild.motherboard.idMotherboard, page, perPage);
+    }
   }, [currentBuild.motherboard.idMotherboard, strictMode, page, perPage]);
   
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
@@ -101,7 +102,15 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
             />
 
             {
-              query && <Result filter={fetchFilteredStorage} result={query}/>
+              query &&               
+              <StorageResult 
+                filter={fetchCompatibleStorageByFilter}
+                setProductInfo={setProductInfo}
+                currentBuild={currentBuild}
+                onClick={onClick}
+                result={query}
+                strictMode={strictMode}
+              />
             }
             {(data.result.length === 0) && (
               <div className="blobContainer">

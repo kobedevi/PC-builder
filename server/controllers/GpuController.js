@@ -47,6 +47,28 @@ class GpuController {
 		}
 	};
 
+	fetchGpusByBuildFilter = async (req, res, next) => {
+		try {
+			const {query} = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')			
+
+			const userQuery = `SELECT gpu_has_partners.*, manufacturers.manufacturerName, gpus.modelName AS chipset, gpus.vram FROM gpu_has_partners
+			LEFT JOIN manufacturers ON gpu_has_partners.idManufacturer = manufacturers.idManufacturer
+			LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
+			WHERE gpu_has_partners.deleted = 0
+			AND CONCAT_WS('', gpu_has_partners.modelName, gpus.modelName, manufacturerName, clockspeed, vram) LIKE ?
+			AND gpus.deleted = 0;`;
+			const [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
 	fetchGpusByBuild = async (req, res, next) => {
 		try {
 			const {page=Math.abs(page) || 0, perPage=20} = req.params;
@@ -178,7 +200,6 @@ class GpuController {
 			height,
 			width,
 			depth,
-			wattage,
 			image,
 			tdp
 		} = req.body;
@@ -204,7 +225,7 @@ class GpuController {
 
 			const id = uuidv4();
 			const sqlInsert =
-				"INSERT INTO gpu_has_partners (idGpuPartner, idGpu, idManufacturer, modelName, clockspeed, watercooled, height, width, depth, wattage, image, tdp) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO gpu_has_partners (idGpuPartner, idGpu, idManufacturer, modelName, clockspeed, watercooled, height, width, depth, wattage, image) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					id,
@@ -216,9 +237,8 @@ class GpuController {
 					height,
 					width,
 					depth,
-					wattage,
+					tdp,
 					image,
-					tdp
 				])
 				.then(() => {
 					res.status(201).send({
@@ -247,6 +267,7 @@ class GpuController {
 			hdmi, 
 			vga, 
 			dvi,
+			tdp
 		} = req.body;
 		try {
 			const { id } = req.params;
@@ -260,7 +281,7 @@ class GpuController {
 					.status(400)
 					.json({ message: "Given idManufacturer does not exist" });
 			}
-			const sql = "UPDATE gpus SET idManufacturer = ?, modelName = ?, vram = ?, displayport = ?, hdmi = ?, vga = ?, dvi = ? WHERE idGpu = ?";
+			const sql = "UPDATE gpus SET idManufacturer = ?, modelName = ?, vram = ?, displayport = ?, hdmi = ?, vga = ?, dvi = ?, wattage = ? WHERE idGpu = ?";
 			let data = [
 				idManufacturer, 
 				modelName, 
@@ -269,6 +290,7 @@ class GpuController {
 				hdmi, 
 				vga, 
 				dvi,
+				tdp,
 				id,
 			];
 		
@@ -369,7 +391,7 @@ class GpuController {
 		try {
 			const { id } = req.params;
 			const results = await db.promise()
-				.query(SQL`SELECT gpu_has_partners.*, gpus.modelName AS chipset, gpus.vram, gpus.displayport, gpus.hdmi, gpus.vga, gpus.dvi, manufacturers.manufacturerName, partner.manufacturerName AS partnerName FROM gpu_has_partners
+				.query(SQL`SELECT gpu_has_partners.*, gpu_has_partners.wattage as tdp, gpus.modelName AS chipset, gpus.vram, gpus.displayport, gpus.hdmi, gpus.vga, gpus.dvi, manufacturers.manufacturerName, partner.manufacturerName AS partnerName FROM gpu_has_partners
 				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
 				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
 				LEFT JOIN manufacturers AS partner ON gpu_has_partners.idManufacturer = partner.idManufacturer
