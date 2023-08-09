@@ -86,7 +86,7 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
                 result={query}
               />
             }
-            {(data.length === 0) && (
+            {(data.result.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
                 <img src="./blob.svg" alt="blobby blobby blobby!"/>
