@@ -81,7 +81,6 @@ class CpuCoolerController {
 
 	fetchCpuCoolersByBuildFilter = async (req, res, next) => {
 		try {
-			console.log('yup');
 			const { id, query} = req.params;
 			let userQuery = `select idCpuSocket from cpus where idProcessor = ?`;
 			let [rows] = await db.promise().query(userQuery, [id]);

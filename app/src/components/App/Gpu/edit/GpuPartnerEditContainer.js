@@ -15,8 +15,6 @@ const GpuPartnerEditContainer = () => {
 
   const { data: gpu, setData, error, isLoading } = useFetch(apiCall);
 
-  console.log(gpu)
-
   if (isLoading) {
     return <Spinner />;
   }

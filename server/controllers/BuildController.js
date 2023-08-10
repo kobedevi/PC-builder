@@ -174,7 +174,6 @@ class BuildController {
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			WHERE idBuild = ?;`;
 			[rows] = await db.promise().query(userQuery, [id]);
-			console.log(rows);
 			finalResult[`storage`] = [];
 			rows.map(item => {
 				finalResult[`storage`] = [
@@ -185,11 +184,8 @@ class BuildController {
 				]
 			})
 
-			console.log(finalResult);
-
 			res.status(200).send(finalResult);
 		} catch (e) {
-			console.log(e)
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
@@ -408,7 +404,6 @@ class BuildController {
 							storageIds.add(data.idStorage);
 							inserter.push([uuidv4(), idBuild, data.idStorage, data.amount]);
 						})
-						console.log(inserter);
 						const temp = Array.from(storageIds);
 						let userQuery = `
 						SELECT COUNT(DISTINCT idStorage) = ? as isTrue 
@@ -430,7 +425,6 @@ class BuildController {
 					});
 				});
 		} catch (e) {
-			console.log(e);
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};

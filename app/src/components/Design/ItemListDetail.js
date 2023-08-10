@@ -1,9 +1,7 @@
 import moment from "moment";
 import ItemCollapserParent from "./ItemCollapserParent";
-import { useState } from "react";
 
 const ItemListDetail = ({info}) => {
-  console.log(info)
 
   return (
     <div className='collapserParent itemListDetail'>
