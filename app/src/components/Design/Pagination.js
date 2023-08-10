@@ -3,6 +3,22 @@ const Pagination = ({page, perPage, perPageClick, pageAmount=1, onClick}) => {
         pageAmount =1;
     }
     let array = [];
+
+    // array.push(
+    //     <li key={'first'} className={page === 0 ? 'active' : ''}>
+    //         <button disabled={page === 0} onClick={(e) => {
+    //             e.preventDefault()
+    //             onClick(0)
+    //         }}>{1}</button>
+    //     </li>
+    // )
+
+    // array.push(
+    //     <li key={'first'} className={page === 0 ? 'active' : ''}>
+    //         ...
+    //     </li>
+    // )
+
     for (let i = 1; i <= pageAmount; i++) {
         array.push(
             <li key={i} className={page === i-1 ? 'active' : ''}>
@@ -18,18 +34,18 @@ const Pagination = ({page, perPage, perPageClick, pageAmount=1, onClick}) => {
         <>
             <nav className="pagination">
                 <ul>
-                    <li key='0'>
-                        <button disabled={page === 0} onClick={(e) => {
+                    <li className="active"  key='0'>
+                        <button style={{filter:'brightness(1)'}} disabled={page === 0} onClick={(e) => {
                             e.preventDefault()
                             onClick(page - 1)
-                        }}>&lt;</button>
+                        }}>&#9668;</button>
                     </li>
                     {array}
-                    <li key={pageAmount+1}>
-                        <button disabled={page === pageAmount -1} onClick={(e) => {
+                    <li className="active" key={pageAmount+1}>
+                        <button style={{filter:'brightness(1)'}} disabled={page === pageAmount -1} onClick={(e) => {
                             e.preventDefault()
                             onClick(page + 1)
-                        }}>&gt;</button>
+                        }}>&#9654;</button>
                     </li>
                 </ul>
                 <ul className='perPage'>

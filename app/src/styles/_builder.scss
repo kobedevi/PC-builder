@@ -10,6 +10,10 @@ form.builder{
     * {
         font-family: 'Sofia Sans', sans-serif;
     }
+    h1{
+        font-size: 2rem;
+        font-family: 'Geologica';
+    }
     padding-top: 6rem;
     display: flex;
     flex-direction: column;
@@ -55,7 +59,7 @@ form.builder{
     position: relative;
     display: flex;
     background: white;
-    padding: 64px 48px;
+    padding: 32px 48px 48px;
     margin: 1rem;
     border-radius: 25px;
     box-sizing: border-box;
@@ -230,8 +234,9 @@ form.builder{
     }
     .productCard{
         display: flex;
+        flex-direction: column;
         flex-wrap: wrap;
-        border-radius: 25px;
+        border-radius: 10px;
         width: 270px;
         height: calc(100% - 3rem);
         position: relative;
@@ -247,7 +252,7 @@ form.builder{
             }
         }
         img{
-            border-radius: 25px 25px 0 0;
+            border-radius: 10px 10px 0 0;
             overflow: hidden;
             object-fit: cover;
             height: 250px;
@@ -261,6 +266,7 @@ form.builder{
             width: 100%;
         }
         section{
+            font-size: 1rem;
             position: relative;
             display: grid;
             flex-grow: 3;
@@ -275,7 +281,7 @@ form.builder{
                 position: relative;
                 left: -24px;
                 width: calc(100% + 48px);
-                border-radius: 0 0 25px 25px;
+                border-radius: 0 0 10px 10px;
                 border: none;
                 background: $light-purple;
                 color: white;
@@ -313,7 +319,9 @@ figure{
     display: flex !important;
     align-items: center;
     gap: 8px;
-    padding: 8px;
+    padding: 8px 8px 16px 8px;
+    border-bottom: 1px solid $breaker;
+    margin: 0 !important;
     img {
         height: auto !important;
         object-fit: unset !important;

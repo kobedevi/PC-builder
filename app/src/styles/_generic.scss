@@ -39,7 +39,7 @@ body {
     margin-right:4rem;
 }
 
-a.btn.btn-big {
+a.btn.btn-big, a.btn.btn-regular {
     padding: 1rem 2rem;
     border-radius: 500px;
     background-color: $dark-purple;
@@ -50,6 +50,16 @@ a.btn.btn-big {
     font-weight: 100;
     letter-spacing: 2px;
 }
+
+a.btn.btn-regular {
+    font-size: 1rem;
+    padding: .6rem 1.5rem;
+}
+
+a.btn.btn-regular:hover{
+    opacity:.85;
+}
+
 a.btn.btn-big:hover {
     opacity: .85;
     transform: scale(1.025);

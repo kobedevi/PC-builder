@@ -5,7 +5,7 @@ const PsuPicker = ({currentBuild, updateBuild, hiddenInput, idPsu, memorySlots, 
 
   return (
     <div>
-        PSU picker:
+        <h2>PSU picker:</h2>
         <input className="HideInput" ref={hiddenInput} onChange={() => {}} tabIndex="-1" style={{color:"black"}} value={idPsu} required type="text"/>
         <p>Minimum recommended wattage: {totalTdp}</p>
         <PsuSelect

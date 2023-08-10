@@ -4,7 +4,7 @@ const CpuPicker = ({hiddenInput, idCpu, currentBuild, updateBuild, idCpuSocket, 
   
   return (
     <div>
-        cpu picker:
+        <h2>cpu picker:</h2>
         {/* Input has to have an onChange or be readOnly, readonly is not an option because inputs become not required, empty onChanges remove the warnings while still being required  */}
         <input ref={hiddenInput} className="HideInput" onChange={() => {}} tabIndex="-1" style={{color:"black"}} value={idCpu} required={true} type="text"/>
         <CpuSelect

@@ -1,4 +1,3 @@
-import BuilderProductCard from 'components/Design/BuilderProductCard'
 import { useCallback } from 'react'
 import useNoAuthFetch from "../../../../core/hooks/useNoAuthFetch";
 import ErrorAlert from 'components/shared/ErrorAlert';
@@ -7,6 +6,8 @@ import { fetchFeaturedBuilds } from 'core/modules/Builds/api';
 import FeaturedProductCard from 'components/Design/FeaturedProductCard';
 import { Link } from 'react-router-dom';
 import { PossibleRoutes, route } from 'core/routing';
+import UserNameWithIcon from 'components/Design/UserNameWithIcon';
+import CtaButton from 'components/Design/CtaButton';
 
 const Featured = () => {
 
@@ -19,12 +20,12 @@ const Featured = () => {
   return (
     <div className='curvedContainer'>
         <div className='gridItem'>
-          <h2>Featured builds</h2>
+          <h2 style={{fontWeight:"boldest"}}>Featured builds</h2>
           <p>
-            These are recently made computers with our tool that people have published and shared with the community.<br/>
-            and here should come more text!
+            These are recently made computers with our Pc building tool!
+            People have published these and are shared with the community.<br/>
           </p>
-          <button>View more</button>
+          <CtaButton to={PossibleRoutes.Builds} className='CTA btn btn-regular'>View more</CtaButton>
         </div>
         <div className='gridItem'>
           {
@@ -50,6 +51,7 @@ const Featured = () => {
                         product={product}
                         id={product.idBuild}
                       >
+                        <UserNameWithIcon userName={product.userName}/>
                         CPU: {product.cpu_modelName}<br/>
                         GPU: {product?.gpu_modelName}<br/>
                         CASE: {product?.case_modelName}<br/>

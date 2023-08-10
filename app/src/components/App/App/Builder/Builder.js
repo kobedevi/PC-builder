@@ -127,7 +127,8 @@ const Builder = () => {
 					<StepCounter steps={steps} currentStepIndex={currentStepIndex}/>
 				</div>
 				
-				<div className="builderParent">
+				<div className="builderParent" style={{display:"flex", flexDirection: "column"}}>
+					<h1 style={{textAlign:"center", fontWeight:"bold"}}>Builder</h1>
 					<form className="builder" ref={builderForm}>
 						<div style={{position: "absolute", top: ".5rem", right:".5rem"}}>
 							{currentStepIndex + 1} / {steps.length}

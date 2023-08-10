@@ -18,7 +18,6 @@ class PsuController {
 			WHERE deleted = 0 LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
 			res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
-			console.log(e);
 			next(e);
 		}
 	};

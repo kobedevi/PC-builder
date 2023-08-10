@@ -8,6 +8,7 @@ import FeaturedProductCard from 'components/Design/FeaturedProductCard';
 import { Link } from 'react-router-dom';
 import { PossibleRoutes, route } from 'core/routing';
 import Pagination from 'components/Design/Pagination';
+import UserNameWithIcon from 'components/Design/UserNameWithIcon';
 
 
 const BuildsOverview = () => {
@@ -27,14 +28,13 @@ const BuildsOverview = () => {
   }, [page,perPage]);
 
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
-  
 
   return (
     <>
         <Nav/>
         <div className='container' style={{marginTop: "6rem"}}>
           <div className='curvedContainer' style={{gridTemplateColumns: "1fr"}}>
-            <h3>Completed builds overview</h3>
+            <h2>Completed builds overview</h2>
             {
               error && (
                 <ErrorAlert error={error} />
@@ -50,7 +50,7 @@ const BuildsOverview = () => {
             {
               data && (
                 <>
-                  <ul className="productList featuredList" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr"}}>
+                  <ul className="productList featuredList" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr"}}>
                     {data.results.map((product) => {
                       return(
                       <Link to={route(PossibleRoutes.BuildDetail, {id: product.idBuild})} key={product.idBuild}>
@@ -60,6 +60,7 @@ const BuildsOverview = () => {
                             product={product}
                             id={product.idBuild}
                           >
+                            <UserNameWithIcon userName={product.userName}/>
                             CPU: {product.cpu_modelName}<br/>
                             GPU: {product?.gpu_modelName}<br/>
                             CASE: {product?.case_modelName}<br/>
