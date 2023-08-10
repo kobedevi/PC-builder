@@ -20,7 +20,7 @@ const Featured = () => {
   return (
     <div className='curvedContainer'>
         <div className='gridItem'>
-          <h2 style={{fontWeight:"boldest"}}>Featured builds</h2>
+          <h2 style={{fontWeight:"boldest", textAlign:"left"}}>Featured builds</h2>
           <p>
             These are recently made computers with our Pc building tool!
             People have published these and are shared with the community.<br/>
