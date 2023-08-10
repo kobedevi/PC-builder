@@ -1,6 +1,21 @@
 import Axios from "axios";
 
 const createBuild = async (data, user) => {
+
+  // https://stackoverflow.com/questions/62425038/how-to-count-duplicate-object-in-js
+
+  let storageOutput = [];
+  if(data.storage.length > 0) {
+    storageOutput = data.storage.reduce((acc, { idStorage }, index, array) => {
+      acc[`${idStorage}`] = {
+        idStorage,
+        amount: (acc[`${idStorage}`] ? acc[`${idStorage}`].amount : 0) + 1
+      };
+    
+      return index === (array.length - 1) ? Object.values(acc) : acc;
+    }, {});
+  }
+
   const tempData = {
       idProcessor: data.cpu.idProcessor,
       idCpuCooler: data.cpucooler.idCpuCooler,
@@ -9,7 +24,7 @@ const createBuild = async (data, user) => {
       idGpu: data.gpu.idGpuPartner,
       idCase: data.case.idCase,
       idPsu: data.psu.idPsu,
-      storage: data.storage
+      storage: storageOutput
   };
   if(user?.token) {
     return await Axios.post(

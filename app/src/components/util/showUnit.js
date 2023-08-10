@@ -13,7 +13,8 @@ const showUnit = (key) => {
         case "clockspeed":
             return "MHz"
         case "Capacity":
-            return "Gb"
+        case "capacity":
+            return "GB"
         case "RPM":
             return "RPM"
         case "vram":

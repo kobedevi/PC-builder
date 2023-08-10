@@ -168,9 +168,28 @@ class BuildController {
 				]
 			});
 
+			userQuery = `SELECT build_has_storage.idBuild, build_has_storage.idStorage, build_has_storage.amount, storage.modelName, storage.capacity, storage.rpm, storage.image, storagetypes.storageType, manufacturers.manufacturerName FROM build_has_storage
+			LEFT JOIN storage ON build_has_storage.idStorage = storage.idStorage
+			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
+			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
+			WHERE idBuild = ?;`;
+			[rows] = await db.promise().query(userQuery, [id]);
+			console.log(rows);
+			finalResult[`storage`] = [];
+			rows.map(item => {
+				finalResult[`storage`] = [
+					...finalResult[`storage`],
+					{
+						...item
+					}
+				]
+			})
+
+			console.log(finalResult);
 
 			res.status(200).send(finalResult);
 		} catch (e) {
+			console.log(e)
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
@@ -326,12 +345,11 @@ class BuildController {
 			idGpu = null,
 			idCase,
             idPsu,
-            storage,
+            storage = [],
 		} = req.body;
-
-
-
+		
 		try {
+			const idBuild = uuidv4();
 			const unixDate = Math.floor(Date.now() / 1000);
             let [rows] = await db.promise().query(`select idProcessor from cpus where idProcessor = ?`, [idProcessor]);
             if (rows.length === 0) {
@@ -363,8 +381,8 @@ class BuildController {
             if (rows.length === 0) {
                 return res.status(400).json({ message: "Given PSU does not exist" });
             }
+			
 
-			const idBuild = uuidv4();
 			const sqlInsert =
 				`INSERT INTO builds (date, idBuild, idUser, idProcessor, idCpuCooler, idMotherboard, idRam, idGpu, idCase, idPsu) VALUES (?,?,?,?,?,?,?,?,?,?)`;
 			db.promise()
@@ -380,6 +398,31 @@ class BuildController {
                     idCase,
                     idPsu,
 				])
+				.then(async() => {
+					// add storage
+					if(storage.length > 0) {
+						// Check if id's exist
+						const storageIds = new Set();
+						const inserter = [];
+						storage.map((data) => {
+							storageIds.add(data.idStorage);
+							inserter.push([uuidv4(), idBuild, data.idStorage, data.amount]);
+						})
+						console.log(inserter);
+						const temp = Array.from(storageIds);
+						let userQuery = `
+						SELECT COUNT(DISTINCT idStorage) = ? as isTrue 
+						FROM storage
+						WHERE FIND_IN_SET(idStorage, ?);
+						`;
+						[rows] = await db.promise().query(userQuery, [temp.length, temp.join(',')]);
+						if(!rows[0].isTrue === 1) {
+							return res.status(400).json({ message: "Given Storage does not exist" });
+						}
+						userQuery = `INSERT INTO build_has_storage (id, idBuild, idStorage, amount) VALUES ?`;				
+						[rows] = await db.promise().query(userQuery, [inserter]);
+					}
+				})
 				.then(() => {
 					res.status(201).send({
 						message: "Build added",
@@ -387,6 +430,7 @@ class BuildController {
 					});
 				});
 		} catch (e) {
+			console.log(e);
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
