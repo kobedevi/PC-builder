@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { withRole } = require("../services/auth/auth.services");
-const { roles } = require("../models/User");
+const { roles, userModel } = require("../models/User");
 const upload = require("../utils/multer");
 
 const { cpuModel } = require("../models/Cpu");
@@ -51,6 +51,7 @@ const userController = new UserController();
 
 const authRouter = express.Router();
 const adminRouter = express.Router();
+const superAdminRouter = express.Router();
 const { ROLES } = require("../utils/globals");
 const { ramTypeModel } = require("../models/RamType");
 authRouter.use(bodyParser.urlencoded({ extended: true }));
@@ -188,12 +189,16 @@ adminRouter.post(
 );
 
 // Users
-adminRouter.get("/users/paginate/:page/:perPage", userController.fetchUsers);
-adminRouter.delete("/users/:id", userController.deleteUserById);
+superAdminRouter.get("/users/paginate/:page/:perPage", userController.fetchUsers);
+superAdminRouter.get("/users/filter/:query", userController.fetchUsersByFilter);
+superAdminRouter.post("/users", userModel, userController.createUser);
+superAdminRouter.patch("/users/:id", userModel, userController.patchUserById);
+superAdminRouter.delete("/users/:id", userController.deleteUserById);
 
 // uploads
 adminRouter.post('/uploads', upload.single('file') ,uploadController.uploadImage);
 
-authRouter.use(withRole(ROLES.admin), adminRouter);
+authRouter.use(withRole([ROLES.admin, ROLES.superAdmin]), adminRouter);
+authRouter.use(withRole([ROLES.superAdmin]), superAdminRouter);
 
 module.exports = authRouter;

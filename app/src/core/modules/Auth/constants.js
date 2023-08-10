@@ -1,5 +1,6 @@
 const roles = {
   admin: "admin",
+  superAdmin: "superAdmin",
   user: "user",
 };
 

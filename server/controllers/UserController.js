@@ -1,7 +1,7 @@
 const db = require("../utils/db");
 const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
-const { ROLES } = require("../utils/globals");
+const { ROLES, ROLESARRAY } = require("../utils/globals");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
 const SQL = require("@nearform/sql");
@@ -26,6 +26,32 @@ class UserController {
 		let user = req.body;
 		user.role = ROLES.user;
 		try {
+			bcrypt.hash(user.password, 10, async function (err, hash) {
+				if (err) {
+					throw err;
+				}
+				(user.id = uuidv4()), (user.password = hash);
+				const sqlInsert =
+					"INSERT INTO users (idUsers, role, userName, password, email) VALUES (?,?,?,?,?)";
+				const u = await db
+					.promise()
+					.query(sqlInsert, [
+						user.id,
+						user.role,
+						user.userName,
+						user.password,
+						user.email,
+					]);
+				res.status(200).json(user);
+			});
+		} catch (e) {
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
+	createUser = async (req, res, next) => {
+		try {
+			const user = req.body;
 			bcrypt.hash(user.password, 10, async function (err, hash) {
 				if (err) {
 					throw err;
@@ -81,7 +107,7 @@ class UserController {
 		const { id } = req.params;
 		const { user } = req;
 		try {
-			if(user.role === ROLES.admin){
+			if(user.role === ROLES.superAdmin){
 				const userQuery = await db.promise().query(`Select * FROM users WHERE idUsers= ?;`, [id]);
 				await db.promise().query(`DELETE FROM users WHERE idUsers= ?;`, [id]);
 				return res.status(200).send(userQuery[0][0]);
@@ -95,9 +121,56 @@ class UserController {
 	fetchUsers = async (req, res, next) => {
 		try {
 			const { user } = req;
-			if(user.role === ROLES.admin){
-				const userQuery = `SELECT idUsers, email, userName, role FROM USERS;`
-				let [rows] = await db.promise().query(userQuery);
+			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
+			if(user.role === ROLES.superAdmin){
+				let pageAmount = await db.promise().query("SELECT COUNT(idUsers) as totalProducts FROM users")
+				.then(res => Math.ceil(res[0][0].totalProducts / perPage))
+
+				const userQuery = `SELECT idUsers, email, userName, role FROM users ORDER BY email LIMIT ? OFFSET ?;`
+				let [rows] = await db.promise().query(userQuery, [parseInt(perPage), parseInt(page*perPage)]);
+				return res.status(200).send({results: rows, pageAmount});
+			}
+			return res.status(400).send({errors: "Access denied"});
+		} catch (e) {
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
+
+	fetchUsersByFilter = async (req, res, next) => {
+		try {
+			const { query } = req.params;
+			let encodedStr = query.replace(/\%/g,"Percent");
+			encodedStr = query.replace(/[/^#\%]/g,"")
+			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
+
+			const userQuery = `SELECT idUsers, email, userName, role FROM users
+			WHERE CONCAT_WS('', email, userName, role) LIKE ?
+			ORDER BY email;`;
+			const [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
+
+			res.status(200).send(rows);
+		} catch (e) {
+			next(
+				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
+			);
+		}
+	};
+
+	patchUserById = async (req, res, next) => {
+		try {
+			const { user } = req;
+			const { id } = req.params;
+			const { email, userName, role } = req.body;
+			if(user.role === ROLES.superAdmin){
+				const userQuery = `UPDATE users SET email = ?, userName = ?, role = ? WHERE idUsers = ?;`;
+				let [rows] = await db.promise().query(userQuery,[email, userName, ROLESARRAY.includes(role) ? role : ROLES.user, id]);
 				return res.status(200).send(rows);
 			}
 			return res.status(400).send({errors: "Access denied"});

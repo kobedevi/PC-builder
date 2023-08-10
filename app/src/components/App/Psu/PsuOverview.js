@@ -11,7 +11,7 @@ import ProductCard from "components/Design/ProductCard";
 import Result from "./forms/Result";
 import DeletePsu from "./Delete/DeletePsu";
 import Pagination from "components/Design/Pagination";
-import useAdmin from "core/hooks/useAdmin";
+import { useAdmin } from "core/hooks/useAdmin";
 import Button from "components/Design/Button";
 
 const PsuOverview = () => {

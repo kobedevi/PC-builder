@@ -1,6 +1,6 @@
 import { useAuth } from "components/Auth/AuthContainer";
 import Button from "components/Design/Button";
-import useAdmin from "core/hooks/useAdmin";
+import { useAdmin} from "core/hooks/useAdmin";
 import { PossibleRoutes } from "core/routing";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";

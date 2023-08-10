@@ -26,9 +26,9 @@ const passportWithErrorHandling = (strategy) => {
 const authLocal = passportWithErrorHandling("local");
 const authJwt = passportWithErrorHandling("jwt");
 
-const withRole = (role) => (req, res, next) => {
+const withRole = (roles) => (req, res, next) => {
 	const user = req.user;
-	if (user.role === role) {
+	if (roles.includes(user.role)) {
 		next();
 	} else {
 		next(new ForbiddenError());

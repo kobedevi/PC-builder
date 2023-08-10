@@ -1,18 +1,17 @@
 import { useState, useCallback } from "react";
-import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
-import { fetchCases } from "../../../core/modules/Case/api";
-import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "components/shared/ErrorAlert";
 import SearchForm from "components/Design/SearchForm";
-import ProductCard from "components/Design/ProductCard";
 import Pagination from "components/Design/Pagination";
 import DeleteButton from "components/Design/DeleteButton";
 import EditButton from "components/Design/EditButton";
 import { fetchUsers } from "core/modules/Users/api";
 import DeleteUser from "./Delete/DeleteUser";
+import CreateOrEditUser from "./forms/CreateOrEditUser";
+import { useAuth } from "components/Auth/AuthContainer";
+import Result from "./forms/Result";
 
 const UserOverview = () => {
   const [info, setInfo] = useState();
@@ -22,6 +21,8 @@ const UserOverview = () => {
   const [page, setPage] = useState(0)
   const [perPage, setPerPage] = useState(20)
   
+  const auth = useAuth();
+
   const handlePerPageClick = (perPage) => {
     setPerPage(perPage)
   }
@@ -36,10 +37,13 @@ const UserOverview = () => {
 
   const { data, error, setError, isLoading, refresh } = useFetch(apiCall);
 
-  console.log(data);
+  const handleCreateUser = () => {
+    setCurrentUser({});
+  };
   
   const onUpdate = () => {
     setDeleteUser(null);
+    setCurrentUser(null);
     setQuery(null);
     refresh();
   };
@@ -77,13 +81,20 @@ const UserOverview = () => {
               setQuery={setQuery}
             />
 
-            <Link to={PossibleRoutes.Create} className="btn btn-primary">
+            <button onClick={() => handleCreateUser()} className="btn btn-primary">
               Add User
-            </Link>
+            </button>
 
-            {/* {
-              query && <Result updateChecker={deleteCase} deleter={setDeleteCase} result={query}/>
-            } */}
+            {
+              query && <Result 
+                result={query} 
+                setCurrentUser={setCurrentUser} 
+                onUpdate={onUpdate}
+                deleteUser={deleteUser}
+                setDeleteUser={setDeleteUser}
+                authUser={auth}
+              />
+            }
 
             {
                 !query && (
@@ -99,8 +110,9 @@ const UserOverview = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                { data.map((user) => (
-                                    <tr key={user._id}>
+                                { data.results.map((user) => {
+                                  if(user.email !== auth?.user.email) {
+                                    return (<tr key={user.idUsers}>
                                         <td>
                                             <DeleteButton deleter={() => setDeleteUser(user)}/>
                                         </td>
@@ -110,14 +122,31 @@ const UserOverview = () => {
                                         <td>
                                             <EditButton editor={() => setCurrentUser(user)}/>
                                         </td>
-                                    </tr>
-                                ))}
+                                    </tr>)
+                                  }
+                                  return;
+                                })}
                             </tbody>
                         </table>
+                        <Pagination
+                          page={page}
+                          perPage={perPage}
+                          pageAmount={data.pageAmount}
+                          perPageClick={handlePerPageClick}
+                          onClick={handlePageClick}
+                        />
                     </>
                 )
             }
-
+            {
+              currentUser && (
+                <CreateOrEditUser
+                  user={currentUser}
+                  onUpdate={onUpdate}
+                  onDismiss={() => setCurrentUser(null)}
+                />
+              )
+            }
             {
               deleteUser && (
                 <DeleteUser

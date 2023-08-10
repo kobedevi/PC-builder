@@ -5,7 +5,7 @@ import Alert from "../../Design/Alert";
 import OriginalGpuOverview from "./Overview/OriginalGpu";
 import PartnerGpuOverview from "./Overview/PartnerGpu";
 import SearchForm from "components/Design/SearchForm";
-import useAdmin from "core/hooks/useAdmin";
+import { useAdmin } from "core/hooks/useAdmin";
 
 const GpuOverview = () => {
   const [info, setInfo] = useState();
