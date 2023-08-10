@@ -19,7 +19,7 @@ const CrudRouting = () => {
     <Header />
     <div className="app">
       <Sidebar />
-      <main>
+      <main className="reset-noise">
       <Routes>
         <Route path={PossibleRoutes.HomeParent} element={<Home/>} />
         <Route index path={PossibleRoutes.CpuParent} element={<CpuRouter/>} />

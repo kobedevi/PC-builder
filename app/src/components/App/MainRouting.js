@@ -8,17 +8,19 @@ import BuildsOverview from "./App/Builds/BuildsOverview";
 
 const MainRouting = () => {
   return (
-    <Routes>
-      <Route index path={PossibleRoutes.Home} element={<Home />} />
-      <Route index path={PossibleRoutes.Builder} element={<Builder />} />
-      <Route index path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
-      <Route index path={PossibleRoutes.Builds} element={<BuildsOverview />} />
-      <Route path={PossibleRoutes.CrudParent} element={<CrudRouting />} />
-      <Route
-        path="*"
-        element={<Navigate to={PossibleRoutes.Home} replace />}
-      />
-    </Routes>
+    <main className="public">
+      <Routes>
+        <Route index path={PossibleRoutes.Home} element={<Home />} />
+        <Route index path={PossibleRoutes.Builder} element={<Builder />} />
+        <Route index path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
+        <Route index path={PossibleRoutes.Builds} element={<BuildsOverview />} />
+        <Route path={PossibleRoutes.CrudParent} element={<CrudRouting />} />
+        <Route
+          path="*"
+          element={<Navigate to={PossibleRoutes.Home} replace />}
+        />
+      </Routes>
+    </main>
   );
 };
 

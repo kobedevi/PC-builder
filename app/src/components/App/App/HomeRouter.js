@@ -10,7 +10,7 @@ import BuildsOverview from "./Builds/BuildsOverview"
 
 const HomeRouter = ({setUser}) => {
   return (
-    <>
+    <main className="public">
       <header>
         <Nav/>
       </header>
@@ -23,7 +23,7 @@ const HomeRouter = ({setUser}) => {
         <Route index path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
         <Route path="*" element={<Navigate to={PossibleRoutes.Home} replace />} />
       </Routes>
-    </>
+    </main>
   )
 }
 
