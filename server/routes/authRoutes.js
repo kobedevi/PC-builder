@@ -30,6 +30,7 @@ const StorageTypeController = require("../controllers/StorageTypeController");
 const StorageController = require("../controllers/StorageController");
 const GpuController = require("../controllers/GpuController");
 const PsuController = require("../controllers/PsuController");
+const UserController = require("../controllers/UserController");
 const UploadController = require("../controllers/UploadController");
 
 const cpuController = new CpuController();
@@ -46,6 +47,7 @@ const ramTypeController = new RamTypeController();
 const storageController = new StorageController();
 const storageTypeController = new StorageTypeController();
 const uploadController = new UploadController();
+const userController = new UserController();
 
 const authRouter = express.Router();
 const adminRouter = express.Router();
@@ -184,6 +186,10 @@ adminRouter.post(
 	formfactorModel,
 	formfactorController.createFormfactor
 );
+
+// Users
+adminRouter.get("/users/paginate/:page/:perPage", userController.fetchUsers);
+adminRouter.delete("/users/:id", userController.deleteUserById);
 
 // uploads
 adminRouter.post('/uploads', upload.single('file') ,uploadController.uploadImage);

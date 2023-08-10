@@ -11,6 +11,7 @@ import PsuRouter from "./Psu/PsuRouter";
 import Home from "./App/Homepage/Home";
 import Sidebar from "./Sidebar/Sidebar";
 import Header from "components/Design/Header";
+import UserRouter from "./Users/UserRouter";
 
 const CrudRouting = () => {
   return (
@@ -29,6 +30,7 @@ const CrudRouting = () => {
         <Route path={PossibleRoutes.RamParent} element={<RamRouter/>} />
         <Route path={PossibleRoutes.GpuParent} element={<GpuRouter/>} />
         <Route path={PossibleRoutes.PsuParent} element={<PsuRouter/>} />
+        <Route path={PossibleRoutes.UserParent} element={<UserRouter/>} />
 
         <Route
           path="*"

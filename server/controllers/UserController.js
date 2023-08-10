@@ -66,14 +66,43 @@ class UserController {
 	fetchUserById = async (req, res, next) => {
 		const { idUsers } = req.body;
 		try {
-			const results = await db.promise().query(SQL`SELECT * FROM users
-				WHERE idUsers=${idUsers} LIMIT 1;`);
+			const results = await db.promise().query(`SELECT * FROM users
+				WHERE idUsers= ? LIMIT 1;`,[idUsers]);
 			if (results[0].length === 0) {
 				return null;
 			}
 			return results[0][0];
 		} catch (e) {
 			next(e);
+		}
+	};
+
+	deleteUserById = async (req, res, next) => {
+		const { id } = req.params;
+		const { user } = req;
+		try {
+			if(user.role === ROLES.admin){
+				const userQuery = await db.promise().query(`Select * FROM users WHERE idUsers= ?;`, [id]);
+				await db.promise().query(`DELETE FROM users WHERE idUsers= ?;`, [id]);
+				return res.status(200).send(userQuery[0][0]);
+			}
+			return res.status(400).send(results);
+		} catch (e) {
+			next(e);
+		}
+	};
+
+	fetchUsers = async (req, res, next) => {
+		try {
+			const { user } = req;
+			if(user.role === ROLES.admin){
+				const userQuery = `SELECT idUsers, email, userName, role FROM USERS;`
+				let [rows] = await db.promise().query(userQuery);
+				return res.status(200).send(rows);
+			}
+			return res.status(400).send({errors: "Access denied"});
+		} catch (e) {
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
 
@@ -93,10 +122,6 @@ class UserController {
 		return jwt.sign({ idUsers: user.idUsers }, process.env.JWT_SECRET, {
 			expiresIn: 60 * 120,
 		});
-	};
-
-	isAdmin = (user) => {
-		return user.role === roles.admin;
 	};
 }
 

@@ -2,10 +2,6 @@ const PossibleRoutes = Object.freeze({
   splash: "/splash",
   Login: "/login",
   Register: "/register",
-
-  
-  Users: "/users",
-  UsersEdit: "/users/edit",
   
   PartsOverview: "/",
   
@@ -56,6 +52,10 @@ const PossibleRoutes = Object.freeze({
   PsuParent: "/psu/*",
   Psus: "/crud/psu",
   PsuEdit: "/crud/psu/:id/edit",
+
+  UserParent: "/users/*",
+  Users: "/crud/users",
+  UsersEdit: "/crud/user/:id/edit",
 });
 
 // replaces : values with values from object

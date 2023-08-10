@@ -47,6 +47,11 @@ const items = [
     route: PossibleRoutes.Psus,
     icon: null,
   },
+  {
+    label: "Users",
+    route: PossibleRoutes.Users,
+    icon: null,
+  },
 ];
 
 const Sidebar = () => {
