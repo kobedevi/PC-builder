@@ -15,8 +15,9 @@ const registerRoutes = (app, db) => {
 	app.post("/register", userModel, userController.register);
 	app.post("/login", authLocal, userController.login);
 	app.get('/build/:id', buildController.fetchBuildById);
-	app.get('/builds/:page/:perPage', buildController.fetchBuildsOverview);
 	app.get('/featured/builds', buildController.fetchFeaturedBuilds);
+	app.get('/builds/user/:id/:page/:perPage', buildController.fetchBuildsByUser);
+	app.get('/builds/:page/:perPage', buildController.fetchBuildsOverview);
 
 	app.use('/compatible', builderRoutes);
 	app.use(authJwt, authBuilderRoutes);

@@ -4,7 +4,8 @@ import CrudRouting from "./CrudRouting";
 import Home from "./App/Homepage/Home";
 import Builder from "./App/Builder/Builder";
 import BuildDetail from "./App/Detail/BuildDetail";
-import BuildsOverview from "./App/Builds/BuildsOverview";
+import GeneralBuildsOverview from "./App/Builds/GeneralBuildsOverview";
+import UserBuildsOverview from "./App/Builds/UserBuildsOverview";
 
 const MainRouting = () => {
   return (
@@ -13,7 +14,8 @@ const MainRouting = () => {
         <Route index path={PossibleRoutes.Home} element={<Home />} />
         <Route index path={PossibleRoutes.Builder} element={<Builder />} />
         <Route index path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
-        <Route index path={PossibleRoutes.Builds} element={<BuildsOverview />} />
+        <Route index path={PossibleRoutes.Builds} element={<GeneralBuildsOverview />} />
+        <Route index path={PossibleRoutes.UserBuilds} element={<UserBuildsOverview />} />
         <Route path={PossibleRoutes.CrudParent} element={<CrudRouting />} />
         <Route
           path="*"

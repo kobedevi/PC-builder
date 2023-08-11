@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import Nav from '../Homepage/Nav'
-import { fetchBuildsOverview } from 'core/modules/Builds/api';
 import useNoAuthFetch from "../../../../core/hooks/useNoAuthFetch";
 import ErrorAlert from 'components/shared/ErrorAlert';
 import Spinner from 'components/Design/Spinner';
@@ -11,7 +10,7 @@ import Pagination from 'components/Design/Pagination';
 import UserNameWithIcon from 'components/Design/UserNameWithIcon';
 
 
-const BuildsOverview = () => {
+const BuildsOverview = ({fetcher, title, id=null, setUserName=null}) => {
   const [page, setPage] = useState(0);
   const [perPage, setPerPage] = useState(20);
 
@@ -24,17 +23,24 @@ const BuildsOverview = () => {
   }
 
   const apiCall = useCallback(() => {
-    return fetchBuildsOverview(page,perPage);
-  }, [page,perPage]);
+    if(id) {
+      return fetcher(id, page,perPage);
+    }
+    return fetcher(page,perPage);
+  }, [id, fetcher, page,perPage]);
 
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
+
+  if(data?.results && setUserName) {
+    setUserName(data.results[0]?.userName ? data.results[0].userName : 'Unknown');
+  }
 
   return (
     <>
         <Nav/>
         <div className='container' style={{marginTop: "6rem"}}>
           <div className='curvedContainer' style={{gridTemplateColumns: "1fr"}}>
-            <h2>Completed builds overview</h2>
+            <h2>{title}</h2>
             {
               error && (
                 <ErrorAlert error={error} />
@@ -44,6 +50,15 @@ const BuildsOverview = () => {
             {
               isLoading && (
                 <Spinner />
+              )
+            }
+
+            {
+              data?.results.length === 0 && (
+                <div className="blobContainer">
+                    <p>{'No builds'}</p>
+                    <img src="/blob.svg" alt="blobby blobby blobby!"/>
+                </div>
               )
             }
             
@@ -60,7 +75,14 @@ const BuildsOverview = () => {
                             product={product}
                             id={product.idBuild}
                           >
-                            <UserNameWithIcon userName={product.userName}/>
+                            {product.idUser && (
+                              <Link to={route(PossibleRoutes.UserBuilds, {id: product.idUser})}>
+                                <UserNameWithIcon userName={product.userName}/>
+                              </Link>
+                            )}
+                            {!product.idUser && (
+                              <UserNameWithIcon userName={product.userName}/>
+                            )}
                             CPU: {product.cpu_modelName}<br/>
                             GPU: {product?.gpu_modelName}<br/>
                             CASE: {product?.case_modelName}<br/>

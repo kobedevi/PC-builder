@@ -51,7 +51,14 @@ const Featured = () => {
                         product={product}
                         id={product.idBuild}
                       >
-                        <UserNameWithIcon userName={product.userName}/>
+                        {product.idUser && (
+                          <Link to={route(PossibleRoutes.UserBuilds, {id: product.idUser})}>
+                            <UserNameWithIcon userName={product.userName}/>
+                          </Link>
+                        )}
+                        {!product.idUser && (
+                          <UserNameWithIcon userName={product.userName}/>
+                        )}
                         CPU: {product.cpu_modelName}<br/>
                         GPU: {product?.gpu_modelName}<br/>
                         CASE: {product?.case_modelName}<br/>

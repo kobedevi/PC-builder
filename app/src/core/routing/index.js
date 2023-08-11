@@ -7,9 +7,10 @@ const PossibleRoutes = Object.freeze({
   
   Builder: "/builder",
   Builds: "/builds",
+  UserBuilds: "/builds/user/:id",
+  BuildDetail: "/build/:id",
   HomeParent: "/home/*",
   Home: "/home",
-  BuildDetail: "/build/:id",
 
   Create: "create",
   Detail: ":id",

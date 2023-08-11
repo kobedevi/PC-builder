@@ -1,7 +1,7 @@
 import { useAuth } from "components/Auth/AuthContainer";
 import Button from "components/Design/Button";
 import { useAdmin} from "core/hooks/useAdmin";
-import { PossibleRoutes } from "core/routing";
+import { PossibleRoutes, route } from "core/routing";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -36,6 +36,7 @@ const Nav = () => {
         <div>
           <li><Link to={PossibleRoutes.Builder}>Builder</Link></li>
           <li><Link to={PossibleRoutes.Builds}>Completed builds</Link></li>
+        {user?.user && <li><Link to={route(PossibleRoutes.UserBuilds, {id: user.user.idUser})}>My builds</Link></li>}
           {admin && <li><Link to={PossibleRoutes.Crud}>CRUD</Link></li>}
         </div>
         <div>

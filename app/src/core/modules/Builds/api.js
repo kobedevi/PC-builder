@@ -57,9 +57,13 @@ const fetchBuildsOverview = async (page=0, perPage=20) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/builds/${page}/${perPage}`);
 }
 
+const fetchBuildsByUser = async (id, page=0, perPage=20) => {
+  return await Axios.request(`${process.env.REACT_APP_BASE_API}/builds/user/${id}/${page}/${perPage}`);
+}
+
 const fetchBuild = async (id) => {
   return await Axios.request(`${process.env.REACT_APP_BASE_API}/build/${id}`);
 }
 
 
-export { createBuild, fetchFeaturedBuilds, fetchBuildsOverview, fetchBuild };
+export { createBuild, fetchFeaturedBuilds, fetchBuildsOverview, fetchBuildsByUser, fetchBuild };

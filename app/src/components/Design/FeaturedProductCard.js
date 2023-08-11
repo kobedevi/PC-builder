@@ -18,10 +18,10 @@ const FeaturedProductCard = ({
           img && (
             <>
               <figure style={{cursor:"pointer"}}>
-                <img draggable="false" className="large"src={`${product.case_image ? product.case_image : "../no-image.svg" }`} alt='Case preview'/>
+                <img draggable="false" className="large"src={`${product.case_image ? product.case_image : "/no-image.svg" }`} alt='Case preview'/>
                 <div>
-                  <img draggable="false" src={`${product.cpu_image ? product.cpu_image : "../no-image.svg" }`} alt='Cpu preview'/>
-                  <img draggable="false" src={`${product.gpu_image ? product.gpu_image : "../no-image.svg" }`} alt='Gpu preview'/>
+                  <img draggable="false" src={`${product.cpu_image ? product.cpu_image : "/no-image.svg" }`} alt='Cpu preview'/>
+                  <img draggable="false" src={`${product.gpu_image ? product.gpu_image : "/no-image.svg" }`} alt='Gpu preview'/>
                 </div>
               </figure>
               <section>
