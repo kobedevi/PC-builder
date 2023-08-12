@@ -28,6 +28,7 @@ const schema = yup.object().shape({
     .max(10000, "Max. TDP amount is 10000W.")
     .required()
     .positive(),
+  price: yup.number().nullable().positive(),
 });
 
 const defaultData = {
@@ -40,6 +41,7 @@ const defaultData = {
   width: 0,
   depth: 0,
   tdp: 200,
+  price: 100,
 };
 
 const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -203,6 +205,19 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           unit={"W"}
           onChange={handleChange}
           error={errors.tdp}
+        />
+
+        <NumberInput
+          label="MSRP price"
+          type="number"
+          name="price"
+          value={data.price}
+          disabled={disabled}
+          min={"1"}
+          step={1}
+          onChange={handleChange}
+          unit={'€'}
+          error={errors.price}
         />
 
         <div className="form-group">

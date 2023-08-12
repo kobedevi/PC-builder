@@ -2,7 +2,6 @@ const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4, validate: uuidValidate } = require("uuid");
 const mysql = require('mysql2');
-const SQL = require("@nearform/sql");
 
 class MotherboardController {
 	fetchMotherboards = async (req, res, next) => {
@@ -18,7 +17,7 @@ class MotherboardController {
 			LEFT JOIN formfactors ON motherboards.idFormfactor = formfactors.idFormfactor
 			LEFT JOIN ramtypes ON motherboards.idRamType = ramtypes.idRamType
 			WHERE motherboards.deleted = 0 LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
-			res.status(200).send({results: results[0], pageAmount});
+			return res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -70,7 +69,7 @@ class MotherboardController {
 				return test;
 			})
 
-			res.status(200).send({result, pageAmount});
+			return res.status(200).send({result, pageAmount});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -128,7 +127,7 @@ class MotherboardController {
 				return test;
 			})
 
-			res.status(200).send(result);
+			return res.status(200).send(result);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -157,7 +156,7 @@ class MotherboardController {
 					encodedStr,
 				});
 			}
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -197,7 +196,7 @@ class MotherboardController {
 				finalResult.amount.push(item.amount)
 			});
 
-			res.status(200).send(finalResult);
+			return res.status(200).send(finalResult);
 		} catch (e) {
 			next(e);
 		}
@@ -220,6 +219,7 @@ class MotherboardController {
 			pcieSlots,
 			memorySlots,
 			image,
+			price,
 			storageMethods
 		} = req.body;
 		try {
@@ -246,7 +246,7 @@ class MotherboardController {
 
 			const id = uuidv4();
 			let sqlInsert =
-				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idRamType, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots, image) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO motherboards (idMotherboard, idManufacturer, idCpuSocket, idRamType, idFormfactor, modelName, wifi, sataPorts, pcieSlots, memorySlots, price, image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 			.query(sqlInsert, [
 				id,
@@ -259,6 +259,7 @@ class MotherboardController {
 				sataPorts,
 				pcieSlots,
 				memorySlots,
+				price,
 				image,
 			])
 				
@@ -277,7 +278,7 @@ class MotherboardController {
 				)}`;
 				await db.promise().query(storageSqlInsert);
 			}
-			res.status(201).send({
+			return res.status(201).send({
 				message: "Storage method",
 				id: id,
 			});
@@ -303,6 +304,7 @@ class MotherboardController {
 			pcieSlots,
 			memorySlots,
 			storageMethods,
+			price,
 			image,
 		} = req.body;
 
@@ -328,7 +330,7 @@ class MotherboardController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "Given idRamType does not exist" });
 			}
-			const sql = `UPDATE motherboards SET idManufacturer = ?, idCpuSocket = ?, idFormfactor = ?, idRamType = ?, modelName = ?, wifi = ?, sataPorts = ?, pcieSlots = ?, memorySlots = ?, image = ? WHERE idMotherboard=?`;
+			const sql = `UPDATE motherboards SET idManufacturer = ?, idCpuSocket = ?, idFormfactor = ?, idRamType = ?, modelName = ?, wifi = ?, sataPorts = ?, pcieSlots = ?, memorySlots = ?, price = ?, image = ? WHERE idMotherboard=?`;
 			let data = [
 				idManufacturer,
 				idCpuSocket,
@@ -339,6 +341,7 @@ class MotherboardController {
 				sataPorts,
 				pcieSlots,
 				memorySlots,
+				price,
 				image,
 				id,
 			];
@@ -423,7 +426,7 @@ class MotherboardController {
 				await db.promise().query(storageSqlRemover, [id]);
 			}
 			
-			res.status(201).send({
+			return res.status(201).send({
 				message: "Motherboard updated",
 				id: id
 			});
@@ -444,7 +447,7 @@ class MotherboardController {
 			}
 			query = `UPDATE motherboards SET deleted = 1 WHERE idMotherboard= ?`;
 			await db.promise().query(query, [id]);
-			res.status(200).send(rows[0]);
+			return res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}

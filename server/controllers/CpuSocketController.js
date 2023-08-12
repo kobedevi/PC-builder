@@ -9,7 +9,7 @@ class CpuSocketController {
 			const results = await db
 				.promise()
 				.query(`SELECT * FROM cpusockets ORDER BY socketType`);
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -29,7 +29,7 @@ class CpuSocketController {
 				db.promise()
 					.query(sqlInsert, [id, req.body.socketType])
 					.then(() => {
-						res.status(201).send({
+						return res.status(201).send({
 							message: "CPU socket added",
 							id,
 						});

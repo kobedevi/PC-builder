@@ -9,7 +9,7 @@ class StorageTypeController {
 			const results = await db.promise().query(`SELECT * FROM storagetypes
 			WHERE deleted = 0
 			ORDER BY storageType;`);
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -29,7 +29,7 @@ class StorageTypeController {
 				db.promise()
 					.query(sqlInsert, [id, req.body.storageType])
 					.then(() => {
-						res.status(201).send({
+						return res.status(201).send({
 							message: "Storage type added",
 							id,
 						});

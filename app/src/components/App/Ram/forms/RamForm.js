@@ -33,6 +33,7 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .integer(),
+  price: yup.number().nullable().positive(),
 });
 
 const defaultData = {
@@ -42,6 +43,7 @@ const defaultData = {
   sizePerStick: 8,
   stickAmount: 2,
   speed: 3600,
+  price: 100,
 };
 
 const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -166,16 +168,19 @@ const RamForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         error={errors.speed}
       />
-{/* 
-      <Toggle2
-        label="DIMM Type"
-        name="type"
-        value={data.type}
-        possibleValues={["DDR4", "DDR5"]}
+
+      <NumberInput
+        label="MSRP price"
+        type="number"
+        name="price"
+        value={data.price}
         disabled={disabled}
+        min={"1"}
+        step={1}
         onChange={handleChange}
-        error={errors.type}
-      /> */}
+        unit={'€'}
+        error={errors.price}
+      />
 
       <div className="form-group">
         <Input

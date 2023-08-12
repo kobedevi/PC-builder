@@ -8,7 +8,7 @@ class RamTypeController {
 			const results = await db.promise().query(`SELECT * FROM ramtypes
 			WHERE deleted = 0
 			ORDER BY ramType;`);
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -28,7 +28,7 @@ class RamTypeController {
 				db.promise()
 					.query(sqlInsert, [id, req.body.ramType])
 					.then(() => {
-						res.status(201).send({
+						return res.status(201).send({
 							message: "RAM type added",
 							id,
 						});

@@ -9,7 +9,7 @@ class FormfactorController {
 			const results = await db
 				.promise()
 				.query(`SELECT * FROM formfactors ORDER BY formfactor`);
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -30,7 +30,7 @@ class FormfactorController {
 				db.promise()
 					.query(sqlInsert, [id, formfactor, height, width])
 					.then(() => {
-						res.status(201).send({
+						return res.status(201).send({
 							message: "Formfactor added",
 							id,
 						});

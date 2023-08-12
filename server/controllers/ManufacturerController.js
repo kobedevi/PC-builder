@@ -2,7 +2,6 @@ const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const ValidationError = require("../errors/ValidationError");
 const { v4: uuidv4 } = require("uuid");
-const SQL = require("@nearform/sql");
 
 class ManufacturerController {
 	fetchManufacturers = async (req, res, next) => {
@@ -10,7 +9,7 @@ class ManufacturerController {
 			const results = await db
 				.promise()
 				.query(`SELECT * FROM manufacturers ORDER BY manufacturerName`);
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -22,9 +21,9 @@ class ManufacturerController {
 			const results = await db
 				.promise()
 				.query(
-					SQL`SELECT * FROM manufacturers WHERE idManufacturer = ${id} LIMIT 1`
+					`SELECT * FROM manufacturers WHERE idManufacturer = ? LIMIT 1`, [id]
 				);
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -45,7 +44,7 @@ class ManufacturerController {
 				db.promise()
 					.query(sqlInsert, [id, manufacturerName])
 					.then(() => {
-						res.status(201).send({
+						return res.status(201).send({
 							message: "Manufacturer added",
 							id,
 						});

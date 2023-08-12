@@ -3,6 +3,7 @@ import { PossibleRoutes, route } from "../../../../core/routing";
 import DetailCard from "../../../Design/DetailCard";
 import Layout from "components/Design/Models/Layout";
 import Model from "./Model/Model";
+import EditIcon from "components/Design/EditIcon";
 
 const MotherboardDetail = ({ motherboard }) => {
   return (
@@ -10,12 +11,12 @@ const MotherboardDetail = ({ motherboard }) => {
       <div className="detail">
         {/* TODO: cpusockets mapping */}
         <DetailCard data={motherboard} />
-        <Link
+        <Link className="edit"
           to={route(PossibleRoutes.MotherboardEdit, {
             id: motherboard.idMotherboard,
           })}
         >
-          {motherboard.modelName}
+          <EditIcon/>
         </Link>
       </div>
       <div className="model">

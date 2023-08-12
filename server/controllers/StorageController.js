@@ -17,7 +17,7 @@ class StorageController {
 				.then(res => {
 					return (Math.ceil(res[0][0].totalProducts / perPage))
 				})
-			res.status(200).send({result: results[0], pageAmount});
+			return res.status(200).send({result: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -42,7 +42,7 @@ class StorageController {
 					encodedStr,
 				});
 			}
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -61,7 +61,7 @@ class StorageController {
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "Storage does not exist" });
 			}
-			res.status(200).send(results[0][0]);
+			return res.status(200).send(results[0][0]);
 		} catch (e) {
 			next(e);
 		}
@@ -97,7 +97,7 @@ class StorageController {
 			AND CONCAT_WS('', modelName, manufacturerName, capacity, RPM) LIKE ?`;
 			[rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
 
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -136,7 +136,7 @@ class StorageController {
 			LIMIT ? OFFSET ?`;
 			[rows] = await db.promise().query(userQuery, [parseInt(perPage), parseInt(page*perPage)]);
 
-			res.status(200).send({pageAmount, result: rows});
+			return res.status(200).send({pageAmount, result: rows});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -154,7 +154,7 @@ class StorageController {
 			}
 			query = `UPDATE storage SET deleted = 1 WHERE idStorage= ?`;
 			await db.promise().query(query, [id]);
-			res.status(200).send(rows[0]);
+			return res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -172,6 +172,7 @@ class StorageController {
 			idManufacturer,
 			idStorageType,
 			RPM,
+			price,
 			image
 		} = req.body;
 		
@@ -192,13 +193,14 @@ class StorageController {
 				return res.status(400).json({ message: "Given idStorageType does not exist" });
 			}
 
-			const sql = `UPDATE storage SET modelName = ?, capacity = ?, idManufacturer = ?, idStorageType = ?, RPM = ?, image = ? WHERE idStorage = ?`;
+			const sql = `UPDATE storage SET modelName = ?, capacity = ?, idManufacturer = ?, idStorageType = ?, RPM = ?, price = ?, image = ? WHERE idStorage = ?`;
 			let data = [
 				modelName,
 				capacity,
 				idManufacturer,
 				idStorageType,
 				parseInt(RPM),
+				price,
 				image,
 				id,
 			];
@@ -207,13 +209,14 @@ class StorageController {
 			db.promise()
 				.query(sql, data)
 				.then(() => {
-					res.status(201).send({
+					return res.status(201).send({
 						message: "Storage updated",
 						modelName,
 						capacity,
 						idManufacturer,
 						idStorageType,
 						RPM,
+						price,
 						image,
 						id,
 					});
@@ -240,6 +243,7 @@ class StorageController {
 			idManufacturer,
 			idStorageType,
 			RPM,
+			price,
 			image
 		} = req.body;
 
@@ -255,7 +259,7 @@ class StorageController {
 
 			const idStorage = uuidv4();
 			const sqlInsert =
-				"INSERT INTO storage (idStorage, modelName, capacity, idManufacturer, idStorageType, RPM, image) VALUES (?,?,?,?,?,?,?)";
+				"INSERT INTO storage (idStorage, modelName, capacity, idManufacturer, idStorageType, RPM, price, image) VALUES (?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					idStorage,
@@ -264,10 +268,11 @@ class StorageController {
 					idManufacturer,
 					idStorageType,
 					RPM,
+					price,
 					image
 				])
 				.then(() => {
-					res.status(201).send({
+					return res.status(201).send({
 						message: "Storage added",
 						id: idStorage,
 					});

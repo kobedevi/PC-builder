@@ -13,6 +13,7 @@ import ArrayStorageSelect from "components/util/ArrayStorageSelect";
 import { v4 as uuidv4 } from "uuid";
 
 
+
 const schema = yup.object().shape({
   idManufacturer: yup.string().required(),
   idCpuSocket: yup.string().required(),
@@ -25,6 +26,8 @@ const schema = yup.object().shape({
   pcieSlots: yup.number().max(8).required().positive().integer(),
   storageMethods: yup.array().nullable(),
   image: yup.string().nullable(),
+  price: yup.number().nullable().positive(),
+
 });
 
 const defaultData = {
@@ -38,7 +41,8 @@ const defaultData = {
   sataPorts: 4,
   pcieSlots: 3,
   storageMethods: [],
-  image: ""
+  image: "",
+  price: 100,
 };
 
 const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageType: {}, amount: 1 }, disabled }) => {
@@ -212,6 +216,19 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
         step={1}
         onChange={handleChange}
         error={errors.pcieSlots}
+      />
+
+      <NumberInput
+        label="MSRP price"
+        type="number"
+        name="price"
+        value={data.price}
+        disabled={disabled}
+        min={"1"}
+        step={1}
+        onChange={handleChange}
+        unit={'€'}
+        error={errors.price}
       />
 
       <ArrayStorageSelect

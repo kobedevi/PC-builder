@@ -15,7 +15,7 @@ class RamController {
 			LEFT JOIN ramtypes ON ram.idRamType = ramtypes.idRamType
 			WHERE ram.deleted = 0
 			LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
-			res.status(200).send({result: results[0], pageAmount});
+			return res.status(200).send({result: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -39,7 +39,7 @@ class RamController {
 			LIMIT ? OFFSET ?;`;
 
 			const [rows] = await db.promise().query(userQuery, (slots !== 'undefined' ? [slots, id, parseInt(perPage), parseInt(page*perPage)] : [id, parseInt(perPage), parseInt(page*perPage)]));
-			res.status(200).send({result: rows, pageAmount});
+			return res.status(200).send({result: rows, pageAmount});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -70,7 +70,7 @@ class RamController {
 				});
 			}
 
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -97,7 +97,7 @@ class RamController {
 					encodedStr,
 				});
 			}
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -116,7 +116,7 @@ class RamController {
 			}
 			query = `UPDATE ram SET deleted = 1 WHERE idRam= ?`;
 			await db.promise().query(query, [id]);
-			res.status(200).send(rows[0]);
+			return res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -133,7 +133,7 @@ class RamController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "RAM does not exist" });
 			}
-			res.status(200).send(rows[0]);
+			return res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -154,6 +154,7 @@ class RamController {
 			stickAmount,
 			speed,
 			idRamType,
+			price,
 			image
 		} = req.body;
 		try {
@@ -168,7 +169,7 @@ class RamController {
 			if (rows.length === 0) {
 				return res.status(400).json({ message: "Given idRamType does not exist" });
 			}
-			const sql = "UPDATE ram SET idManufacturer = ?, modelName = ?, sizePerStick = ?, stickAmount = ?, speed = ?, idRamType = ?, image = ? WHERE idRam = ?";
+			const sql = "UPDATE ram SET idManufacturer = ?, modelName = ?, sizePerStick = ?, stickAmount = ?, speed = ?, idRamType = ?, price = ?, image = ? WHERE idRam = ?";
 			let data = [
 				idManufacturer,
 				modelName,
@@ -176,6 +177,7 @@ class RamController {
 				stickAmount,
 				speed,
 				idRamType,
+				price,
 				image,
 				id,
 			];
@@ -183,7 +185,7 @@ class RamController {
 			db.promise()
 			.query(sql, data)
 			.then(() => {
-				res.status(201).send({
+				return res.status(201).send({
 					message: "Case updated",
 					id,
 				});
@@ -207,6 +209,7 @@ class RamController {
 			sizePerStick,
 			stickAmount,
 			speed,
+			price,
 			image
 		} = req.body;
 		
@@ -225,7 +228,7 @@ class RamController {
 
 			const idRam = uuidv4();
 			const sqlInsert =
-				"INSERT INTO ram (idRam, idManufacturer, modelName, sizePerStick, stickAmount, speed, idRamType, image) VALUES (?,?,?,?,?,?,?,?)";
+				"INSERT INTO ram (idRam, idManufacturer, modelName, sizePerStick, stickAmount, speed, idRamType, price, image) VALUES (?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					idRam,
@@ -235,10 +238,11 @@ class RamController {
 					stickAmount,
 					speed,
 					idRamType,
+					price,
 					image
 				])
 				.then(() => {
-					res.status(201).send({
+					return res.status(201).send({
 						message: "Ram added",
 						id: idRam,
 					});

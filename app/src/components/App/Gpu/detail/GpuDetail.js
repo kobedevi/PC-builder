@@ -3,6 +3,7 @@ import { PossibleRoutes, route } from "../../../../core/routing";
 import DetailCard from "../../../Design/DetailCard";
 import Layout from "components/Design/Models/Layout";
 import Model from "./Model/Model";
+import EditIcon from "components/Design/EditIcon";
 
 const GpuDetail = ({ gpu }) => {
   return (
@@ -11,15 +12,15 @@ const GpuDetail = ({ gpu }) => {
         <DetailCard data={gpu} />
         {
           gpu.idGpuPartner && (
-            <Link to={route(PossibleRoutes.GpuPartnerEdit, { id: gpu.idGpuPartner })}>
-              Partner: {gpu.modelName}
+            <Link className="edit" to={route(PossibleRoutes.GpuPartnerEdit, { id: gpu.idGpuPartner })}>
+              <EditIcon/>
             </Link>
           )
         }
         {
           !gpu.idGpuPartner && (
-            <Link to={route(PossibleRoutes.GpuEdit, { id: gpu.idGpu })}>
-              Original: {gpu.modelName}
+            <Link className="edit" to={route(PossibleRoutes.GpuEdit, { id: gpu.idGpu })}>
+              <EditIcon/>
             </Link>
           )
         }

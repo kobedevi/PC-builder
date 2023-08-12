@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getValidationErrors } from "../../../../core/utils/validation";
 import * as yup from "yup";
 import Input from "../../../Design/Input";
@@ -16,6 +16,7 @@ const schema = yup.object().shape({
   depth: yup.number().notRequired().positive().integer(),
   smallBay: yup.number().moreThan(-1).notRequired().integer(),
   largeBay: yup.number().moreThan(-1).notRequired().integer(),
+  price: yup.number().nullable().positive(),
 });
 
 const defaultData = {
@@ -27,6 +28,7 @@ const defaultData = {
   depth: undefined,
   smallBay: 0,
   largeBay: 0,
+  price: 100,
 };
 
 const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -182,7 +184,19 @@ const CaseForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         error={errors.largeBay}
       />
 
-      
+      <NumberInput
+        label="MSRP price"
+        type="number"
+        name="price"
+        value={data.price}
+        disabled={disabled}
+        min={"1"}
+        step={1}
+        onChange={handleChange}
+        unit={'€'}
+        error={errors.price}
+      />
+            
       <div className="form-group">
         <Input
           label="Product image"

@@ -14,6 +14,7 @@ const schema = yup.object().shape({
   idStorageType: yup.string().required(),
   RPM: yup.number().nullable().moreThan(0),
   image: yup.string().nullable(),
+  price: yup.number().nullable().positive(),
 });
 
 const defaultData = {
@@ -22,7 +23,8 @@ const defaultData = {
   idManufacturer: "",
   idStorageType: "",
   RPM: 7200,
-  image: ""
+  image: "",
+  price: 100,
 };
 
 const StorageForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -139,6 +141,19 @@ const StorageForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) =>
         step={1000}
         onChange={handleChange}
         error={errors.RPM}
+      />
+
+      <NumberInput
+        label="MSRP price"
+        type="number"
+        name="price"
+        value={data.price}
+        disabled={disabled}
+        min={"1"}
+        step={1}
+        onChange={handleChange}
+        unit={'€'}
+        error={errors.price}
       />
 
       <div className="form-group">

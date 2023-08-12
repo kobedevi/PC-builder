@@ -29,7 +29,7 @@ class BuildController {
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			WHERE storage.deleted = 0`);
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -58,9 +58,8 @@ class BuildController {
 				LIMIT ? OFFSET ?;
 			`, [id, parseInt(perPage), parseInt(page*perPage)]);
 
-			res.status(200).send({results: results[0], pageAmount});
+			return res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
-			console.log(e);
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
 	};
@@ -81,7 +80,7 @@ class BuildController {
 				ORDER BY date DESC
 				LIMIT ? OFFSET ?;
 			`, [parseInt(perPage), parseInt(page*perPage)]);
-			res.status(200).send({results: results[0], pageAmount});
+			return res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
@@ -97,7 +96,7 @@ class BuildController {
 				LEFT JOIN cases ON builds.idCase = cases.idCase
 				ORDER BY date DESC LIMIT 3;
 			`);
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
@@ -232,7 +231,7 @@ class BuildController {
 				]
 			})
 
-			res.status(200).send(finalResult);
+			return res.status(200).send(finalResult);
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}

@@ -1,7 +1,6 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
-const SQL = require("@nearform/sql");
 
 class GpuController {
 	fetchGpus = async (req, res, next) => {
@@ -15,7 +14,7 @@ class GpuController {
 			LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
 			WHERE deleted = 0
 			LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
-			res.status(200).send({results: results[0], pageAmount});
+			return res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -39,7 +38,7 @@ class GpuController {
 					encodedStr,
 				});
 			}
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -61,7 +60,7 @@ class GpuController {
 			AND CONCAT_WS('', gpu_has_partners.modelName, gpus.modelName, manufacturerName, clockspeed, vram) LIKE ?
 			AND gpus.deleted = 0;`;
 			const [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -83,7 +82,7 @@ class GpuController {
 			AND gpus.deleted = 0
 			LIMIT ? OFFSET ?;`;
 			const [rows] = await db.promise().query(userQuery, [parseInt(perPage), parseInt(page*perPage)]);
-			res.status(200).send({results: rows, pageAmount});
+			return res.status(200).send({results: rows, pageAmount});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -111,7 +110,7 @@ class GpuController {
 					encodedStr,
 				});
 			}
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -134,7 +133,7 @@ class GpuController {
 				WHERE gpu_has_partners.deleted = 0
 				AND gpus.deleted = 0
 				LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
-			res.status(200).send({results: results[0], pageAmount});
+			return res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -152,9 +151,7 @@ class GpuController {
 		try {
 			const manufacturer = await db
 				.promise()
-				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
+				.query(`select idManufacturer from manufacturers where idManufacturer = ?`, [idManufacturer]);
 			if (manufacturer[0].length === 0) {
 				return res
 					.status(400)
@@ -175,7 +172,7 @@ class GpuController {
 					dvi,
 				])
 				.then(() => {
-					res.status(201).send({
+					return res.status(201).send({
 						message: "Gpu added",
 						id,
 					});
@@ -201,15 +198,14 @@ class GpuController {
 			width,
 			depth,
 			image,
-			tdp
+			tdp,
+			price
 		} = req.body;
 
 		try {
 			const manufacturer = await db
 				.promise()
-				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
+				.query(`select idManufacturer from manufacturers where idManufacturer = ?`, [idManufacturer]);
 			if (manufacturer[0].length === 0) {
 				return res
 					.status(400)
@@ -225,7 +221,7 @@ class GpuController {
 
 			const id = uuidv4();
 			const sqlInsert =
-				"INSERT INTO gpu_has_partners (idGpuPartner, idGpu, idManufacturer, modelName, clockspeed, watercooled, height, width, depth, wattage, image) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO gpu_has_partners (idGpuPartner, idGpu, idManufacturer, modelName, clockspeed, watercooled, height, width, depth, wattage, price, image) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					id,
@@ -238,10 +234,11 @@ class GpuController {
 					width,
 					depth,
 					tdp,
+					price,
 					image,
 				])
 				.then(() => {
-					res.status(201).send({
+					return res.status(201).send({
 						message: "Gpu Partner added",
 						id,
 					});
@@ -273,9 +270,7 @@ class GpuController {
 			const { id } = req.params;
 			const manufacturer = await db
 				.promise()
-				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
+				.query(`select idManufacturer from manufacturers where idManufacturer = ?`, [idManufacturer]);
 			if (manufacturer[0].length === 0) {
 				return res
 					.status(400)
@@ -297,7 +292,7 @@ class GpuController {
 			db.promise()
 			.query(sql, data)
 			.then(() => {
-				res.status(201).send({
+				return res.status(201).send({
 					message: "Gpu updated",
 					id,
 				});
@@ -326,21 +321,20 @@ class GpuController {
 			width,
 			depth,
 			tdp,
+			price,
 			image,
 		} = req.body;
 		try {
 			const { id } = req.params;
 			const manufacturer = await db
 				.promise()
-				.query(
-					SQL`select idManufacturer from manufacturers where idManufacturer = ${idManufacturer}`
-				);
+				.query(`select idManufacturer from manufacturers where idManufacturer = ?`, [idManufacturer]);
 			if (manufacturer[0].length === 0) {
 				return res
 					.status(400)
 					.json({ message: "Given idManufacturer does not exist" });
 			}
-			const sql = "UPDATE gpu_has_partners SET idGpu = ?, idManufacturer = ?, modelName = ?, clockspeed = ?, watercooled = ?, height = ?, width = ?, depth = ?, wattage = ?, image = ? WHERE idGpuPartner = ?";
+			const sql = "UPDATE gpu_has_partners SET idGpu = ?, idManufacturer = ?, modelName = ?, clockspeed = ?, watercooled = ?, height = ?, width = ?, depth = ?, wattage = ?, price = ?, image = ? WHERE idGpuPartner = ?";
 			let data = [
 				idGpu,
 				idManufacturer, 
@@ -351,6 +345,7 @@ class GpuController {
 				width,
 				depth,
 				tdp,
+				price,
 				image,
 				id,
 			];
@@ -358,7 +353,7 @@ class GpuController {
 			db.promise()
 			.query(sql, data)
 			.then(() => {
-				res.status(201).send({
+				return res.status(201).send({
 					message: "Gpu updated",
 					id,
 				});
@@ -373,15 +368,15 @@ class GpuController {
 		try {
 			const { id } = req.params;
 			const results = await db.promise()
-				.query(SQL`SELECT gpus.*, manufacturers.manufacturerName FROM gpus
+				.query(`SELECT gpus.*, manufacturers.manufacturerName FROM gpus
 				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
-				WHERE gpus.idGpu=${id} 
+				WHERE gpus.idGpu= ?
 				AND deleted = 0 
-				LIMIT 1;`);
+				LIMIT 1;`, [id]);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "GPU does not exist" });
 			}
-			res.status(200).send(results[0]);
+			return res.status(200).send(results[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -391,17 +386,17 @@ class GpuController {
 		try {
 			const { id } = req.params;
 			const results = await db.promise()
-				.query(SQL`SELECT gpu_has_partners.*, gpu_has_partners.wattage as tdp, gpus.modelName AS chipset, gpus.vram, gpus.displayport, gpus.hdmi, gpus.vga, gpus.dvi, manufacturers.manufacturerName, partner.manufacturerName AS partnerName FROM gpu_has_partners
+				.query(`SELECT gpu_has_partners.*, gpu_has_partners.wattage as tdp, gpus.modelName AS chipset, gpus.vram, gpus.displayport, gpus.hdmi, gpus.vga, gpus.dvi, manufacturers.manufacturerName, partner.manufacturerName AS partnerName FROM gpu_has_partners
 				LEFT JOIN gpus ON gpu_has_partners.idGpu = gpus.idGpu
 				LEFT JOIN manufacturers ON gpus.idManufacturer = manufacturers.idManufacturer
 				LEFT JOIN manufacturers AS partner ON gpu_has_partners.idManufacturer = partner.idManufacturer
-				WHERE gpu_has_partners.idGpuPartner=${id} 
+				WHERE gpu_has_partners.idGpuPartner= ?
 				AND gpu_has_partners.deleted = 0
-				LIMIT 1;`);
+				LIMIT 1;`, [id]);
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "GPU does not exist" });
 			}
-			res.status(200).send(results[0][0]);
+			return res.status(200).send(results[0][0]);
 		} catch (e) {
 			next(e);
 		}
@@ -418,7 +413,7 @@ class GpuController {
 			}
 			query = `UPDATE gpus SET deleted = 1 WHERE idGpu= ?`;
 			await db.promise().query(query, [id]);
-			res.status(200).send(rows[0]);
+			return res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -435,7 +430,7 @@ class GpuController {
 			}
 			query = `UPDATE gpu_has_partners SET deleted = 1 WHERE idGpuPartner= ?`;
 			await db.promise().query(query, [id]);
-			res.status(200).send(rows[0]);
+			return res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}

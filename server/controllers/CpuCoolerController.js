@@ -28,7 +28,7 @@ class CpuCoolerController {
 				}
 			})
 
-			res.status(200).send({result, pageAmount});
+			return res.status(200).send({result, pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -73,7 +73,7 @@ class CpuCoolerController {
 				}
 			})
 
-			res.status(200).send({result, pageAmount});
+			return res.status(200).send({result, pageAmount});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
@@ -125,7 +125,7 @@ class CpuCoolerController {
 				}
 			})
 
-			res.status(200).send(result);
+			return res.status(200).send(result);
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}
@@ -164,7 +164,7 @@ class CpuCoolerController {
 				});
 			}
 
-			res.status(200).send(result);
+			return res.status(200).send(result);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -192,7 +192,7 @@ class CpuCoolerController {
 			query = `UPDATE cpucoolers SET deleted = 1 WHERE idCpuCooler= ?`;
 			await db.promise().query(query, [id]);
 			
-			res.status(200).send(result[0]);
+			return res.status(200).send(result[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -224,7 +224,7 @@ class CpuCoolerController {
 				finalResult.idCpuSocket.push(item.idCpuSocket)
 			});
 
-			res.status(200).send(finalResult);
+			return res.status(200).send(finalResult);
 		} catch (e) {
 			next(e);
 		}
@@ -236,7 +236,7 @@ class CpuCoolerController {
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-		const { idManufacturer, modelName, height, width, depth, cpuSockets, image } =
+		const { idManufacturer, modelName, height, width, depth, cpuSockets, image, price } =
 			req.body;
 		try {
 			const { id } = req.params;
@@ -246,8 +246,8 @@ class CpuCoolerController {
 				return res.status(400).json({ message: "Given idManufacturer does not exist" });
 			}
 
-			const sql = `UPDATE cpucoolers SET idManufacturer = ?, modelName = ?, height = ?, width = ? , depth = ?, image = ? WHERE idCpuCooler = ?`;
-			let data = [idManufacturer, modelName, height, width, depth, image, id];
+			const sql = `UPDATE cpucoolers SET idManufacturer = ?, modelName = ?, height = ?, width = ? , depth = ?, image = ?, price = ? WHERE idCpuCooler = ?`;
+			let data = [idManufacturer, modelName, height, width, depth, image, price, id];
 			await db.promise().query(sql, data);
 
 			// execute the UPDATE statement
@@ -298,7 +298,7 @@ class CpuCoolerController {
 				await db.promise().query(socketsSqlRemover, [id]);
 			}
 
-			res.status(200).send({
+			return res.status(200).send({
 				message: "CPU cooler updated",
 				id,
 			});
@@ -319,6 +319,7 @@ class CpuCoolerController {
 			height,
 			width,
 			depth,
+			price,
 			cpuSockets = [{ idCpuSocket: undefined, tempId: undefined }],
 			image
 		} = req.body;
@@ -331,7 +332,7 @@ class CpuCoolerController {
 
 			const coolerId = uuidv4();
 			const sqlInsert =
-				"INSERT INTO cpucoolers (idCpuCooler, idManufacturer, modelName, height, width, depth, image) VALUES (?,?,?,?,?,?,?)";
+				"INSERT INTO cpucoolers (idCpuCooler, idManufacturer, modelName, height, width, depth, price, image) VALUES (?,?,?,?,?,?,?,?)";
 			await db
 				.promise()
 				.query(sqlInsert, [
@@ -341,6 +342,7 @@ class CpuCoolerController {
 					height,
 					width,
 					depth,
+					price,
 					image
 				]);
 
@@ -359,7 +361,7 @@ class CpuCoolerController {
 				)}`;
 				await db.promise().query(socketsSqlInsert);
 			}
-			res.status(201).send({
+			return res.status(201).send({
 				message: "CPU cooler added",
 				id: coolerId,
 			});

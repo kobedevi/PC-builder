@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 class UserController {
 	login = async (req, res, next) => {
 		const { user } = req;
-		res.status(200).json({
+		return res.status(200).json({
 			email: user.email,
 			role: user.role,
 			userName: user.userName,
@@ -41,7 +41,7 @@ class UserController {
 						user.password,
 						user.email,
 					]);
-				res.status(200).json(user);
+				return res.status(200).json(user);
 			});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
@@ -67,7 +67,7 @@ class UserController {
 						user.password,
 						user.email,
 					]);
-				res.status(200).json(user);
+				return res.status(200).json(user);
 			});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
@@ -154,7 +154,7 @@ class UserController {
 				});
 			}
 
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e

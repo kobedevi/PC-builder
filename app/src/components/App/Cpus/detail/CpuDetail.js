@@ -3,14 +3,15 @@ import { PossibleRoutes, route } from "../../../../core/routing";
 import DetailCard from "../../../Design/DetailCard";
 import Layout from "components/Design/Models/Layout";
 import Model from "./Model/Model";
+import EditIcon from "components/Design/EditIcon";
 
 const CpuDetail = ({ cpu }) => {
   return (
     <div className="fullSize">
       <div className="detail">
         <DetailCard data={cpu} />
-        <Link to={route(PossibleRoutes.CpuEdit, { id: cpu.idProcessor })}>
-          {cpu.modelName}
+        <Link className="edit" to={route(PossibleRoutes.CpuEdit, { id: cpu.idProcessor })}>
+          <EditIcon/>
         </Link>
       </div>
       <div className="model">

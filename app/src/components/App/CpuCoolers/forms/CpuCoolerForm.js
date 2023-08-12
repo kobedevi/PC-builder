@@ -16,6 +16,7 @@ const schema = yup.object().shape({
   depth: yup.number().notRequired().positive().integer(),
   cpuSockets: yup.array().notRequired(),
   image: yup.string().nullable(),
+  price: yup.number().nullable().positive(),
 });
 
 const defaultData = {
@@ -26,6 +27,7 @@ const defaultData = {
   depth: 0,
   cpuSockets: [],
   image: "",
+  price: 100,
 };
 
 const CpuCoolerForm = ({ file, setFile, onSubmit, initialData = { idCpuSocket: {} }, disabled }) => {
@@ -159,6 +161,18 @@ const CpuCoolerForm = ({ file, setFile, onSubmit, initialData = { idCpuSocket: {
         onChange={handleChange}
         unit={'mm'}
         error={errors.depth}
+      />
+      <NumberInput
+        label="MSRP price"
+        type="number"
+        name="price"
+        value={data.price}
+        disabled={disabled}
+        min={"1"}
+        step={1}
+        onChange={handleChange}
+        unit={'€'}
+        error={errors.price}
       />
       <ArrayCpuSocketSelect
         label="Compatible CPU socket"

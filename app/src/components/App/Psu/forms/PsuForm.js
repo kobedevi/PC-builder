@@ -18,6 +18,7 @@ const schema = yup.object().shape({
   height: yup.number().min(1).max(1000).notRequired().positive().integer(),
   width: yup.number().min(1).max(1000).notRequired().positive().integer(),
   depth: yup.number().min(1).max(1000).notRequired().positive().integer(),
+  price: yup.number().nullable().positive(),
 });
 
 const defaultData = {
@@ -29,6 +30,7 @@ const defaultData = {
   height: 85,
   width: 150,
   depth: 140,
+  price: 100,
 };
 
 const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -176,6 +178,19 @@ const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         unit={"mm"}
         onChange={handleChange}
         error={errors.depth}
+      />
+
+      <NumberInput
+        label="MSRP price"
+        type="number"
+        name="price"
+        value={data.price}
+        disabled={disabled}
+        min={"1"}
+        step={1}
+        onChange={handleChange}
+        unit={'€'}
+        error={errors.price}
       />
       
       <div className="form-group">

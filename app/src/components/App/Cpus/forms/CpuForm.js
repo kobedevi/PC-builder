@@ -14,7 +14,8 @@ const schema = yup.object().shape({
   clockSpeed: yup.number().required().positive(),
   cores: yup.number().required().positive().integer(),
   image: yup.string().nullable(),
-  wattage: yup.number().required().positive().integer()
+  wattage: yup.number().required().positive().integer(),
+  price: yup.number().nullable().positive(),
 });
 
 const defaultData = {
@@ -25,6 +26,7 @@ const defaultData = {
   cores: 4,
   image: "",
   wattage: 100,
+  price: 100,
 };
 
 const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
@@ -145,6 +147,19 @@ const CpuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         onChange={handleChange}
         unit={'W'}
         error={errors.wattage}
+      />
+
+      <NumberInput
+        label="MSRP price"
+        type="number"
+        name="price"
+        value={data.price}
+        disabled={disabled}
+        min={"1"}
+        step={1}
+        onChange={handleChange}
+        unit={'€'}
+        error={errors.price}
       />
 
       <div className="form-group">

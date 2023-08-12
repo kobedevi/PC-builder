@@ -16,7 +16,7 @@ class PsuController {
 
 			const results = await db.promise().query(`SELECT * FROM psu
 			WHERE deleted = 0 LIMIT ? OFFSET ?;`, [parseInt(perPage), parseInt(page*perPage)]);
-			res.status(200).send({results: results[0], pageAmount});
+			return res.status(200).send({results: results[0], pageAmount});
 		} catch (e) {
 			next(e);
 		}
@@ -34,7 +34,7 @@ class PsuController {
 			if (results[0].length === 0) {
 				return res.status(400).json({ message: "PSU does not exist" });
 			}
-			res.status(200).send(results[0][0]);
+			return res.status(200).send(results[0][0]);
 		} catch (e) {
 			next(e);
 		}
@@ -58,7 +58,7 @@ class PsuController {
 					encodedStr,
 				});
 			}
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -89,7 +89,7 @@ class PsuController {
 				});
 			}
 
-			res.status(200).send(rows);
+			return res.status(200).send(rows);
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -111,7 +111,7 @@ class PsuController {
 			ORDER BY wattage
 			LIMIT ? OFFSET ?;`;
 			const [rows] = await db.promise().query(userQuery, [wattage, parseInt(perPage), parseInt(page*perPage)]);
-			res.status(200).send({results: rows, pageAmount});
+			return res.status(200).send({results: rows, pageAmount});
 		} catch (e) {
 			next(
 				e.name && e.name === "ValidationError" ? new ValidationError(e) : e
@@ -136,6 +136,7 @@ class PsuController {
 			height,
 			width,
 			depth,
+			price,
 			image
 		} = req.body;
 		try {
@@ -160,7 +161,7 @@ class PsuController {
 					.status(400)
 					.json({ message: "Given idFormfactor does not exist" });
 			}
-			const sql = "UPDATE Psu SET idManufacturer = ?, modelName = ?, modular = ?, idFormfactor = ?, wattage = ?, height = ?, width = ?, depth = ?, image = ? WHERE idPsu = ?";
+			const sql = "UPDATE Psu SET idManufacturer = ?, modelName = ?, modular = ?, idFormfactor = ?, wattage = ?, height = ?, width = ?, depth = ?, price = ?, image = ? WHERE idPsu = ?";
 			let data = [
 				idManufacturer,
 				modelName,
@@ -170,6 +171,7 @@ class PsuController {
 				height,
 				width,
 				depth,
+				price,
 				image,
 				id,
 			];
@@ -177,7 +179,7 @@ class PsuController {
 			db.promise()
 			.query(sql, data)
 			.then(() => {
-				res.status(201).send({
+				return res.status(201).send({
 					message: "Case updated",
 					id,
 				});
@@ -203,6 +205,7 @@ class PsuController {
 			depth,
 			wattage,
 			modular,
+			price,
 			image
 		} = req.body;
 
@@ -229,7 +232,7 @@ class PsuController {
 			}
 			const id = uuidv4();
 			const sqlInsert =
-				"INSERT INTO psu (idPsu, idManufacturer, idFormfactor, modelName, height, width, depth, wattage, modular, image) VALUES (?,?,?,?,?,?,?,?,?,?)";
+				"INSERT INTO psu (idPsu, idManufacturer, idFormfactor, modelName, height, width, depth, wattage, modular, price, image) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 			db.promise()
 				.query(sqlInsert, [
 					id,
@@ -244,7 +247,7 @@ class PsuController {
 					image
 				])
 				.then(() => {
-					res.status(201).send({
+					return res.status(201).send({
 						message: "PSU added",
 						id,
 					});
@@ -265,7 +268,7 @@ class PsuController {
 			}
 			query = `UPDATE psu SET deleted = 1 WHERE idPsu = ?;`;
 			await db.promise().query(query, [id]);
-			res.status(200).send(rows[0]);
+			return res.status(200).send(rows[0]);
 		} catch (e) {
 			next(e);
 		}
@@ -355,7 +358,7 @@ class PsuController {
 				root: path.join(__dirname)
 			};
 			const fileName = './results.csv';
-			res.sendFile(fileName, options,  function (err) {
+			return res.sendFile(fileName, options,  function (err) {
 				if (err) {
 					next(err);
 				} else {
