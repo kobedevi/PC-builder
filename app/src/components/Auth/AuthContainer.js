@@ -1,17 +1,15 @@
 import { createContext, useContext, useState } from "react";
-// import { Redirect, Route, Switch } from "react-router-dom";
-// import { PossibleRoutes } from "../../core/routing";
-import LoginPage from "../OnBoarding/Login/LoginPage";
 import storage from "../../core/storage";
 import App from "components/App/App/App";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PossibleRoutes } from "core/routing";
-import Home from "components/App/App/Homepage/Home";
 import HomeRouter from "components/App/App/HomeRouter";
 
 const AuthContext = createContext();
 
 const AuthContainer = () => {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(storage.getUser());
 
   const updateUser = (updatedUser) => {
@@ -29,6 +27,7 @@ const AuthContainer = () => {
 
   const logout = () => {
     updateUser(null);
+    navigate(PossibleRoutes.Home, { replace: true });
   };
 
   if (user) {
@@ -39,12 +38,6 @@ const AuthContainer = () => {
     );
   }
 
-  // return <LoginPage setUser={updateUser} />;
-  // return (
-  //   <AuthContext.Provider value={{ user, setUser: updateUser, logout }}>
-  //     <App setUser={updateUser}/>
-  //   </AuthContext.Provider>
-  // );
   return (
     <div className="App reset">
       <div className="content">
