@@ -5,7 +5,7 @@ const ProductView = ({image, center=false, onDismiss}) => {
     
     return(
         <Modal className="d-inline-flex p-2" onDismiss={onDismiss} center={center}>
-            <img src={image} alt="Large product view"/>
+            <img style={{width:"100%"}} src={image} alt="Large product view"/>
         </Modal>
 )
 

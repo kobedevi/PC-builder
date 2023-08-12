@@ -40,12 +40,12 @@ const Modal = ({ children, center=false, title, onDismiss }) => {
                         </div>
                         <div className="modal-body">
                             {center && (
-                                <div className={"btnContainer d-flex justify-content-center"}>
+                                <div style={{width:"100%"}} className={"btnContainer d-flex justify-content-center"}>
                                     {children}
                                 </div>
                             )}
                             {!center && (
-                                <div className='btnContainer'>
+                                <div style={{width:"100%"}} className='btnContainer'>
                                     {children}
                                 </div>
                             )}

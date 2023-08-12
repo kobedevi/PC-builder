@@ -205,12 +205,12 @@ const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         />
         {
           data.image && (
-            <>
+            <div className="formImgPreview">
               <img alt="product preview" src={ file ? URL.createObjectURL(file) : (data.image)}/>
               <Button onClick={removeImage} color="danger">
                 Remove image
               </Button>
-            </>
+            </div>
           )
         }
       </div>
