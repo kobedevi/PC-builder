@@ -1,18 +1,18 @@
 import RamSelect from 'components/util/builder/RamSelect'
 
-const RamPicker = ({idRamType, strictMode, setStrictMode, currentBuild, updateBuild, hiddenInput, idRam, memorySlots, updateFields}) => {
+const RamPicker = ({strictMode, setStrictMode, currentBuild, updateBuild, hiddenInput, updateFields}) => {
   return (
     <div>
         <h2>Memory picker:</h2>
-        <input className="HideInput" ref={hiddenInput} onChange={() => {}} tabIndex="-1" style={{color:"black"}} value={idRam} required type="text"/>
+        <input className="HideInput" ref={hiddenInput} onChange={() => {}} tabIndex="-1" style={{color:"black"}} value={currentBuild.ram.idRam} required type="text"/>
         <RamSelect
           strictMode={strictMode} 
           setStrictMode={setStrictMode}
           currentBuild={currentBuild}
           updateBuild={updateBuild}
-          idRamType={idRamType}
-          idRam={idRam}
-          memorySlots = {memorySlots}
+          idRamType={currentBuild.motherboard.idRamType}
+          idRam={currentBuild.ram.idRam}
+          memorySlots = {currentBuild.motherboard.memorySlots}
           updateFields = {updateFields}
         />
     </div>

@@ -1,6 +1,6 @@
 import useMultiStepForm from "core/hooks/useMultiStepForm"
 import CpuPicker from "./forms/CpuPicker"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import CpuCoolerPicker from "./forms/CpuCoolerPicker"
 import StepCounter from "components/Design/StepCounter"
 import MotherboardPicker from "./forms/MotherboardPicker"
@@ -13,10 +13,10 @@ import ErrorAlert from "components/shared/ErrorAlert"
 import ItemList from "components/Design/ItemList"
 import PsuPicker from "./forms/PsuPicker"
 import Nav from "../Homepage/Nav"
-import { createBuild } from "../../../../core/modules/Builds/api"
+import { createBuild, updateCurrentBuild } from "../../../../core/modules/Builds/api"
 import { useAuth } from "../../../Auth/AuthContainer"
 import useNoAuthApi from "core/hooks/useNoAuthApi"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { PossibleRoutes, route } from "core/routing"
 
 const initialData = {
@@ -57,14 +57,20 @@ const initialBuild = {
 }
 
 const Builder = () => {
-
+	const location = useLocation();
 	const auth = useAuth();
 	const withNoAuth = useNoAuthApi();
 	const navigate = useNavigate();
 
-	const [data, setData] = useState(initialData);
+	const [currentBuild, setCurrentBuild] = useState({
+		...initialBuild,
+		...location.state?.data
+	});
+
+	const [data, setData] = useState({
+		...initialData,
+	});
 	const [alert, setAlert] = useState();
-	const [currentBuild, setCurrentBuild] = useState(initialBuild)
 	const [strictMode, setStrictMode] = useState(true);
 
 	const builderForm = useRef(null);
@@ -81,6 +87,9 @@ const Builder = () => {
 			return {...prev, ...fields}
 		})
 	}
+
+	useEffect(() => {
+	},[currentBuild])
 
 	// TODO: pagination
 	const {steps, currentStepIndex, step, isFirstStep, isLastStep, isFinish, back, next} = 
@@ -104,6 +113,11 @@ const Builder = () => {
 		if(hiddenInput.current.validity.valid) {
 			setAlert(null);
 			if (!isLastStep) return next();
+			if (currentBuild.id) {
+				return withNoAuth(updateCurrentBuild(currentBuild.id, currentBuild, auth?.user))
+				.then(() => next())
+				.catch((err) => setAlert(err));
+			}
 			return withNoAuth(createBuild(currentBuild, auth?.user))
 			.then((res) => {
 				updateBuild({

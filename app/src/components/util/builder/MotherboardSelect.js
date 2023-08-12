@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
@@ -28,15 +28,20 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
     setQuery(query.search)
   }
 
+  useEffect(() => {
+    updateFields({
+      maxWidth: currentBuild.motherboard.width || 0, 
+      maxHeight: currentBuild.motherboard.height || 0
+    })
+    return () => {
+    }
+  }, [])
+
   const onClick = (product) => {
     updateBuild({
       motherboard: product
     })
     updateFields({
-      idMotherboard: product.idMotherboard,
-      idRamType: product.idRamType,
-      memorySlots: product.memorySlots,
-      pcieSlots: product.pcieSlots,
       maxWidth: product.width,
       maxHeight: product.height
     })

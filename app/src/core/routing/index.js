@@ -6,6 +6,7 @@ const PossibleRoutes = Object.freeze({
   PartsOverview: "/",
   
   Builder: "/builder",
+  BuilderEdit: "/builder/:id/edit",
   Builds: "/builds",
   UserBuilds: "/builds/user/:id",
   BuildDetail: "/build/:id",

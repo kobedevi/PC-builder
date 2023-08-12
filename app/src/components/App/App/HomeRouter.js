@@ -20,10 +20,10 @@ const HomeRouter = ({setUser}) => {
         <Route index path={PossibleRoutes.Home} element={<Home />} />
         <Route path={PossibleRoutes.Register} element={<RegisterPage setUser={setUser}/>} />
         <Route path={PossibleRoutes.Login} element={<LoginPage setUser={setUser}/>} />
-        <Route index path={PossibleRoutes.Builder} element={<Builder />} />
-        <Route index path={PossibleRoutes.Builds} element={<GeneralBuildsOverview />} />
-        <Route index path={PossibleRoutes.UserBuilds} element={<UserBuildsOverview />} />
-        <Route index path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
+        <Route path={PossibleRoutes.Builder} element={<Builder />} />
+        <Route path={PossibleRoutes.Builds} element={<GeneralBuildsOverview />} />
+        <Route path={PossibleRoutes.UserBuilds} element={<UserBuildsOverview />} />
+        <Route path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
         <Route path="*" element={<Navigate to={PossibleRoutes.Home} replace />} />
       </Routes>
     </main>

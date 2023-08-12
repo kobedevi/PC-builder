@@ -11,7 +11,7 @@ import InfoModal from "components/Design/InfoModal";
 import Pagination from "components/Design/Pagination";
 import RamResult from "./RamResult";
 
-const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamType, idRam, memorySlots, updateFields}) => {
+const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamType, memorySlots}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState();
@@ -43,9 +43,6 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
   const onClick = (product) => {
     updateBuild({
       ram: product
-    })
-    updateFields({
-      idRam: product.idRam
     })
   }
 
@@ -106,7 +103,7 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
             {(data.result.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
-                <img src="./blob.svg" alt="blobby blobby blobby!"/>
+                <img src="/blob.svg" alt="blobby blobby blobby!"/>
               </div>
             )}
             {

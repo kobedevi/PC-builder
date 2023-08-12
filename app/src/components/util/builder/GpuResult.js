@@ -11,7 +11,6 @@ const GpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
         return filter(result);
     }, [filter, result])
 
-    
     const {
         data: products,
         error,
@@ -30,7 +29,7 @@ const GpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
         return (
             <div className="blobContainer">
                 <p>{products.message}</p>
-                <img src="./blob.svg" alt="blobby blobby blobby!"/>
+                <img src="/blob.svg" alt="blobby blobby blobby!"/>
             </div>
         )
     }

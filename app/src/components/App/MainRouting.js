@@ -6,16 +6,18 @@ import Builder from "./App/Builder/Builder";
 import BuildDetail from "./App/Detail/BuildDetail";
 import GeneralBuildsOverview from "./App/Builds/GeneralBuildsOverview";
 import UserBuildsOverview from "./App/Builds/UserBuildsOverview";
+import BuilderEdit from "./App/Builder/BuilderEdit";
 
 const MainRouting = () => {
   return (
     <main className="public">
       <Routes>
         <Route index path={PossibleRoutes.Home} element={<Home />} />
-        <Route index path={PossibleRoutes.Builder} element={<Builder />} />
-        <Route index path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
-        <Route index path={PossibleRoutes.Builds} element={<GeneralBuildsOverview />} />
-        <Route index path={PossibleRoutes.UserBuilds} element={<UserBuildsOverview />} />
+        <Route path={PossibleRoutes.Builder} element={<Builder />} />
+        <Route path={PossibleRoutes.BuilderEdit} element={<BuilderEdit />} />
+        <Route path={PossibleRoutes.BuildDetail} element={<BuildDetail />} />
+        <Route path={PossibleRoutes.Builds} element={<GeneralBuildsOverview />} />
+        <Route path={PossibleRoutes.UserBuilds} element={<UserBuildsOverview />} />
         <Route path={PossibleRoutes.CrudParent} element={<CrudRouting />} />
         <Route
           path="*"

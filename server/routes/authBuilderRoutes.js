@@ -10,6 +10,8 @@ const { buildModel } = require("../models/Build");
 const authBuilderRouter = express.Router();
 authBuilderRouter.use(bodyParser.urlencoded({ extended: true }));
 
+authBuilderRouter.get("/auth/builds/:id", buildModel, buildController.fetchBuildInfo);
+authBuilderRouter.patch("/auth/builds/:id", buildModel, buildController.updateBuild);
 authBuilderRouter.post("/auth/builds", buildModel, buildController.createBuild);
 
 module.exports = authBuilderRouter;

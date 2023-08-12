@@ -1,5 +1,4 @@
-import { Link, Routes } from "react-router-dom"
-import DeleteButton from "./DeleteButton"
+import { Link } from "react-router-dom"
 import { route } from "core/routing"
 
 const BuilderProductCard = ({
@@ -17,7 +16,7 @@ const BuilderProductCard = ({
         {
           img && (
             <>
-              <img onClick={() => setProductInfo(id)} style={{cursor:"pointer"}}src={`${product.image ? product.image : "../no-image.svg" }`} alt='Product preview'/>
+              <img onClick={() => setProductInfo(id)} style={{cursor:"pointer"}}src={`${product.image ? product.image : "/no-image.svg" }`} alt='Product preview'/>
               <section>
                   {
                     product && <p onClick={() => setProductInfo(id)} className='coverTitle mt-0 mb-0, productTitle' title="Click for more info">{product.modelName}</p>

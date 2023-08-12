@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
@@ -12,7 +12,7 @@ import {fetchPartnerGpuByIdBuilder} from "../../../core/modules/Gpu/api"
 import Pagination from "components/Design/Pagination";
 import GpuResult from "./GpuResult";
 
-const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, updateFields}) => {
+const GpuSelect = ({currentBuild, updateBuild, depth, width, updateFields}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState()
@@ -28,6 +28,22 @@ const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, u
   const onSubmit = (query) => {
     setQuery(query.search)
   }
+
+  useEffect(() => {
+    updateFields({
+      idGpu: currentBuild.gpu.idGpuPartner,
+    })
+    if(currentBuild.gpu.depth > depth) {
+      updateFields({
+        maxDepth: currentBuild.gpu.depth,
+      })
+    }
+    if(currentBuild.gpu.width > width) {
+      updateFields({
+        maxWidth: currentBuild.gpu.width,
+      })
+    }
+  }, [])
 
   const handlePageClick = (page) => {
     setPage(page)
@@ -95,14 +111,14 @@ const GpuSelect = ({currentBuild, updateBuild, idGpu, pcieSlots, depth, width, u
                 result={query}
               />
             }
-            {(data.results.length === 0 || pcieSlots <= 0) && (
+            {(data.results.length === 0 || currentBuild.motherboard.pcieSlots <= 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
-                <img src="./blob.svg" alt="blobby blobby blobby!"/>
+                <img src="/blob.svg" alt="blobby blobby blobby!"/>
               </div>
             )}
             {
-              (!query && pcieSlots > 0) && (
+              (!query && currentBuild.motherboard.pcieSlots > 0) && (
                 <>
                   <ul className="productList">
                     {data.results.map((product) => {

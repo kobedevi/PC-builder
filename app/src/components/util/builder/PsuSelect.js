@@ -11,7 +11,7 @@ import InfoModal from "components/Design/InfoModal";
 import Pagination from "components/Design/Pagination";
 import PsuResult from "./PsuResult";
 
-const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) => {
+const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields }) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState();
@@ -89,7 +89,7 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields, idPsu, }) =
             {(data.results.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
-                <img src="./blob.svg" alt="blobby blobby blobby!"/>
+                <img src="/blob.svg" alt="blobby blobby blobby!"/>
               </div>
             )}
             {

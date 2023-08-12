@@ -1,10 +1,28 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
-const ValidationError = require("../errors/ValidationError");
 const { v4: uuidv4 } = require("uuid");
-const mysql = require('mysql2');
+const ValidationError = require("../errors/ValidationError");
+const NotFoundError = require("../errors/NotFoundError");
+const ForbiddenError = require("../errors/ForbiddenError");
 
 class BuildController {
+	fetchBuildInfo = async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const {user} = req;
+			const [rows] = await db.promise().query(`SELECT idUser FROM builds WHERE idBuild = ? LIMIT 1;`, [id]);
+			if(rows.length > 0 && user.idUsers === rows[0].idUser) {
+				return res.status(200).send(rows);
+			} if(rows.length === 0){
+				return next(new NotFoundError());
+			} else {
+				return next(new ForbiddenError());
+			}
+		} catch (e) {
+			next(e);
+		}
+	};
+
 	fetchBuilds = async (req, res, next) => {
 		try {
 			const results = await db.promise().query(`SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
@@ -93,11 +111,11 @@ class BuildController {
 				users.idUsers as user_id, users.userName as user_userName, 
 				cpus.idProcessor as cpu_id, cpus.idManufacturer as cpu_idManufacturer, cpus.modelName as cpu_modelName, cpus.clockSpeed as cpu_clockSpeed, cpus.cores as cpu_cores, cpus.wattage as cpu_wattage, t1.socketType as cpu_socketType, cpus.image as cpu_image,
 				cpucoolers.idCpuCooler as cpucooler_id, cpucoolers.idManufacturer as cpucooler_idManufacturer, cpucoolers.modelName as cpucooler_modelName, cpucoolers.height as cpucooler_height, cpucoolers.width as cpucooler_width, cpucoolers.depth as cpucooler_depth, cpucoolers.image as cpucooler_image,
-				motherboards.idMotherboard as motherboard_id, motherboards.idManufacturer as motherboard_idManufacturer, motherboards.modelName as motherboard_modelName, motherboards.wifi as motherboard_wifi, motherboards.memorySlots as motherboard_memorySlots, motherboards.sataPorts as motherboard_sataPorts, motherboards.pcieSlots as motherboard_pcieSlots, t2.socketType as motherboard_sockettype, formfactors.formfactor as motherboard_formfactor, formfactors.height as motherboard_height, formfactors.width as motherboard_width, motherboards.image as motherboard_image,
+				motherboards.idMotherboard as motherboard_id, motherboards.idManufacturer as motherboard_idManufacturer, motherboards.modelName as motherboard_modelName, motherboards.wifi as motherboard_wifi, motherboards.memorySlots as motherboard_memorySlots, motherboards.sataPorts as motherboard_sataPorts, motherboards.pcieSlots as motherboard_pcieSlots, t2.socketType as motherboard_sockettype, formfactors.idFormfactor as motherboard_idFormfactor, formfactors.formfactor as motherboard_formfactor, formfactors.height as motherboard_height, formfactors.width as motherboard_width, motherboards.image as motherboard_image, motherboards.idRamType as motherboard_idRamType,
 				ram.idRam as ram_id, ram.idManufacturer as ram_idManufacturer, ram.modelName as ram_modelName, ram.sizePerStick as ram_sizePerStick, ram.stickAmount as ram_stickAmount, ram.speed as ram_speed, ram.image as ram_image,
 				gpu_has_partners.idGpuPartner as gpu_id, gpu_has_partners.idManufacturer as gpu_idManufacturer, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.clockspeed as gpu_clockSpeed, gpu_has_partners.watercooled as gpu_watercooled, gpu_has_partners.wattage as gpu_wattage, gpus.modelName as gpu_chipset, gpus.vram as gpu_vram, gpu_has_partners.image as gpu_image, gpu_has_partners.height as gpu_height, gpu_has_partners.width as gpu_width, gpu_has_partners.depth as gpu_depth, 
 				cases.idCase as case_id, cases.idManufacturer as case_idManufacturer, cases.modelName as case_modelName, cases.height as case_height, cases.width as case_width, cases.depth as case_depth, cases.\`2-5_slots\` as case_smallSlots, cases.\`3-5_slots\` as case_bigSlots, cases.image as case_image,
-				psu.idPsu as psu_id, psu.idManufacturer as psu_idManufacturer, psu.modelName as psu_modelName, psu.modular as psu_modular, psu.wattage as psu_wattage
+				psu.idPsu as psu_id, psu.idManufacturer as psu_idManufacturer, psu.modelName as psu_modelName, psu.modular as psu_modular, psu.wattage as psu_wattage, psu.image as psu_image
 				FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
@@ -178,7 +196,7 @@ class BuildController {
 			finalResult.cpucooler.socketType = socketType;
 
 			userQuery = `SELECT 
-			motherboard_has_storagetypes.idStorageType, motherboard_has_storagetypes.amount, storagetypes.storageType
+			motherboard_has_storagetypes.idStorageType, motherboard_has_storagetypes.amount, storagetypes.storageType, storagetypes.idStorageType
 			FROM motherboards
 			LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
 			LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
@@ -198,7 +216,7 @@ class BuildController {
 				]
 			});
 
-			userQuery = `SELECT build_has_storage.idBuild, build_has_storage.idStorage, build_has_storage.amount, storage.modelName, storage.capacity, storage.rpm, storage.image, storagetypes.storageType, manufacturers.manufacturerName FROM build_has_storage
+			userQuery = `SELECT build_has_storage.idBuild, build_has_storage.idStorage, build_has_storage.amount, storage.modelName, storage.capacity, storage.rpm, storage.image, storagetypes.storageType, storagetypes.idStorageType, manufacturers.manufacturerName FROM build_has_storage
 			LEFT JOIN storage ON build_has_storage.idStorage = storage.idStorage
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
@@ -220,137 +238,114 @@ class BuildController {
 		}
 	};
 
-	// fetchStorageById = async (req, res, next) => {
-	// 	try {
-	// 		const { id } = req.params;
-	// 		const results = await db.promise()
-	// 			.query(`SELECT storage.*, manufacturers.manufacturerName, storageTypes.storageType FROM storage
-	// 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
-	// 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
-	// 			WHERE storage.idStorage = ? AND storage.deleted = 0 LIMIT 1;`, [id]);
-	// 		if (results[0].length === 0) {
-	// 			return res.status(400).json({ message: "Storage does not exist" });
-	// 		}
-	// 		res.status(200).send(results[0]);
-	// 	} catch (e) {
-	// 		next(e);
-	// 	}
-	// };
+	updateBuild = async (req, res, next) => {
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ errors: errors.array() });
+		}
 
-	// fetchStorageByBuild = async (req, res, next) => {
-	// 	try {
-	// 		const {motherboardId} = req.params;
-	// 		let userQuery, rows;
-	// 		if(motherboardId !== 'undefined') {
-	// 			userQuery = `SELECT storagetypes.idStorageType FROM motherboards
-	// 			LEFT JOIN motherboard_has_storagetypes ON motherboards.idMotherboard = motherboard_has_storagetypes.idMotherboard
-	// 			LEFT JOIN storagetypes ON motherboard_has_storagetypes.idStorageType = storagetypes.idStorageType
-	// 			WHERE motherboards.idMotherboard = ?
-	// 			AND motherboards.deleted = 0`;
-	// 			[rows] = await db.promise().query(userQuery, [motherboardId]);
-	// 			if (rows.length === 0) {
-	// 				return res.status(400).json({ message: "Given motherboard does not exist" });
-	// 			}
-	// 		}
-	// 		// https://stackoverflow.com/questions/33957252/node-js-mysql-query-where-id-array
-	// 		const arr = (motherboardId !== 'undefined') ? Array.from(rows.map(val => { return val?.idStorageType; })) : [] ;
-	// 		userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
-	// 		LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
-	// 		LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
-	// 		WHERE ${arr.length > 0 ? `storage.idStorageType IN (${mysql.escape(arr)}) AND` : ''}
-	// 		storage.deleted = 0`;
-	// 		[rows] = await db.promise().query(userQuery);
-	// 		res.status(200).send(rows);
-	// 	} catch (e) {
-	// 		next(
-	// 			e.name && e.name === "ValidationError" ? new ValidationError(e) : e
-	// 		);
-	// 	}
-	// };
+		const { user } = req
+		const { id:idBuild } = req.params
 
-	// deleteStorageById = async (req, res, next) => {
-	// 	try {
-	// 		const { id } = req.params;
-	// 		let query = `SELECT * FROM storage WHERE storage.idStorage= ? LIMIT 1;`;
-	// 		let [rows] = await db.promise().query(query, [id]);
-	// 		if (rows.length === 0) {
-	// 			return res.status(400).json({ message: "Storage does not exist" });
-	// 		}
-	// 		query = `UPDATE storage SET deleted = 1 WHERE idStorage= ?`;
-	// 		await db.promise().query(query, [id]);
-	// 		res.status(200).send(rows[0]);
-	// 	} catch (e) {
-	// 		next(e);
-	// 	}
-	// };
-
-	// patchStorageById = async (req, res, next) => {
-	// 	const errors = validationResult(req);
-	// 	if (!errors.isEmpty()) {
-	// 		return res.status(400).json({ errors: errors.array() });
-	// 	}
-
-	// 	const {
-	// 		modelName,
-	// 		capacity,
-	// 		idManufacturer,
-	// 		idStorageType,
-	// 		RPM,
-	// 		image
-	// 	} = req.body;
+		const {
+			idProcessor,
+			idCpuCooler,
+			idMotherboard,
+			idRam,
+			idGpu = null,
+			idCase,
+            idPsu,
+            storage = [],
+		} = req.body;
 		
-	// 	try {
-	// 		const { id } = req.params;
+		try {
+			let [rows] = await db.promise().query(`SELECT idUser FROM builds WHERE idBuild = ? LIMIT 1;`, [idBuild]);
+			if(rows.length === 0){
+				return next(new NotFoundError());
+			}
+			else if(rows[0].idUser !== user.idUsers) {
+				return next(new ForbiddenError());
+			}
 
-	// 		let userQuery = `select idManufacturer from manufacturers where idManufacturer = ?;`
-	// 		let [rows] = await db.promise().query(userQuery, [idManufacturer]);
-	// 		if (rows.length === 0) {
-	// 			return res
-	// 				.status(400)
-	// 				.json({ message: "Given idManufacturer does not exist" });
-	// 		}
-
-	// 		userQuery = `select idStorageType from storagetypes where idStorageType = ?;`;
-	// 		[rows] = await db.promise().query(userQuery, [idStorageType]);
-	// 		if (rows.length === 0) {
-	// 			return res.status(400).json({ message: "Given idStorageType does not exist" });
-	// 		}
-
-	// 		const sql = `UPDATE storage SET modelName = ?, capacity = ?, idManufacturer = ?, idStorageType = ?, RPM = ?, image = ? WHERE idStorage = ?`;
-	// 		let data = [
-	// 			modelName,
-	// 			capacity,
-	// 			idManufacturer,
-	// 			idStorageType,
-	// 			parseInt(RPM),
-	// 			image,
-	// 			id,
-	// 		];
-
-	// 		// execute the UPDATE statement
-	// 		db.promise()
-	// 			.query(sql, data)
-	// 			.then(() => {
-	// 				res.status(201).send({
-	// 					message: "Storage updated",
-	// 					modelName,
-	// 					capacity,
-	// 					idManufacturer,
-	// 					idStorageType,
-	// 					RPM,
-	// 					image,
-	// 					id,
-	// 				});
-	// 			})
-	// 			.catch((e) => {
-	// 				next(e);
-	// 			});
-	// 	} catch (e) {
-	// 		next(
-	// 			e.name && e.name === "ValidationError" ? new ValidationError(e) : e
-	// 		);
-	// 	}
-	// };
+            [rows] = await db.promise().query(`select idProcessor from cpus where idProcessor = ?`, [idProcessor]);
+            if (rows.length === 0) {
+                return res.status(400).json({ message: "Given CPU does not exist" });
+            }
+            [rows] = await db.promise().query(`select idCpuCooler from cpucoolers where idCpuCooler = ?`, [idCpuCooler]);
+            if (rows.length === 0) {
+                return res.status(400).json({ message: "Given CPU cooler does not exist" });
+            }
+            [rows] = await db.promise().query(`select idMotherboard from motherboards where idMotherboard = ?`, [idMotherboard]);
+            if (rows.length === 0) {
+                return res.status(400).json({ message: "Given motherboard does not exist" });
+            }
+            [rows] = await db.promise().query(`select idRam from ram where idRam = ?`, [idRam]);
+            if (rows.length === 0) {
+                return res.status(400).json({ message: "Given memory does not exist" });
+            }
+			if(idGpu) {
+				[rows] = await db.promise().query(`select idGpuPartner from gpu_has_partners where idGpuPartner = ?`, [idGpu]);
+				if (rows.length === 0) {
+					return res.status(400).json({ message: "Given GPU does not exist" });
+				}
+			}
+            [rows] = await db.promise().query(`select idCase from cases where idCase = ?`, [idCase]);
+            if (rows.length === 0) {
+                return res.status(400).json({ message: "Given case does not exist" });
+            }
+            [rows] = await db.promise().query(`select idPsu from psu where idPsu = ?`, [idPsu]);
+            if (rows.length === 0) {
+                return res.status(400).json({ message: "Given PSU does not exist" });
+            }
+			
+			const sqlInsert =
+				`UPDATE builds SET idProcessor = ?, idCpuCooler = ?, idMotherboard = ?, idRam = ?, idGpu = ?, idCase = ?, idPsu = ? WHERE idBuild = ?`;
+			db.promise()
+				.query(sqlInsert, [
+					idProcessor,
+                    idCpuCooler,
+                    idMotherboard,
+                    idRam,
+                    idGpu,
+                    idCase,
+                    idPsu,
+					idBuild
+				])
+				.then(async() => {
+					// add storage
+					if(storage.length > 0) {
+						// Check if id's exist
+						const storageIds = new Set();
+						const inserter = [];
+						storage.map((data) => {
+							storageIds.add(data.idStorage);
+							inserter.push([uuidv4(), idBuild, data.idStorage, data.amount]);
+						})
+						const temp = Array.from(storageIds);
+						let userQuery = `
+						SELECT COUNT(DISTINCT idStorage) = ? as isTrue 
+						FROM storage
+						WHERE FIND_IN_SET(idStorage, ?);
+						`;
+						[rows] = await db.promise().query(userQuery, [temp.length, temp.join(',')]);
+						if(!rows[0].isTrue === 1) {
+							return res.status(400).json({ message: "Given Storage does not exist" });
+						}
+						[rows] = await db.promise().query(`DELETE FROM build_has_storage WHERE idBuild = ?;`,[idBuild]);
+						userQuery = `INSERT INTO build_has_storage (id, idBuild, idStorage, amount) VALUES ?`;				
+						[rows] = await db.promise().query(userQuery, [inserter]);
+					}
+				})
+				.then(() => {
+					return res.status(201).send({
+						message: "Build updated",
+						id: idBuild,
+					});
+				}).catch((e) => next(e));
+		} catch (e) {
+			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
+		}
+	};
 
 	createBuild = async (req, res, next) => {
 		const errors = validationResult(req);
@@ -449,11 +444,11 @@ class BuildController {
 					}
 				})
 				.then(() => {
-					res.status(201).send({
+					return res.status(201).send({
 						message: "Build added",
 						id: idBuild,
 					});
-				});
+				}).catch(e => next(e));
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}

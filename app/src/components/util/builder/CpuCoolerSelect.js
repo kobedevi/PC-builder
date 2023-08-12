@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
 import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
@@ -28,6 +28,16 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
   const onSubmit = (query) => {
     setQuery(query.search)
   }
+
+  useEffect(() => {
+    updateFields({
+      idCpuCooler: currentBuild.cpucooler.idCpuCooler,
+      cooler: currentBuild.cpucooler.idCpuSocket,
+      maxDepth: currentBuild.cpucooler.height || 0
+    })
+    return () => {
+    }
+  }, [])
 
   const handlePageClick = (page) => {
     setPage(page);
@@ -89,7 +99,7 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
             {(data.result.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
-                <img src="./blob.svg" alt="blobby blobby blobby!"/>
+                <img src="/blob.svg" alt="blobby blobby blobby!"/>
               </div>
             )}
             {

@@ -1,12 +1,10 @@
 import { useCallback, useState, useEffect } from "react";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
-import { PossibleRoutes, route } from "../../../core/routing";
+import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "../../shared/ErrorAlert";
-import ProductCard from "components/Design/ProductCard";
 import SearchForm from "components/Design/SearchForm";
-import Result from "./CpuResult";
 import { fetchCompatibleStorage, fetchCompatibleStorageByFilter, fetchStorageByIdBuilder } from "core/modules/Storage/api";
 import { v4 as uuidv4 } from "uuid";
 import BuilderProductCard from "components/Design/BuilderProductCard";
@@ -15,12 +13,28 @@ import Pagination from "components/Design/Pagination";
 import StorageResult from "./StorageResult";
 
 
-const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updateBuild, drives, setDrives, smallSlots, largeSlots, m2Slots, updateFields}) => {
+const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, setDrives}) => {
   const [info, setInfo] = useState();
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState();
   const [page, setPage] = useState(0)
   const [perPage, setPerPage] = useState(20)
+
+  useEffect(() => {
+    const tempTest = [...currentBuild.storage];
+    currentBuild.storage.map((item) => {
+      const tempAmount = item.amount
+      delete item.amount;
+      for (let i = 0; i < tempAmount; i++) {
+        tempTest.push({
+          ...item,
+          localId:uuidv4(),
+        })
+      }
+      return null;
+    })
+    setDrives(tempTest)
+  },[])
 
   const apiCall = useCallback(() => {
     if(!strictMode) {
@@ -115,7 +129,7 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, updat
             {(data.result.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
-                <img src="./blob.svg" alt="blobby blobby blobby!"/>
+                <img src="/blob.svg" alt="blobby blobby blobby!"/>
               </div>
             )}
             {
