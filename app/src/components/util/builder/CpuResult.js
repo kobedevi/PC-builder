@@ -54,7 +54,8 @@ const CpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
                                             Manufacturer: {product.manufacturerName}<br/>
                                             Base Clock: {product.clockSpeed}Ghz<br/>
                                             Cores: {product.cores}<br/>
-                                            Socket: {product.socketType}
+                                            Socket: {product.socketType}<br/>
+                                            <b className="price">MSRP Price: {product.price ? `€${product.price}`: 'Unknown'}</b>
                                         </p>
                                         <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                                     </BuilderProductCard>

@@ -96,7 +96,12 @@ class StorageController {
 			storage.deleted = 0
 			AND CONCAT_WS('', modelName, manufacturerName, capacity, RPM) LIKE ?`;
 			[rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
-
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
 			return res.status(200).send(rows);
 		} catch (e) {
 			next(

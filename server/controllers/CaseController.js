@@ -40,6 +40,12 @@ class CaseController {
 			AND CONCAT_WS('', modelName, manufacturerName, formfactor) LIKE ?
 			ORDER BY idCase;`;
 			const [rows] = await db.promise().query(userQuery, [width,height,depth, `%${encodedStr}%`]);
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
 
 			return res.status(200).send(rows);
 		} catch (e) {

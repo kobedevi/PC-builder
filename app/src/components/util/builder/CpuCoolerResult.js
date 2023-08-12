@@ -53,6 +53,7 @@ const CpuCoolerResult = ({result, setProductInfo, onClick, currentBuild, filter}
                                         <p>
                                             Manufacturer: {product.manufacturerName}<br/>
                                             compatible sockets: {product.socketType.join(', ')}<br/>
+                                            <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                                         </p>
                                         <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                                     </BuilderProductCard>

@@ -16,12 +16,15 @@ const showUnit = (key) => {
         case "capacity":
             return "GB"
         case "RPM":
-            return "RPM"
+        case "rpm":
+            return "'"
         case "vram":
         case "sizePerStick":
             return "GB"
+        case "price":
+            return "€"
         default:
-            break;
+            return "";
     }
 }
 

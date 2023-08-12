@@ -145,7 +145,8 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
                             Manufacturer: {cpu.manufacturerName}<br/>
                             Base Clock: {cpu.clockSpeed}Ghz<br/>
                             Cores: {cpu.cores}<br/>
-                            Socket: {cpu.socketType}
+                            Socket: {cpu.socketType}<br/>
+                            <b className="price">MSRP Price: {cpu.price ? `€${cpu.price}` : 'Unknown'}</b>
                           </p>
                           <button type="button" onClick={() => onClick(cpu)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>

@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import ItemCollapserParent from "./ItemCollapserParent";
 import { useState } from "react";
-import Button from "./Button";
+import PriceCalc from "./PriceCalc";
 
-const ItemList = ({ info}) => {
+const ItemList = ({ info, setTotalPrice }) => {
 
   const [collapse, setCollapse] = useState(false);
 
@@ -19,9 +19,10 @@ const ItemList = ({ info}) => {
                   <ItemCollapserParent title={key} items={value}/>
                 </div>
               )
-            }
+            } 
             return;
           })}
+          <PriceCalc setTotalPrice={setTotalPrice} info={info}/>
         </div>
       </div>
     </div>

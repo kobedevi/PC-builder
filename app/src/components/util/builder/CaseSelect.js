@@ -108,6 +108,7 @@ const CaseSelect = ({currentBuild, updateBuild, idCase, formfactor, width, heigh
                         <p>
                         Manufacturer: {product.manufacturerName}<br/>
                         Formfactor: {product.formfactor}<br/>
+                        <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                         </p>
                         <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                       </BuilderProductCard>

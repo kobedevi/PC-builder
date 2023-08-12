@@ -61,6 +61,11 @@ const Builder = () => {
 	const auth = useAuth();
 	const withNoAuth = useNoAuthApi();
 	const navigate = useNavigate();
+	let totalPrice = 0;
+
+	const setTotalPrice = (newPrice) => {
+		totalPrice = parseFloat(newPrice).toFixed(2);
+	}
 
 	const [currentBuild, setCurrentBuild] = useState({
 		...initialBuild,
@@ -114,11 +119,11 @@ const Builder = () => {
 			setAlert(null);
 			if (!isLastStep) return next();
 			if (currentBuild.id) {
-				return withNoAuth(updateCurrentBuild(currentBuild.id, currentBuild, auth?.user))
+				return withNoAuth(updateCurrentBuild(currentBuild.id, currentBuild, totalPrice, auth?.user))
 				.then(() => next())
 				.catch((err) => setAlert(err));
 			}
-			return withNoAuth(createBuild(currentBuild, auth?.user))
+			return withNoAuth(createBuild(currentBuild, totalPrice, auth?.user))
 			.then((res) => {
 				updateBuild({
 					id: res.id
@@ -159,24 +164,10 @@ const Builder = () => {
 							</div>
 						</fieldset>
 					</form>
-					{data && (
-						<div>
-							{/* {Object.entries(data).map(([key, value]) => {
-							// hide show id fields
-								return (
-									<p key={key}>
-										{key}: {value}
-									</p>
-								);
-							})} */}
-						</div>
-					)}
 				</div>
 			</div>
 			{currentBuild && 
-				<>
-					<ItemList color="info" info={currentBuild}/>
-				</>
+				<ItemList color="info" setTotalPrice={setTotalPrice}info={currentBuild}/>
 			}
 		</>
 	)

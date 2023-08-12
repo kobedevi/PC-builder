@@ -24,6 +24,7 @@ const GpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
     if (error) {
         return <ErrorAlert error={error} />
     }
+    console.log(products);
 
     if (products.message) {
         return (
@@ -53,7 +54,8 @@ const GpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
                                             Manufacturer: {product.manufacturerName}<br/>
                                             Vram: {product.vram}GB<br/>
                                             Clockspeed: {product.clockspeed}MHz<br/>
-                                            Watercooled: {product.watercooled ? 'Yes': 'No'}
+                                            Watercooled: {product.watercooled ? 'Yes': 'No'}<br/>
+                                            <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                                         </p>
                                         <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                                     </BuilderProductCard>

@@ -57,7 +57,8 @@ const StorageResult = ({strictMode, result, setProductInfo, onClick, currentBuil
                                             Manufacturer: {product.manufacturerName}<br/>
                                             Capacity: {product.capacity}<br/>
                                             Storage Type: {product.storageType}<br/>
-                                            {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}'
+                                            {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM+"'" :''}<br/>
+                                            <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                                         </p>
                                         <button type="button" onClick={() => onClick(product)}>Add</button>
                                     </BuilderProductCard>

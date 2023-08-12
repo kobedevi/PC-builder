@@ -109,7 +109,8 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields }) => {
                           <p>
                           Manufacturer: {product.manufacturerName}<br/>
                           Modular: {product.modular? "Yes": "No"}<br/>
-                          Wattage: {product.wattage}W
+                          Wattage: {product.wattage}W<br/>
+                          <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                           </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>

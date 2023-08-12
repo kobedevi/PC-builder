@@ -1,9 +1,9 @@
 const express = require("express");
+require("dotenv").config();
 const { registerRoutes } = require("./routes");
 const { registerMiddleware } = require("./middleware");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-require("dotenv").config();
 const db = require("./utils/db");
 
 const app = express();

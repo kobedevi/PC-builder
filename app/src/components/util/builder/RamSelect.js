@@ -128,6 +128,7 @@ const RamSelect = ({strictMode, setStrictMode, currentBuild, updateBuild, idRamT
                           Size per stick: {product.sizePerStick} GB<br/>
                           <strong>Total</strong> size: {product.sizePerStick * product.stickAmount} GB<br/>
                           Ram speed: {product.speed}MHz<br/>
+                          <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                           </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>

@@ -60,6 +60,12 @@ class GpuController {
 			AND CONCAT_WS('', gpu_has_partners.modelName, gpus.modelName, manufacturerName, clockspeed, vram) LIKE ?
 			AND gpus.deleted = 0;`;
 			const [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
+			if (rows.length === 0) {
+				return res.status(200).json({ 
+					message: "No results",
+					encodedStr,
+				});
+			}
 			return res.status(200).send(rows);
 		} catch (e) {
 			next(

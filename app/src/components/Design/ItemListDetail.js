@@ -1,5 +1,6 @@
 import moment from "moment";
 import ItemCollapserParent from "./ItemCollapserParent";
+import PriceCalc from "./PriceCalc";
 
 const ItemListDetail = ({info}) => {
 
@@ -13,7 +14,7 @@ const ItemListDetail = ({info}) => {
             <h6><strong>Date published: </strong><br/>{moment(new Date(info.date.undefined * 1000)).format("D MMM YYYY")}</h6> 
           </div>
           {Object.entries(info).map(([key, value], i) => {
-            if (!key.startsWith("id") && !key.startsWith("date") && !key.startsWith("user")){
+            if (!key.startsWith("id") && !key.startsWith("date") && !key.startsWith("user") && !key.startsWith("totalPrice")){
               return (
                 <div className="item" key={key}>
                   <ItemCollapserParent title={key} items={value}/>
@@ -22,6 +23,7 @@ const ItemListDetail = ({info}) => {
             }
             return;
           })}
+          <PriceCalc info={info}/>
         </div>
       </div>
     </div>

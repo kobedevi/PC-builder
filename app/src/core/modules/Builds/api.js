@@ -10,7 +10,7 @@ const fetchBuildInfo = (id) => async (headers) =>  {
   );
 };
 
-const createBuild = async (data, user) => {
+const createBuild = async (data, totalPrice, user) => {
 
   // https://stackoverflow.com/questions/62425038/how-to-count-duplicate-object-in-js
 
@@ -34,7 +34,8 @@ const createBuild = async (data, user) => {
       idGpu: data.gpu.idGpuPartner,
       idCase: data.case.idCase,
       idPsu: data.psu.idPsu,
-      storage: storageOutput
+      storage: storageOutput,
+      totalPrice
   };
   if(user?.token) {
     return await Axios.post(
@@ -59,7 +60,7 @@ const createBuild = async (data, user) => {
   )
 };
 
-const updateCurrentBuild = async (id, data, user) => {
+const updateCurrentBuild = async (id, data, totalPrice, user) => {
 
   // https://stackoverflow.com/questions/62425038/how-to-count-duplicate-object-in-js
 
@@ -83,7 +84,8 @@ const updateCurrentBuild = async (id, data, user) => {
       idGpu: data.gpu.idGpuPartner,
       idCase: data.case.idCase,
       idPsu: data.psu.idPsu,
-      storage: storageOutput
+      storage: storageOutput,
+      totalPrice
   };
   if(user.token) {
     return await Axios.patch(

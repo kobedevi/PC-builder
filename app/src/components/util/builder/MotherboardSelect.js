@@ -97,7 +97,7 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
             {(data.result.length === 0) && (
               <div className="blobContainer">
                 <p style={{color: "black"}}>No compatible products found</p>
-                <img src="./blob.svg" alt="blobby blobby blobby!"/>
+                <img src="/blob.svg" alt="blobby blobby blobby!"/>
               </div>
             )}
             {
@@ -118,6 +118,7 @@ const MotherboardSelect = ({currentBuild, updateBuild, idMotherboard, idCpu, wid
                           Manufacturer: {product.manufacturerName}<br/>
                           Formfactor: {product.formfactor}<br/>
                           SocketType: {product.socketType}<br/>
+                          <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                           </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>
                         </BuilderProductCard>

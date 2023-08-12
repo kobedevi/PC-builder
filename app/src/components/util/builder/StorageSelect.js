@@ -145,10 +145,11 @@ const StorageSelect = ({warnings, strictMode, setStrictMode, currentBuild, setDr
                           id={product.idStorage}
                         >
                           <p>
-                          Manufacturer: {product.manufacturerName}<br/>
-                          Capacity: {product.capacity}<br/>
-                          Storage Type: {product.storageType}<br/>
-                          {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM :''}'
+                            Manufacturer: {product.manufacturerName}<br/>
+                            Capacity: {product.capacity}<br/>
+                            Storage Type: {product.storageType}<br/>
+                            {product.RPM > 0 ? 'Speed in RPM: ' + product.RPM+"'" :''}<br/>
+                            <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                           </p>
                           <button type="button" onClick={() => onClick(product)}>Add</button>
                         </BuilderProductCard>

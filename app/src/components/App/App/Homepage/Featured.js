@@ -62,6 +62,7 @@ const Featured = () => {
                         CPU: {product.cpu_modelName}<br/>
                         GPU: {product?.gpu_modelName}<br/>
                         CASE: {product?.case_modelName}<br/>
+                        <b className="price">Total Price: {product.totalPrice ? `€${product.totalPrice}` : 'Unknown'}</b>
                       </FeaturedProductCard>
                     </li>
                   </Link>

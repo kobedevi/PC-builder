@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ProductView from "./ProductView";
 import { ObjectKeysToText } from "components/util/ObjectKeysToText";
+import { showUnit } from "components/util/showUnit";
 
 const DetailCard = ({ data }) => {
 
@@ -19,7 +20,7 @@ const DetailCard = ({ data }) => {
                     {ObjectKeysToText(key)}
                     :
                   </td>
-                  <td>{value !== null ? (!Array.isArray(value) ? value : value.join(', ') ) : "unknown"} </td>
+                  <td>{value !== null ? (!Array.isArray(value) ? `${value} ${showUnit(key)}` : value.join(', ') ) : "unknown"} </td>
                 </tr>
               );
             }

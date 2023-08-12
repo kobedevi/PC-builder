@@ -48,7 +48,7 @@ class BuildController {
 			.then(res => Math.ceil(res[0][0].totalProducts / perPage));
 
 			const results = await db.promise().query(`
-				SELECT idBuild, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
+				SELECT idBuild, totalPrice, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
 				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
@@ -72,7 +72,7 @@ class BuildController {
 			.then(res => Math.ceil(res[0][0].totalProducts / perPage));
 
 			const results = await db.promise().query(`
-				SELECT idBuild, builds.idUser, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
+				SELECT idBuild, totalPrice, builds.idUser, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
 				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
@@ -89,7 +89,7 @@ class BuildController {
 	fetchFeaturedBuilds = async (req, res, next) => {
 		try {
 			const results = await db.promise().query(`
-				SELECT idBuild, users.idUsers as idUser, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
+				SELECT idBuild, totalPrice, users.idUsers as idUser, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
 				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
@@ -108,13 +108,13 @@ class BuildController {
 			let userQuery = `
 				SELECT builds.*,
 				users.idUsers as user_id, users.userName as user_userName, 
-				cpus.idProcessor as cpu_id, cpus.idManufacturer as cpu_idManufacturer, cpus.modelName as cpu_modelName, cpus.clockSpeed as cpu_clockSpeed, cpus.cores as cpu_cores, cpus.wattage as cpu_wattage, t1.socketType as cpu_socketType, cpus.image as cpu_image,
-				cpucoolers.idCpuCooler as cpucooler_id, cpucoolers.idManufacturer as cpucooler_idManufacturer, cpucoolers.modelName as cpucooler_modelName, cpucoolers.height as cpucooler_height, cpucoolers.width as cpucooler_width, cpucoolers.depth as cpucooler_depth, cpucoolers.image as cpucooler_image,
-				motherboards.idMotherboard as motherboard_id, motherboards.idManufacturer as motherboard_idManufacturer, motherboards.modelName as motherboard_modelName, motherboards.wifi as motherboard_wifi, motherboards.memorySlots as motherboard_memorySlots, motherboards.sataPorts as motherboard_sataPorts, motherboards.pcieSlots as motherboard_pcieSlots, t2.socketType as motherboard_sockettype, formfactors.idFormfactor as motherboard_idFormfactor, formfactors.formfactor as motherboard_formfactor, formfactors.height as motherboard_height, formfactors.width as motherboard_width, motherboards.image as motherboard_image, motherboards.idRamType as motherboard_idRamType,
-				ram.idRam as ram_id, ram.idManufacturer as ram_idManufacturer, ram.modelName as ram_modelName, ram.sizePerStick as ram_sizePerStick, ram.stickAmount as ram_stickAmount, ram.speed as ram_speed, ram.image as ram_image,
-				gpu_has_partners.idGpuPartner as gpu_id, gpu_has_partners.idManufacturer as gpu_idManufacturer, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.clockspeed as gpu_clockSpeed, gpu_has_partners.watercooled as gpu_watercooled, gpu_has_partners.wattage as gpu_wattage, gpus.modelName as gpu_chipset, gpus.vram as gpu_vram, gpu_has_partners.image as gpu_image, gpu_has_partners.height as gpu_height, gpu_has_partners.width as gpu_width, gpu_has_partners.depth as gpu_depth, 
-				cases.idCase as case_id, cases.idManufacturer as case_idManufacturer, cases.modelName as case_modelName, cases.height as case_height, cases.width as case_width, cases.depth as case_depth, cases.\`2-5_slots\` as case_smallSlots, cases.\`3-5_slots\` as case_bigSlots, cases.image as case_image,
-				psu.idPsu as psu_id, psu.idManufacturer as psu_idManufacturer, psu.modelName as psu_modelName, psu.modular as psu_modular, psu.wattage as psu_wattage, psu.image as psu_image
+				cpus.idProcessor as cpu_id, cpus.price as cpu_price, cpus.idManufacturer as cpu_idManufacturer, cpus.modelName as cpu_modelName, cpus.clockSpeed as cpu_clockSpeed, cpus.cores as cpu_cores, cpus.wattage as cpu_wattage, t1.socketType as cpu_socketType, cpus.image as cpu_image,
+				cpucoolers.idCpuCooler as cpucooler_id, cpucoolers.price as cpucooler_price, cpucoolers.idManufacturer as cpucooler_idManufacturer, cpucoolers.modelName as cpucooler_modelName, cpucoolers.height as cpucooler_height, cpucoolers.width as cpucooler_width, cpucoolers.depth as cpucooler_depth, cpucoolers.image as cpucooler_image,
+				motherboards.idMotherboard as motherboard_id, motherboards.price as motherboard_price, motherboards.idManufacturer as motherboard_idManufacturer, motherboards.modelName as motherboard_modelName, motherboards.wifi as motherboard_wifi, motherboards.memorySlots as motherboard_memorySlots, motherboards.sataPorts as motherboard_sataPorts, motherboards.pcieSlots as motherboard_pcieSlots, t2.socketType as motherboard_sockettype, formfactors.idFormfactor as motherboard_idFormfactor, formfactors.formfactor as motherboard_formfactor, formfactors.height as motherboard_height, formfactors.width as motherboard_width, motherboards.image as motherboard_image, motherboards.idRamType as motherboard_idRamType,
+				ram.idRam as ram_id, ram.price as ram_price, ram.idManufacturer as ram_idManufacturer, ram.modelName as ram_modelName, ram.sizePerStick as ram_sizePerStick, ram.stickAmount as ram_stickAmount, ram.speed as ram_speed, ram.image as ram_image,
+				gpu_has_partners.idGpuPartner as gpu_id, gpu_has_partners.price as gpu_price, gpu_has_partners.idManufacturer as gpu_idManufacturer, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.clockspeed as gpu_clockSpeed, gpu_has_partners.watercooled as gpu_watercooled, gpu_has_partners.wattage as gpu_wattage, gpus.modelName as gpu_chipset, gpus.vram as gpu_vram, gpu_has_partners.image as gpu_image, gpu_has_partners.height as gpu_height, gpu_has_partners.width as gpu_width, gpu_has_partners.depth as gpu_depth, 
+				cases.idCase as case_id, cases.price as case_price, cases.idManufacturer as case_idManufacturer, cases.modelName as case_modelName, cases.height as case_height, cases.width as case_width, cases.depth as case_depth, cases.\`2-5_slots\` as case_smallSlots, cases.\`3-5_slots\` as case_bigSlots, cases.image as case_image,
+				psu.idPsu as psu_id, psu.price as psu_price, psu.idManufacturer as psu_idManufacturer, psu.modelName as psu_modelName, psu.modular as psu_modular, psu.wattage as psu_wattage, psu.image as psu_image
 				FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
@@ -215,7 +215,7 @@ class BuildController {
 				]
 			});
 
-			userQuery = `SELECT build_has_storage.idBuild, build_has_storage.idStorage, build_has_storage.amount, storage.modelName, storage.capacity, storage.rpm, storage.image, storagetypes.storageType, storagetypes.idStorageType, manufacturers.manufacturerName FROM build_has_storage
+			userQuery = `SELECT build_has_storage.idBuild, build_has_storage.idStorage, build_has_storage.amount, storage.modelName, storage.capacity, storage.rpm, storage.price, storage.image, storagetypes.storageType, storagetypes.idStorageType, manufacturers.manufacturerName FROM build_has_storage
 			LEFT JOIN storage ON build_has_storage.idStorage = storage.idStorage
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
@@ -255,6 +255,7 @@ class BuildController {
 			idCase,
             idPsu,
             storage = [],
+			totalPrice
 		} = req.body;
 		
 		try {
@@ -298,7 +299,7 @@ class BuildController {
             }
 			
 			const sqlInsert =
-				`UPDATE builds SET idProcessor = ?, idCpuCooler = ?, idMotherboard = ?, idRam = ?, idGpu = ?, idCase = ?, idPsu = ? WHERE idBuild = ?`;
+				`UPDATE builds SET idProcessor = ?, idCpuCooler = ?, idMotherboard = ?, idRam = ?, idGpu = ?, idCase = ?, idPsu = ?, totalPrice = ? WHERE idBuild = ?`;
 			db.promise()
 				.query(sqlInsert, [
 					idProcessor,
@@ -308,6 +309,7 @@ class BuildController {
                     idGpu,
                     idCase,
                     idPsu,
+					totalPrice,
 					idBuild
 				])
 				.then(async() => {
@@ -366,6 +368,7 @@ class BuildController {
 			idCase,
             idPsu,
             storage = [],
+			totalPrice
 		} = req.body;
 		
 		try {
@@ -404,7 +407,7 @@ class BuildController {
 			
 
 			const sqlInsert =
-				`INSERT INTO builds (date, idBuild, idUser, idProcessor, idCpuCooler, idMotherboard, idRam, idGpu, idCase, idPsu) VALUES (?,?,?,?,?,?,?,?,?,?)`;
+				`INSERT INTO builds (date, idBuild, idUser, idProcessor, idCpuCooler, idMotherboard, idRam, idGpu, idCase, idPsu, totalPrice) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
 			db.promise()
 				.query(sqlInsert, [
 					unixDate,
@@ -417,6 +420,7 @@ class BuildController {
                     idGpu,
                     idCase,
                     idPsu,
+					totalPrice
 				])
 				.then(async() => {
 					// add storage
