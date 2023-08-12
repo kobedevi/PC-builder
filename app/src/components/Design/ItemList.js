@@ -13,7 +13,7 @@ const ItemList = ({ info, setTotalPrice }) => {
       <div className="ItemList">
         <div style={{marginTop:"6rem", overflowY:"auto"}}>
           {Object.entries(info).map(([key, value], i) => {
-            if (!key.startsWith("id")){
+            if (!key.startsWith("id") && !key.startsWith("name")){
               return (
                 <div className="item" key={key}>
                   <ItemCollapserParent title={key} items={value}/>

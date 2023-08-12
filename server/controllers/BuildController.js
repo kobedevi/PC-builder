@@ -48,7 +48,7 @@ class BuildController {
 			.then(res => Math.ceil(res[0][0].totalProducts / perPage));
 
 			const results = await db.promise().query(`
-				SELECT idBuild, totalPrice, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
+				SELECT idBuild, builds.name, totalPrice, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
 				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
@@ -72,7 +72,7 @@ class BuildController {
 			.then(res => Math.ceil(res[0][0].totalProducts / perPage));
 
 			const results = await db.promise().query(`
-				SELECT idBuild, totalPrice, builds.idUser, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
+				SELECT idBuild, builds.name, totalPrice, builds.idUser, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
 				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
@@ -89,7 +89,7 @@ class BuildController {
 	fetchFeaturedBuilds = async (req, res, next) => {
 		try {
 			const results = await db.promise().query(`
-				SELECT idBuild, totalPrice, users.idUsers as idUser, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
+				SELECT idBuild, builds.name, totalPrice, users.idUsers as idUser, users.userName, cpus.modelName as cpu_modelName, cpus.image as cpu_image, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.image as gpu_image, cases.modelName as case_modelName, cases.image as case_image FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
 				LEFT JOIN gpu_has_partners ON builds.idGpu = gpu_has_partners.idGpuPartner
@@ -137,8 +137,8 @@ class BuildController {
 				return res.status(400).json({ message: "Build does not exist" });
 			}
 
-			const finalResult = {}
-			let tempManuArr = []
+			const finalResult = {};
+			let tempManuArr = [];
 			let cpucoolerId;
 
 			// push manufacturer to items
@@ -155,9 +155,10 @@ class BuildController {
 					finalResult[category[0]][category[1]] = item
 				}
 			})
+			// Add buildName back
+			finalResult.name = rows[0].name
 
 			tempManuArr = Array.from(new Set(tempManuArr));
-
 			// Only doing this for manufacturers since this table would be joined many times over
 			// Get all the relevant manufacturers
 			userQuery = `
@@ -360,6 +361,7 @@ class BuildController {
 		}
 
 		const {
+			name,
 			idProcessor,
 			idCpuCooler,
 			idMotherboard,
@@ -368,7 +370,7 @@ class BuildController {
 			idCase,
             idPsu,
             storage = [],
-			totalPrice
+			totalPrice,
 		} = req.body;
 		
 		try {
@@ -407,11 +409,12 @@ class BuildController {
 			
 
 			const sqlInsert =
-				`INSERT INTO builds (date, idBuild, idUser, idProcessor, idCpuCooler, idMotherboard, idRam, idGpu, idCase, idPsu, totalPrice) VALUES (?,?,?,?,?,?,?,?,?,?,?)`;
+				`INSERT INTO builds (date, idBuild, name, idUser, idProcessor, idCpuCooler, idMotherboard, idRam, idGpu, idCase, idPsu, totalPrice) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`;
 			db.promise()
 				.query(sqlInsert, [
 					unixDate,
 					idBuild,
+					name,
                     user?.idUsers,
 					idProcessor,
                     idCpuCooler,

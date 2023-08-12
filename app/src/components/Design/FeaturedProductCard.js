@@ -32,7 +32,12 @@ const FeaturedProductCard = ({
                     subtitle && <h6 onClick={() => setProductInfo(id)} style={{cursor:"pointer"}} className='subTitle mt-1 mb-2'>{subtitle}</h6>
                   }
                   {
-                    children && <>{children}</>
+                    children && (
+                      <>
+                        {product.name ? <h2 className="buildName">{product.name}</h2>: ''}
+                        {children}
+                      </>
+                    )
                   }
               </section>
             </>

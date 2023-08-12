@@ -27,6 +27,7 @@ const createBuild = async (data, totalPrice, user) => {
   }
 
   const tempData = {
+      name: data.name,
       idProcessor: data.cpu.idProcessor,
       idCpuCooler: data.cpucooler.idCpuCooler,
       idMotherboard: data.motherboard.idMotherboard,

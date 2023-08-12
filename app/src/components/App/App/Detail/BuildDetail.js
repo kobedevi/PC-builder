@@ -46,6 +46,7 @@ const BuildDetail = () => {
                       <Link className="edit" to={route(PossibleRoutes.BuilderEdit, {id: id})} state={
                         { 
                           data: {
+                            title: data.name,
                             id,
                             case: {
                               idCase: data.case.id,

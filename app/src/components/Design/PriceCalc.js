@@ -2,7 +2,7 @@
 const PriceCalc = ({info, setTotalPrice=null}) => {
   const totalPrices = [0.00]
   Object.entries(info).map(([key, value], i) => {
-    if (!key.startsWith("id")){
+    if (!key.startsWith("id") && !key.startsWith("name")){
       if(!Array.isArray(value) && Object.keys(value).length > 0) {
         totalPrices.push( isNaN(parseFloat(value?.price)) ? 0 : parseFloat(value?.price))
       } if(Array.isArray(value) && value.length > 0) {
@@ -28,7 +28,7 @@ const PriceCalc = ({info, setTotalPrice=null}) => {
   })
   
   return (
-      <div class="item">
+      <div className="item">
         <p style={{margin:0, padding:".5rem 1rem"}}>
           <b className='price'>Total: €{parseFloat(totalPrice).toFixed(2)}</b>
         </p>

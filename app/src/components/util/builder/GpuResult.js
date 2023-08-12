@@ -24,7 +24,6 @@ const GpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
     if (error) {
         return <ErrorAlert error={error} />
     }
-    console.log(products);
 
     if (products.message) {
         return (

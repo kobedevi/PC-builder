@@ -54,6 +54,7 @@ const initialBuild = {
 	psu: {},
 	case: {},
 	id: '',
+	name: '',
 }
 
 const Builder = () => {
@@ -93,9 +94,6 @@ const Builder = () => {
 		})
 	}
 
-	useEffect(() => {
-	},[currentBuild])
-
 	// TODO: pagination
 	const {steps, currentStepIndex, step, isFirstStep, isLastStep, isFinish, back, next} = 
 		useMultiStepForm([
@@ -110,7 +108,19 @@ const Builder = () => {
 			<PartsOverview data={data} currentBuild={currentBuild}/>,
 		])
 
-	const validate = (e) => {
+	useEffect(() =>{
+		if(isLastStep) {
+			withNoAuth(createBuild(currentBuild, totalPrice, auth?.user))
+			.then((res) => {
+				updateBuild({
+					id: res.id
+				})
+				next();
+			}).catch((err) => setAlert(err));
+		}
+	},[currentBuild.name])
+
+	const validate = async (e) => {
 		e.preventDefault();
 		if (isFinish) {
 			return navigate(route(PossibleRoutes.BuildDetail, {id: currentBuild.id}), { replace: true });
@@ -123,14 +133,10 @@ const Builder = () => {
 				.then(() => next())
 				.catch((err) => setAlert(err));
 			}
-			return withNoAuth(createBuild(currentBuild, totalPrice, auth?.user))
-			.then((res) => {
-				updateBuild({
-					id: res.id
-				})
-				next();
-			}).catch((err) => setAlert(err));
-
+			const name = prompt("Please name your build", "");
+			updateBuild({
+				name
+			})
 		} else {
 			setAlert({builderMsg: "Please pick a component"})
 		}
@@ -159,8 +165,8 @@ const Builder = () => {
 							}
 							<legend>{step}</legend>
 							<div className='btnContainer'>
-								{(!isFirstStep && !isFinish) && <button className="back" type="button" onClick={back}><span>Back </span>&lt;</button>}
-								<button className="next" type="submit" onClick={(e) => validate(e)}><span className={isLastStep ? "finish" : ""}>{isLastStep ? "Finish  " : "Next "}</span>&gt;</button>
+								{(!isFirstStep && !isFinish) && <button className="back" type="button" onClick={back}><span>Back </span>&#9668;</button>}
+								<button className="next" type="submit" onClick={(e) => validate(e)}><span className={isLastStep ? "finish" : ""}>{isLastStep ? "Finish" : "Next "}</span> &#9654;</button>
 							</div>
 						</fieldset>
 					</form>
