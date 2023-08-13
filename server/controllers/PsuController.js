@@ -1,7 +1,7 @@
 const db = require("../utils/db");
 const { validationResult } = require("express-validator");
 const { v4: uuidv4 } = require("uuid");
-const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
@@ -346,25 +346,26 @@ class PsuController {
 
 			// await browser.close();
 			
-			fs.appendFile(
-				`${__dirname}/results.csv`,
-				`${'zever'},${'nog wa zever'},${'en nog wa'}\n`,
-				function (err) {
-					if (err) throw err;
-				}
-			);
+			// fs.appendFile(
+			// 	`${__dirname}/results.csv`,
+			// 	`${'zever'},${'nog wa zever'},${'en nog wa'}\n`,
+			// 	function (err) {
+			// 		if (err) throw err;
+			// 	}
+			// );
 
-			const options = {
-				root: path.join(__dirname)
-			};
-			const fileName = './results.csv';
-			return res.sendFile(fileName, options,  function (err) {
-				if (err) {
-					next(err);
-				} else {
-					console.log('Sent:', fileName);
-				}
-			});
+			// const options = {
+			// 	root: path.join(__dirname)
+			// };
+			// const fileName = './results.csv';
+			// return res.sendFile(fileName, options,  function (err) {
+			// 	if (err) {
+			// 		next(err);
+			// 	} else {
+			// 		console.log('Sent:', fileName);
+			// 	}
+			// });
+			next();
 
 		} catch (e) {
 			console.log(e);
