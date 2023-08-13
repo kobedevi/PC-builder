@@ -1,4 +1,3 @@
-import { Text, useGLTF } from "@react-three/drei";
 
 import { Base } from "./assets/Base";
 import { Fin } from "./assets/Fin";

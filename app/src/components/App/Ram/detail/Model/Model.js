@@ -1,4 +1,4 @@
-import { Mask, Text, useGLTF } from "@react-three/drei";
+import { Text} from "@react-three/drei";
 import React from "react";
 import {Memory} from "./assets/Memory";
 

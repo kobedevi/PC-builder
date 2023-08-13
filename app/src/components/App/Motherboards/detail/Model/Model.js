@@ -1,17 +1,9 @@
-import { Text, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import memorySlotModel from "./assets/DIMMSlot.glb";
 import pcieModel from "./assets/Pcie.glb";
 import socketModel from "./assets/Socket.glb";
 import sataModel from "./assets/Sata.glb";
 import powerModel from "./assets/Power.glb";
-import memModel from "../../../Ram/detail/Model/assets/memory.glb";
-import cpuModel from "../../../Cpus/detail/Model/assets/cpu.glb";
-
-import coolerBaseModel  from "../../../CpuCoolers/detail/Model/assets/cooler_base.glb"
-import coolerFinsModel  from "../../../CpuCoolers/detail/Model/assets/coolerFin_cube.glb"
-import gpuCubeModel  from "../../../Gpu/detail/Model/assets/gpuCube.glb"
-import caseCubeModel  from "../../../Cases/detail/Model/assets/caseCubeCompressed.glb"
-import psuCubeModel  from "../../../Psu/detail/Model/assets/psu_cube.glb"
 
 import {Nvme} from "./Nvme";
 
@@ -21,8 +13,6 @@ const Model = ({motherboard}) => {
   const { scene: socket } = useGLTF(socketModel, true);
   const { scene: sataPort } = useGLTF(sataModel, true);
   const { scene: power } = useGLTF(powerModel, true);  
-
-
 
   motherboard = {
     ...motherboard,
