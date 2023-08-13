@@ -17,7 +17,6 @@ const Model = ({ cooler, baseScale=1, finScale=1, scale=1, rotation=[0,0,0], pos
 
   const base_height = 37.84 / 100;
   const finAmount = Math.round((height - base_height) * 1.36 * 20)
-  console.log(height)
 
   // NATIVE BASE SIZE
   // Z: 88mm

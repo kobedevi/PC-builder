@@ -42,11 +42,11 @@ const BuildDetail = () => {
                 <p>3D model here?</p>
                 {data.user.id !== null  && (
                   <>
-                    {(auth.user.idUser === data.user.id) && (
+                    {(auth?.user?.idUser === data.user.id) && (
                       <Link className="edit" to={route(PossibleRoutes.BuilderEdit, {id: id})} state={
                         { 
                           data: {
-                            title: data.name,
+                            name: data.name,
                             id,
                             case: {
                               idCase: data.case.id,

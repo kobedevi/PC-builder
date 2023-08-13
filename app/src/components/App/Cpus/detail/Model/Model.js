@@ -4,15 +4,15 @@ import React from "react";
 import {Cpu} from "./Cpu";
 
 
-const Model = ({ cpu, scale=2.5, rotation=[0,0,0], position=[0,0,0] }) => {
+const Model = ({anchorpoint=false, cpu, scale=2.5, rotation=[0,0,0], position=[0,0,0] }) => {
 
   return (
     <group name="cpu" position={position} scale={scale} rotation={rotation}>
-      <group name="base" scale={.05} rotation={[Math.PI / 2, 0, 0]}>
-         <Cpu/>
+      <group name="base" scale={.05} position={!anchorpoint ? [1.21/2,1.21/2,0] : [0,0,0]} rotation={[Math.PI / 2, 0, 0]}>
+        <Cpu/>
       </group>
-      <group name="info">
-        <mesh position={[0, 0.15, -0.09]} receiveShadow={true}>
+      <group name="info" position={!anchorpoint ? [0, 0.15, -0.09] : [-1.21/2, -1/2, -0.09]}>
+        <mesh receiveShadow={true}>
           <React.Suspense fallback={null}>
             <Text
               position={[0, 0.2, 0.17]}

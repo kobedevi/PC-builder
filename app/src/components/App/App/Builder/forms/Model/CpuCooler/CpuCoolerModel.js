@@ -4,7 +4,6 @@ import cpuCooler from "../assets/CpuCooler/cooler_base.glb";
 import cpuFins from "../assets/CpuCooler/cooler_fins.glb";
 
 const CpuCoolerModel = ({ currentBuild }) => {
-  console.log(currentBuild)
   const { scene: base } = useGLTF(cpuCooler, true);
   const { scene: fins } = useGLTF(cpuFins, true);
 
@@ -15,7 +14,7 @@ const CpuCoolerModel = ({ currentBuild }) => {
   const width = currentBuild.cpucooler.width / 148;
   const depth = currentBuild.cpucooler.depth / 79;
   const height = currentBuild.cpucooler.height / 1.36;
-
+  
   // NATIVE BASE SIZE
   // Z: 88mm
   const base_height = 88;

@@ -18,10 +18,6 @@ const PartsOverview = ({currentBuild}) => {
       stickAmount: currentBuild.motherboard.memorySlots,
     }
   }
-  const mbScale = 1.75
-  console.log(`test: ${currentBuild.motherboard.height * .01 + .4}`);
-  console.log(`test: ${(-currentBuild.motherboard.height / 2 + .2) * mbScale}`);
-
 
   return (
     // TODO: overview model
@@ -41,7 +37,7 @@ const PartsOverview = ({currentBuild}) => {
             {/* <MotherboardModel pccase={currentBuild.case} cpu={currentBuild.cpu} motherboard={currentBuild.motherboard} /> */}
             {/* <GpuModel gpu={currentBuild.gpu} position={[-2.5 + (currentBuild.gpu.width/100), -.15+ (-currentBuild.gpu.height/100), currentBuild.gpu.depth/100 - .1]} scale={1} rotation={[-Math.PI / 2,0, 0]}/> */}
             {/* <MemoryModel ram={currentBuild.ram} scale={1.23} ramOffset={.165} position={[1.68, (-currentBuild.motherboard.height / 2 + .2) * mbScale, .11]} rotation={[ 0, -Math.PI / 2, -Math.PI / 2]}/> */}
-            <MotherboardModel motherboard={currentBuild.motherboard} ram={<MemoryModel ram={currentBuild.ram} scale={1.23} ramOffset={.165} position={[1.68,.45,.11]} rotation={[ 0, -Math.PI / 2, -Math.PI / 2]}/>}>
+            <MotherboardModel motherboard={currentBuild.motherboard} pccase={currentBuild.case} gpu={currentBuild.gpu} cpucooler={currentBuild.cpucooler} ram={<MemoryModel ram={currentBuild.ram} scale={1.23} ramOffset={.165} position={[1.68,.45,.11]} rotation={[ 0, -Math.PI / 2, -Math.PI / 2]}/>}>
 
             </MotherboardModel>
           </group>

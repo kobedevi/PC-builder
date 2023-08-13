@@ -1,19 +1,22 @@
 import { Text, useGLTF } from "@react-three/drei";
 import React from "react";
-import cpuModel from "./assets/cpu.glb";
+import { Case } from "./assets/CaseCube";
 
-const Model = ({ motherboard }) => {
-  const { scene: cpuScene } = useGLTF(cpuModel, true);
+const Model = ({ pccase, scale=1, position=[0,0,0], rotation=[0,0,0] }) => {
 
+  pccase = {
+    ...pccase,
+    width: pccase.width/100,
+    depth: pccase.depth/100,
+    height: pccase.height/100
+  }
+  console.log(pccase);
   return (
-    <group name="cpu">
-      <group name="base" position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <primitive object={cpuScene} />
-      </group>
-      <group name="info">
-        <mesh position={[0, 0.15, -0.09]} receiveShadow={true}>
-          <React.Suspense fallback={null}>{/* TODO: MODEL */}</React.Suspense>
-        </mesh>
+    <group name="manipulator" scale={scale} position={position} rotation={rotation}>
+      <group name="Case" scale={1}>
+        <group name="base" rotation={[0, 0, 0]} scale={[pccase.width, pccase.height, pccase.depth]} position={[-pccase.width, pccase.height , pccase.depth * 2 -.7]}>
+          <Case />
+        </group>
       </group>
     </group>
   );
