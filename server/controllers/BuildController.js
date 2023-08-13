@@ -25,7 +25,7 @@ class BuildController {
 
 	fetchBuilds = async (req, res, next) => {
 		try {
-			const results = await db.promise().query(`SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+			const results = await db.promise().query(`SELECT *, manufacturers.manufacturerName, storagetypes.storageType FROM storage
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			WHERE storage.deleted = 0`);
