@@ -8,7 +8,7 @@ class StorageController {
 	fetchStorage = async (req, res, next) => {
 		try {
 			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
-			const results = await db.promise().query(`SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+			const results = await db.promise().query(`SELECT *, manufacturers.manufacturerName, storagetypes.storageType FROM storage
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			WHERE storage.deleted = 0
@@ -30,7 +30,7 @@ class StorageController {
 			encodedStr = query.replace(/[/^#\%]/g,"")
 			encodedStr = encodedStr.replace(/[\u00A0-\u9999<>\&]/gim, i => '&#'+i.charCodeAt(0)+';')
 
-			const userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+			const userQuery = `SELECT *, manufacturers.manufacturerName, storagetypes.storageType FROM storage
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			WHERE CONCAT_WS('', modelName, manufacturerName, capacity, RPM) LIKE ?
@@ -54,7 +54,7 @@ class StorageController {
 		try {
 			const { id } = req.params;
 			const results = await db.promise()
-				.query(`SELECT storage.*, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+				.query(`SELECT storage.*, manufacturers.manufacturerName, storagetypes.storageType FROM storage
 				LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 				LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 				WHERE storage.idStorage = ? AND storage.deleted = 0 LIMIT 1;`, [id]);
@@ -89,7 +89,7 @@ class StorageController {
 
 			// https://stackoverflow.com/questions/33957252/node-js-mysql-query-where-id-array
 			const arr = (motherboardId !== 'undefined') ? Array.from(rows.map(val => { return val?.idStorageType; })) : [] ;
-			userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+			userQuery = `SELECT *, manufacturers.manufacturerName, storagetypes.storageType FROM storage
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			WHERE ${arr.length > 0 ? `storage.idStorageType IN (${mysql.escape(arr)}) AND` : ''}
@@ -133,7 +133,7 @@ class StorageController {
 
 			// https://stackoverflow.com/questions/33957252/node-js-mysql-query-where-id-array
 			const arr = (motherboardId !== 'undefined') ? Array.from(rows.map(val => { return val?.idStorageType; })) : [] ;
-			userQuery = `SELECT *, manufacturers.manufacturerName, storageTypes.storageType FROM storage
+			userQuery = `SELECT storage.*, manufacturers.manufacturerName, storagetypes.storageType FROM storage
 			LEFT JOIN manufacturers ON storage.idManufacturer = manufacturers.idManufacturer
 			LEFT JOIN storagetypes ON storage.idStorageType = storagetypes.idStorageType
 			WHERE ${arr.length > 0 ? `storage.idStorageType IN (${mysql.escape(arr)}) AND` : ''}
