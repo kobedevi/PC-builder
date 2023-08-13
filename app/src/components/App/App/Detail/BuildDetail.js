@@ -9,6 +9,8 @@ import ItemListDetail from "components/Design/ItemListDetail";
 import { PossibleRoutes, route } from "core/routing";
 import EditIcon from "components/Design/EditIcon";
 import { useAuth } from "components/Auth/AuthContainer";
+import Layout from "components/Design/Models/Layout";
+import Model from "../Builder/forms/Model/Model";
 
 
 const BuildDetail = () => {
@@ -39,7 +41,11 @@ const BuildDetail = () => {
                 <ItemListDetail color="info" info={data} />
               </div>
               <div>
-                <p>3D model here?</p>
+              <Layout>
+                <group name="parts">
+                  <Model motherboard={data.motherboard} psu={data.psu} pccase={data.case} gpu={data?.gpu ? data.gpu : null} cpucooler={data.cpucooler} ram={data.ram}/>
+                </group>
+              </Layout>
                 {data.user.id !== null  && (
                   <>
                     {(auth?.user?.idUser === data.user.id) && (

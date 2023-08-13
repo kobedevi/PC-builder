@@ -114,7 +114,7 @@ class BuildController {
 				ram.idRam as ram_id, ram.price as ram_price, ram.idManufacturer as ram_idManufacturer, ram.modelName as ram_modelName, ram.sizePerStick as ram_sizePerStick, ram.stickAmount as ram_stickAmount, ram.speed as ram_speed, ram.image as ram_image,
 				gpu_has_partners.idGpuPartner as gpu_id, gpu_has_partners.price as gpu_price, gpu_has_partners.idManufacturer as gpu_idManufacturer, gpu_has_partners.modelName as gpu_modelName, gpu_has_partners.clockspeed as gpu_clockSpeed, gpu_has_partners.watercooled as gpu_watercooled, gpu_has_partners.wattage as gpu_wattage, gpus.modelName as gpu_chipset, gpus.vram as gpu_vram, gpu_has_partners.image as gpu_image, gpu_has_partners.height as gpu_height, gpu_has_partners.width as gpu_width, gpu_has_partners.depth as gpu_depth, 
 				cases.idCase as case_id, cases.price as case_price, cases.idManufacturer as case_idManufacturer, cases.modelName as case_modelName, cases.height as case_height, cases.width as case_width, cases.depth as case_depth, cases.\`2-5_slots\` as case_smallSlots, cases.\`3-5_slots\` as case_bigSlots, cases.image as case_image,
-				psu.idPsu as psu_id, psu.price as psu_price, psu.idManufacturer as psu_idManufacturer, psu.modelName as psu_modelName, psu.modular as psu_modular, psu.wattage as psu_wattage, psu.image as psu_image
+				psu.idPsu as psu_id, psu.price as psu_price, psu.height as psu_height, psu.width as psu_width, psu.depth as psu_depth, psu.idManufacturer as psu_idManufacturer, psu.modelName as psu_modelName, psu.modular as psu_modular, psu.wattage as psu_wattage, psu.image as psu_image
 				FROM builds
 				LEFT JOIN users ON builds.idUser = users.idUsers
 				LEFT JOIN cpus ON builds.idProcessor = cpus.idProcessor
