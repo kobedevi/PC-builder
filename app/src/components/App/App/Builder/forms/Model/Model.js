@@ -103,7 +103,7 @@ const Model = ({motherboard, cpucooler, gpu=null, pccase, psu, ram}) => {
               receiveShadow={true}
             >
             <boxGeometry args={[ .5, .4, motherboard.height / 2]}/>
-            <meshStandardMaterial metalness={1}/>
+            <meshStandardMaterial/>
           </mesh>
         </group>
         <group name="pcieSlots" rotation={[Math.PI / -2, 0, 0]} scale={1} position={[(-motherboard.width / 2 + offset) , 0, .25 ]}>
