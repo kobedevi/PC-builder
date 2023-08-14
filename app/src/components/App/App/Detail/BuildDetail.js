@@ -40,12 +40,14 @@ const BuildDetail = () => {
               <div>
                 <ItemListDetail color="info" info={data} />
               </div>
-              <div>
-              <Layout>
-                <group name="parts">
-                  <Model motherboard={data.motherboard} psu={data.psu} pccase={data.case} gpu={data?.gpu ? data.gpu : null} cpucooler={data.cpucooler} ram={data.ram}/>
-                </group>
-              </Layout>
+              <div style={{width: "100%", maxHeight:"1000px"}}>
+                <div>
+                  <Layout>
+                    <group name="parts">
+                      <Model motherboard={data.motherboard} psu={data.psu} pccase={data.case} gpu={data?.gpu ? data.gpu : null} cpucooler={data.cpucooler} ram={data.ram}/>
+                    </group>
+                  </Layout>
+                </div>
                 {data.user.id !== null  && (
                   <>
                     {(auth?.user?.idUser === data.user.id) && (
