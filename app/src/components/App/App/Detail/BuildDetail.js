@@ -26,7 +26,9 @@ const BuildDetail = () => {
   
   return (
     <>
-			<Nav/>
+      <header>
+        <Nav/>
+      </header>
       <div className="container" style={{marginTop:"6rem"}}>
         <div className="curvedContainer">
           {isLoading && (
@@ -40,14 +42,12 @@ const BuildDetail = () => {
               <div>
                 <ItemListDetail color="info" info={data} />
               </div>
-              <div style={{width: "100%", maxHeight:"1000px"}}>
-                <div>
-                  <Layout>
-                    <group name="parts">
-                      <Model motherboard={data.motherboard} psu={data.psu} pccase={data.case} gpu={data?.gpu ? data.gpu : null} cpucooler={data.cpucooler} ram={data.ram}/>
-                    </group>
-                  </Layout>
-                </div>
+              <div style={{width: "100%", minHeight:"500px", maxHeight:"1000px"}}>
+                <Layout>
+                  <group name="parts">
+                    <Model motherboard={data.motherboard} psu={data.psu} pccase={data.case} gpu={data?.gpu ? data.gpu : null} cpucooler={data.cpucooler} ram={data.ram}/>
+                  </group>
+                </Layout>
                 {data.user.id !== null  && (
                   <>
                     {(auth?.user?.idUser === data.user.id) && (

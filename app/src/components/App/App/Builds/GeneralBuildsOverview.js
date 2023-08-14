@@ -4,8 +4,8 @@ import { fetchBuildsOverview } from 'core/modules/Builds/api';
 const GeneralBuildsOverview = () => {
   return (
     <BuildsOverview
-        fetcher={fetchBuildsOverview}
-        title={'Completed builds overview'}
+      fetcher={fetchBuildsOverview}
+      title={'Completed builds overview'}
     />
   )
 }

@@ -33,13 +33,13 @@ const Nav = () => {
         <div>
           <li className="logo"><Link to={PossibleRoutes.Home}>Home</Link></li>
         </div>
-        <div>
+        <div style={{justifyContent:"center"}}>
           <li><Link to={PossibleRoutes.Builder}>Builder</Link></li>
           <li><Link to={PossibleRoutes.Builds}>Completed builds</Link></li>
         {user?.user && <li><Link to={route(PossibleRoutes.UserBuilds, {id: user.user.idUser})}>My builds</Link></li>}
           {admin && <li><Link to={PossibleRoutes.Crud}>CRUD</Link></li>}
         </div>
-        <div>
+        <div style={{justifyContent:"flex-end"}}>
           {!user?.user &&<li> <Link to={PossibleRoutes.Login}>Login</Link></li>}
           {user?.user && <li> <Button onClick={user.logout} color="outline-light">Sign out</Button></li>}
         </div>
