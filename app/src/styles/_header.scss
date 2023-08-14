@@ -39,6 +39,7 @@ header{
         margin: 8px 32px;
         padding: 0;
         div{
+            flex: 1 1 0px;
             display: flex;
             flex-direction: row;
             gap: 32px;
