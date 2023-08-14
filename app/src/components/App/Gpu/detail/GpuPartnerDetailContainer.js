@@ -21,7 +21,7 @@ const GpuPartnerDetailContainer = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  return <GpuDetail gpu={gpu} />;
+  return <GpuDetail gpu={{ ...gpu, watercooled: gpu.watercooled >= 1 ? true : false}}/>;
 };
 
 export default GpuPartnerDetailContainer;

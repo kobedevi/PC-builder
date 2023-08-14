@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import useFetch from "../../../core/hooks/useFetch";
 import { fetchPsus, scrape } from "../../../core/modules/Psu/api";
-import { PossibleRoutes, route } from "../../../core/routing";
+import { PossibleRoutes } from "../../../core/routing";
 import Alert from "../../Design/Alert";
 import Spinner from "../../Design/Spinner";
 import ErrorAlert from "components/shared/ErrorAlert";
@@ -82,9 +82,9 @@ const PsuOverview = () => {
               Add Power supply
             </Link>
             
-            {
+            {/* {
               isAdmin && <Button onClick={() => handleScrape()} color="outline-light">Scrape-test</Button>
-            }
+            } */}
 
             {
               query && <Result updateChecker={deletePsu} deleter={setDeletePsu} result={query}/>

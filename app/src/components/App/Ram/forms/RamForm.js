@@ -5,7 +5,6 @@ import Input from "../../../Design/Input";
 import Button from "../../../Design/Button";
 import NumberInput from "../../../Design/NumberInput";
 import ManufacturerSelect from "../../../util/ManufacturerSelect";
-import Toggle2 from "../../../Design/Toggle2";
 import RamTypeSelect from "components/util/RamTypeSelect";
 
 const schema = yup.object().shape({

@@ -6,7 +6,7 @@ import Button from "../../../Design/Button";
 import NumberInput from "../../../Design/NumberInput";
 import ManufacturerSelect from "../../../util/ManufacturerSelect";
 import GpuOriginalSelect from "../../../util/GpuOriginalSelect";
-import Toggle from "../../../Design/Toggle2";
+import Toggle from "../../../Design/Toggle";
 
 const schema = yup.object().shape({
   idGpu: yup.string().required(),
@@ -57,6 +57,12 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
       ...data,
       [e.target.name]: e.target.value,
     });
+    if (e.target.name === "watercooled") {
+      setData({
+        ...data,
+        [e.target.name]: e.target.checked,
+      });
+    }
     if(e.target.name === 'image') {
       setFile(e.target.files[0]);
     }
@@ -145,7 +151,6 @@ const GpuForm = ({file, setFile, onSubmit, initialData = {}, disabled }) => {
           label="Is watercooled"
           name="watercooled"
           value={data.watercooled}
-          possibleValues={[false, true]}
           disabled={disabled}
           onChange={handleChange}
           error={errors.watercooled}

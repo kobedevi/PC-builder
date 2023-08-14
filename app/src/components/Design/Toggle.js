@@ -5,24 +5,14 @@ const Toggle = React.forwardRef(
   (
     { label, name, onChange, possibleValues, value, error, disabled, ...rest },
     ref
+
   ) => {
     return (
       <div className="form-group">
-        <label>Has {name}:</label>
-        {possibleValues.map((v, index) => (
-          <div className="toggle" key={v}>
-            <input
-              type="radio"
-              id={v.toString()}
-              name={name}
-              value={v}
-              onChange={onChange}
-              defaultChecked={index === value}
-              {...rest}
-            />
-            <label htmlFor={v.toString()}>{v.toString()}</label>
-          </div>
-        ))}
+        <div className="form-check checkbox-xl" style={{display:"flex", alignItems:"center"}}>
+          <input onClick={onChange} style={{padding:"10px"}} className="form-check-input" type="checkbox" value={1} name={name} id={name} disabled={disabled} checked={value}/>
+          <label style={{paddingLeft: "10px"}}className="form-check-label" htmlFor={name} >{name}:</label>
+        </div>
 
         {error && <div className="invalid-feedback">{error}</div>}
       </div>

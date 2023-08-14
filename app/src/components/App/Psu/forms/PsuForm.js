@@ -6,8 +6,8 @@ import Button from "../../../Design/Button";
 import NumberInput from "../../../Design/NumberInput";
 import ManufacturerSelect from "../../../util/ManufacturerSelect";
 import FormfactorSelect from "../../../util/FormfactorSelect";
-import Toggle2 from "../../../Design/Toggle2";
 import ToggleDefaultTrue from "../../../Design/ToggleDefaultTrue";
+import Toggle from "components/Design/Toggle";
 
 const schema = yup.object().shape({
   idManufacturer: yup.string().required(),
@@ -46,6 +46,12 @@ const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
       ...data,
       [e.target.name]: e.target.value,
     });
+    if (e.target.name === "modular") {
+      setData({
+        ...data,
+        [e.target.name]: e.target.checked,
+      });
+    }
     if(e.target.name === 'image') {
       setFile(e.target.files[0]);
     }
@@ -106,11 +112,10 @@ const PsuForm = ({ file, setFile, onSubmit, initialData = {}, disabled }) => {
         error={errors.modelName}
       />
 
-      <ToggleDefaultTrue
+      <Toggle
         label="Is modular"
         name="modular"
         value={data.modular}
-        possibleValues={[false, true]}
         disabled={disabled}
         onChange={handleChange}
         error={errors.modular}

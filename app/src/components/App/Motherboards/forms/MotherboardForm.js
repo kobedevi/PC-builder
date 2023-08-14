@@ -36,7 +36,7 @@ const defaultData = {
   idFormfactor: "",
   idRamType: "",
   modelName: "",
-  wifi: 0,
+  wifi: false,
   memorySlots: 4,
   sataPorts: 4,
   pcieSlots: 3,
@@ -63,7 +63,7 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
       temp.push({ storageType: "", tempId: uuidv4() });
     }
     setData({...defaultData, ...initialData, storageMethods})
-  }, [initialData]);
+  }, [initialData.amount]);
 
   const [storageMethods, setStorageMethods] = useState(temp);
   const [data, setData] = useState({
@@ -81,7 +81,7 @@ const MotherboardForm = ({ file, setFile, onSubmit, initialData = { idStorageTyp
     if (e.target.name === "wifi") {
       setData({
         ...data,
-        [e.target.name]: e.target.value === "true",
+        [e.target.name]: e.target.checked,
       });
     }
     if(e.target.name === 'image') {

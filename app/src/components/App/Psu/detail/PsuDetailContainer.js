@@ -22,7 +22,8 @@ const PsuDetailContainer = () => {
   if (error) {
     return <ErrorAlert error={error} />;
   }
-  return <PsuDetail psu={psu} />;
+
+  return <PsuDetail psu={{ ...psu, modular: psu.modular >= 1 ? true : false}} />;
 };
 
 export default PsuDetailContainer;
