@@ -137,6 +137,7 @@ const GpuSelect = ({currentBuild, updateBuild, depth, width, updateFields}) => {
                           Vram: {product.vram}GB<br/>
                           Clockspeed: {product.clockspeed}MHz<br/>
                           Watercooled: {product.watercooled ? 'Yes': 'No'}<br/>
+                          TDP: {product.wattage ? `${product.wattage}W` : 'Unknown'}<br/>
                           <b className="price">MSRP Price: {product.price ? `€${product.price}` : 'Unknown'}</b>
                           </p>
                           <button type="button" onClick={() => onClick(product)} disabled={disabled}>{!disabled ? 'Add' : 'Added'}</button>

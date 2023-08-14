@@ -143,6 +143,7 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
                         >
                           <p>
                             Manufacturer: {cpu.manufacturerName}<br/>
+                            TDP: {cpu.wattage ? `${cpu.wattage}W` : 'Unknown'}<br/>
                             Base Clock: {cpu.clockSpeed}Ghz<br/>
                             Cores: {cpu.cores}<br/>
                             Socket: {cpu.socketType}<br/>

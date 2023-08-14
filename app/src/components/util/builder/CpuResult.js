@@ -52,6 +52,7 @@ const CpuResult = ({result, setProductInfo, onClick, currentBuild, filter}) => {
                                         >
                                         <p>
                                             Manufacturer: {product.manufacturerName}<br/>
+                                            TDP: {product.wattage ? `${product.wattage}W` : 'Unknown'}<br/>
                                             Base Clock: {product.clockSpeed}Ghz<br/>
                                             Cores: {product.cores}<br/>
                                             Socket: {product.socketType}<br/>
