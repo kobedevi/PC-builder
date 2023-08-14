@@ -32,7 +32,7 @@ const BuildsOverview = ({fetcher, title, id=null, setUserName=null}) => {
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
   if(data?.results && setUserName) {
-    setUserName(data.results[0]?.userName ? data.results[0].userName : 'Unknown');
+    setUserName(data?.userName ? data.userName : 'Unknown');
   }
 
   return (

@@ -39,10 +39,11 @@ class BuildController {
 		try {
 			const { id, page=Math.abs(page) || 0, perPage=20 } = req.params;
 
-			const [rows] = await db.promise().query(`SELECT idUsers FROM users WHERE idUsers = ?`, [id]);
+			const [rows] = await db.promise().query(`SELECT idUsers, userName FROM users WHERE idUsers = ?`, [id]);
             if (rows.length === 0) {
                 return res.status(400).json({ message: "User does not exist" });
             }
+			const userName= rows[0].userName;
 
 			let pageAmount = await db.promise().query("SELECT COUNT(idBuild) as totalProducts FROM builds WHERE idUser = ?", [id])
 			.then(res => Math.ceil(res[0][0].totalProducts / perPage));
@@ -58,7 +59,7 @@ class BuildController {
 				LIMIT ? OFFSET ?;
 			`, [id, parseInt(perPage), parseInt(page*perPage)]);
 
-			return res.status(200).send({results: results[0], pageAmount});
+			return res.status(200).send({results: results[0], pageAmount, userName});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
 		}

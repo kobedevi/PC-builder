@@ -9,10 +9,10 @@ const UserBuildsOverview = () => {
     
   return (
     <BuildsOverview
-        fetcher={fetchBuildsByUser}
-        id={id}
-        title={`${userName}'s builds`}
-        setUserName={setUserName}
+      fetcher={fetchBuildsByUser}
+      id={id}
+      title={`${userName}'s builds`}
+      setUserName={setUserName}
     />
   )
 

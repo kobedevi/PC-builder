@@ -32,7 +32,7 @@ class UserController {
 				(user.id = uuidv4()), (user.password = hash);
 				const sqlInsert =
 					"INSERT INTO users (idUsers, role, userName, password, email) VALUES (?,?,?,?,?)";
-				const u = await db
+				await db
 					.promise()
 					.query(sqlInsert, [
 						user.id,
@@ -41,7 +41,15 @@ class UserController {
 						user.password,
 						user.email,
 					]);
-				return res.status(200).json(user);
+				return res.status(200).json({
+					email: user.email,
+					role: user.role,
+					userName: user.userName,
+					idUser: user.id,
+					token: jwt.sign({ idUsers: user.idUsers }, process.env.JWT_SECRET, {
+						expiresIn: 60 * 120,
+					})
+				});
 			});
 		} catch (e) {
 			next(e.name && e.name === "ValidationError" ? new ValidationError(e) : e);
