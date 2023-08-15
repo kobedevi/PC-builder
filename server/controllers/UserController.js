@@ -4,6 +4,7 @@ const { validationResult } = require("express-validator");
 const { ROLES, ROLESARRAY } = require("../utils/globals");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("jsonwebtoken");
+const NotFoundError = require("../errors/NotFoundError");
 
 class UserController {
 	login = async (req, res, next) => {
@@ -86,7 +87,7 @@ class UserController {
 		const { email } = req.body;
 		try {
 			const results = await db.promise().query(`SELECT * FROM users
-				WHERE email= ? LIMIT 1;`, [email]);
+				WHERE email= ? AND deleted = 0 LIMIT 1;`, [email]);
 			if (results[0].length === 0) {
 				return null;
 			}
@@ -100,7 +101,7 @@ class UserController {
 		const { idUsers } = req.body;
 		try {
 			const results = await db.promise().query(`SELECT * FROM users
-				WHERE idUsers= ? LIMIT 1;`,[idUsers]);
+				WHERE idUsers = ? AND deleted = 0 LIMIT 1;`,[idUsers]);
 			if (results[0].length === 0) {
 				return null;
 			}
@@ -116,11 +117,15 @@ class UserController {
 		try {
 			if(user.role === ROLES.superAdmin){
 				const userQuery = await db.promise().query(`Select * FROM users WHERE idUsers= ?;`, [id]);
-				await db.promise().query(`DELETE FROM users WHERE idUsers= ?;`, [id]);
+				if (userQuery[0].length === 0) {
+					return next(new NotFoundError());
+				}
+				await db.promise().query(`UPDATE users SET deleted = 1 WHERE idUsers= ?;`, [id]);
 				return res.status(200).send(userQuery[0][0]);
 			}
 			return res.status(400).send(results);
 		} catch (e) {
+			console.log(e);
 			next(e);
 		}
 	};
@@ -130,10 +135,10 @@ class UserController {
 			const { user } = req;
 			const { page=Math.abs(page) || 0, perPage=20 } = req.params;
 			if(user.role === ROLES.superAdmin){
-				let pageAmount = await db.promise().query("SELECT COUNT(idUsers) as totalProducts FROM users")
+				let pageAmount = await db.promise().query("SELECT COUNT(idUsers) as totalProducts FROM users WHERE deleted = 0;")
 				.then(res => Math.ceil(res[0][0].totalProducts / perPage))
 
-				const userQuery = `SELECT idUsers, email, userName, role FROM users ORDER BY email LIMIT ? OFFSET ?;`
+				const userQuery = `SELECT idUsers, email, userName, role FROM users WHERE deleted = 0 ORDER BY email LIMIT ? OFFSET ?;`
 				let [rows] = await db.promise().query(userQuery, [parseInt(perPage), parseInt(page*perPage)]);
 				return res.status(200).send({results: rows, pageAmount});
 			}
@@ -152,6 +157,7 @@ class UserController {
 
 			const userQuery = `SELECT idUsers, email, userName, role FROM users
 			WHERE CONCAT_WS('', email, userName, role) LIKE ?
+			AND deleted = 0
 			ORDER BY email;`;
 			const [rows] = await db.promise().query(userQuery, [`%${encodedStr}%`]);
 
