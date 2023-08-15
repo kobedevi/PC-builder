@@ -13,9 +13,6 @@ import UserBuildsOverview from "./Builds/UserBuildsOverview"
 const HomeRouter = ({setUser}) => {
   return (
     <main className="public">
-      <header>
-        <Nav/>
-      </header>
       <Routes>
         <Route index path={PossibleRoutes.Home} element={<Home />} />
         <Route path={PossibleRoutes.Register} element={<RegisterPage setUser={setUser}/>} />

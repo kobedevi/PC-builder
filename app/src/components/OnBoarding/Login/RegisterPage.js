@@ -11,6 +11,9 @@ import { handleApiResult } from "../../../core/utils/api";
 import ErrorAlert from "../../shared/ErrorAlert";
 import { Link } from "react-router-dom";
 import { PossibleRoutes } from "core/routing";
+import Nav from "components/App/App/Homepage/Nav";
+import InfoModal from "components/Design/InfoModal";
+import Alert from "components/Design/Alert";
 
 let schema = yup.object().shape({
   userName: yup.string().required("Username is a required field"),
@@ -29,6 +32,7 @@ const RegisterPage = ({ setUser }) => {
 
   const [errors, setErrors] = useState({});
   const [error, setError] = useState();
+  const [info, setInfo] = useState();
 
   const handleChange = (e) => {
     setData({
@@ -46,7 +50,7 @@ const RegisterPage = ({ setUser }) => {
           register(data)
           .then((res) => handleApiResult(res))
           .then((data) => {
-            setUser(data);
+            setInfo('Account created, please Log in.')
           })
           .catch((err) => {
             let e;
@@ -73,6 +77,10 @@ const RegisterPage = ({ setUser }) => {
   };
 
   return (
+  <>
+    <header>
+     <Nav/>
+    </header>
     <div className="middle center-form">
       <div className="container">
         <div className="text-center">
@@ -84,6 +92,9 @@ const RegisterPage = ({ setUser }) => {
           >
             <h2 className="h3 mb-3 font-weight-normal">Please register</h2>
             <ErrorAlert error={error} />
+            {
+              info && <Alert color="info">{info}</Alert>
+            }
             <Input
               label="Username"
               type="text"
@@ -130,6 +141,7 @@ const RegisterPage = ({ setUser }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

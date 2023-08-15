@@ -37,11 +37,9 @@ const BuildsOverview = ({fetcher, title, id=null, setUserName=null}) => {
 
   return (
     <>  
-      {!data?.results && (
         <header>
           <Nav/>
         </header>
-      )}
 
         <div className='container' style={{marginTop: "6rem"}}>
           <div className='curvedContainer' style={{gridTemplateColumns: "1fr"}}>

@@ -11,6 +11,7 @@ import { handleApiResult } from "../../../core/utils/api";
 import ErrorAlert from "../../shared/ErrorAlert";
 import { Link } from "react-router-dom";
 import { PossibleRoutes } from "core/routing";
+import Nav from "components/App/App/Homepage/Nav";
 
 let schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -65,6 +66,10 @@ const LoginPage = ({ setUser }) => {
   };
 
   return (
+    <>
+    <header>
+      <Nav/>
+    </header>
     <div className="middle center-form">
       <div className="container">
         <div className="text-center">
@@ -106,6 +111,7 @@ const LoginPage = ({ setUser }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
