@@ -33,11 +33,6 @@ const registerRoutes = (app, db) => {
 		res.status(err.statusCode || 500);
 		res.json(err);
 	});
-
-	// Keep db alive
-	setInterval(function () {
-		db.query('SELECT 1');
-	}, 900000);
 };
 
 
