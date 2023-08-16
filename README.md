@@ -1,10 +1,10 @@
-# PC-builder WIP
+# PC-builder
 
 A tool for guiding you to building a compatible pc
 
-Tools for converting gltf to glb:
- - gltf-pipeline -i naamInputbestand.gltf -o naamOutputbestand.glb -b
- - gltfjsx naamInputBestand.glb
+## Mono repo
+This is a mono repo, meaning this repository contains both the frontend and the backend. The only thing thats missing is the database. 
+You can find an exported instance in the main onedrive folder.
 
 ## Used/adapted 3D models from :
  - Sketchfab
