@@ -160,6 +160,8 @@ const Builder = () => {
 
 						</div>
 						<fieldset>
+						<p style={{fontSize: "1rem", opacity: "0.5", margin: "2rem 0"}}><i>Every part you see in this builder is a part that is already filtered.<br/>Each component you see is compatible with your current build.</i></p>
+
 							{alert && 
 								<ErrorAlert error={alert}/>
 							}
