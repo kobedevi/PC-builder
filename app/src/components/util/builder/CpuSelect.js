@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import useNoAuthFetch from "../../../core/hooks/useNoAuthFetch";
 import { fetchCompatibleCpus, fetchCompatibleFilteredCpus } from "../../../core/modules/CPU/api";
 import { PossibleRoutes } from "../../../core/routing";
@@ -31,6 +31,26 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
     isLoading,
     refresh,
   } = useNoAuthFetch(apiCall);
+
+
+  
+  const totalTdp = Math.round(( parseInt((currentBuild.cpu.wattage ??=0)) + parseInt((currentBuild.gpu.wattage ??=0))  + parseInt(((currentBuild.motherboard.sataPorts ??=0) * 5) + 75)) / 50)*50;
+
+  useEffect(() => {
+    setInfo([])
+    if(totalTdp > currentBuild.psu?.wattage) {
+      updateFields({
+        idPsu: ''
+      })
+      updateBuild({
+        psu: {}
+      })
+      if(currentBuild.psu) {
+        setInfo(info => [...info, 'Incompatible Power supply removed, insufficient amount of power.'])
+      }
+    }
+  }, [totalTdp])
+
 
   const handlePageClick = (page) => {
     setPage(page);

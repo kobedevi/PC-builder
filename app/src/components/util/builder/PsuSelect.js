@@ -36,7 +36,6 @@ const PsuSelect = ({minWat, currentBuild, updateBuild, updateFields }) => {
     setPerPage(perPage)
   }
 
-
   const onClick = (product) => {
     updateBuild({
       psu: product

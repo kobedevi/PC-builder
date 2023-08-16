@@ -13,7 +13,7 @@ import Pagination from "components/Design/Pagination";
 import GpuResult from "./GpuResult";
 
 const GpuSelect = ({currentBuild, updateBuild, depth, width, updateFields}) => {
-  const [info, setInfo] = useState();
+  const [info, setInfo] = useState([]);
   const [query, setQuery] = useState('');
   const [productInfo, setProductInfo] = useState()
   const [page, setPage] = useState(0);
@@ -29,7 +29,10 @@ const GpuSelect = ({currentBuild, updateBuild, depth, width, updateFields}) => {
     setQuery(query.search)
   }
 
+  const totalTdp = Math.round(( parseInt((currentBuild.cpu.wattage ??=0)) + parseInt((currentBuild.gpu.wattage ??=0))  + parseInt(((currentBuild.motherboard.sataPorts ??=0) * 5) + 75)) / 50)*50;
+
   useEffect(() => {
+    setInfo([])
     updateFields({
       idGpu: currentBuild.gpu.idGpuPartner,
     })
@@ -43,7 +46,19 @@ const GpuSelect = ({currentBuild, updateBuild, depth, width, updateFields}) => {
         maxWidth: currentBuild.gpu.width,
       })
     }
-  }, [])
+    if(totalTdp > currentBuild.psu?.wattage) {
+      updateFields({
+        idPsu: ''
+      })
+      updateBuild({
+        psu: {}
+      })
+      if(currentBuild.psu) {
+        setInfo(info => [...info, 'Incompatible Power supply removed, insufficient amount of power.'])
+      }
+    }
+  }, [totalTdp])
+
 
   const handlePageClick = (page) => {
     setPage(page)
@@ -71,6 +86,16 @@ const GpuSelect = ({currentBuild, updateBuild, depth, width, updateFields}) => {
       })
     }
   }
+  
+  
+  useEffect(() => {
+    if(depth > currentBuild.case?.depth || width > currentBuild.case?.width) {
+      updateFields({
+        idCase: ''
+      })
+      setInfo(info => [...info, 'Incompatible Case removed'])
+    }
+  },[depth, width, currentBuild.case])
 
   return (
     <>

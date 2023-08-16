@@ -12,8 +12,8 @@ import { fetchCpuCoolerByIdBuilder } from '../../../core/modules/CPUCooler/api';
 import Pagination from "components/Design/Pagination";
 import CpuCoolerResult from "./CpuCoolerResult";
 
-const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateFields}) => {
-  const [info, setInfo] = useState();
+const CpuCoolerSelect = ({currentBuild, updateBuild, idCpu, updateFields, maxDepth}) => {
+  const [info, setInfo] = useState([]);
   const [productInfo, setProductInfo] = useState();
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(0);
@@ -39,6 +39,19 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
     }
   }, [])
 
+  
+  useEffect(() => {
+    if(maxDepth > currentBuild.case?.depth) {
+      updateFields({
+        idCase: ''
+      })
+      updateBuild({
+        case: {}
+      })
+      setInfo(info => [...info, 'Incompatible Case removed'])
+    }
+  },[maxDepth, currentBuild.case])
+
   const handlePageClick = (page) => {
     setPage(page);
   }
@@ -56,6 +69,16 @@ const CpuCoolerSelect = ({currentBuild, updateBuild, idCpuCooler, idCpu, updateF
       cooler: cooler.idCpuSocket,
       maxDepth: cooler.height
     })
+
+    if(maxDepth > currentBuild.case?.depth) {
+      updateFields({
+        idCase: ''
+      })
+      updateBuild({
+        case: {}
+      })
+      setInfo(info => [...info, 'Incompatible Case removed'])
+    }
   }
 
   return (

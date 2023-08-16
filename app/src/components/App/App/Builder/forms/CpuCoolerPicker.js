@@ -1,6 +1,6 @@
 import CpuCoolerSelect from 'components/util/builder/CpuCoolerSelect'
 
-const CpuCoolerPicker = ({currentBuild, updateBuild, hiddenInput, updateFields}) => {
+const CpuCoolerPicker = ({currentBuild, updateBuild, hiddenInput, updateFields, maxHeight, maxDepth, maxWidth}) => {
   return (
     <div>
         <h2>cpu cooler picker:</h2>
@@ -11,6 +11,9 @@ const CpuCoolerPicker = ({currentBuild, updateBuild, hiddenInput, updateFields})
           idCpu={currentBuild.cpu.idProcessor}
           idCpuCooler={currentBuild.cpucooler.idCpuCooler}
           updateFields = {updateFields}
+          maxDepth = {maxDepth}
+          maxWidth = {maxWidth}
+          maxHeight = {maxHeight}
         />
     </div>
   )

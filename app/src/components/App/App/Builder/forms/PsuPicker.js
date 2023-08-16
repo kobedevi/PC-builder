@@ -13,6 +13,7 @@ const PsuPicker = ({currentBuild, updateBuild, hiddenInput, updateFields}) => {
           currentBuild={currentBuild}
           updateBuild={updateBuild}
           updateFields = {updateFields}
+          totalTdp={totalTdp}
         />
     </div>
   )
