@@ -104,7 +104,7 @@ const PsuOverview = () => {
                       >
                           Manufacturer: {product.manufacturerName}<br/>
                           Modular: {product.modular ? 'Yes': 'No'}<br/>
-                          wattage: {product.socketType}
+                          wattage: {product.wattage}W
                       </ProductCard>
                       </li>
                     ))}
