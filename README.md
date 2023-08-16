@@ -1,10 +1,6 @@
-# PC-builder WIP
+# PC-builder
 
 A tool for guiding you to building a compatible pc
-
-Tools for converting gltf to glb:
- - gltf-pipeline -i naamInputbestand.gltf -o naamOutputbestand.glb -b
- - gltfjsx naamInputBestand.glb
 
 ## Used/adapted 3D models from :
  - Sketchfab
