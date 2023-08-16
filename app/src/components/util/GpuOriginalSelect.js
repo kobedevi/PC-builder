@@ -33,7 +33,10 @@ const GpuOriginalSelect = (props) => {
       }))
     : null;
 
-  const toggleHide = () => {
+  const toggleHide = (e=null) => {
+    if(e) {
+      e.preventDefault();
+    }
     setIsHidden(!isHidden);
     setNewGpu({});
   };

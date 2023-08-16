@@ -48,9 +48,10 @@ const ManufacturerSelect = (props) => {
       }))
     : null;
 
-  const toggleHide = () => {
+  const toggleHide = (e=null) => {
     setIsHidden(!isHidden);
     setNewManuName({});
+    e.preventDefault();
   };
 
   const validate = useCallback(async (newManuName, onSuccess) => {
@@ -89,9 +90,9 @@ const ManufacturerSelect = (props) => {
         setLocalDisabled(false);
         refresh();
         setInfo(e);
-        toggleHide();
-        setNewManuName();
         inputRef.current.value = "";
+        setNewManuName();
+        toggleHide();
       })
       .catch((err) => {
         setErrors(err);

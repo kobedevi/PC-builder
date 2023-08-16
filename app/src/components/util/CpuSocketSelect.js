@@ -48,7 +48,10 @@ const CpuSocketSelect = (props) => {
       }))
     : null;
 
-  const toggleHide = () => {
+  const toggleHide = (e=null) => {
+    if(e) {
+      e.preventDefault();
+    }
     setIsHidden(!isHidden);
     setNewSocket({});
   };

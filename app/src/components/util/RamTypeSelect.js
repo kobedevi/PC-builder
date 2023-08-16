@@ -46,9 +46,12 @@ const RamTypeSelect = (props) => {
       }))
     : null;
 
-  const toggleHide = () => {
+  const toggleHide = (e=null) => {
     setIsHidden(!isHidden);
     setNewRamType({});
+    if(e) {
+      e.preventDefault();
+    }
   };
 
   const validate = useCallback(async (newRamType, onSuccess) => {

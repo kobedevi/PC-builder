@@ -44,7 +44,10 @@ const FormfactorSelect = (
 
   const withAuth = useAuthApi();
 
-  const toggleHide = () => {
+  const toggleHide = (e=null) => {
+    if(e) {
+      e.preventDefault();
+    }
     setIsHidden(!isHidden);
     setNewFormfactor({});
   };
