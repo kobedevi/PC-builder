@@ -5,6 +5,7 @@ import { PossibleRoutes, route } from "core/routing";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+
 const Nav = () => {
 
   const [background, setBackground] = useState(false)
@@ -31,7 +32,7 @@ const Nav = () => {
     <nav className={background ? "mainNav headerBg" : "mainNav" }>
       <ul>
         <div>
-          <li className="logo"><Link to={PossibleRoutes.Home}>Home</Link></li>
+          <Link to={PossibleRoutes.Home}><li className="logo">Home</li></Link>
         </div>
         <div style={{justifyContent:"center"}}>
           <li><Link to={PossibleRoutes.Builder}>Builder</Link></li>
