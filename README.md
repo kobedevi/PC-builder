@@ -2,6 +2,10 @@
 
 A tool for guiding you to building a compatible pc
 
+## Mono repo
+This is a mono repo, meaning this repository contains both the frontend and the backend. The only thing thats missing is the database. 
+You can find an exported instance in the main onedrive folder.
+
 ## Used/adapted 3D models from :
  - Sketchfab
    - CPU: https://sketchfab.com/3d-models/cpu-ryzen-5-3600-249fb5e8c1e94686a2c2b1cd6df72bc5
