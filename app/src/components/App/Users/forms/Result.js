@@ -44,7 +44,7 @@ const Result = ({result, setCurrentUser, deleteUser, setDeleteUser, authUser}) =
     }
 
     return (
-        <>
+        <div className="contentScroller">
         {
             users && (
                 <table className='mt-4'>
@@ -88,7 +88,7 @@ const Result = ({result, setCurrentUser, deleteUser, setDeleteUser, authUser}) =
                 </DeleteUser>
             )
         }
-        </>
+        </div>
     )
 }
 

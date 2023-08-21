@@ -18,7 +18,7 @@ const Featured = () => {
   const { data, error, setError, isLoading, refresh } = useNoAuthFetch(apiCall);
 
   return (
-    <div className='curvedContainer'>
+    <div className='curvedContainer' id="featured">
         <div className='gridItem'>
           <h2 style={{fontWeight:"boldest", textAlign:"left"}}>Featured builds</h2>
           <p>

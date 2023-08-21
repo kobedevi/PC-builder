@@ -8,6 +8,13 @@ body{
     margin: 0;
 }
 
+.background .bannerParent h1.mobile {
+    display: none;
+    &::after {
+        display: none;
+    }
+}
+
 .background{
     position: relative;
     width: 100%;

@@ -68,7 +68,7 @@ const BuildsOverview = ({fetcher, title, id=null, setUserName=null}) => {
             {
               data && (
                 <>
-                  <ul className="productList featuredList" style={{display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr"}}>
+                  <ul className="productList featuredList buildsOverview">
                     {data.results.map((product) => {
                       return(
                       <Link to={route(PossibleRoutes.BuildDetail, {id: product.idBuild})} key={product.idBuild}>

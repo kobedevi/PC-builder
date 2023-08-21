@@ -98,7 +98,7 @@ const UserOverview = () => {
 
             {
                 !query && (
-                    <>
+                    <div className="contentScroller">
                         <table className='mt-4'>
                             <thead>
                                 <tr>    
@@ -135,7 +135,7 @@ const UserOverview = () => {
                           perPageClick={handlePerPageClick}
                           onClick={handlePageClick}
                         />
-                    </>
+                    </div>
                 )
             }
             {

@@ -33,7 +33,7 @@ const Modal = ({ children, center=false, title, onDismiss }) => {
                             </h5>
                             <button
                                 type="button"
-                                className="btn-close"
+                                className="btn-close btn-close-white"
                                 aria-label="Close"
                                 onClick={onDismiss}
                             />

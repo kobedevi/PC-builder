@@ -4,6 +4,12 @@ header{
     position: fixed;
     z-index: 7;
     width: 100%;
+    #menuToggle {
+        width: 100%;
+        input {
+            display: none;
+        }
+    }
     .mainNav {
         background-color: rgba(0,0,0,0);
         transition: .2s;
@@ -35,12 +41,12 @@ header{
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 100%;
+        width: calc(100% - 64px);
         gap: 16px;
         margin: 8px 32px;
         padding: 0;
         div{
-            flex: 1 1 0px;
+            min-width: 90px;            
             display: flex;
             flex-direction: row;
             gap: 32px;
@@ -52,6 +58,7 @@ header{
                 text-shadow: 2px 3px 5px rgba(0,0,0,0.5);
             }
             li{
+                text-align: center;
                 &.logo{
                     text-indent: -99999em;
                     overflow: hidden;
@@ -68,6 +75,9 @@ header{
                 }
                 
             }
+        }
+        .navRoutes {
+            flex-grow: 3;
         }
     }
 }
