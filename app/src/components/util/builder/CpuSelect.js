@@ -37,7 +37,6 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
   const totalTdp = Math.round(( parseInt((currentBuild.cpu.wattage ??=0)) + parseInt((currentBuild.gpu.wattage ??=0))  + parseInt(((currentBuild.motherboard.sataPorts ??=0) * 5) + 75)) / 50)*50;
 
   useEffect(() => {
-    setInfo([])
     if(totalTdp > currentBuild.psu?.wattage) {
       updateFields({
         idPsu: ''
@@ -46,6 +45,7 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
         psu: {}
       })
       if(currentBuild.psu) {
+        setInfo([])
         setInfo(info => [...info, 'Incompatible Power supply removed, insufficient amount of power.'])
       }
     }
