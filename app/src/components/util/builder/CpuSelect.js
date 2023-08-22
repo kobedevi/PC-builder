@@ -77,11 +77,13 @@ const CpuSelect = ({currentBuild, updateBuild, idCpuSocket, cooler, updateFields
         // If new cpu has other socket reset motherboard
         idMotherboard: '',
       })
-      if(Object.keys(currentBuild.motherboard).length > 0) {
-        updateBuild({
-          motherboard: {},
-        })
-        setInfo(info => [...info, 'Incompatible motherboard removed'])
+      if(currentBuild.motherboard?.idMotherboard) {
+        if(Object.keys(currentBuild.motherboard).length > 0) {
+          updateBuild({
+            motherboard: {},
+          })
+          setInfo(info => [...info, 'Incompatible motherboard removed'])
+        }
       }
 
       // If new cpu is not compatible with old cooler, reset
