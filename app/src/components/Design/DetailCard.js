@@ -8,7 +8,7 @@ const DetailCard = ({ data }) => {
   const [productView, setProductView] = useState();
 
   return (
-    <>
+    <div className="contentScroller">
       <table className="mt-4">
         <tbody>
           {Object.entries(data).map(([key, value]) => {
@@ -59,7 +59,7 @@ const DetailCard = ({ data }) => {
         )
       }
 
-    </>
+    </div>
 
   );
 };

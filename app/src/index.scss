@@ -598,6 +598,30 @@ form {
     }
 }
 
+@media screen and (max-width: 1810px) {
+    .fullSize{
+        .model{
+            width: 50%;
+        }
+        .detail {
+            flex-grow: 1;
+        }
+    }
+}
+
+@media screen and (max-width: 1120px) {
+    .fullSize {
+        flex-direction: column;
+        .detail {
+           width: 100%;
+        }
+        .model{
+            width: 100%;
+            height: 50%;
+        }
+    }
+}
+
 @media screen and (max-width: 1120px) {
     main.reset-noise {
         >div:has(form){
